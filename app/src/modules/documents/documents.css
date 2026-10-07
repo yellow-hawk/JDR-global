@@ -1,0 +1,15 @@
+.doc-page { display: grid; grid-template-columns: 260px 1fr; gap: 16px; min-height: 0; }
+.doc-cote { display: grid; align-content: start; gap: 6px; }
+.doc-cote h3 { margin: 10px 0 2px; font-size: 0.95rem; color: var(--encre-2); }
+.doc-ligne { width: 100%; text-align: left; border: 1px solid transparent; background: none; color: var(--encre); padding: 6px 8px; border-radius: 6px; font: inherit; cursor: pointer; }
+.doc-ligne:hover { background: var(--fond-2); }
+.doc-ligne[aria-current='true'] { border-color: var(--accent); background: var(--panneau); }
+.doc-fiche { display: grid; gap: 12px; }
+.doc-corps { display: grid; grid-template-columns: minmax(260px, 380px) 1fr; gap: 16px; align-items: start; }
+.doc-champs textarea { width: 100%; }
+.doc-apercu { background: #0d0b08; border-radius: var(--rayon); padding: 24px; display: grid; place-items: center; min-height: 320px; font-size: 0.6rem; }
+.doc-apercu .ecran-doc-feuille { max-width: 100%; max-height: none; padding: 24px 28px; }
+.doc-apercu .ecran-doc-titre { font-size: 1.5rem; }
+.doc-apercu .ecran-doc-texte { font-size: 1rem; }
+.doc-apercu .ecran-doc-feuille img { max-height: 260px; max-width: 100%; }
+@media (max-width: 900px) { .doc-page, .doc-corps { grid-template-columns: 1fr; } }

@@ -1,0 +1,19 @@
+/* Module Campagne : classes préfixées .camp- */
+.camp-nom { flex: 1; min-width: 180px; font: inherit; padding: 7px 10px; border: 1px solid var(--trait); border-radius: 6px; background: var(--fond); color: var(--encre); }
+.camp-tuile { text-align: left; cursor: pointer; font: inherit; color: inherit; }
+.camp-tuile:hover { border-color: var(--accent); }
+.camp-tuile h2 { margin-bottom: 4px; }
+.camp-entete { display: grid; grid-template-columns: 1fr 200px; gap: 12px; border: 0; padding: 0; margin: 0; }
+.camp-titre { font-family: var(--titre) !important; font-size: 1.5rem !important; }
+.camp-comptes { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+.camp-compte { display: flex; flex-direction: column; align-items: flex-start; padding: 12px; cursor: pointer; font: inherit; color: inherit; }
+.camp-compte:disabled { cursor: default; }
+.camp-compte:not(:disabled):hover { border-color: var(--accent); }
+.camp-compte strong { font: 1.8rem var(--titre); color: var(--accent); line-height: 1.1; }
+@media (max-width: 560px) { .camp-entete { grid-template-columns: 1fr; } }
+
+/* Sauvegardes */
+.camp-dossier h3, .carte-ui h3 { margin: 4px 0; }
+.camp-instantanes { border-collapse: collapse; width: 100%; }
+.camp-instantanes td { padding: 4px 6px; border-bottom: 1px solid var(--trait); }
+.camp-instantanes td:last-child { text-align: right; white-space: nowrap; }

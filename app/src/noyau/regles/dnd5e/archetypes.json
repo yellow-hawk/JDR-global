@@ -1,0 +1,30 @@
+{
+  "_note": "Archétypes de PNJ pour D&D 5e. La première règle dont le motif (expression régulière, insensible à la casse) correspond au rôle l'emporte. ordre = caractéristiques de la plus haute à la plus basse ; niveau = [min, max] ; dv = dé de vie ; arme = dé de l'arme et caractéristique d'attaque.",
+  "archetypes": [
+    { "id": "seigneur-guerre", "motif": "seigneur de guerre|dame de guerre|général|chef de guerre", "niveau": [8, 11], "ordre": ["for", "con", "cha", "dex", "sag", "int"], "ca": 18, "dv": 10, "arme": ["1d10", "for"], "vitesse": 6 },
+    { "id": "pretre-haut", "motif": "grand prêtre|grande prêtresse|archiprêtre", "niveau": [8, 11], "ordre": ["sag", "cha", "con", "int", "for", "dex"], "ca": 15, "dv": 8, "arme": ["1d6", "sag"], "vitesse": 6 },
+    { "id": "intrigant", "motif": "chancelier|chancelière|maître de guilde|maîtresse de guilde|conseiller|conseillère|ambassad|noble", "niveau": [3, 6], "ordre": ["cha", "int", "sag", "dex", "con", "for"], "ca": 12, "dv": 8, "arme": ["1d4", "dex"], "vitesse": 6 },
+    { "id": "savant-mage", "motif": "astrologue|astronome|archiviste|bibliothécaire|copiste|mage|sorci", "niveau": [3, 7], "ordre": ["int", "sag", "dex", "con", "cha", "for"], "ca": 12, "dv": 6, "arme": ["1d4", "dex"], "vitesse": 6 },
+    { "id": "officier", "motif": "capitaine|garde|soldat|sergent|chevalier", "niveau": [2, 6], "ordre": ["for", "con", "dex", "sag", "cha", "int"], "ca": 16, "dv": 10, "arme": ["1d8", "for"], "vitesse": 6 },
+    { "id": "mercenaire", "motif": "mercenaire|chasseu(r|se) de primes", "niveau": [3, 6], "ordre": ["for", "dex", "con", "sag", "cha", "int"], "ca": 15, "dv": 10, "arme": ["1d8", "for"], "vitesse": 6 },
+    { "id": "ombre", "motif": "espion|receleu|contrebandi|voleu|assassin|enfant des rues", "niveau": [2, 5], "ordre": ["dex", "cha", "int", "sag", "con", "for"], "ca": 14, "dv": 8, "arme": ["1d6", "dex"], "vitesse": 7 },
+    { "id": "eclaireur", "motif": "pisteu|chasseu(r|se) de reliques|berger|bergère|ermite|guide", "niveau": [2, 5], "ordre": ["dex", "sag", "con", "for", "int", "cha"], "ca": 14, "dv": 8, "arme": ["1d8", "dex"], "vitesse": 7 },
+    { "id": "pretre", "motif": "prêtre|prêtresse|moine|herboriste|guérisseu", "niveau": [1, 4], "ordre": ["sag", "cha", "con", "int", "dex", "for"], "ca": 13, "dv": 8, "arme": ["1d6", "sag"], "vitesse": 6 },
+    { "id": "artisan", "motif": "forgeron|forgeronne|meunier|meunière|batelier|batelière|pêcheu|marchand|aubergiste", "niveau": [1, 2], "ordre": ["con", "for", "sag", "cha", "dex", "int"], "ca": 11, "dv": 8, "arme": ["1d6", "for"], "vitesse": 6 },
+    { "id": "ancien-soldat", "motif": "ancien soldat|ancienne soldate|vétéran", "niveau": [2, 4], "ordre": ["for", "con", "sag", "dex", "cha", "int"], "ca": 13, "dv": 10, "arme": ["1d8", "for"], "vitesse": 6 },
+    { "id": "civil", "motif": ".", "niveau": [1, 2], "ordre": ["cha", "sag", "con", "dex", "int", "for"], "ca": 10, "dv": 6, "arme": ["1d4", "dex"], "vitesse": 6 }
+  ],
+  "valeurs": [15, 14, 13, 12, 10, 8],
+  "description": [
+    { "motif": "massi(f|ve)|colosse|carrure", "bonus": { "for": 2, "con": 2, "dex": -1 } },
+    { "motif": "maigre|élancé", "bonus": { "dex": 1, "con": -1 } },
+    { "motif": "âgé|vieux|vieille|voûté", "bonus": { "for": -2, "dex": -1, "sag": 2, "int": 1 } },
+    { "motif": "jeune", "bonus": { "dex": 1, "sag": -1 } },
+    { "motif": "petit|petite", "bonus": { "for": -1, "dex": 1 } },
+    { "motif": "regard perçant|longue-vue", "bonus": { "sag": 2 } },
+    { "motif": "élégant|charmeu|bijoux", "bonus": { "cha": 2 } },
+    { "motif": "méthodique|lucide|tatoué d’une constellation", "bonus": { "int": 1 } },
+    { "motif": "cicatrice|ancien soldat", "bonus": { "con": 1 } },
+    { "motif": "cupide|ambitieu", "bonus": { "cha": 1 } }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "_note": "Sortes de relations entre personnages. symetrique : vaut dans les deux sens ; inverse : libellé vu depuis l'autre personnage.",
+  "relations": [
+    { "id": "allie", "libelle": "allié de", "couleur": "#3d9a4a", "symetrique": true },
+    { "id": "ami", "libelle": "ami de", "couleur": "#7cc276", "symetrique": true },
+    { "id": "amant", "libelle": "amant de", "couleur": "#d65a8a", "symetrique": true },
+    { "id": "famille", "libelle": "de la famille de", "couleur": "#c9a84c", "symetrique": true },
+    { "id": "rival", "libelle": "rival de", "couleur": "#e08a2e", "symetrique": true },
+    { "id": "ennemi", "libelle": "ennemi de", "couleur": "#c0392b", "symetrique": true },
+    { "id": "mentor", "libelle": "mentor de", "inverse": "élève de", "couleur": "#4a90d9" },
+    { "id": "employeur", "libelle": "emploie", "inverse": "employé par", "couleur": "#41b6c4" },
+    { "id": "sert", "libelle": "sert", "inverse": "servi par", "couleur": "#7fb3a8" },
+    { "id": "dette", "libelle": "doit une dette à", "inverse": "créancier de", "couleur": "#b07a2e" },
+    { "id": "protege", "libelle": "protège", "inverse": "protégé par", "couleur": "#2e74b5" },
+    { "id": "espionne", "libelle": "espionne", "inverse": "espionné par", "couleur": "#6b3fa0" },
+    { "id": "chantage", "libelle": "fait chanter", "inverse": "victime de chantage de", "couleur": "#8e2a5e" },
+    { "id": "recherche", "libelle": "recherche", "inverse": "recherché par", "couleur": "#9b59b6" }
+  ]
+}

@@ -1,0 +1,27 @@
+/* Module Personnages : toutes les classes sont préfixées .perso- */
+.perso-page { display: grid; grid-template-columns: minmax(220px, 280px) 1fr; gap: 20px; align-items: start; }
+.perso-liste { display: flex; flex-direction: column; gap: 10px; }
+.perso-groupe-titre { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--encre-2); margin: 8px 0 4px; font-family: var(--texte); }
+.perso-ligne {
+  display: flex; align-items: center; gap: 10px; width: 100%; padding: 6px 8px; border: 0;
+  border-radius: var(--rayon); background: transparent; color: var(--encre); font: inherit; text-align: left; cursor: pointer;
+}
+.perso-ligne:hover { background: var(--fond-2); }
+.perso-ligne[aria-current='true'] { background: var(--panneau); box-shadow: inset 3px 0 0 var(--accent); }
+.perso-mini {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--fond-2); border: 1px solid var(--trait);
+  display: grid; place-items: center; overflow: hidden; flex: none; font-family: var(--titre); color: var(--accent);
+}
+.perso-mini img { width: 100%; height: 100%; object-fit: cover; }
+.perso-cache { margin-left: auto; font-size: 0.75rem; color: var(--mj); }
+.perso-portrait {
+  width: 120px; height: 120px; border-radius: 50%; border: 2px solid var(--accent); background: var(--fond-2);
+  display: grid; place-items: center; overflow: hidden; cursor: pointer; padding: 0; flex: none;
+  font: 2.6rem var(--titre); color: var(--accent);
+}
+.perso-portrait:disabled { cursor: default; }
+.perso-portrait img { width: 100%; height: 100%; object-fit: cover; }
+.perso-champs { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; border: 0; padding: 0; margin: 0; }
+.perso-groupe { border: 0; padding: 0; margin: 0; min-width: 0; }
+.perso-groupe legend { font-family: var(--titre); margin-bottom: 6px; padding: 0; }
+@media (max-width: 760px) { .perso-page { grid-template-columns: 1fr; } }

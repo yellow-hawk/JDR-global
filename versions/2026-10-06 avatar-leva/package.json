@@ -1,0 +1,39 @@
+{
+  "name": "jdr-global",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Suite d'outils de jeu de rôle : monde, personnages, magie, combat, campagne.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "verif": "tsc --noEmit",
+    "test:magie": "tsx src/modules/magie/atelier/tests/engine.verif.ts && tsx src/modules/magie/atelier/tests/techniques.verif.ts && tsx src/modules/magie/atelier/tests/profils.verif.ts && tsx src/modules/magie/atelier/tests/realiste.verif.ts",
+    "test:tout": "vitest run && npm run test:magie"
+  },
+  "dependencies": {
+    "@react-three/drei": "^9.114.0",
+    "@react-three/fiber": "^8.17.10",
+    "fflate": "^0.8.2",
+    "leva": "^0.9.35",
+    "pdfjs-dist": "^6.4.299",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "three": "^0.169.0",
+    "zustand": "^4.5.5"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/three": "^0.169.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "fake-indexeddb": "^6.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.0",
+    "vitest": "^3.0.0"
+  }
+}

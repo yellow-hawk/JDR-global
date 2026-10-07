@@ -1,0 +1,12 @@
+{
+  "_note": "PNJ lanceurs de sorts : la première règle dont le motif correspond au rôle l'emporte. coeurs = Cœurs de l'Atelier préférés (~ = inversé), nombre = sorts reçus.",
+  "regles": [
+    { "motif": "grand prêtre|grande prêtresse|archiprêtre", "coeurs": ["lueur", "lueur~", "seve", "souffle"], "nombre": 6 },
+    { "motif": "astrologue|astronome", "coeurs": ["lueur", "souffle", "lueur~", "source"], "nombre": 5 },
+    { "motif": "mage|sorci|enchant", "coeurs": ["braise", "souffle", "source", "socle"], "nombre": 5 },
+    { "motif": "prêtre|prêtresse|moine", "coeurs": ["lueur", "seve"], "nombre": 3 },
+    { "motif": "herboriste|guérisseu|druide", "coeurs": ["seve", "source"], "nombre": 3 },
+    { "motif": "ermite", "coeurs": ["seve", "socle", "lueur"], "nombre": 2 },
+    { "motif": "archiviste|bibliothécaire", "coeurs": ["lueur", "souffle"], "nombre": 2 }
+  ]
+}

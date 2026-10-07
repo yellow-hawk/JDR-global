@@ -1,0 +1,321 @@
+/* Feuille de l'Atelier de tracé, préfixée automatiquement par .atelier-racine (ne pas modifier à la main sans garder le préfixe). */
+/* Atelier de tracé — planche d'atelier : encre bleu nuit sur papier gris-bleu, inversions en prune, rangs en vert / bleu / bronze */
+.atelier-racine {
+  --bg: #eceff4; --paper: #f8f9fc; --sheet: #fbfbf7; --ink: #1a2140; --muted: #59627f; --line: #cdd3e1;
+  --accent: #2c55c9; --inv: #a33f6c; --seal: #6b4fa0; --ok: #2f7350; --warn: #b7791f; --bad: #b83a3a;
+  --t1: #2f7350; --t2: #2c55c9; --t3: #8a5a16;
+  --display: "Marcellus SC", "Trajan Pro", Georgia, serif;
+  --body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="clair"]) .atelier-racine {
+    --bg: #0f1220; --paper: #171b2d; --sheet: #141829; --ink: #dce2fa; --muted: #8e97bc; --line: #2b3150;
+    --accent: #86a6ff; --inv: #ee8fb9; --seal: #b79beb; --ok: #7fcba2; --warn: #e2b26a; --bad: #f08a8a;
+    --t1: #7fcba2; --t2: #86a6ff; --t3: #e2b26a; color-scheme: dark;
+  }
+}
+:root[data-theme="sombre"] .atelier-racine {
+  --bg: #0f1220; --paper: #171b2d; --sheet: #141829; --ink: #dce2fa; --muted: #8e97bc; --line: #2b3150;
+  --accent: #86a6ff; --inv: #ee8fb9; --seal: #b79beb; --ok: #7fcba2; --warn: #e2b26a; --bad: #f08a8a;
+  --t1: #7fcba2; --t2: #86a6ff; --t3: #e2b26a; color-scheme: dark;
+}
+
+.atelier-racine, .atelier-racine * { box-sizing: border-box; }
+.atelier-racine { margin: 0; }
+.atelier-racine { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.45; }
+.atelier-racine h1, .atelier-racine h2, .atelier-racine h3 { font-family: var(--display); font-weight: 400; margin: 0; text-wrap: balance; letter-spacing: .02em; }
+.atelier-racine button, .atelier-racine input, .atelier-racine select, .atelier-racine textarea { font: inherit; color: inherit; }
+.atelier-racine :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.atelier-racine .tag { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.atelier-racine .muted { color: var(--muted); }
+.atelier-racine .inv-t { color: var(--inv); }
+.atelier-racine .ok-t { color: var(--ok); }
+
+.atelier-racine .app { min-height: 100vh; }
+.atelier-racine .top { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; padding: 12px 20px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.atelier-racine .marque { display: flex; align-items: center; gap: 10px; color: var(--ink); }
+.atelier-racine .marque h1 { font-size: 1.5rem; line-height: 1; }
+.atelier-racine .modes { display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap; }
+.atelier-racine .modes button { background: none; border: 1px solid transparent; border-radius: 6px; padding: 6px 14px; cursor: pointer; display: flex; flex-direction: column; align-items: flex-start; line-height: 1.15; }
+.atelier-racine .modes button small { font-size: .7rem; color: var(--muted); letter-spacing: .06em; }
+.atelier-racine .modes button:hover { border-color: var(--line); }
+.atelier-racine .modes button.on { background: var(--bg); border-color: var(--line); font-weight: 700; }
+.atelier-racine .check { display: inline-flex; align-items: center; gap: 6px; font-size: .92rem; cursor: pointer; user-select: none; white-space: nowrap; }
+.atelier-racine .check input { accent-color: var(--accent); }
+.atelier-racine .btn.mj { border: 1px dashed var(--seal); color: var(--seal); margin-left: auto; }
+.atelier-racine .modes + .btn.mj { margin-left: 0; }
+.atelier-racine .btn.mj.on { background: color-mix(in srgb, var(--seal) 14%, transparent); border-style: solid; }
+.atelier-racine .voile { position: fixed; inset: 0; background: rgb(8 10 20 / .55); display: grid; place-items: center; padding: 16px; z-index: 10; }
+.atelier-racine .modale { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 20px; width: min(380px, 100%); display: flex; flex-direction: column; gap: 10px; }
+.atelier-racine .modale p { margin: 0; }
+.atelier-racine .modale input { border: 1px solid var(--line); background: var(--sheet); border-radius: 6px; padding: 8px 10px; }
+.atelier-racine .erreur { color: var(--bad); }
+.atelier-racine .vue3d { position: relative; width: 100%; aspect-ratio: 4 / 3; max-width: 100%; border-radius: 8px; overflow: hidden; background: #0b0e1a; border: 1px solid var(--line); cursor: grab; touch-action: none; }
+.atelier-racine .vue3d canvas { display: block; width: 100% !important; height: 100% !important; }
+.atelier-racine .vue3d-err { position: absolute; inset: 0; display: grid; place-items: center; color: #c9d2ff; padding: 16px; text-align: center; margin: 0; }
+.atelier-racine .recit { display: flex; flex-direction: column; gap: 6px; }
+.atelier-racine .recit p { margin: 0; }
+.atelier-racine .recit .accroche { font-family: var(--display); font-size: 1.1rem; }
+.atelier-racine .recit .impact { color: var(--muted); font-style: italic; }
+.atelier-racine .props .prop { display: contents; }
+.atelier-racine .reglages { margin: 0; padding-left: 18px; font-size: .92rem; display: flex; flex-direction: column; gap: 3px; }
+.atelier-racine .risque { margin: 0; font-size: .92rem; color: var(--bad); }
+.atelier-racine .mj-detail { font-size: .9rem; border-top: 1px dashed var(--line); padding-top: 8px; }
+.atelier-racine .mj-detail summary { cursor: pointer; color: var(--seal); }
+.atelier-racine .mj-detail ul { margin: 6px 0; padding-left: 18px; }
+.atelier-racine .mj-detail p { margin: 0; }
+.atelier-racine details.consignes { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; font-size: .93rem; }
+.atelier-racine details.consignes summary { cursor: pointer; font-family: var(--display); }
+.atelier-racine details.consignes ol { margin: 8px 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+
+.atelier-racine main { padding: 18px 20px 40px; }
+.atelier-racine .atelier { display: grid; grid-template-columns: 230px minmax(0, 1fr) minmax(340px, 440px); gap: 18px; align-items: start; max-width: 1600px; margin: 0 auto; }
+.atelier-racine .atelier.libre { grid-template-columns: minmax(0, 1fr) minmax(360px, 520px); max-width: 1300px; }
+.atelier-racine .cote { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+@media (max-width: 1250px) { .atelier-racine .atelier { grid-template-columns: 210px minmax(0, 1fr); } .atelier-racine .atelier .cote { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; } }
+@media (max-width: 900px) { .atelier-racine .atelier, .atelier-racine .atelier.libre { grid-template-columns: minmax(0, 1fr); } .atelier-racine .atelier .cote { grid-template-columns: minmax(0, 1fr); } .atelier-racine main { padding: 12px 16px 32px; } .atelier-racine .modes { margin-left: 0; } }
+
+/* boutons */
+.atelier-racine .btn { border: 1px solid var(--line); background: var(--paper); border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+.atelier-racine .btn:hover:not(:disabled) { border-color: var(--accent); }
+.atelier-racine .btn:disabled { opacity: .45; cursor: not-allowed; }
+.atelier-racine .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--paper); font-weight: 700; }
+.atelier-racine .btn.danger { color: var(--bad); }
+.atelier-racine .btn.ghost { background: none; }
+.atelier-racine .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.atelier-racine .seg button { border: 0; background: var(--paper); padding: 6px 12px; cursor: pointer; border-right: 1px solid var(--line); }
+.atelier-racine .seg button:last-child { border-right: 0; }
+.atelier-racine .seg button.on { background: var(--ink); color: var(--paper); }
+.atelier-racine .seg.mini button { padding: 5px 9px; }
+
+/* palette */
+.atelier-racine .palette { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.atelier-racine .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+.atelier-racine .tabs button { border: 1px solid var(--line); background: none; border-radius: 6px; padding: 6px 4px; cursor: pointer; font-family: var(--display); }
+.atelier-racine .tabs button.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.atelier-racine .aide { font-size: .88rem; color: var(--muted); margin: 0; }
+.atelier-racine .pal-groupe { display: flex; flex-direction: column; gap: 6px; }
+.atelier-racine .pal-titre { display: flex; align-items: center; justify-content: space-between; font-family: var(--display); color: var(--muted); font-size: .95rem; }
+.atelier-racine .pal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 6px; }
+.atelier-racine .pal-item { border: 1px solid var(--line); background: var(--sheet); border-radius: 6px; padding: 4px 2px 3px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 0; font-size: .74rem; line-height: 1.1; min-width: 0; }
+.atelier-racine .pal-item span { overflow-wrap: anywhere; text-align: center; }
+.atelier-racine .pal-item:hover { border-color: var(--accent); }
+.atelier-racine .pal-item.on { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); background: var(--paper); }
+.atelier-racine .pal-item.scelle { border-style: dashed; border-color: var(--seal); }
+
+/* scène */
+.atelier-racine .scene-col { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.atelier-racine .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.atelier-racine .scene { position: relative; width: 100%; max-width: 640px; aspect-ratio: 1; margin: 0 auto; background: var(--sheet); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.atelier-racine .scene > svg, .atelier-racine .scene > canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.atelier-racine .scene > canvas { pointer-events: none; }
+.atelier-racine .scene.placing svg { cursor: crosshair; }
+.atelier-racine .papier svg { touch-action: none; cursor: crosshair; }
+.atelier-racine .sceau .guides line, .atelier-racine .sceau .guides circle, .atelier-racine .tracer .guides circle { stroke: var(--line); stroke-width: 1.5; }
+.atelier-racine .sceau .signe { cursor: pointer; }
+.atelier-racine .sceau .signe .hit { fill: transparent; }
+.atelier-racine .sceau .signe.sel .hit { fill: color-mix(in srgb, var(--accent) 12%, transparent); stroke: var(--accent); stroke-width: 2; stroke-dasharray: 6 4; }
+.atelier-racine .sceau.actif, .atelier-racine .tracer.actif { filter: drop-shadow(0 0 6px var(--glow)); transition: filter .4s; }
+.atelier-racine .encre { fill: none; stroke: var(--ink); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.atelier-racine .tracer.actif .encre { stroke: var(--glow); }
+.atelier-racine .lu rect { fill: none; stroke-width: 1.5; stroke-dasharray: 5 4; }
+.atelier-racine .lu text { font-family: var(--body); font-size: 15px; font-weight: 700; paint-order: stroke; stroke: var(--sheet); stroke-width: 4px; }
+.atelier-racine .lu.ok rect { stroke: var(--ok); } .atelier-racine .lu.ok text { fill: var(--ok); }
+.atelier-racine .lu.ko rect { stroke: var(--bad); } .atelier-racine .lu.ko text { fill: var(--bad); }
+.atelier-racine .entaille-mark { fill: none; stroke: var(--inv); stroke-width: 2; stroke-dasharray: 3 3; }
+
+.atelier-racine .selbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+.atelier-racine .selbar b { font-family: var(--display); font-weight: 400; font-size: 1.1rem; }
+.atelier-racine .selbar .muted { font-size: .9rem; flex: 1 1 200px; min-width: 0; }
+.atelier-racine .save { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.atelier-racine .save input, .atelier-racine .toolbar input { border: 1px solid var(--line); background: var(--paper); border-radius: 6px; padding: 6px 10px; min-width: 0; flex: 1 1 180px; }
+
+/* fiche */
+.atelier-racine .fiche { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.atelier-racine .fiche h2 { font-size: 1.55rem; }
+.atelier-racine .badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.atelier-racine .badge { display: inline-flex; align-items: center; gap: 6px; font-size: .8rem; border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; }
+.atelier-racine .badge.interdit { border-color: var(--bad); color: var(--bad); }
+.atelier-racine .badge.etat.on { border-color: var(--ok); color: var(--ok); }
+.atelier-racine .badge.etat.pret, .atelier-racine .badge.pret { border-color: var(--warn); color: var(--warn); }
+.atelier-racine .resume { margin: 0; font-size: 1.02rem; }
+.atelier-racine .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.atelier-racine .stat { display: flex; flex-direction: column; gap: 4px; }
+.atelier-racine .stat b { font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+.atelier-racine .stat small { font-size: .8rem; color: var(--muted); font-weight: 400; }
+.atelier-racine .jauge { height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+.atelier-racine .jauge-fill { height: 100%; border-radius: 3px; transition: width .3s; }
+.atelier-racine .jauge-fill.acc { background: var(--accent); } .atelier-racine .jauge-fill.ok { background: var(--ok); } .atelier-racine .jauge-fill.mid { background: var(--t2); }
+.atelier-racine .jauge-fill.warn { background: var(--warn); } .atelier-racine .jauge-fill.bad { background: var(--bad); }
+.atelier-racine .props { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 0; font-size: .93rem; }
+.atelier-racine .props dt { color: var(--muted); }
+.atelier-racine .props dd { margin: 0; }
+.atelier-racine .formes ul, .atelier-racine .alertes { margin: 4px 0 0; padding-left: 18px; font-size: .92rem; display: flex; flex-direction: column; gap: 3px; }
+.atelier-racine .formes b { font-weight: 700; }
+.atelier-racine .coeur-ligne { margin: 0; font-size: .92rem; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.atelier-racine .pastille { width: 12px; height: 12px; border-radius: 50%; display: inline-block; border: 1px solid var(--line); }
+.atelier-racine .alertes { color: var(--warn); }
+.atelier-racine .fiche-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.atelier-racine .rank { display: inline-flex; align-items: center; gap: 3px; color: var(--tc, var(--ink)); }
+.atelier-racine .rank i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; display: inline-block; }
+.atelier-racine .rank i.off { background: none; border: 1.5px solid currentColor; width: 6px; height: 6px; }
+.atelier-racine .t1 { --tc: var(--t1); } .atelier-racine .t2 { --tc: var(--t2); } .atelier-racine .t3 { --tc: var(--t3); }
+
+/* grimoire */
+.atelier-racine .grimoire { max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+.atelier-racine .cartes { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.atelier-racine .carte { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+.atelier-racine .carte > svg { width: 100%; height: auto; aspect-ratio: 1; background: var(--sheet); border-bottom: 1px solid var(--line); }
+.atelier-racine .carte-corps { padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.atelier-racine .carte-corps h3 { font-size: 1.2rem; }
+.atelier-racine .carte-corps p { margin: 0; font-size: .9rem; }
+.atelier-racine .carte-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.atelier-racine .vide { color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) { .atelier-racine, .atelier-racine * { transition: none !important; } }
+
+/* v0.3 : 3D toujours visible, agrandissable */
+@media (min-width: 901px) {
+  .atelier-racine .cote { position: sticky; top: 12px; max-height: calc(100vh - 24px); }
+  .atelier-racine .cote .fiche { overflow: auto; min-height: 0; flex: 1 1 auto; }
+  .atelier-racine .cote .vue3d-cadre { flex: 0 0 auto; }
+}
+.atelier-racine .vue3d-cadre { display: flex; flex-direction: column; gap: 0; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); background: #1c2236; }
+.atelier-racine .vue3d-cadre .vue3d { border: 0; border-radius: 0; }
+.atelier-racine .vue3d-barre { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 6px 10px; background: #151a2b; color: #c9d2ff; font-size: .85rem; }
+.atelier-racine .btn.mini { padding: 3px 10px; font-size: .85rem; background: #232a44; color: #e3e8ff; border-color: #3d4670; }
+.atelier-racine .vue3d-cadre.plein { position: fixed; inset: 0; z-index: 30; border-radius: 0; border: 0; padding-top: env(safe-area-inset-top, 0px); }
+.atelier-racine .vue3d-cadre.plein .vue3d { aspect-ratio: auto; flex: 1 1 auto; height: auto; }
+.atelier-racine .vue3d { background: #1c2236; }
+
+/* générateur */
+.atelier-racine .generateur { border: 1px dashed var(--line); border-radius: 6px; padding: 8px; display: flex; flex-direction: column; gap: 8px; }
+.atelier-racine .generateur summary { cursor: pointer; font-family: var(--display); }
+.atelier-racine .generateur[open] { padding-bottom: 10px; }
+.atelier-racine .gen-champs { display: grid; grid-template-columns: 1fr; gap: 6px; margin: 8px 0; }
+.atelier-racine .gen-champs label { display: flex; flex-direction: column; gap: 2px; font-size: .8rem; color: var(--muted); }
+.atelier-racine select { border: 1px solid var(--line); background: var(--paper); border-radius: 6px; padding: 5px 8px; color: var(--ink); }
+
+/* grimoire */
+.atelier-racine .grim-tabs { max-width: 360px; }
+.atelier-racine .grim-corps { display: grid; grid-template-columns: minmax(0, 1fr) minmax(340px, 460px); gap: 18px; align-items: start; }
+@media (max-width: 1100px) { .atelier-racine .grim-corps { grid-template-columns: minmax(0, 1fr); } }
+.atelier-racine .grim-liste { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.atelier-racine .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.atelier-racine .chip { border: 1px solid var(--line); background: var(--paper); border-radius: 999px; padding: 3px 12px; cursor: pointer; font-size: .9rem; }
+.atelier-racine .chip.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.atelier-racine .cartes { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+.atelier-racine .carte.sel { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.atelier-racine .carte-vignette { padding: 0; border: 0; background: var(--sheet); cursor: pointer; border-bottom: 1px solid var(--line); display: block; }
+.atelier-racine .carte-vignette svg { width: 100%; height: auto; aspect-ratio: 1; display: block; }
+.atelier-racine .signes-ref { display: flex; flex-direction: column; gap: 10px; }
+.atelier-racine .signes-ref h3 { display: flex; align-items: center; gap: 10px; font-size: 1.25rem; margin-top: 10px; }
+.atelier-racine .cs-grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.atelier-racine .carte-signe { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 10px; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; }
+.atelier-racine .carte-signe.scelle { border-style: dashed; border-color: var(--seal); }
+.atelier-racine .cs-glyphes { display: flex; gap: 4px; }
+.atelier-racine .cs-glyphes > div { display: flex; flex-direction: column; align-items: center; background: var(--sheet); border-radius: 6px; padding: 4px; }
+.atelier-racine .cs-glyphes .tag { font-size: .62rem; }
+.atelier-racine .cs-texte p { margin: 0 0 4px; font-size: .88rem; color: var(--muted); }
+.atelier-racine .cs-titre { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.atelier-racine .cs-titre b { font-family: var(--display); font-weight: 400; font-size: 1.05rem; }
+.atelier-racine .vue3d-ctrl { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: flex-end; }
+.atelier-racine .vue3d-ctrl select { background: #232a44; color: #e3e8ff; border-color: #3d4670; padding: 3px 6px; font-size: .82rem; }
+.atelier-racine .vue3d-barre { flex-wrap: wrap; }
+.atelier-racine .releve { position: absolute; left: 8px; top: 8px; margin: 0; padding: 6px 10px; list-style: none; background: rgb(12 15 28 / .62); color: #eef1ff; border-radius: 6px; font-size: .78rem; line-height: 1.35; max-width: min(70%, 340px); pointer-events: none; }
+.atelier-racine .releve b { color: #ffd98a; font-weight: 700; }
+.atelier-racine .vue3d-cadre.plein .releve { font-size: .95rem; }
+/* fiche v0.5 */
+.atelier-racine .fiche h2 { font-size: 1.7rem; line-height: 1.15; }
+.atelier-racine .composition { margin: 4px 0 0; color: var(--muted); font-size: .88rem; }
+.atelier-racine .en-bref { margin: 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); border-radius: 0 6px 6px 0; font-size: 1.02rem; font-weight: 500; }
+.atelier-racine .fiche-bloc { display: flex; flex-direction: column; gap: 6px; border-top: 1px solid var(--line); padding-top: 10px; }
+.atelier-racine .fiche-bloc h3 { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-family: var(--body); font-weight: 700; }
+.atelier-racine .props.cibles dt { font-weight: 700; color: var(--ink); }
+.atelier-racine .mini-paire { position: absolute; right: 8px; bottom: 8px; width: 34%; background: var(--paper); border: 1px solid var(--line); border-radius: 6px; pointer-events: none; }
+.atelier-racine .mini-paire svg { position: static !important; width: 100%; height: auto; display: block; }
+
+/* ---- v0.6 : personnage, chrono, défis, leçons, calibrage ---- */
+.atelier-racine .choix-pj { display: flex; flex-direction: column; gap: 2px; margin-left: auto; }
+.atelier-racine .modes + .choix-pj { margin-left: 0; }
+.atelier-racine .choix-pj + .btn.mj { margin-left: 0; }
+.atelier-racine .choix-pj select { border: 1px solid var(--line); border-left: 4px solid var(--pj, var(--line)); background: var(--sheet); border-radius: 6px; padding: 5px 8px; min-width: 180px; }
+
+.atelier-racine .chrono { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 1.05rem; border: 1px solid var(--line); border-radius: 6px; padding: 4px 10px; min-width: 92px; text-align: center; background: var(--paper); }
+.atelier-racine .chrono.tourne { border-color: var(--accent); color: var(--accent); }
+.atelier-racine .chrono.arrete { border-color: var(--ok); color: var(--ok); }
+
+.atelier-racine .modele { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 12px; align-items: center; border: 1px solid var(--seal); border-radius: 8px; padding: 10px; background: var(--paper); }
+.atelier-racine .modele-vignette svg { width: 100%; height: auto; display: block; }
+.atelier-racine .modele-texte { display: flex; flex-direction: column; gap: 4px; }
+.atelier-racine .modele-texte p { margin: 0; }
+.atelier-racine .fantome { opacity: .22; pointer-events: none; }
+.atelier-racine .fantome * { pointer-events: none; }
+
+.atelier-racine .resultat { border: 1px solid var(--line); border-left: 5px solid var(--muted); border-radius: 8px; padding: 10px 14px; background: var(--paper); }
+.atelier-racine .resultat ul { margin: 6px 0 0; padding-left: 18px; font-size: .92rem; }
+.atelier-racine .resultat p { margin: 6px 0 0; }
+.atelier-racine .res-tete { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px; font-size: 1.1rem; }
+.atelier-racine .res-tete b { font-family: var(--display); font-size: 1.3rem; }
+.atelier-racine .res-score { font-weight: 700; font-variant-numeric: tabular-nums; }
+.atelier-racine .m-Parfait { border-left-color: var(--t3); } .atelier-racine .m-Parfait .res-tete b { color: var(--t3); }
+.atelier-racine .m-Réussi { border-left-color: var(--ok); } .atelier-racine .m-Réussi .res-tete b { color: var(--ok); }
+.atelier-racine .m-Passable { border-left-color: var(--warn); } .atelier-racine .m-Passable .res-tete b { color: var(--warn); }
+.atelier-racine .m-Raté { border-left-color: var(--bad); } .atelier-racine .m-Raté .res-tete b { color: var(--bad); }
+
+.atelier-racine .lu.inconnu rect { stroke: var(--warn); } .atelier-racine .lu.inconnu text { fill: var(--warn); }
+.atelier-racine .alerte-inconnu { margin: 0; color: var(--warn); border: 1px solid var(--warn); border-radius: 6px; padding: 6px 10px; }
+
+.atelier-racine .carnet { border: 1px solid var(--line); border-top: 4px solid var(--pj, var(--seal)); border-radius: 8px; padding: 12px; background: var(--paper); display: flex; flex-direction: column; gap: 10px; }
+.atelier-racine .carnet h3 small { font-family: var(--body); font-size: .9rem; color: var(--muted); }
+.atelier-racine .carnet-tete { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; }
+.atelier-racine .carnet-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.atelier-racine .badge.warn { border-color: var(--warn); color: var(--warn); }
+.atelier-racine .carnet-grim { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 8px; }
+.atelier-racine .carnet-sort { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 10px; align-items: center; border: 1px solid var(--line); border-radius: 6px; padding: 6px; background: var(--sheet); }
+.atelier-racine .carnet-sort-texte { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.atelier-racine .carnet-sort-texte .muted { font-size: .82rem; }
+.atelier-racine .carnet .mini svg, .atelier-racine .profil-edit .mini svg, .atelier-racine .lecon .mini svg { width: 100%; height: auto; display: block; }
+.atelier-racine .libre-empl { display: grid; place-items: center; min-height: 84px; border-style: dashed; color: var(--muted); font-style: italic; grid-template-columns: 1fr; }
+.atelier-racine .carnet-signes { display: flex; flex-direction: column; gap: 8px; }
+.atelier-racine .glyphes-connus { display: flex; flex-wrap: wrap; gap: 6px; }
+.atelier-racine .glyphe-connu { display: flex; flex-direction: column; align-items: center; width: 64px; font-size: .75rem; text-align: center; }
+.atelier-racine .carnet-lecons { display: flex; flex-direction: column; gap: 8px; }
+.atelier-racine .lecon { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 10px; align-items: start; border: 1px solid var(--line); border-radius: 6px; padding: 8px; background: var(--sheet); }
+.atelier-racine .lecon p { margin: 3px 0 6px; font-size: .92rem; }
+.atelier-racine .lecon.faite { border-color: var(--ok); }
+.atelier-racine .lecon.faite b { color: var(--ok); }
+
+.atelier-racine .modale.calibrage { width: min(860px, 100%); max-height: calc(100vh - 32px); overflow: auto; }
+.atelier-racine .calib-corps { display: grid; grid-template-columns: 180px minmax(0, 1fr) 150px; gap: 14px; align-items: start; }
+.atelier-racine .calib-liste { display: flex; flex-wrap: wrap; gap: 4px; max-height: 380px; overflow: auto; }
+.atelier-racine .calib-zone { display: flex; flex-direction: column; gap: 8px; }
+.atelier-racine .calib-feuille { width: 100%; max-width: 340px; aspect-ratio: 1; margin: 0 auto; background: var(--sheet); border: 1px solid var(--line); border-radius: 8px; touch-action: none; cursor: crosshair; }
+.atelier-racine .calib-feuille .encre { stroke-width: 2.4; }
+.atelier-racine .calib-guide circle { fill: var(--muted); }
+.atelier-racine .calib-guide path { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 2; }
+.atelier-racine .calib-guide text { fill: var(--muted); font-size: 5px; font-family: var(--body); }
+.atelier-racine .calib-exemples { display: flex; flex-direction: column; gap: 6px; }
+.atelier-racine .calib-ex { display: flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 6px; padding: 3px; background: var(--sheet); }
+.atelier-racine .encre.fine { stroke-width: 3; }
+@media (max-width: 760px) { .atelier-racine .calib-corps { grid-template-columns: minmax(0, 1fr); } .atelier-racine .calib-liste { max-height: 120px; } }
+
+.atelier-racine .profils { max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 18px; align-items: start; }
+@media (max-width: 900px) { .atelier-racine .profils { grid-template-columns: minmax(0, 1fr); } }
+.atelier-racine .profils-liste { display: flex; flex-direction: column; gap: 6px; }
+.atelier-racine .profil-ligne { display: flex; align-items: center; gap: 10px; text-align: left; border: 1px solid var(--line); background: var(--paper); border-radius: 8px; padding: 8px 10px; cursor: pointer; }
+.atelier-racine .profil-ligne.on { border-color: var(--ink); box-shadow: inset 4px 0 0 var(--pj); }
+.atelier-racine .profil-ligne small { display: block; color: var(--muted); font-size: .8rem; }
+.atelier-racine .pastille { width: 14px; height: 14px; border-radius: 50%; background: var(--pj); flex: none; }
+.atelier-racine .profil-edit { border: 1px solid var(--line); border-radius: 8px; padding: 14px; background: var(--paper); display: flex; flex-direction: column; gap: 10px; }
+.atelier-racine .profil-edit .chips { margin-bottom: 4px; }
+.atelier-racine .profil-champs { display: flex; flex-wrap: wrap; gap: 10px; }
+.atelier-racine .profil-champs label { display: flex; flex-direction: column; gap: 3px; font-size: .8rem; color: var(--muted); }
+.atelier-racine .profil-champs input, .atelier-racine .profil-champs select { border: 1px solid var(--line); background: var(--sheet); border-radius: 6px; padding: 6px 8px; color: var(--ink); font-size: 1rem; }
+.atelier-racine .profil-champs input[type=number] { width: 90px; }
+.atelier-racine .profil-champs input[type=color] { padding: 2px; height: 36px; width: 56px; }
+.atelier-racine .chip.au-dela { border-style: dashed; }
+.atelier-racine select.donner { border: 1px solid var(--line); background: var(--sheet); border-radius: 6px; padding: 4px 6px; max-width: 170px; }
+.atelier-racine .profil-edit h3 { margin-top: 6px; }
+.atelier-racine .profil-edit > p { margin: 0; }

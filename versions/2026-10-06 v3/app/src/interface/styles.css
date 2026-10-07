@@ -1,0 +1,158 @@
+/* Styles communs de la coquille. Les modules préfixent leurs propres classes (.perso-…, .camp-…). */
+
+:root {
+  --fond: #f4efe6;
+  --fond-2: #ebe3d4;
+  --panneau: #fffaf1;
+  --encre: #2b2419;
+  --encre-2: #6b5d48;
+  --trait: #d8ccb6;
+  --accent: #8a5a1c;
+  --accent-2: #b07a2e;
+  --accent-texte: #fffaf1;
+  --danger: #a3372b;
+  --succes: #3d7a3a;
+  --mj: #6b3fa0;
+  --rayon: 8px;
+  --ombre: 0 2px 10px rgb(60 40 10 / 0.12);
+  --titre: 'Marcellus SC', Georgia, serif;
+  --texte: 'Alegreya Sans', system-ui, sans-serif;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='clair']) {
+    --fond: #16130f;
+    --fond-2: #1f1b15;
+    --panneau: #26211a;
+    --encre: #ece3d2;
+    --encre-2: #a8987d;
+    --trait: #3d3528;
+    --accent: #d4a050;
+    --accent-2: #e6b86a;
+    --accent-texte: #1a150e;
+    --danger: #e0705f;
+    --succes: #7cc276;
+    --mj: #b48ae6;
+    --ombre: 0 2px 12px rgb(0 0 0 / 0.4);
+    color-scheme: dark;
+  }
+}
+:root[data-theme='sombre'] {
+  --fond: #16130f;
+  --fond-2: #1f1b15;
+  --panneau: #26211a;
+  --encre: #ece3d2;
+  --encre-2: #a8987d;
+  --trait: #3d3528;
+  --accent: #d4a050;
+  --accent-2: #e6b86a;
+  --accent-texte: #1a150e;
+  --danger: #e0705f;
+  --succes: #7cc276;
+  --mj: #b48ae6;
+  --ombre: 0 2px 12px rgb(0 0 0 / 0.4);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body, #racine { height: 100%; margin: 0; }
+body { background: var(--fond); color: var(--encre); font: 17px/1.45 var(--texte); }
+h1, h2, h3 { font-family: var(--titre); font-weight: 400; margin: 0 0 0.5em; letter-spacing: 0.02em; }
+h1 { font-size: 1.6rem; } h2 { font-size: 1.3rem; } h3 { font-size: 1.1rem; }
+p { margin: 0 0 0.8em; }
+a { color: var(--accent); }
+
+/* ---------- coquille ---------- */
+.coq { display: grid; grid-template-columns: 220px 1fr; grid-template-rows: auto 1fr; height: 100%; }
+.coq:has(> .coq-bandeau-joueurs) { grid-template-rows: auto auto 1fr; } /* le bandeau d'aperçu ne s'étire pas */
+.coq-entete {
+  grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 10px 16px; background: var(--panneau); border-bottom: 1px solid var(--trait);
+}
+.coq-marque { font-family: var(--titre); font-size: 1.25rem; color: var(--accent); white-space: nowrap; }
+.coq-campagne { color: var(--encre-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1; }
+.coq-outils { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.coq-nav { background: var(--fond-2); border-right: 1px solid var(--trait); padding: 12px 8px; overflow-y: auto; }
+.coq-nav button {
+  display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
+  padding: 9px 12px; margin-bottom: 2px; border: 0; border-radius: var(--rayon);
+  background: transparent; color: var(--encre); font: inherit; cursor: pointer;
+}
+.coq-nav button:hover { background: var(--panneau); }
+.coq-nav button[aria-current='page'] { background: var(--accent); color: var(--accent-texte); }
+.coq-nav button:disabled { opacity: 0.45; cursor: default; }
+.coq-nav .bientot { margin-left: auto; font-size: 0.75rem; opacity: 0.8; }
+.coq-nav svg { width: 18px; height: 18px; flex: none; }
+.coq-page { overflow-y: auto; padding: 20px 24px 60px; }
+.coq-bandeau-joueurs {
+  background: var(--mj); color: #fff; padding: 6px 16px; font-size: 0.9rem; grid-column: 1 / -1;
+}
+
+@media (max-width: 760px) {
+  .coq { grid-template-columns: 1fr; grid-template-rows: auto auto 1fr; }
+  .coq:has(> .coq-bandeau-joueurs) { grid-template-rows: auto auto auto 1fr; }
+  .coq-nav { display: flex; overflow-x: auto; padding: 6px; border-right: 0; border-bottom: 1px solid var(--trait); }
+  .coq-nav button { width: auto; white-space: nowrap; margin: 0 2px 0 0; }
+  .coq-page { padding: 16px; }
+}
+
+/* ---------- composants ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px;
+  border: 1px solid var(--trait); border-radius: var(--rayon); background: var(--panneau);
+  color: var(--encre); font: inherit; font-size: 0.95rem; cursor: pointer;
+}
+.btn:hover { border-color: var(--accent); }
+.btn:disabled { opacity: 0.5; cursor: default; }
+.btn-principal { background: var(--accent); border-color: var(--accent); color: var(--accent-texte); }
+.btn-principal:hover { background: var(--accent-2); }
+.btn-danger { color: var(--danger); }
+.btn-mj { border-color: var(--mj); color: var(--mj); }
+.btn-petit { padding: 3px 9px; font-size: 0.85rem; }
+
+.carte-ui { background: var(--panneau); border: 1px solid var(--trait); border-radius: var(--rayon); padding: 16px; box-shadow: var(--ombre); }
+.grille-cartes { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+.pile { display: flex; flex-direction: column; gap: 14px; }
+.ligne { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.discret { color: var(--encre-2); font-size: 0.9rem; }
+
+.champ { display: flex; flex-direction: column; gap: 3px; font-size: 0.9rem; color: var(--encre-2); }
+.champ input, .champ select, .champ textarea {
+  font: inherit; font-size: 1rem; color: var(--encre); background: var(--fond);
+  border: 1px solid var(--trait); border-radius: 6px; padding: 6px 9px; min-width: 0;
+}
+.champ textarea { min-height: 80px; resize: vertical; }
+.champ input:focus, .champ select:focus, .champ textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+.champs { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
+
+.bloc-mj { border: 1px dashed var(--mj); border-radius: var(--rayon); padding: 12px; }
+.bloc-mj > .etiquette-mj { color: var(--mj); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; display: block; }
+
+.alertes { border-left: 3px solid var(--accent); padding: 8px 12px; background: var(--fond-2); font-size: 0.9rem; }
+.alertes ul { margin: 4px 0 0; padding-left: 18px; }
+
+.vide { text-align: center; padding: 40px 16px; color: var(--encre-2); }
+
+.toasts { position: fixed; right: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 8px; z-index: 50; }
+.toast { background: var(--encre); color: var(--fond); padding: 8px 14px; border-radius: var(--rayon); box-shadow: var(--ombre); max-width: 360px; }
+.toast.erreur { background: var(--danger); color: #fff; }
+.toast.succes { background: var(--succes); color: #fff; }
+
+.a-venir { max-width: 680px; }
+.a-venir ul { padding-left: 20px; }
+
+/* ---------- écran joueurs ---------- */
+.ecran { position: fixed; inset: 0; display: grid; place-items: center; background: #0d0b08; color: #ece3d2; padding: 4vh 4vw; }
+.ecran img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.ecran-titre { font-family: var(--titre); font-size: clamp(1.6rem, 4vw, 3.4rem); text-align: center; margin-bottom: 0.4em; }
+.ecran-texte { font-size: clamp(1.1rem, 2vw, 1.8rem); max-width: 60ch; text-align: center; white-space: pre-wrap; }
+.ecran-image { display: grid; grid-template-rows: auto 1fr; height: 100%; width: 100%; gap: 1vh; }
+.ecran-image .ecran-titre { font-size: clamp(1.2rem, 2.4vw, 2.2rem); margin: 0; }
+.ecran-image > div { display: grid; place-items: center; min-height: 0; }
+.ecran-perso { display: flex; gap: 4vw; align-items: center; flex-wrap: wrap; justify-content: center; }
+.ecran-perso img { width: min(36vh, 40vw); height: min(36vh, 40vw); border-radius: 50%; object-fit: cover; border: 4px solid #d4a050; }
+.ecran-perso .ecran-texte { text-align: left; }
+.ecran-sous { color: #a8987d; font-size: clamp(1rem, 1.6vw, 1.4rem); }
+.ecran-plein { position: fixed; top: 10px; right: 10px; opacity: 0.25; }
+.ecran-plein:hover { opacity: 1; }

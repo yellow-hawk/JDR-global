@@ -1,0 +1,30 @@
+.chrono-page { display: grid; gap: 14px; }
+.chrono-haut { display: grid; grid-template-columns: minmax(320px, 1fr) minmax(280px, 380px); gap: 14px; align-items: start; }
+.chrono-horloge { display: grid; gap: 10px; }
+.chrono-horloge h3 { margin: 0 0 4px; font-size: 1rem; }
+.chrono-jour { font-family: var(--titre); font-size: 1.8rem; color: var(--accent); }
+.chrono-avances { flex-wrap: wrap; gap: 6px; }
+.chrono-lunes { display: flex; flex-wrap: wrap; gap: 14px; }
+.chrono-lune { display: inline-flex; align-items: center; gap: 6px; }
+.chrono-fetes { margin: 0; padding-left: 18px; }
+.chrono-reglage { display: grid; gap: 8px; border-top: 1px solid var(--trait); padding-top: 8px; }
+.chrono-reglage input[type='number'], .chrono-nb { width: 6em; }
+.chrono-detail { display: grid; gap: 8px; align-content: start; min-height: 180px; }
+.chrono-frise { position: relative; border: 1px solid var(--trait); border-radius: var(--rayon); background: var(--panneau); overflow: hidden; touch-action: none; user-select: none; cursor: grab; }
+.chrono-frise svg { display: block; }
+.chrono-bande { fill: transparent; }
+.chrono-bande.impaire { fill: var(--fond-2); opacity: 0.5; }
+.chrono-ligne { stroke: var(--trait); stroke-width: 2; }
+.chrono-grad { stroke: var(--trait); stroke-dasharray: 2 4; }
+.chrono-an { fill: var(--encre-2); font-size: 11px; text-anchor: middle; }
+.chrono-etiquette-fond { fill: var(--panneau); }
+.chrono-etiquette { fill: var(--encre); font-size: 12px; font-weight: 600; }
+.chrono-point { cursor: pointer; }
+.chrono-point circle { stroke: var(--panneau); stroke-width: 2; }
+.chrono-point.choisi circle { stroke: var(--encre); }
+.chrono-titre { fill: var(--encre); font-size: 11px; text-anchor: middle; paint-order: stroke; stroke: var(--panneau); stroke-width: 3px; }
+.chrono-maintenant { stroke: var(--succes); stroke-width: 2; }
+.chrono-maintenant-texte { fill: var(--succes); font-size: 11px; }
+.chrono-zoom { position: absolute; top: 6px; right: 8px; display: flex; gap: 6px; }
+.chrono-entete { display: inline-flex; gap: 4px; }
+@media (max-width: 900px) { .chrono-haut { grid-template-columns: 1fr; } .chrono-entete button:first-child { max-width: 9em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } }

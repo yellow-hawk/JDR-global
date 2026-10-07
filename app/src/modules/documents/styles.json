@@ -1,0 +1,9 @@
+{
+  "_note": "Habillages des documents montrés aux joueurs (classes .ecran-doc-<id> dans interface/styles.css).",
+  "styles": [
+    { "id": "parchemin", "libelle": "Parchemin" },
+    { "id": "lettre", "libelle": "Lettre manuscrite" },
+    { "id": "affiche", "libelle": "Affiche / avis de recherche" },
+    { "id": "note", "libelle": "Note griffonnée" }
+  ]
+}

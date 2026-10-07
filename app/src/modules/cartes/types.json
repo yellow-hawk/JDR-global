@@ -1,0 +1,70 @@
+{
+  "typesCarte": [
+    {
+      "id": "monde",
+      "libelle": "Monde"
+    },
+    {
+      "id": "region",
+      "libelle": "Région / pays"
+    },
+    {
+      "id": "ville",
+      "libelle": "Ville"
+    },
+    {
+      "id": "village",
+      "libelle": "Village"
+    },
+    {
+      "id": "lieu",
+      "libelle": "Lieu"
+    },
+    {
+      "id": "donjon",
+      "libelle": "Donjon / intérieur"
+    },
+    {
+      "id": "bataille",
+      "libelle": "Carte de bataille"
+    },
+    {
+      "id": "quete",
+      "libelle": "Carte de quête"
+    },
+    {
+      "id": "ciel",
+      "libelle": "Ciel"
+    },
+    {
+      "id": "systeme",
+      "libelle": "Système stellaire"
+    },
+    {
+      "id": "autre",
+      "libelle": "Autre"
+    }
+  ],
+  "sortesRepere": [
+    {
+      "id": "ville",
+      "libelle": "Ville"
+    },
+    {
+      "id": "lieu",
+      "libelle": "Lieu"
+    },
+    {
+      "id": "danger",
+      "libelle": "Danger"
+    },
+    {
+      "id": "quete",
+      "libelle": "Quête"
+    },
+    {
+      "id": "note",
+      "libelle": "Note"
+    }
+  ]
+}

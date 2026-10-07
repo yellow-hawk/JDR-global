@@ -1,0 +1,548 @@
+{
+  "_note": "Données de base de la table de combat (listes ouvertes : ajouter une entrée suffit). Bibliothèque et sorts génériques (inspirés du SRD). Les univers particuliers (ex. L'Épée de vérité) sont des packs : public/packs/.",
+  "conditions": [
+    "Aveuglé",
+    "Charmé",
+    "Effrayé",
+    "Invisible",
+    "Paralysé",
+    "Pétrifié",
+    "Empoisonné",
+    "Entravé",
+    "Étourdi",
+    "Inconscient",
+    "En feu",
+    "Ralenti",
+    "Béni",
+    "Hâté",
+    "Protégé",
+    "Inspiré",
+    "Résistance"
+  ],
+  "conditionsBonus": [
+    "Béni",
+    "Hâté",
+    "Protégé",
+    "Inspiré",
+    "Résistance"
+  ],
+  "terrains": [
+    {
+      "id": "difficile",
+      "nom": "Terrain difficile",
+      "couleur": "rgba(180,140,60,0.4)",
+      "desc": "Mouvement ×2",
+      "motif": "hachures",
+      "cout": 2,
+      "bloque": false,
+      "bloqueVue": false
+    },
+    {
+      "id": "infranchissable",
+      "nom": "Infranchissable",
+      "couleur": "rgba(120,40,40,0.5)",
+      "desc": "Bloque le passage",
+      "motif": "croix",
+      "cout": 999,
+      "bloque": true,
+      "bloqueVue": true
+    },
+    {
+      "id": "eau",
+      "nom": "Eau",
+      "couleur": "rgba(40,100,180,0.45)",
+      "desc": "Nage requise",
+      "motif": "vagues",
+      "cout": 2,
+      "bloque": false,
+      "bloqueVue": false
+    },
+    {
+      "id": "elevation",
+      "nom": "Élévation",
+      "couleur": "rgba(100,100,100,0.35)",
+      "desc": "Hauteur +3 m",
+      "motif": "points",
+      "cout": 1,
+      "bloque": false,
+      "bloqueVue": false
+    },
+    {
+      "id": "couvert",
+      "nom": "Couvert",
+      "couleur": "rgba(60,120,60,0.35)",
+      "desc": "½ couvert",
+      "motif": "hachures",
+      "cout": 1,
+      "bloque": false,
+      "bloqueVue": false
+    },
+    {
+      "id": "antimagie",
+      "nom": "Antimagie",
+      "couleur": "rgba(100,40,120,0.35)",
+      "desc": "Sorts annulés",
+      "motif": "croix",
+      "cout": 1,
+      "bloque": false,
+      "bloqueVue": false,
+      "antimagie": true
+    },
+    {
+      "id": "mur",
+      "nom": "Mur opaque",
+      "couleur": "rgba(60,60,60,0.6)",
+      "desc": "Bloque vue et passage",
+      "motif": "croix",
+      "cout": 999,
+      "bloque": true,
+      "bloqueVue": true
+    }
+  ],
+  "sorts": [
+    {
+      "id": 1,
+      "nom": "Boule de feu",
+      "forme": "cercle",
+      "rayon": 4,
+      "couleur": "rgba(217,72,72,0.5)",
+      "desc": "Sphère, 6 m",
+      "portee": 24,
+      "origine": "point",
+      "effets": [
+        {
+          "type": "degats",
+          "valeur": 28,
+          "nature": "feu"
+        },
+        {
+          "type": "condition",
+          "valeur": "En feu"
+        }
+      ],
+      "particule": "feu",
+      "concentration": false
+    },
+    {
+      "id": 2,
+      "nom": "Bénédiction",
+      "forme": "cercle",
+      "rayon": 3,
+      "couleur": "rgba(69,168,74,0.5)",
+      "desc": "Aura, 4,5 m",
+      "portee": 6,
+      "origine": "point",
+      "effets": [
+        {
+          "type": "condition",
+          "valeur": "Béni",
+          "bonus": true
+        }
+      ],
+      "particule": "sacre",
+      "concentration": true
+    },
+    {
+      "id": 3,
+      "nom": "Souffle du dragon",
+      "forme": "cone",
+      "rayon": 5,
+      "couleur": "rgba(230,126,34,0.5)",
+      "desc": "Cône, 7,5 m",
+      "portee": 0,
+      "origine": "soi",
+      "effets": [
+        {
+          "type": "degats",
+          "valeur": 21,
+          "nature": "feu"
+        }
+      ],
+      "particule": "feu",
+      "concentration": false
+    },
+    {
+      "id": 4,
+      "nom": "Éclair",
+      "forme": "ligne",
+      "rayon": 20,
+      "couleur": "rgba(0,188,212,0.5)",
+      "desc": "Ligne, 30 m",
+      "portee": 0,
+      "origine": "soi",
+      "effets": [
+        {
+          "type": "degats",
+          "valeur": 24,
+          "nature": "foudre"
+        }
+      ],
+      "particule": "foudre",
+      "concentration": false
+    },
+    {
+      "id": 5,
+      "nom": "Mur de force",
+      "forme": "rectangle",
+      "rayon": 6,
+      "largeur": 1,
+      "couleur": "rgba(155,89,182,0.5)",
+      "desc": "Mur",
+      "portee": 18,
+      "origine": "point",
+      "effets": [],
+      "particule": null,
+      "concentration": true
+    },
+    {
+      "id": 6,
+      "nom": "Tempête de grêle",
+      "forme": "cercle",
+      "rayon": 4,
+      "couleur": "rgba(74,144,217,0.5)",
+      "desc": "Glace, 6 m",
+      "portee": 20,
+      "origine": "point",
+      "effets": [
+        {
+          "type": "degats",
+          "valeur": 18,
+          "nature": "froid"
+        },
+        {
+          "type": "condition",
+          "valeur": "Ralenti"
+        }
+      ],
+      "particule": "glace",
+      "concentration": false
+    },
+    {
+      "id": 7,
+      "nom": "Ténèbres",
+      "forme": "cercle",
+      "rayon": 3,
+      "couleur": "rgba(30,30,50,0.7)",
+      "desc": "Ténèbres",
+      "portee": 10,
+      "origine": "point",
+      "effets": [
+        {
+          "type": "condition",
+          "valeur": "Aveuglé"
+        }
+      ],
+      "particule": "tenebres",
+      "concentration": true
+    },
+    {
+      "id": 8,
+      "nom": "Projectile magique",
+      "forme": "cercle",
+      "rayon": 1,
+      "couleur": "rgba(155,89,182,0.5)",
+      "desc": "Trois fléchettes, 36 m",
+      "portee": 24,
+      "origine": "point",
+      "effets": [
+        {
+          "type": "degats",
+          "valeur": 10,
+          "nature": "force"
+        }
+      ],
+      "particule": "sacre",
+      "concentration": false
+    },
+    {
+      "id": 9,
+      "nom": "Soins de groupe",
+      "forme": "cercle",
+      "rayon": 3,
+      "couleur": "rgba(69,168,74,0.5)",
+      "desc": "Soigne les alliés, 4,5 m",
+      "portee": 12,
+      "origine": "point",
+      "effets": [
+        {
+          "type": "soin",
+          "valeur": 15
+        }
+      ],
+      "particule": "sacre",
+      "concentration": false
+    }
+  ],
+  "bibliotheque": [
+    {
+      "nom": "Gobelin",
+      "camp": "ennemi",
+      "pvMax": 7,
+      "ca": 15,
+      "vitesse": 6,
+      "carac": {
+        "for": 8,
+        "dex": 14,
+        "con": 10,
+        "int": 10,
+        "sag": 8,
+        "cha": 8
+      },
+      "taille": 1,
+      "notes": "Petit, sournois",
+      "degats": "1d6+2"
+    },
+    {
+      "nom": "Bandit",
+      "camp": "ennemi",
+      "pvMax": 11,
+      "ca": 12,
+      "vitesse": 6,
+      "carac": {
+        "for": 11,
+        "dex": 12,
+        "con": 12,
+        "int": 10,
+        "sag": 10,
+        "cha": 10
+      },
+      "taille": 1,
+      "notes": "Brigand des routes",
+      "degats": "1d6+1"
+    },
+    {
+      "nom": "Garde",
+      "camp": "ennemi",
+      "pvMax": 11,
+      "ca": 16,
+      "vitesse": 6,
+      "carac": {
+        "for": 13,
+        "dex": 12,
+        "con": 12,
+        "int": 10,
+        "sag": 11,
+        "cha": 10
+      },
+      "taille": 1,
+      "notes": "Soldat ou milicien",
+      "degats": "1d6+1"
+    },
+    {
+      "nom": "Cultiste",
+      "camp": "ennemi",
+      "pvMax": 9,
+      "ca": 12,
+      "vitesse": 6,
+      "carac": {
+        "for": 11,
+        "dex": 12,
+        "con": 10,
+        "int": 10,
+        "sag": 11,
+        "cha": 10
+      },
+      "taille": 1,
+      "notes": "Fanatique",
+      "degats": "1d6+1"
+    },
+    {
+      "nom": "Loup",
+      "camp": "ennemi",
+      "pvMax": 11,
+      "ca": 13,
+      "vitesse": 8,
+      "carac": {
+        "for": 12,
+        "dex": 15,
+        "con": 12,
+        "int": 3,
+        "sag": 12,
+        "cha": 6
+      },
+      "taille": 1,
+      "notes": "Meute, avantage en groupe",
+      "degats": "2d4+2"
+    },
+    {
+      "nom": "Squelette",
+      "camp": "ennemi",
+      "pvMax": 13,
+      "ca": 13,
+      "vitesse": 6,
+      "carac": {
+        "for": 10,
+        "dex": 14,
+        "con": 15,
+        "int": 6,
+        "sag": 8,
+        "cha": 5
+      },
+      "taille": 1,
+      "notes": "Mort-vivant",
+      "degats": "1d6+2"
+    },
+    {
+      "nom": "Zombie",
+      "camp": "ennemi",
+      "pvMax": 22,
+      "ca": 8,
+      "vitesse": 4,
+      "carac": {
+        "for": 13,
+        "dex": 6,
+        "con": 16,
+        "int": 3,
+        "sag": 6,
+        "cha": 5
+      },
+      "taille": 1,
+      "notes": "Mort-vivant, lent",
+      "degats": "1d6+1"
+    },
+    {
+      "nom": "Orc",
+      "camp": "ennemi",
+      "pvMax": 15,
+      "ca": 13,
+      "vitesse": 6,
+      "carac": {
+        "for": 16,
+        "dex": 12,
+        "con": 16,
+        "int": 7,
+        "sag": 11,
+        "cha": 10
+      },
+      "taille": 1,
+      "notes": "Guerrier brutal",
+      "degats": "1d12+3"
+    },
+    {
+      "nom": "Araignée géante",
+      "camp": "ennemi",
+      "pvMax": 26,
+      "ca": 14,
+      "vitesse": 6,
+      "carac": {
+        "for": 14,
+        "dex": 16,
+        "con": 12,
+        "int": 2,
+        "sag": 11,
+        "cha": 4
+      },
+      "taille": 2,
+      "notes": "Toile, venin",
+      "degats": "1d8+3"
+    },
+    {
+      "nom": "Ours brun",
+      "camp": "ennemi",
+      "pvMax": 34,
+      "ca": 11,
+      "vitesse": 8,
+      "carac": {
+        "for": 19,
+        "dex": 10,
+        "con": 16,
+        "int": 2,
+        "sag": 13,
+        "cha": 7
+      },
+      "taille": 2,
+      "notes": "Bête",
+      "degats": "2d6+4"
+    },
+    {
+      "nom": "Capitaine bandit",
+      "camp": "ennemi",
+      "pvMax": 65,
+      "ca": 15,
+      "vitesse": 6,
+      "carac": {
+        "for": 15,
+        "dex": 16,
+        "con": 14,
+        "int": 14,
+        "sag": 11,
+        "cha": 14
+      },
+      "taille": 1,
+      "notes": "Chef de bande",
+      "degats": "1d6+3"
+    },
+    {
+      "nom": "Mage",
+      "camp": "ennemi",
+      "pvMax": 40,
+      "ca": 12,
+      "vitesse": 6,
+      "carac": {
+        "for": 9,
+        "dex": 14,
+        "con": 11,
+        "int": 17,
+        "sag": 12,
+        "cha": 11
+      },
+      "taille": 1,
+      "notes": "Lanceur de sorts",
+      "degats": "1d4+2"
+    },
+    {
+      "nom": "Prêtre",
+      "camp": "ennemi",
+      "pvMax": 27,
+      "ca": 13,
+      "vitesse": 6,
+      "carac": {
+        "for": 10,
+        "dex": 10,
+        "con": 12,
+        "int": 13,
+        "sag": 16,
+        "cha": 13
+      },
+      "taille": 1,
+      "notes": "Soigneur",
+      "degats": "1d6"
+    },
+    {
+      "nom": "Ogre",
+      "camp": "ennemi",
+      "pvMax": 59,
+      "ca": 11,
+      "vitesse": 8,
+      "carac": {
+        "for": 19,
+        "dex": 8,
+        "con": 16,
+        "int": 5,
+        "sag": 7,
+        "cha": 7
+      },
+      "taille": 2,
+      "notes": "Géant stupide",
+      "degats": "2d8+4"
+    },
+    {
+      "nom": "Jeune dragon rouge",
+      "camp": "ennemi",
+      "pvMax": 110,
+      "ca": 18,
+      "vitesse": 8,
+      "carac": {
+        "for": 23,
+        "dex": 10,
+        "con": 21,
+        "int": 14,
+        "sag": 11,
+        "cha": 19
+      },
+      "taille": 3,
+      "notes": "Souffle de feu",
+      "degats": "2d10+6"
+    }
+  ]
+}

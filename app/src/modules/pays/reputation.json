@@ -1,0 +1,13 @@
+{
+  "_note": "Niveaux de réputation du groupe auprès d'un peuple (seuil minimal, de -100 à +100), et pas des boutons.",
+  "niveaux": [
+    { "min": -100, "libelle": "Haï", "couleur": "#a3372b" },
+    { "min": -60, "libelle": "Hostile", "couleur": "#c75a3a" },
+    { "min": -25, "libelle": "Méfiant", "couleur": "#c9a84c" },
+    { "min": -5, "libelle": "Neutre", "couleur": "#8c8270" },
+    { "min": 6, "libelle": "Amical", "couleur": "#6aa84f" },
+    { "min": 26, "libelle": "Allié", "couleur": "#3d7a3a" },
+    { "min": 61, "libelle": "Vénéré", "couleur": "#2e74b5" }
+  ],
+  "pas": [-10, -5, 5, 10]
+}

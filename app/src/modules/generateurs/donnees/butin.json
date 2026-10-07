@@ -1,0 +1,19 @@
+{
+  "_note": "Butin par tranche de niveau : pièces (formule de dés × multiplicateur), gemmes, objets d'art, objets magiques par rareté.",
+  "tranches": [
+    { "id": "0-4", "libelle": "Niveaux 1 à 4", "pieces": [{ "formule": "5d6", "fois": 1, "unite": "po" }, { "formule": "4d6", "fois": 10, "unite": "pa" }], "gemmes": [10, 50], "art": [25], "magique": ["commun", "peu commun"], "nbObjets": [0, 2] },
+    { "id": "5-10", "libelle": "Niveaux 5 à 10", "pieces": [{ "formule": "4d6", "fois": 10, "unite": "po" }, { "formule": "2d6", "fois": 10, "unite": "pp" }], "gemmes": [50, 100], "art": [25, 250], "magique": ["peu commun", "rare"], "nbObjets": [1, 3] },
+    { "id": "11-16", "libelle": "Niveaux 11 à 16", "pieces": [{ "formule": "4d6", "fois": 100, "unite": "po" }, { "formule": "1d6", "fois": 100, "unite": "pp" }], "gemmes": [100, 500, 1000], "art": [250, 750], "magique": ["rare", "très rare"], "nbObjets": [1, 4] },
+    { "id": "17+", "libelle": "Niveaux 17 et plus", "pieces": [{ "formule": "12d6", "fois": 100, "unite": "po" }, { "formule": "8d6", "fois": 100, "unite": "pp" }], "gemmes": [1000, 5000], "art": [750, 2500, 7500], "magique": ["très rare", "légendaire"], "nbObjets": [2, 5] }
+  ],
+  "gemmes": { "10": ["agate", "hématite", "quartz bleu", "turquoise"], "50": ["jaspe", "onyx", "citrine", "pierre de lune"], "100": ["ambre", "améthyste", "grenat", "jade", "perle"], "500": ["aigue-marine", "topaze", "perle noire"], "1000": ["émeraude", "opale de feu", "saphir"], "5000": ["diamant", "rubis étoilé", "jacinthe"] },
+  "art": { "25": ["un calice d'argent", "une statuette d'os sculpté", "un petit tapis brodé", "un miroir au cadre de cuivre"], "250": ["un anneau d'or serti", "une statuette d'ivoire", "une coupe d'or gravée", "un masque cérémoniel"], "750": ["une épée d'apparat sertie", "une harpe en bois exotique", "une idole d'or"], "2500": ["une chaîne d'or et de rubis", "une couronne ancienne", "une tapisserie royale"], "7500": ["un sceptre royal", "un œuf de dragon pétrifié et serti"] },
+  "magique": {
+    "commun": ["Potion de soins", "Bougie qui ne s'éteint pas", "Chapeau qui change de couleur", "Pierre chaude de voyage"],
+    "peu commun": ["Potion de soins supérieurs", "Sac sans fond", "Cape de protection", "Bottes de marche silencieuse", "Arme +1", "Baguette de projectiles"],
+    "rare": ["Armure +1", "Anneau de résistance", "Bracelets de défense", "Potion de vol", "Arme +2", "Amulette de santé"],
+    "très rare": ["Arme +3", "Manteau de déplacement", "Bâton de puissance", "Potion de soins suprêmes"],
+    "légendaire": ["Épée vorpale", "Anneau des trois souhaits", "Armure d'invulnérabilité", "Bâton des mages"]
+  },
+  "contenants": ["un coffre vermoulu", "une bourse de cuir", "un sac taché de sang", "une urne scellée", "un double fond de tiroir", "une cache sous une dalle"]
+}

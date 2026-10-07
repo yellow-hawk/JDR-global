@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Atlas des ciels imaginaires (version locale)</title>
+<style>
+@font-face{font-family:'Cormorant Garamond';src:url('lib/polices/cormorant-garamond-latin-500-normal.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('lib/polices/cormorant-garamond-latin-500-italic.woff2') format('woff2');font-weight:500;font-style:italic;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('lib/polices/cormorant-garamond-latin-600-normal.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('lib/polices/cormorant-garamond-latin-600-italic.woff2') format('woff2');font-weight:600;font-style:italic;font-display:swap}
+@font-face{font-family:'Figtree';src:url('lib/polices/figtree-latin-400-normal.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Figtree';src:url('lib/polices/figtree-latin-500-normal.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Figtree';src:url('lib/polices/figtree-latin-600-normal.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+</style>
+<link rel="stylesheet" href="css/atlas.css">
+</head>
+<body>
+<canvas id="sky" aria-label="Ciel nocturne interactif"></canvas>
+
+<header class="title"><h1 id="skyName">…</h1><p id="skyMeta"></p><button class="mode-chip" id="modeChip">Voir le vrai ciel de la Terre</button><button class="mode-chip" id="homeChip" hidden></button></header>
+
+<div class="modes" role="group" aria-label="Mode de vue">
+  <button data-mode="pov" aria-pressed="true">Vue au sol</button>
+  <button data-mode="map" aria-pressed="false">Carte</button>
+</div>
+<div class="zoom">
+  <button id="zin" aria-label="Zoomer">+</button>
+  <button id="zout" aria-label="Dézoomer">−</button>
+  <button id="btnSearch" aria-label="Rechercher"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg></button>
+</div>
+
+<nav class="bar" aria-label="Actions">
+  <button id="btnNew"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.2" fill="currentColor"/><circle cx="15" cy="15" r="1.2" fill="currentColor"/><circle cx="15" cy="9" r="1.2" fill="currentColor"/><circle cx="9" cy="15" r="1.2" fill="currentColor"/></svg><span class="lg">Nouveau ciel</span><span class="sm">Nouveau</span></button>
+  <button id="btnSettings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>Réglages</button>
+  <button id="btnSaves"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 5h14v14H5z"/><path d="M5 10h14M10 5v14"/></svg><span class="lg">Mes ciels</span><span class="sm">Ciels</span></button>
+  <button id="btnWorld"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8"/><path d="M4.5 10c3 1 5-1 7 .5s1 4 3.5 4.5 3.5-1 4.5-2M8 5.5c1 2 3 2 4 1.5s2.5.5 3 2"/></svg>Monde</button>
+  <button id="btnShip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3c3 2.5 4.5 6 4.5 10l-2 3h-5l-2-3C7.5 9 9 5.5 12 3z"/><circle cx="12" cy="10" r="1.6"/><path d="M9.5 16l-2.5 3 3-.5M14.5 16l2.5 3-3-.5M11 19.5l1 2 1-2"/></svg>Explorer</button>
+  <button id="btnSave" class="primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg><span class="lg">Sauvegarder</span><span class="sm">Sauver</span></button>
+</nav>
+
+<div class="timebar" role="group" aria-label="Heure de la nuit">
+  <button id="tPlay" aria-label="Faire avancer le temps"></button>
+  <button class="tl" id="tLabel" type="button" title="Ouvrir le calendrier"></button>
+  <input type="range" id="tRange" min="18" max="31" step="0.0833" aria-label="Heure">
+  <input type="date" id="tDate" hidden aria-label="Date">
+  <button class="tnow" id="tNow" hidden>Maintenant</button>
+</div>
+
+<aside class="sheet" id="panelSettings" aria-label="Réglages du ciel">
+  <div class="sheet-head"><h2>Réglages</h2><button class="close" data-close aria-label="Fermer">×</button></div>
+  <div id="genBlock">
+  <h3>Génération</h3>
+  <p class="hint">Une même graine redonne toujours le même ciel.</p>
+  <div class="row"><label for="seedIn">Graine</label>
+    <div class="seed"><input type="text" id="seedIn" autocomplete="off" spellcheck="false"><button id="seedRnd">Tirer</button></div></div>
+  <div id="genRows"></div>
+  <div class="row"><label for="styleIn">Style des noms et des légendes</label>
+    <select id="styleIn"><option value="celeste">Céleste</option><option value="nordique">Nordique</option><option value="ancien">Ancien</option><option value="elfique">Elfique</option></select></div>
+  </div>
+  <h3>Affichage</h3>
+  <div id="dispRows"></div>
+  <div class="row"><label for="tintIn">Teinte du ciel</label>
+    <select id="tintIn"><option value="nuit">Nuit profonde</option><option value="crepuscule">Crépuscule</option><option value="aurore">Aurore verte</option><option value="encre">Encre</option></select></div>
+</aside>
+
+<aside class="sheet" id="panelSearch" aria-label="Rechercher">
+  <div class="sheet-head"><h2>Rechercher</h2><button class="close" data-close aria-label="Fermer">×</button></div>
+  <input type="search" id="searchIn" placeholder="Étoile, constellation, cité, lieu…" autocomplete="off">
+  <ul class="v-list" id="searchRes"></ul>
+</aside>
+
+<aside class="sheet" id="panelWorld" aria-label="Le monde et ses peuples">
+  <div class="sheet-head"><h2 id="worldHubTitle">Monde</h2><button class="close" data-close aria-label="Fermer">×</button></div>
+  <div id="worldBody"></div>
+</aside>
+
+<aside class="sheet" id="panelQuests" aria-label="Quêtes de la campagne">
+  <div class="sheet-head"><h2>Quêtes</h2><button class="close" data-close aria-label="Fermer">×</button></div>
+  <div id="questBody"></div>
+</aside>
+
+<aside class="sheet" id="panelShip" aria-label="Vaisseau d’exploration">
+  <div class="sheet-head"><h2 id="shipTitle">Vaisseau</h2><button class="close" data-close aria-label="Fermer">×</button></div>
+  <div id="shipBody"></div>
+</aside>
+
+<aside class="sheet" id="panelCal" aria-label="Calendrier">
+  <div class="sheet-head"><h2 id="calTitle">Calendrier</h2><button class="close" data-close aria-label="Fermer">×</button></div>
+  <div class="row" id="calPeopleRow"><label for="calPeople"><span>Calendrier selon</span></label><select id="calPeople"></select></div>
+  <p class="desc" id="calNow"></p>
+  <div class="row"><label for="calDay"><span>Jour de l’année</span><output id="calDayO"></output></label><input type="range" id="calDay" min="0" max="364" step="1"></div>
+  <div class="acts" style="margin:8px 0 4px"><button class="act" id="calPrev">Jour précédent</button><button class="act" id="calNext">Jour suivant</button></div>
+  <h3>Mois</h3><ul class="v-list" id="calMonths"></ul>
+  <h3>Fêtes et événements</h3><ul class="v-list" id="calFests"></ul>
+  <h3>Astres</h3><div id="calAstres"></div>
+</aside>
+
+<aside class="sheet" id="panelSaves" aria-label="Mes ciels sauvegardés">
+  <div class="sheet-head"><h2>Mes ciels</h2><button class="close" data-close aria-label="Fermer">×</button></div>
+  <form class="save-form" id="saveForm">
+    <input type="text" id="saveName" aria-label="Nom du ciel" maxlength="60">
+    <button type="submit">Sauvegarder</button>
+  </form>
+  <button type="button" class="act" id="updBtn" hidden></button>
+  <p class="hint" id="storeHint"></p>
+  <ul class="saved-list" id="savedList"></ul>
+  <h3>Fichier de sauvegarde</h3>
+  <p class="hint">Garde une copie de tes ciels dans un fichier, pour les retrouver ou les transférer ailleurs.</p>
+  <div class="export-row"><button class="act primary" id="exSaves">Exporter mes ciels</button><button class="act" id="imSaves">Importer un fichier</button></div>
+  <input type="file" id="imFile" accept=".json,application/json" hidden>
+  <h3>Exporter en image</h3>
+  <p class="hint">La carte complète reprend tes réglages d’affichage et l’heure choisie.</p>
+  <div class="export-row"><button class="act primary" id="exMap">Carte complète</button><button class="act" id="exView">Vue actuelle</button><button class="act" id="exPdf">Carnet de campagne (PDF)</button></div>
+  <label class="xp-check"><input type="checkbox" id="xpPlayer"> Carnet en version joueurs (sans les secrets du MJ)</label>
+  <h3>Export complet</h3>
+  <p class="hint">Crée un dossier avec le carnet de campagne (PDF), toutes les cartes (un dossier par pays, avec ses villes et ses villages), le système stellaire, les constellations, et un dossier « quetes » avec les livrets MJ et joueurs, les cartes de quête et les cartes de PNJ et d’objets.</p>
+  <label class="xp-check"><input type="checkbox" id="xpVillages" checked> Inclure les plans des villages (plus long)</label>
+  <div class="export-row"><button class="act primary" id="exAll">Export complet</button><button class="act" id="exAllDir">Changer de dossier</button></div>
+  <p class="hint" id="exAllDest"></p>
+</aside>
+
+<div class="card" id="card" hidden>
+  <button class="close" id="cardClose" aria-label="Fermer">×</button>
+  <div id="cView">
+  <h2 id="cName"></h2>
+  <p class="sub" id="cSub"></p>
+  <p class="desc" id="cDesc"></p>
+  <dl class="facts" id="cDl"></dl>
+  <div class="acts">
+    <button class="act primary" id="cExplore"></button>
+    <button class="act" id="cConst"></button>
+    <button class="act" id="cCenter">Centrer la vue</button>
+    <button class="act" id="cVantage">Voir le ciel depuis cette étoile</button>
+    <button class="act" id="cNear">Étoiles voisines</button>
+    <button class="act" id="cTell" hidden>Raconter la légende</button>
+    <button class="act primary" id="cKeep" hidden>Garder cette légende</button>
+    <button class="act" id="cEdit">Modifier</button>
+  </div>
+  </div>
+  <form class="edit" id="editForm" hidden>
+    <label>Nom<input type="text" id="eName" maxlength="60" autocomplete="off"></label>
+    <label>Légende<textarea id="eDesc" rows="7" maxlength="1500"></textarea></label>
+    <div class="acts">
+      <button type="submit" class="act primary">Enregistrer</button>
+      <button type="button" class="act" id="eCancel">Annuler</button>
+      <button type="button" class="act" id="eReset">Rétablir l’original</button>
+    </div>
+  </form>
+</div>
+<div class="imgview" id="imgView" hidden>
+  <div class="imgbox">
+    <p>Appuie longuement sur l’image (ou clic droit) pour l’enregistrer.</p>
+    <img id="imgOut" alt="Image exportée du ciel">
+    <div class="acts"><button class="act" id="imgClose">Fermer</button></div>
+  </div>
+</div>
+
+<section class="viewer" id="viewer" hidden aria-label="Visualiseur">
+  <div class="v-stage" id="vStage">
+    <canvas id="vcv"></canvas>
+    <div class="v-head">
+      <button class="v-btn" id="vBack">Retour</button>
+      <div><h2 id="vTitle"></h2><p id="vSubT"></p></div>
+    </div>
+    <div class="v-ctrl">
+      <button class="v-btn" id="vPause">Pause</button>
+      <button class="v-btn" id="vZin" aria-label="Zoomer">+</button>
+      <button class="v-btn" id="vZout" aria-label="Dézoomer">−</button>
+      <button class="v-btn" id="vClose">Revenir au ciel</button>
+    </div>
+  </div>
+  <aside class="v-panel" id="vPanel">
+    <div id="vInfo"></div>
+    <h4 id="vListTitle"></h4>
+    <ul class="v-list" id="vList"></ul>
+  </aside>
+</section>
+<section class="viewer" id="cityv" hidden aria-label="Plan de la ville">
+  <div class="v-stage" id="cyStage">
+    <canvas id="ccv"></canvas>
+    <div class="v-head"><button class="v-btn" id="cyBack">Retour</button><div><h2 id="cyTitle"></h2><p id="cySubT"></p></div></div>
+    <div class="v-ctrl"><button class="v-btn" id="cyZin" aria-label="Zoomer">+</button><button class="v-btn" id="cyZout" aria-label="Dézoomer">−</button><button class="v-btn" id="cyExport">Exporter le plan</button></div>
+  </div>
+  <aside class="v-panel"><div id="cyInfo"></div><div id="cyLists"></div></aside>
+</section>
+<section class="viewer" id="chrono" hidden aria-label="Chronologie du monde">
+  <div class="v-stage" id="chStage">
+    <canvas id="chcv"></canvas>
+    <div class="v-head"><button class="v-btn" id="chBack">Revenir</button><div><h2 id="chTitle"></h2><p id="chSubT"></p></div></div>
+    <div class="v-ctrl" style="right:16px; flex-wrap:wrap; align-items:center">
+      <div class="modes wmodes" role="group" aria-label="Échelle"><button data-chtab="planet" aria-pressed="true">Planète</button><button data-chtab="civ" aria-pressed="false">Civilisations</button></div>
+      <button class="v-btn" id="chPlay">Lecture</button>
+      <div class="chslider" id="chSlider"><span id="chTime"></span><input type="range" id="chRange" min="0" max="1000" step="1" aria-label="Époque"></div>
+    </div>
+  </div>
+  <aside class="v-panel"><div id="chInfo"></div><div id="chLists"></div></aside>
+</section>
+<section class="viewer" id="micro" hidden aria-label="Carte du pays">
+  <div class="v-stage" id="mStage">
+    <canvas id="mcv"></canvas>
+    <div class="v-head">
+      <button class="v-btn" id="mBack">Retour</button>
+      <div><h2 id="mTitle"></h2><p id="mSubT"></p></div>
+    </div>
+    <div class="v-ctrl">
+      <button class="v-btn" id="mZin" aria-label="Zoomer">+</button>
+      <button class="v-btn" id="mZout" aria-label="Dézoomer">−</button>
+      <button class="v-btn" id="mExport">Exporter la carte</button>
+    </div>
+  </div>
+  <aside class="v-panel" id="mPanel"><div id="mInfo"></div><div id="mLists"></div></aside>
+</section>
+<section class="viewer" id="world" hidden aria-label="Ta planète">
+  <div class="v-stage" id="wStage">
+    <canvas id="wcv"></canvas>
+    <div class="v-head">
+      <button class="v-btn" id="wBack">Revenir au ciel</button>
+      <div><h2 id="wTitle"></h2><p id="wSubT">Le monde d’où tu observes le ciel</p></div>
+    </div>
+    <div class="v-ctrl">
+      <div class="modes wmodes" role="group" aria-label="Projection">
+        <button data-wmode="globe" aria-pressed="true">Globe</button>
+        <button data-wmode="map" aria-pressed="false">Carte</button>
+      </div>
+      <button class="v-btn" id="wZin" aria-label="Zoomer">+</button>
+      <button class="v-btn" id="wZout" aria-label="Dézoomer">−</button>
+    </div>
+  </div>
+  <aside class="v-panel" id="wPanel">
+    <div id="wInfo"></div>
+    <h4 id="wListTitle">Continents et océans</h4>
+    <ul class="v-list" id="wList"></ul>
+    <div id="wParamBlock">
+    <h4>Paramètres de la planète</h4>
+    <div id="wParams"></div>
+    <div class="acts" style="margin-top:12px"><button class="act" id="wOther">Autre planète</button></div>
+    </div>
+  </aside>
+</section>
+<canvas id="landFx" hidden></canvas>
+<div class="imgview" id="jsonView" hidden>
+  <div class="imgbox" style="width:min(700px,100%)">
+    <p>Le téléchargement n’est pas disponible ici : copie ce texte et colle-le dans un fichier nommé « mes-ciels.json ».</p>
+    <textarea id="jsonOut" readonly style="width:100%;height:320px;font:12px ui-monospace,monospace;background:var(--field);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px"></textarea>
+    <div class="acts"><button class="act primary" id="jsonCopy">Copier</button><button class="act" id="jsonClose">Fermer</button></div>
+  </div>
+</div>
+<div class="imgview" id="xpView" hidden>
+  <div class="imgbox xp-box" role="dialog" aria-labelledby="xpTitle" aria-live="polite">
+    <h2 id="xpTitle">Export complet</h2>
+    <p id="xpStep"></p>
+    <div class="xp-bar"><span id="xpFill"></span></div>
+    <p id="xpCount"></p>
+    <p id="xpOpenHint" class="xp-where" hidden></p>
+    <div class="acts"><button class="act" id="xpCancel">Annuler</button><button class="act primary" id="xpOk" hidden>Fermer</button></div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+
+<!-- Modules de l'outil (ordre important : le démarrage est en dernier) -->
+<script src="js/01-outils.js"></script>
+<script src="js/02-noms-et-legendes.js"></script>
+<script src="js/03-parametres.js"></script>
+<script src="js/04-ciel-generation.js"></script>
+<script src="js/05-ciel-rendu.js"></script>
+<script src="js/06-ciel-interface.js"></script>
+<script src="js/07-systemes-stellaires.js"></script>
+<script src="js/08-planete.js"></script>
+<script src="js/donnees/terre-etoiles.js"></script>
+<script src="js/donnees/terre-pays.js"></script>
+<script src="js/09-vrai-ciel-terre.js"></script>
+<script src="js/10-monde-astres-peuples.js"></script>
+<script src="js/11-legendes-claude.js"></script>
+<script src="js/12-carnet-campagne.js"></script>
+<script src="js/13-civilisations.js"></script>
+<script src="js/14-vaisseau-et-lieux.js"></script>
+<script src="js/15-cartes-de-pays.js"></script>
+<script src="js/16-phenomenes-recherche.js"></script>
+<script src="js/17-chronologie.js"></script>
+<script src="js/18-plans-de-ville.js"></script>
+<script src="js/19-sauvegardes-exports.js"></script>
+<script src="js/20-export-complet.js"></script>
+<script src="js/21-systeme-stellaire-images.js"></script>
+<script src="js/22-quetes.js"></script>
+<script src="js/23-pont.js"></script>
+<script src="js/99-demarrage.js"></script>
+</body>
+</html>

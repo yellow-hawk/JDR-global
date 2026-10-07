@@ -1,0 +1,13 @@
+/* Module Organigrammes : classes préfixées .orga- */
+.coq-page:has(.orga-page) { padding: 0; overflow: hidden; }
+.orga-page { display: grid; grid-template-columns: 240px minmax(0, 1fr); height: 100%; }
+.orga-cote { padding: 14px; border-right: 1px solid var(--trait); overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+.orga-cote h3 { margin: 10px 0 4px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--encre-2); font-family: var(--texte); }
+.orga-ligne { display: block; width: 100%; padding: 5px 8px; border: 0; border-radius: var(--rayon); background: transparent; color: var(--encre); font: inherit; text-align: left; cursor: pointer; }
+.orga-ligne:hover { background: var(--fond-2); }
+.orga-ligne[aria-current='true'] { background: var(--panneau); box-shadow: inset 3px 0 0 var(--accent); }
+.orga-coche { display: flex; gap: 6px; align-items: center; margin-top: 10px; font-size: 0.9rem; }
+.orga-centre { position: relative; min-width: 0; min-height: 0; padding: 8px; }
+.orga-detail { position: absolute; right: 16px; top: 16px; width: 280px; padding: 14px; display: flex; flex-direction: column; gap: 8px; background: var(--panneau); box-shadow: var(--ombre); }
+.orga-detail input { font: inherit; padding: 4px 8px; border: 1px solid var(--trait); border-radius: 6px; background: var(--fond); color: var(--encre); }
+@media (max-width: 860px) { .orga-page { grid-template-columns: 1fr; grid-template-rows: auto 75vh; height: auto; } .coq-page:has(.orga-page) { overflow-y: auto; } }

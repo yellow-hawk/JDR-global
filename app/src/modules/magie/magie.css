@@ -1,0 +1,4 @@
+/* Ajustements de l'Atelier dans la coquille (classes .magie-). */
+.coq-page:has(.magie-page) { padding: 0; }
+.magie-page { min-height: 100%; }
+.magie-astuce { margin: 0 0 12px; }

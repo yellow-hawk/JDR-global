@@ -1,0 +1,21 @@
+/* Vues de graphes et d'arbres partagées (classes .graphe- et .arbre-). */
+.graphe-boite { position: relative; width: 100%; height: 100%; min-height: 0; overflow: hidden; background: var(--fond-2); border-radius: var(--rayon); }
+.graphe-svg { width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; user-select: none; }
+.graphe-svg:active { cursor: grabbing; }
+.graphe-noeud { stroke: rgb(0 0 0 / 0.55); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.graphe-noeud.choisi { stroke: var(--accent); stroke-width: 4; }
+.graphe-etiquette { text-anchor: middle; fill: var(--encre); paint-order: stroke; stroke: var(--fond-2); stroke-width: 3px; font-family: var(--texte); pointer-events: none; }
+.graphe-lien { vector-effect: non-scaling-stroke; }
+.arbre-lien { fill: none; stroke: var(--encre-2); stroke-width: 1.5; vector-effect: non-scaling-stroke; opacity: 0.6; }
+.arbre-noeud { cursor: pointer; }
+.arbre-noeud > rect:first-child { fill: var(--panneau); stroke: var(--trait); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.arbre-noeud.choisi > rect:first-child { stroke: var(--accent); stroke-width: 3; }
+.arbre-noeud:hover > rect:first-child { stroke: var(--accent-2); }
+.arbre-titre { font: 600 14px var(--texte); fill: var(--encre); }
+.arbre-sous { font: 12px var(--texte); fill: var(--encre-2); }
+.arbre-repli circle { fill: var(--accent); stroke: var(--panneau); stroke-width: 2; }
+.arbre-repli text { font: 600 10px var(--texte); fill: var(--accent-texte); text-anchor: middle; pointer-events: none; }
+.graphe-legende { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 0.85rem; }
+.graphe-legende span { display: inline-flex; align-items: center; gap: 5px; }
+.graphe-legende i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.graphe-degrade { height: 10px; border-radius: 5px; width: 140px; background: linear-gradient(90deg, #0c1d5c, #2c3d97, #1f7fb4, #41b6c4, #a1dab4, #ffffcc); }

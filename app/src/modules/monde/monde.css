@@ -1,0 +1,37 @@
+/* Module Monde : classes préfixées .monde- */
+.coq-page:has(.monde-page) { padding: 0; overflow: hidden; }
+.monde-page { display: grid; grid-template-columns: 270px 1fr; height: 100%; }
+.monde-cote { padding: 16px; border-right: 1px solid var(--trait); overflow-y: auto; background: var(--fond); }
+.monde-cote h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--encre-2); font-family: var(--texte); margin: 8px 0 4px; }
+.monde-ligne { display: flex; justify-content: space-between; gap: 8px; width: 100%; padding: 6px 8px; border: 0; border-radius: var(--rayon); background: transparent; color: var(--encre); font: inherit; text-align: left; cursor: pointer; }
+.monde-ligne:hover { background: var(--fond-2); }
+.monde-ligne[aria-current='true'] { background: var(--panneau); box-shadow: inset 3px 0 0 var(--accent); }
+.monde-principal { min-width: 0; min-height: 0; overflow-y: auto; }
+.monde-atlas { width: 100%; height: 100%; border: 0; display: block; background: #05060a; }
+.monde-atlas[hidden] { display: none; }
+.monde-fait-main { padding: 20px 24px 60px; max-width: 980px; }
+.monde-champs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; border: 0; padding: 0; margin: 0; }
+.monde-globe { width: 100%; height: min(60vh, 560px); border-radius: var(--rayon); background: radial-gradient(circle at 50% 40%, #1b2236, #05060a); cursor: grab; }
+.monde-nb { width: 64px; font: inherit; padding: 2px 6px; border: 1px solid var(--trait); border-radius: 6px; background: var(--fond); color: var(--encre); }
+.monde-peuple { display: grid; grid-template-columns: 40px 200px 1fr auto; gap: 8px; border: 0; padding: 0; margin: 0; align-items: center; }
+.monde-peuple input { font: inherit; padding: 5px 8px; border: 1px solid var(--trait); border-radius: 6px; background: var(--fond); color: var(--encre); min-width: 0; }
+.monde-peuple input[type='color'] { padding: 0; height: 32px; }
+@media (max-width: 860px) {
+  .monde-page { grid-template-columns: 1fr; grid-template-rows: auto 70vh; height: auto; }
+  .coq-page:has(.monde-page) { overflow-y: auto; }
+  .monde-champs, .monde-peuple { grid-template-columns: 1fr; }
+}
+.monde-unite { display: flex; flex-direction: column; gap: 6px; }
+.monde-unite > summary { cursor: pointer; color: var(--encre-2); font-size: 0.9rem; margin-bottom: 4px; }
+.monde-voile { position: fixed; inset: 0; background: rgb(0 0 0 / 0.55); display: grid; place-items: center; z-index: 60; }
+.monde-installation { width: min(560px, 94vw); padding: 20px; display: flex; flex-direction: column; gap: 12px; background: var(--panneau); }
+.monde-etapes { margin: 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.monde-etapes li { display: flex; flex-direction: column; padding-left: 28px; position: relative; color: var(--encre-2); }
+.monde-etapes li::before { content: '○'; position: absolute; left: 4px; }
+.monde-etapes li.en-cours { color: var(--encre); font-weight: 600; }
+.monde-etapes li.en-cours::before { content: '◐'; color: var(--accent); }
+.monde-etapes li.fait { color: var(--encre); }
+.monde-etapes li.fait::before { content: '✓'; color: var(--succes); }
+.monde-barre { height: 8px; border-radius: 4px; background: var(--fond-2); overflow: hidden; }
+.monde-barre > div { height: 100%; background: var(--accent); transition: width 0.2s; }
+.monde-erreur { color: var(--danger); }

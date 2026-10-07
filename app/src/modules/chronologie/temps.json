@@ -1,0 +1,25 @@
+{
+  "_note": "Horloge du temps de jeu : boutons d'avance, moments de la journée (heure de début, sur 24 h, ramenée à la durée du jour du monde), phases de lune, calendrier par défaut.",
+  "avances": [
+    { "libelle": "+1 h", "heures": 1 },
+    { "libelle": "+4 h", "heures": 4 },
+    { "libelle": "Repos long", "heures": 8 },
+    { "libelle": "+1 jour", "jours": 1 },
+    { "libelle": "+1 semaine", "jours": 7 },
+    { "libelle": "+1 mois", "mois": 1 }
+  ],
+  "moments": [
+    { "debut": 0, "libelle": "nuit" },
+    { "debut": 5, "libelle": "aube" },
+    { "debut": 7, "libelle": "matin" },
+    { "debut": 12, "libelle": "midi" },
+    { "debut": 14, "libelle": "après-midi" },
+    { "debut": 18, "libelle": "soir" },
+    { "debut": 21, "libelle": "nuit" }
+  ],
+  "phases": ["nouvelle lune", "premier croissant", "premier quartier", "gibbeuse croissante", "pleine lune", "gibbeuse décroissante", "dernier quartier", "dernier croissant"],
+  "sortesEvenement": ["événement", "bataille", "rencontre", "découverte", "mort", "naissance", "traité", "catastrophe", "fête"],
+  "couleurs": { "histoire": "#c9a84c", "seance": "#4a90d9", "evenement": "#e0705f", "maintenant": "#7cc276" },
+  "calendrierDefaut": { "mois": 12, "jours": 30, "nom": "Mois" },
+  "heuresDefaut": 24
+}

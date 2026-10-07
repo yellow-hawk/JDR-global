@@ -1,0 +1,45 @@
+{
+  "_note": "Boutiques : sortes, morceaux de noms, propriétaires et objets avec prix (pièces d'or po, d'argent pa, de cuivre pc).",
+  "sortes": [
+    { "id": "forge", "libelle": "Forgeron et armurier", "noms": ["L'Enclume", "Le Marteau d'argent", "La Forge du Pont", "Fer et Feu"], "role": "forgeron",
+      "objets": [
+        { "nom": "Dague", "prix": "2 po" }, { "nom": "Épée courte", "prix": "10 po" }, { "nom": "Épée longue", "prix": "15 po" }, { "nom": "Hache d'armes", "prix": "10 po" },
+        { "nom": "Lance", "prix": "1 po" }, { "nom": "Arc court", "prix": "25 po" }, { "nom": "Arbalète légère", "prix": "25 po" }, { "nom": "Carreaux (20)", "prix": "1 po" },
+        { "nom": "Bouclier", "prix": "10 po" }, { "nom": "Armure de cuir", "prix": "10 po" }, { "nom": "Chemise de mailles", "prix": "50 po" }, { "nom": "Cotte de mailles", "prix": "75 po" },
+        { "nom": "Harnois", "prix": "1 500 po", "rare": true }, { "nom": "Épée longue de maître", "prix": "120 po", "rare": true }
+      ] },
+    { "id": "apothicaire", "libelle": "Apothicaire et herboriste", "noms": ["Le Mortier vert", "Simples et Remèdes", "L'Alambic", "La Mandragore"], "role": "herboriste",
+      "objets": [
+        { "nom": "Potion de soins", "prix": "50 po" }, { "nom": "Antidote", "prix": "50 po" }, { "nom": "Trousse de soins", "prix": "5 po" }, { "nom": "Herbes calmantes", "prix": "2 pa" },
+        { "nom": "Onguent contre les brûlures", "prix": "1 po" }, { "nom": "Encens", "prix": "1 pa" }, { "nom": "Poison léger (fiole)", "prix": "100 po", "rare": true },
+        { "nom": "Potion de soins majeurs", "prix": "200 po", "rare": true }, { "nom": "Racine de rêve", "prix": "8 po" }
+      ] },
+    { "id": "general", "libelle": "Bazar et équipement", "noms": ["Tout pour la route", "Le Grand Bazar", "Chez la mère Tranquille", "Le Sac sans fond"], "role": "marchand",
+      "objets": [
+        { "nom": "Corde de chanvre (15 m)", "prix": "1 po" }, { "nom": "Torches (10)", "prix": "1 pa" }, { "nom": "Rations (1 jour)", "prix": "5 pa" }, { "nom": "Sac à dos", "prix": "2 po" },
+        { "nom": "Lanterne à capote", "prix": "5 po" }, { "nom": "Huile (flasque)", "prix": "1 pa" }, { "nom": "Tente pour deux", "prix": "2 po" }, { "nom": "Couverture", "prix": "5 pa" },
+        { "nom": "Grappin", "prix": "2 po" }, { "nom": "Pied-de-biche", "prix": "2 po" }, { "nom": "Outres", "prix": "2 pa" }, { "nom": "Longue-vue", "prix": "1 000 po", "rare": true }
+      ] },
+    { "id": "curiosites", "libelle": "Curiosités et objets magiques", "noms": ["Le Cabinet d'Iris", "Merveilles et Babioles", "La Boîte à secrets", "Au Mage distrait"], "role": "mage",
+      "objets": [
+        { "nom": "Parchemin de sort mineur", "prix": "50 po" }, { "nom": "Pierre qui luit dans le noir", "prix": "10 po" }, { "nom": "Boussole qui pointe vers l'or", "prix": "75 po" },
+        { "nom": "Anneau de protection", "prix": "3 500 po", "rare": true }, { "nom": "Cape elfique", "prix": "2 000 po", "rare": true }, { "nom": "Sac sans fond", "prix": "500 po", "rare": true },
+        { "nom": "Plume qui écrit seule", "prix": "40 po" }, { "nom": "Dé qui tombe toujours sur 6", "prix": "15 po" }, { "nom": "Baguette de projectiles", "prix": "800 po", "rare": true }
+      ] },
+    { "id": "libraire", "libelle": "Libraire et scribe", "noms": ["L'Encrier", "La Page tournée", "Au Vieux Grimoire"], "role": "scribe",
+      "objets": [
+        { "nom": "Livre vierge", "prix": "25 po" }, { "nom": "Encre (fiole)", "prix": "10 po" }, { "nom": "Plume", "prix": "2 pc" }, { "nom": "Parchemin (feuille)", "prix": "1 pa" },
+        { "nom": "Carte de la région", "prix": "15 po" }, { "nom": "Traité d'histoire locale", "prix": "30 po" }, { "nom": "Grimoire usé", "prix": "120 po", "rare": true }, { "nom": "Copie d'une lettre", "prix": "2 pa" }
+      ] },
+    { "id": "tailleur", "libelle": "Tailleur et drapier", "noms": ["Fil d'or", "L'Aiguille fine", "Draps et Dentelles"], "role": "tailleur",
+      "objets": [
+        { "nom": "Vêtements de voyage", "prix": "2 po" }, { "nom": "Vêtements communs", "prix": "5 pa" }, { "nom": "Tenue fine", "prix": "15 po" }, { "nom": "Cape doublée", "prix": "3 po" },
+        { "nom": "Bottes", "prix": "1 po" }, { "nom": "Déguisement complet", "prix": "25 po" }, { "nom": "Habit de cour", "prix": "80 po", "rare": true }
+      ] }
+  ],
+  "humeurs": ["aimable", "pressé", "radin", "bavard", "méfiant", "rusé en affaires", "honnête", "distrait"],
+  "particularites": [
+    "accepte le troc", "fait crédit aux habitués", "propose un rabais contre un service", "vend aussi des objets volés en arrière-boutique",
+    "ne vend pas aux étrangers avant le soir", "a un perroquet qui insulte les clients", "ferme pendant les fêtes", "cherche un objet rare et paie bien"
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "_note": "Tavernes et auberges : morceaux de noms (avec genre), ambiances, plats et boissons (prix), clients, événements, rumeurs. {pnj}, {lieu}, {peuple}, {quete} sont remplacés par des éléments de la campagne quand il y en a.",
+  "articles": { "m": "Le", "f": "La" },
+  "objets": [
+    { "nom": "Sanglier", "g": "m" }, { "nom": "Chope", "g": "f" }, { "nom": "Lanterne", "g": "f" }, { "nom": "Corbeau", "g": "m" },
+    { "nom": "Tonneau", "g": "m" }, { "nom": "Licorne", "g": "f" }, { "nom": "Marmite", "g": "f" }, { "nom": "Griffon", "g": "m" },
+    { "nom": "Sirène", "g": "f" }, { "nom": "Dragon", "g": "m" }, { "nom": "Couronne", "g": "f" }, { "nom": "Pendu", "g": "m" },
+    { "nom": "Truie", "g": "f" }, { "nom": "Ménestrel", "g": "m" }, { "nom": "Étoile", "g": "f" }, { "nom": "Chaudron", "g": "m" },
+    { "nom": "Taupe", "g": "f" }, { "nom": "Bouc", "g": "m" }, { "nom": "Épée", "g": "f" }, { "nom": "Hibou", "g": "m" }
+  ],
+  "adjectifs": [
+    { "m": "Rieur", "f": "Rieuse" }, { "m": "Borgne", "f": "Borgne" }, { "m": "Doré", "f": "Dorée" }, { "m": "Ivre", "f": "Ivre" },
+    { "m": "Endormi", "f": "Endormie" }, { "m": "Noir", "f": "Noire" }, { "m": "Joyeux", "f": "Joyeuse" }, { "m": "Ébréché", "f": "Ébréchée" },
+    { "m": "Fumant", "f": "Fumante" }, { "m": "Vert", "f": "Verte" }, { "m": "Bavard", "f": "Bavarde" }, { "m": "Rouillé", "f": "Rouillée" },
+    { "m": "Boiteux", "f": "Boiteuse" }, { "m": "Argenté", "f": "Argentée" }, { "m": "Affamé", "f": "Affamée" }
+  ],
+  "sortes": ["taverne", "auberge", "relais", "gargote", "estaminet"],
+  "ambiances": [
+    "bruyante, enfumée, pleine de bûcherons qui chantent faux",
+    "calme et feutrée, des marchands y concluent leurs affaires à voix basse",
+    "louche : les conversations s'arrêtent quand un inconnu entre",
+    "chaleureuse, un grand feu crépite et un barde accorde son luth",
+    "délabrée, le toit fuit et les tables collent",
+    "élégante, fréquentée par la petite noblesse et ses gardes",
+    "animée par des parties de dés acharnées dans l'arrière-salle",
+    "presque vide, le patron s'ennuie et parle à qui veut l'entendre"
+  ],
+  "patrons": ["tavernier", "aubergiste", "tenancière", "patronne", "cuisinier", "veuve du tavernier"],
+  "traitsPatron": ["toujours de bonne humeur", "méfiant envers les étrangers", "endetté jusqu'au cou", "ancien aventurier", "avare", "curieux de tout", "très croyant", "parle sans arrêt de sa fille", "a une jambe de bois", "sert les meilleures saucisses de la région"],
+  "plats": [
+    { "nom": "Ragoût du jour", "prix": "3 pa" }, { "nom": "Pain, fromage et oignons", "prix": "1 pa" }, { "nom": "Tourte au gibier", "prix": "5 pa" },
+    { "nom": "Soupe aux choux", "prix": "8 pc" }, { "nom": "Poisson grillé", "prix": "4 pa" }, { "nom": "Cuissot de sanglier", "prix": "1 po" },
+    { "nom": "Galettes au miel", "prix": "2 pa" }, { "nom": "Boudin et pommes", "prix": "3 pa" }, { "nom": "Brouet de légumes", "prix": "6 pc" }
+  ],
+  "boissons": [
+    { "nom": "Bière de la maison", "prix": "4 pc" }, { "nom": "Cidre", "prix": "5 pc" }, { "nom": "Vin du pays (pichet)", "prix": "2 pa" },
+    { "nom": "Hydromel", "prix": "6 pc" }, { "nom": "Eau-de-vie", "prix": "1 pa" }, { "nom": "Vin fin d'importation", "prix": "1 po" }, { "nom": "Infusion d'herbes", "prix": "2 pc" }
+  ],
+  "chambres": [
+    { "nom": "Paillasse dans la salle commune", "prix": "5 pc" }, { "nom": "Chambre simple", "prix": "5 pa" }, { "nom": "Chambre confortable", "prix": "8 pa" }, { "nom": "Suite", "prix": "2 po" }
+  ],
+  "clients": [
+    "un marchand qui compte et recompte sa bourse", "deux gardes qui ne sont pas en service", "une voyageuse encapuchonnée",
+    "un vieux conteur qui échange ses histoires contre une bière", "une bande de mercenaires bruyants", "un prêtre qui boit seul",
+    "un enfant qui vend des fleurs", "un joueur de cartes trop chanceux", "un nain qui se plaint de la bière", "un pèlerin épuisé"
+  ],
+  "evenements": [
+    "une bagarre éclate pour une partie de dés truquée", "un messager entre en courant et demande quelqu'un par son nom",
+    "le barde entonne une chanson moqueuse sur un notable", "un ivrogne prend un des héros pour quelqu'un d'autre",
+    "la garde fait irruption et fouille la salle", "le patron cherche des volontaires pour un petit service",
+    "une coupure de courant… de chandelles : tout s'éteint d'un coup", "un étranger paie une tournée générale avec de l'or étranger"
+  ],
+  "rumeurs": [
+    "On dit que {pnj} n'est pas celui qu'on croit.", "Des voyageurs ont vu des lumières étranges près de {lieu}.",
+    "Il paraît que {peuple} préparent quelque chose.", "Quelqu'un cherche des gens courageux, on parle de « {quete} ».",
+    "Le prix du sel a doublé, quelqu'un s'enrichit sur notre dos.", "Un loup énorme rôde la nuit et ne craint pas le feu.",
+    "La fille du meunier a disparu depuis trois jours.", "Un trésor serait caché sous les ruines au nord.",
+    "Les morts ne reposent plus en paix au vieux cimetière.", "Un noble paierait cher pour une lettre perdue."
+  ]
+}

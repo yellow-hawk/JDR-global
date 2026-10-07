@@ -1,0 +1,38 @@
+/* Plateau de dés (MJ) */
+.des-plateau { display: grid; gap: 8px; }
+.des-modes { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--trait); border-radius: var(--rayon); overflow: hidden; }
+.des-mode { border: 0; background: var(--fond-2); color: var(--encre-2); padding: 6px 4px; font: inherit; font-size: 0.9rem; cursor: pointer; }
+.des-mode + .des-mode { border-left: 1px solid var(--trait); }
+.des-mode.actif { color: var(--accent-texte); font-weight: 700; }
+.des-mode-normal.actif { background: var(--accent); }
+.des-mode-avantage.actif { background: var(--succes); }
+.des-mode-desavantage.actif { background: var(--danger); }
+.des-boutons { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.des-de { border: 0; border-radius: 6px; padding: 8px 0; font: inherit; font-weight: 700; color: #fff6e0; cursor: pointer; box-shadow: inset 0 -3px 0 rgb(0 0 0 / 0.25); }
+.des-de:hover { filter: brightness(1.12); }
+.des-de:active { transform: translateY(1px); box-shadow: none; }
+.des-d4 { background: #b8382c; } .des-d6 { background: #2e74b5; } .des-d8 { background: #2f9a57; }
+.des-d10 { background: #7d3fa8; } .des-d12 { background: #d0651b; } .des-d20 { background: #b8901c; } .des-d100 { background: #3b4d63; font-size: 0.85rem; }
+.des-formule { display: flex; gap: 6px; }
+.des-formule input { flex: 1; min-width: 0; }
+.des-cache { display: flex; gap: 6px; align-items: center; font-size: 0.9rem; color: var(--encre-2); }
+.des-historique { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; font-size: 0.88rem; color: var(--encre-2); }
+.des-historique li { display: flex; gap: 8px; align-items: baseline; }
+.des-historique strong { min-width: 2.2em; text-align: right; color: var(--encre); }
+.des-historique li.dernier strong { color: var(--accent); font-size: 1.1rem; }
+.des-historique span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.des-flottant { position: fixed; top: 52px; right: 12px; z-index: 50; width: min(340px, calc(100vw - 24px)); display: grid; gap: 8px; box-shadow: var(--ombre); }
+.des-fermer { border: 0; background: none; color: var(--encre-2); font-size: 1.3rem; line-height: 1; cursor: pointer; }
+
+/* Animation 3D (écran joueurs) */
+.des3d { position: fixed; inset: 0; z-index: 20; pointer-events: none; background: radial-gradient(ellipse at 50% 45%, rgb(8 6 4 / 0.82), rgb(8 6 4 / 0.35) 75%); transition: opacity 0.8s; }
+.des3d.efface { opacity: 0; }
+.des3d-scene, .des3d-scene canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.des3d-total { position: absolute; left: 0; right: 0; bottom: 9vh; text-align: center; opacity: 0; transform: translateY(12px); transition: opacity 0.4s, transform 0.4s; color: #fff6e0; text-shadow: 0 2px 12px #000; }
+.des3d-total.visible { opacity: 1; transform: none; }
+.des3d-nombre { font-family: var(--titre); font-size: clamp(3rem, 9vw, 7rem); line-height: 1; color: #e6b86a; }
+.des3d-detail, .des3d-qui { max-width: 62vw; margin: 0 auto; font-size: clamp(1rem, 1.8vw, 1.5rem); color: #d8ccb6; }
+.ecran-jets { position: fixed; right: 14px; top: 52px; z-index: 15; list-style: none; margin: 0; padding: 8px 12px; border-radius: 8px; background: rgb(0 0 0 / 0.45); font-size: clamp(0.8rem, 1.1vw, 1rem); color: #d8ccb6; display: grid; gap: 2px; }
+.ecran-jets li:first-child { color: #fff6e0; }
+.ecran-jets strong { color: #e6b86a; display: inline-block; min-width: 2em; text-align: right; margin-right: 6px; }
+.ecran-bandeau { position: fixed; left: 14px; bottom: 12px; z-index: 15; padding: 6px 14px; border-radius: 8px; background: rgb(0 0 0 / 0.45); color: #e6b86a; font-family: var(--titre); font-size: clamp(0.9rem, 1.4vw, 1.3rem); }

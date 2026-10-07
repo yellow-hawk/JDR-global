@@ -1,0 +1,30 @@
+/* Module Avatar : classes préfixées .avatar- */
+.coq-page:has(.avatar-page) { padding: 0; overflow: hidden; }
+.avatar-page { display: grid; grid-template-columns: 250px 1fr 300px; height: 100%; }
+.avatar-cote { padding: 16px; border-right: 1px solid var(--trait); overflow-y: auto; }
+.avatar-scene { position: relative; min-width: 0; background: #1a1a1f; }
+.avatar-scene canvas { display: block; }
+.avatar-reglages { border-left: 1px solid var(--trait); overflow-y: auto; background: var(--panneau); }
+.avatar-panneau { display: flex; flex-direction: column; padding: 8px; gap: 8px; }
+.avatar-dossier { border: 1px solid var(--trait); border-radius: var(--rayon); background: var(--fond); }
+.avatar-dossier summary { cursor: pointer; padding: 6px 10px; font-family: var(--titre); display: flex; align-items: center; }
+.avatar-dossier-corps { padding: 4px 10px 10px; display: flex; flex-direction: column; gap: 6px; }
+.avatar-dossier h4 { margin: 6px 0 0; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--encre-2); }
+.avatar-reinit { margin-left: auto; border: 0; background: none; color: var(--encre-2); cursor: pointer; font-size: 1rem; }
+.avatar-reinit:hover { color: var(--accent); }
+.avatar-curseur { display: grid; grid-template-columns: 1fr 40px; gap: 0 6px; font-size: 0.88rem; align-items: center; }
+.avatar-curseur span { grid-column: 1 / -1; color: var(--encre-2); }
+.avatar-curseur input { width: 100%; accent-color: var(--accent); }
+.avatar-curseur output { font-family: ui-monospace, monospace; font-size: 0.78rem; text-align: right; }
+.avatar-couleur { display: grid; grid-template-columns: 1fr 44px 70px; gap: 6px; align-items: center; font-size: 0.9rem; }
+.avatar-couleur input { width: 44px; height: 26px; border: 1px solid var(--trait); border-radius: 4px; padding: 0; background: none; cursor: pointer; }
+.avatar-couleur code { font-size: 0.75rem; color: var(--encre-2); }
+.avatar-coche { display: flex; gap: 6px; align-items: center; font-size: 0.9rem; }
+.avatar-choix { display: flex; flex-direction: column; gap: 2px; font-size: 0.88rem; color: var(--encre-2); }
+.avatar-choix select { font: inherit; padding: 4px 6px; border: 1px solid var(--trait); border-radius: 6px; background: var(--panneau); color: var(--encre); }
+.avatar-vignette { width: 120px; height: 120px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; }
+@media (max-width: 960px) {
+  .avatar-page { grid-template-columns: 1fr; grid-template-rows: auto 60vh auto; height: auto; }
+  .coq-page:has(.avatar-page) { overflow-y: auto; }
+  .avatar-reglages { border-left: 0; }
+}

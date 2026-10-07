@@ -1,0 +1,32 @@
+/* Module Cartes : classes préfixées .cartes- */
+.cartes-tuile { display: flex; flex-direction: column; gap: 4px; text-align: left; cursor: pointer; font: inherit; color: inherit; padding: 10px; }
+.cartes-tuile:hover { border-color: var(--accent); }
+.cartes-apercu { aspect-ratio: 16 / 10; background: var(--fond-2); border-radius: 6px; overflow: hidden; display: grid; place-items: center; }
+.cartes-apercu img { width: 100%; height: 100%; object-fit: cover; }
+.cartes-detail { display: flex; flex-direction: column; gap: 10px; }
+.cartes-fil { gap: 4px; }
+.cartes-corps { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start; }
+.cartes-infos { position: sticky; top: 0; }
+.cartes-champs { border: 0; padding: 0; margin: 0; min-width: 0; }
+.cartes-champs h3 { margin: 4px 0; }
+.cartes-lien { display: block; background: none; border: 0; padding: 2px 0; color: var(--accent); cursor: pointer; font: inherit; text-align: left; }
+.cartes-bascule { gap: 0; }
+.cartes-metres { width: 90px; font: inherit; padding: 3px 6px; border: 1px solid var(--trait); border-radius: 6px; background: var(--fond); color: var(--encre); }
+.cartes-zoom input { width: 160px; }
+.cartes-cadre { overflow: auto; max-height: 72vh; border: 1px solid var(--trait); border-radius: var(--rayon); background: #111; }
+.cartes-pile { position: relative; min-width: 100%; }
+.cartes-pile img { position: absolute; inset: 0; width: 100%; height: 100%; user-select: none; }
+.cartes-calque { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+.cartes-calque.outil-repere, .cartes-calque.outil-echelle, .cartes-calque.outil-zone { cursor: crosshair; }
+.cartes-repere circle { fill: #d4a050; stroke: #1a150e; stroke-width: 2; vector-effect: non-scaling-stroke; cursor: pointer; }
+.cartes-repere.actif circle { fill: #fff; }
+.cartes-repere.cache circle { fill: var(--mj); }
+.cartes-repere text, .cartes-enfant text { fill: #fff; paint-order: stroke; stroke: rgb(0 0 0 / 0.8); stroke-width: 3px; vector-effect: non-scaling-stroke; pointer-events: none; font-family: var(--texte); }
+.cartes-enfant rect { fill: rgb(212 160 80 / 0.12); stroke: #d4a050; stroke-width: 2; stroke-dasharray: 6 4; vector-effect: non-scaling-stroke; cursor: pointer; }
+.cartes-enfant:hover rect { fill: rgb(212 160 80 / 0.28); }
+.cartes-point { fill: #e0705f; }
+.cartes-ligne { stroke: #e0705f; }
+.cartes-trace { fill: rgb(212 160 80 / 0.2); stroke: #d4a050; }
+@media (max-width: 900px) { .cartes-corps { grid-template-columns: 1fr; } .cartes-infos { position: static; } }
+.cartes-groupe { border-top: 1px solid var(--trait); padding-top: 8px; }
+.cartes-groupe > summary { cursor: pointer; font-family: var(--titre); font-size: 1.1rem; margin-bottom: 8px; }

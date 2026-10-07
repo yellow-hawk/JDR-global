@@ -1,0 +1,16 @@
+{
+  "_note": "Sortes de nœuds du réseau de la campagne : libellé, couleur, page à ouvrir, visible par défaut.",
+  "sortes": [
+    { "id": "univers", "libelle": "Univers", "couleur": "#d4a050", "page": "monde", "defaut": true },
+    { "id": "peuple", "libelle": "Peuples", "couleur": "#e0705f", "page": "pays", "defaut": true },
+    { "id": "pj", "libelle": "PJ", "couleur": "#4a90d9", "page": "personnages", "defaut": true },
+    { "id": "pnj", "libelle": "PNJ", "couleur": "#45a84a", "page": "personnages", "defaut": true },
+    { "id": "ennemi", "libelle": "Ennemis", "couleur": "#c0392b", "page": "personnages", "defaut": true },
+    { "id": "quete", "libelle": "Quêtes", "couleur": "#b48ae6", "page": "journal", "defaut": true },
+    { "id": "rencontre", "libelle": "Rencontres", "couleur": "#e67e22", "page": "combat", "defaut": true },
+    { "id": "carte", "libelle": "Cartes", "couleur": "#41b6c4", "page": "cartes", "defaut": true },
+    { "id": "village", "libelle": "Villages", "couleur": "#7fb3a8", "page": "cartes", "defaut": false },
+    { "id": "seance", "libelle": "Séances", "couleur": "#c9a84c", "page": "journal", "defaut": false },
+    { "id": "sort", "libelle": "Sorts", "couleur": "#9b59b6", "page": "magie", "defaut": false }
+  ]
+}

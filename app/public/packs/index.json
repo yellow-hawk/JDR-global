@@ -1,0 +1,9 @@
+{
+  "packs": [
+    {
+      "fichier": "epee-de-verite.json",
+      "nom": "L'Épée de vérité",
+      "desc": "Créatures, sorts et états de l'univers de L'Épée de vérité (Terry Goodkind)."
+    }
+  ]
+}

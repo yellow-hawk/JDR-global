@@ -1,0 +1,57 @@
+{
+  "_note": "Organigrammes des institutions selon le régime (clé = régime court de l'Atlas). motif = rôles de PNJ qui peuvent occuper le poste (expression régulière). villes = une branche par ville ({ville} remplacé).",
+  "regimes": {
+    "Royaume": { "postes": [
+      { "titre": "Conseil royal", "enfants": [
+        { "titre": "Chancelier", "motif": "chancel|conseiller du trône|conseillère du trône" },
+        { "titre": "Grand trésorier", "motif": "trésor|maître de guilde|marchand" },
+        { "titre": "Maréchal", "motif": "seigneur de guerre|dame de guerre|capitaine|général" },
+        { "titre": "Grand prêtre", "motif": "grand prêtre|grande prêtresse|prêtre|prêtresse" },
+        { "titre": "Archiviste royal", "motif": "archiviste|bibliothécaire|astronome" },
+        { "titre": "Ambassadeur", "motif": "ambassad" } ] },
+      { "titre": "Seigneurs", "villes": "Seigneur de {ville}" } ] },
+    "Empire": { "postes": [
+      { "titre": "Cour impériale", "enfants": [
+        { "titre": "Chancelier impérial", "motif": "chancel|conseiller du trône|conseillère du trône" },
+        { "titre": "Général des armées", "motif": "seigneur de guerre|dame de guerre|capitaine|général" },
+        { "titre": "Grand prêtre de l’Empire", "motif": "grand prêtre|grande prêtresse|prêtre" },
+        { "titre": "Astronome impérial", "motif": "astronome|astrologue|archiviste" },
+        { "titre": "Maître des espions", "motif": "espion|receleu" } ] },
+      { "titre": "Provinces", "villes": "Gouverneur de {ville}" } ] },
+    "République marchande": { "postes": [
+      { "titre": "Conseil des guildes", "enfants": [
+        { "titre": "Guilde des marchands", "motif": "maître de guilde|marchand|receleu" },
+        { "titre": "Guilde des navigateurs", "motif": "batelier|batelière|pêcheu|contrebandi" },
+        { "titre": "Guilde des artisans", "motif": "forgeron|forgeronne|meunier|meunière" },
+        { "titre": "Guilde des cartographes", "motif": "marchand de cartes|copiste|archiviste" } ] },
+      { "titre": "Capitaine de la flotte", "motif": "capitaine|mercenaire" },
+      { "titre": "Consulats", "villes": "Consul de {ville}" } ] },
+    "Confédération de clans": { "postes": [
+      { "titre": "Gardien des traditions", "motif": "ermite|prêtre|prêtresse|herboriste" },
+      { "titre": "Chef de guerre", "motif": "seigneur de guerre|dame de guerre|capitaine|mercenaire" },
+      { "titre": "Clans", "villes": "Chef du clan de {ville}" } ] },
+    "Théocratie": { "postes": [
+      { "titre": "Conclave", "enfants": [
+        { "titre": "Archiviste des astres", "motif": "astronome|astrologue|archiviste" },
+        { "titre": "Inquisiteur", "motif": "espion|chasseu|grand prêtre|grande prêtresse" },
+        { "titre": "Trésorier du temple", "motif": "marchand|maître de guilde" } ] },
+      { "titre": "Temples", "villes": "Haut prêtre de {ville}" } ] },
+    "Conseil des sages": { "postes": [
+      { "titre": "Conseil", "enfants": [
+        { "titre": "Sage des lois", "motif": "conseiller|conseillère|chancel" },
+        { "titre": "Sage des astres", "motif": "astronome|astrologue" },
+        { "titre": "Sage des mémoires", "motif": "archiviste|bibliothécaire|copiste" },
+        { "titre": "Sage des remèdes", "motif": "herboriste|prêtre|prêtresse" },
+        { "titre": "Sage des chemins", "motif": "ermite|pisteu|guide" } ] },
+      { "titre": "Magistratures", "villes": "Magistrat de {ville}" } ] },
+    "Ligue de cités": { "postes": [
+      { "titre": "Capitaine de la ligue", "motif": "capitaine|mercenaire|seigneur de guerre" },
+      { "titre": "Assemblée de la ligue", "villes": "Consul de {ville}" } ] },
+    "_defaut": { "postes": [
+      { "titre": "Conseil", "enfants": [
+        { "titre": "Conseiller", "motif": "conseiller|conseillère|chancel|ambassad" },
+        { "titre": "Chef militaire", "motif": "capitaine|seigneur de guerre|général" },
+        { "titre": "Chef religieux", "motif": "prêtre|prêtresse" } ] },
+      { "titre": "Villes", "villes": "Seigneur de {ville}" } ] }
+  }
+}
