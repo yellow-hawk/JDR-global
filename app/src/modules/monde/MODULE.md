@@ -12,6 +12,7 @@
 | `installation/` | **« Ajouter le ciel affiché » installe tout** : `executer.ts` (univers par défaut → quêtes → PNJ + apparence auto → toutes les cartes → cartes de bataille + rencontres ; progression, arrêt, relance sans doublon), `cartes.ts` (pur : `integrerCarte`, `relierCartes` emboîtement + repères), `batailles.ts` (pur : `lieuxDeBataille`, `adversairesPour`, `integrerBataille`), `Installation.tsx` (fenêtre + fabrique de portraits du module Avatar). |
 | `public/atlas/js/23-pont.js` | Côté Atlas : `atlas:ouvrir`, `atlas:demander`, `atlas:quetes`, `atlas:quetes-donnees` (avec `lieuxDetail` : sorte, danger, carte cible `ou`), `atlas:pnj` (avec `feminin`), `atlas:image-monde`, `atlas:cartes-plan` (toutes les cartes : clé, type, parent + zone, repères), `atlas:carte` (image d'une carte, version MJ pour les quêtes, repères des plans de ville) → `atlas:reponse`, et `atlas:pret`. Sauvegarde avant modification : `versions/2026-10-06 atlas-pont/`. |
 
-Règle : ne jamais modifier les autres fichiers de `public/atlas/` sans copie dans `versions/` (voir la doc de l'Atlas, `docs/outils/`).
+Règle : modifier les autres fichiers de `public/atlas/` le moins possible, dans un commit à part (l'historique git remplace les copies dans `versions/`).
+`installation/` est l'orchestrateur de la suite : c'est le seul endroit qui appelle plusieurs modules à la fois (toujours par leur `index.ts`).
 API publique : `definition`.
 Limites : l'Atlas garde aussi ses « Mes ciels » (localStorage de la même adresse) ; l'Atlas lui-même ne sait pas encore afficher un monde fait main dans ses propres vues (le globe est dans la suite).

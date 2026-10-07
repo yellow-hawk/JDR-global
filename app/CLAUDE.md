@@ -25,8 +25,8 @@ Atlas : fichiers d'origine dans `public/atlas/`, ouverts dans un cadre (iframe) 
 ```bash
 npm install
 npm run dev                      # http://localhost:5173
-npm test                         # tests Vitest (noyau + modules)
-npm run test:magie               # tests d'origine de l'Atelier (scripts tsx, dont 144 tracés simulés)
+npm test                         # tous les tests Vitest (noyau + modules + vérifications d'origine de l'Atelier, ~30 s)
+npm run test:magie               # seulement la magie (dont les 144 tracés simulés de l'Atelier)
 npx vitest run src/modules/xxx   # tests d'un seul module
 npm run verif                    # vérification des types
 npm run build                    # dist/ (types vérifiés avant)
@@ -87,7 +87,9 @@ Référence du format de données : `../docs/format-jdr-global.md`. Journal : `.
 - `npm run verif && npm test` sans erreur ; `npm run build` passe.
 - `MODULE.md` du module à jour si son API publique a changé.
 - Une ligne dans le journal de bord.
-- Avant de modifier un fichier existant important : copie dans `../versions/AAAA-MM-JJ vN/`.
+- Historique : **git** (dépôt `yellow-hawk/JDR-global`, racine = `projet JDR Global/`). Un commit par étape, message en français.
+  Le dossier `../versions/` est l'ancien système de copies (avant git) : ne plus l'alimenter.
+- Chaque envoi sur `main` lance la CI (`.github/workflows/ci.yml` : verif, test, build) puis publie `dist/` sur GitHub Pages.
 
 ## 8. Où en est-on
 
