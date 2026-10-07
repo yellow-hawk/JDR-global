@@ -9,3 +9,8 @@ desktop.ini
 .vscode/
 .idea/
 *.log
+
+# Dossier de travail d’Understand-Anything (le graphe lui-même est versionné)
+.ua/intermediate/
+.ua/tmp/
+.ua/.trash-*/
