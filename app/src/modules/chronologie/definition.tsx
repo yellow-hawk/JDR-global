@@ -1,6 +1,7 @@
+import { lazy } from 'react';
 import type { DefinitionModule } from '../../interface/types';
 import { EnTete } from './EnTete';
-import { Page } from './Page';
+const Page = lazy(() => import('./Page').then((x) => ({ default: x.Page })));
 
 export const definition: DefinitionModule = {
   id: 'chronologie', nom: 'Chronologie', etat: 'pret', besoinCampagne: true, dansMenu: true,

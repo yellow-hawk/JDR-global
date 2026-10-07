@@ -33,6 +33,12 @@ export async function exporterCampagne(c: Campagne, joueurs: boolean): Promise<v
   });
 }
 
+/** Même campagne sous un nouvel identifiant, nommée « (copie) » : pour importer à côté d'une existante. */
+export const copieDe = (c: Campagne): Campagne => ({
+  ...c,
+  campagne: { ...c.campagne, id: nouvelId('camp'), nom: `${c.campagne.nom} (copie)` },
+});
+
 /** Demande un fichier, le lit, et règle le cas d'une campagne déjà présente. null si annulé ou invalide. */
 export async function importerCampagne(): Promise<{
   campagne: Campagne; fichiers: Map<string, Uint8Array>; alertes: string[];
@@ -46,12 +52,7 @@ export async function importerCampagne(): Promise<{
       const remplacer = window.confirm(
         `La campagne « ${existante.campagne.campagne.nom} » existe déjà.\n\nOK : la remplacer par l'archive.\nAnnuler : importer une copie à côté.`,
       );
-      if (!remplacer) {
-        r.campagne = {
-          ...r.campagne,
-          campagne: { ...r.campagne.campagne, id: nouvelId('camp'), nom: `${r.campagne.campagne.nom} (copie)` },
-        };
-      }
+      if (!remplacer) r.campagne = copieDe(r.campagne);
     }
     return r;
   } catch (err) {

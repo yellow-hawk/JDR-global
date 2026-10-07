@@ -6,7 +6,7 @@ Socle partagé, sans interface et sans React. Cinq sous-modules, chacun avec son
 
 | Fichier | Rôle |
 |---|---|
-| `types.ts` | Interfaces `Campagne` (dont `modules` : réglages par module), `Rencontre` (dont `table` : état de la Table v7), `Univers`, `Carte`, `Repere`, `Personnage`, `Sort`, `Rencontre`, `Quete`, `Seance`, `Fichier`, `Ref`. Constantes `FORMAT`, `VERSION`, `COLLECTIONS`. |
+| `types/` | Découpé par domaine (`base`, `monde`, `cartes`, `personnages`, `jeu`, `campagne`), réexporté par `types/index.ts`. Interfaces `Campagne` (dont `modules` : réglages par module), `Rencontre` (dont `table` : état de la Table v7), `Univers`, `Carte`, `Repere`, `Personnage`, `Sort`, `Rencontre`, `Quete`, `Seance`, `Fichier`, `Ref`. Constantes `FORMAT`, `VERSION`, `COLLECTIONS`. |
 | `creer.ts` | `nouvelId(prefixe)`, `maintenant()`, `nouvelleCampagne`, `nouvelUnivers`, `nouvelleCarte`, `nouveauPersonnage`. |
 | `charger.ts` | `chargerCampagne(json) → { campagne, alertes }` : migre, complète, répare ids, garde l'inconnu, signale les liens cassés. |
 | `migrations.ts` | `MIGRATIONS[n]` : v n → v n+1 (vide en v1). |

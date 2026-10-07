@@ -12,8 +12,10 @@
 | `createur/ui/ControlPanel.jsx` | Panneau de réglages généré depuis species.json (contrôles React natifs, leva retiré le 06/10 ; contrôles pilotés par le store). |
 
 | `auto.ts` | Pur, testé : `apparenceAuto({nom, apparence, feminin, peuple})` → preset (morphs tirés des mots de la description, peau selon le peuple, genre, coiffure). Marqué `auto: true`. |
-| `Fabrique.tsx` | `FabriqueDePortraits` : visualiseur hors écran qui charge les apparences une à une et les photographie (`modeleCharge()` ajouté à `snapshot.js`). |
+| `Fabrique.tsx` | (exporté via `FabriqueALaDemande.tsx`, chargé à la demande) `FabriqueDePortraits` : visualiseur hors écran qui charge les apparences une à une et les photographie (`modeleCharge()` ajouté à `snapshot.js`). |
 
 Stockage : `personnage.apparence` = preset `presetVersion 1` complet (avec vignette).
 API publique : `definition`, `ouvrirAvatarPour`, `apparenceAuto`, `FabriqueDePortraits`.
-À faire : genre H/F (pas prioritaire), vêtements, alléger `base.glb` (12,5 Mo ; meshopt ne gagne que 29 %, ce sont surtout les textures).
+Tests : `avatar.test.ts` (`apparenceAuto` déterministe, morphs connus et bornés, preset chargé sans avertissement par `sanitizePreset`).
+Assets compressés le 07/10 (meshopt + textures WebP, 17 Mo → 2,4 Mo) : tout GLTFLoader doit avoir `setMeshoptDecoder` (déjà le cas de `useGLTF`). Recompresser un nouvel asset : `npx @gltf-transform/cli webp in.glb t.glb --quality 90 && npx @gltf-transform/cli meshopt t.glb out.glb`.
+À faire : genre H/F (pas prioritaire), vêtements.

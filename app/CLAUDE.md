@@ -66,7 +66,7 @@ Référence du format de données : `../docs/format-jdr-global.md`. Journal : `.
 
 1. **Un module n'importe jamais l'intérieur d'un autre module.** Seulement son `index.ts`, ou le bus.
 2. **Le noyau ne dépend d'aucun module ni de React.** Les modules dépendent du noyau et de `interface/`.
-3. **Le contrat est la seule structure partagée.** Nouveau champ = d'abord dans `docs/format-jdr-global.md` et `noyau/contrat/types.ts`.
+3. **Le contrat est la seule structure partagée.** Nouveau champ = d'abord dans `docs/format-jdr-global.md` et `noyau/contrat/types/` (un fichier par domaine : base, monde, cartes, personnages, jeu, campagne).
 4. **Secrets** : tout ce qui est secret va sous une clé `mj`. `mj: { cache: true }` cache l'objet entier.
    Aucune donnée vers l'écran joueurs sans passer par `montrerAuxJoueurs()` (qui filtre).
 5. **Logique séparée de l'affichage** : chaque module a un `logique.ts` (ou un sous-dossier `moteur/`) pur et testé.

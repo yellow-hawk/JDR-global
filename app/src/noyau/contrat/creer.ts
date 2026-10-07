@@ -4,12 +4,17 @@ import { FORMAT, VERSION } from './types';
 
 let compteur = 0;
 
-/** Identifiant unique préfixé par le type : "perso-lq3k9a-2f". */
+/** Partie aléatoire d'un identifiant : crypto si disponible (navigateur, Node 19+), sinon Math.random (ce n'est pas de la génération). */
+function aleatoire(): string {
+  const c = globalThis.crypto;
+  if (c?.getRandomValues) return c.getRandomValues(new Uint32Array(1))[0].toString(36).padStart(7, '0').slice(-4);
+  return Math.floor(Math.random() * 36 ** 4).toString(36).padStart(4, '0');
+}
+
+/** Identifiant unique préfixé par le type : "perso-lq3k9a2f3x1". Court et lisible, ordonné dans le temps. */
 export function nouvelId(prefixe: string): string {
   compteur = (compteur + 1) % 1296;
-  const temps = Date.now().toString(36);
-  const hasard = Math.floor(Math.random() * 1296).toString(36).padStart(2, '0');
-  return `${prefixe}-${temps}${compteur.toString(36)}${hasard}`;
+  return `${prefixe}-${Date.now().toString(36)}${compteur.toString(36)}${aleatoire()}`;
 }
 
 export const maintenant = (): string => new Date().toISOString();
