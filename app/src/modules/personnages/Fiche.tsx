@@ -5,7 +5,7 @@ import { ecrireStat, lireStat } from '../../noyau/regles';
 import { emettre } from '../../noyau/bus';
 import { BlocMj, Champ } from '../../interface/composants';
 import { SORTES, champsVisibles } from './logique';
-import { Relations } from './Relations';
+import { Relations } from './PanneauRelations';
 
 interface Props {
   perso: Personnage;

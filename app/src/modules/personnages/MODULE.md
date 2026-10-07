@@ -18,4 +18,4 @@ API publique : `definition`, `SORTES`, `libelleSorte`, `campJoueurs`, `sceneJoue
 
 ## Relations
 
-`relations.ts` + `relations.json` (pur, testé) : `ajouterRelation`, `retirerRelation`, `relationsDe` (dans les deux sens, libellé inverse), `RELATIONS`, `sorteRelation`. `Relations.tsx` sur la fiche (ajout, suppression, relation secrète). Données : `personnage.relations`.
+`relations.ts` + `relations.json` (pur, testé) : `ajouterRelation`, `retirerRelation`, `relationsDe` (dans les deux sens, libellé inverse), `RELATIONS`, `sorteRelation`. `PanneauRelations.tsx` sur la fiche (ajout, suppression, relation secrète). Données : `personnage.relations`.
