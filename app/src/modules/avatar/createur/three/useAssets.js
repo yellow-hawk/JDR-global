@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
 import { useCharacter } from '../store/useCharacter'
 
 // Hook : monte/demonte les assets "poses" (coiffures, sourcils, cils) sur le
@@ -21,7 +22,8 @@ import { useCharacter } from '../store/useCharacter'
 //  - "skinned" : reserve au futur (assets rigges) -> warning, non implemente.
 
 // Cache module : url -> Promise<Group template> (parse une seule fois par fichier).
-const loader = new GLTFLoader()
+// Les GLB sont compresses (meshopt + textures WebP) : le decodeur meshopt est obligatoire.
+const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder)
 const templateCache = new Map()
 
 function loadTemplate(url) {
