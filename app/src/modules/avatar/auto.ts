@@ -85,7 +85,7 @@ export function apparenceAuto(d: DescriptionPnj): Record<string, unknown> {
   }
   const palette = R.palettes[tenue.palette] ?? R.palettes.terre;
   const couleursTenue: Record<string, string> = {};
-  for (const slot of ['haut', 'bas', 'pieds', 'armure', 'ceinture', 'cape']) {
+  for (const slot of ['haut', 'bas', 'pieds', 'armure', 'epaules', 'bras', 'mains', 'ceinture', 'cape', 'tete']) {
     const l = palette[slot] ?? R.palettes.terre[slot];
     if (l) couleursTenue[`tenue_${slot}`] = tirer(l);
   }

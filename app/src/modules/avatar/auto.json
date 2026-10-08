@@ -10,7 +10,11 @@
         "pieds": "bottes",
         "armure": "plastron",
         "ceinture": "ceinture",
-        "cape": "cape"
+        "cape": "cape",
+        "epaules": "epaulieres",
+        "mains": "gants",
+        "bras": null,
+        "tete": null
       },
       "palette": "noble",
       "muscle": 0.5
@@ -31,7 +35,20 @@
           null,
           null,
           "cape"
-        ]
+        ],
+        "epaules": [
+          null,
+          "epaulieres"
+        ],
+        "bras": [
+          null,
+          "brassards"
+        ],
+        "mains": [
+          null,
+          "gants"
+        ],
+        "tete": null
       },
       "palette": "soldat",
       "muscle": 0.4
@@ -51,7 +68,15 @@
         "cape": [
           null,
           "cape"
-        ]
+        ],
+        "tete": [
+          null,
+          null,
+          "capuche"
+        ],
+        "mains": null,
+        "bras": null,
+        "epaules": null
       },
       "palette": "mage",
       "muscle": -0.3
@@ -65,7 +90,14 @@
         "pieds": "bottes",
         "armure": null,
         "ceinture": "ceinture",
-        "cape": null
+        "cape": null,
+        "tete": [
+          null,
+          "capuche"
+        ],
+        "mains": null,
+        "bras": null,
+        "epaules": null
       },
       "palette": "pretre"
     },
@@ -81,7 +113,14 @@
         "pieds": "bottes",
         "armure": null,
         "ceinture": "ceinture",
-        "cape": "cape"
+        "cape": "cape",
+        "mains": [
+          null,
+          "gants"
+        ],
+        "tete": null,
+        "bras": null,
+        "epaules": null
       },
       "palette": "noble"
     },
@@ -97,7 +136,18 @@
         "cape": [
           "cape",
           null
-        ]
+        ],
+        "tete": [
+          "capuche",
+          "capuche",
+          null
+        ],
+        "mains": "gants",
+        "bras": [
+          "brassards",
+          null
+        ],
+        "epaules": null
       },
       "palette": "ombre"
     },
@@ -116,7 +166,20 @@
         "cape": [
           "cape",
           null
-        ]
+        ],
+        "tete": [
+          null,
+          "capuche"
+        ],
+        "bras": [
+          "brassards",
+          null
+        ],
+        "mains": [
+          null,
+          "gants"
+        ],
+        "epaules": null
       },
       "palette": "terre",
       "muscle": 0.2
@@ -137,7 +200,15 @@
           "ceinture",
           null
         ],
-        "cape": null
+        "cape": null,
+        "mains": null,
+        "bras": [
+          null,
+          null,
+          "brassards"
+        ],
+        "tete": null,
+        "epaules": null
       },
       "palette": "terre"
     }
@@ -160,7 +231,11 @@
         null,
         null,
         "cape"
-      ]
+      ],
+      "tete": null,
+      "mains": null,
+      "bras": null,
+      "epaules": null
     },
     "palette": "terre"
   },
@@ -198,6 +273,23 @@
         "#5a4a3a",
         "#4f5a3c",
         "#6b5a40"
+      ],
+      "mains": [
+        "#4a3424",
+        "#2e2219"
+      ],
+      "bras": [
+        "#5a3a22",
+        "#4a2e1a"
+      ],
+      "epaules": [
+        "#a8acb4",
+        "#b8bcc4"
+      ],
+      "tete": [
+        "#5a4a3a",
+        "#4f5a3c",
+        "#6b5a40"
       ]
     },
     "soldat": {
@@ -224,6 +316,24 @@
         "#4a2e1a"
       ],
       "cape": [
+        "#7a1d1d",
+        "#2c3a6b",
+        "#3d4a2c",
+        "#5a1d4a"
+      ],
+      "mains": [
+        "#4a3424",
+        "#2e2219"
+      ],
+      "bras": [
+        "#5a3a22",
+        "#4a2e1a"
+      ],
+      "epaules": [
+        "#a8acb4",
+        "#b8bcc4"
+      ],
+      "tete": [
         "#7a1d1d",
         "#2c3a6b",
         "#3d4a2c",
@@ -262,6 +372,25 @@
         "#4a2c6b",
         "#1d4a3a",
         "#111111"
+      ],
+      "mains": [
+        "#4a3424",
+        "#2e2219"
+      ],
+      "bras": [
+        "#5a3a22",
+        "#4a2e1a"
+      ],
+      "epaules": [
+        "#a8acb4",
+        "#b8bcc4"
+      ],
+      "tete": [
+        "#7a1d1d",
+        "#2c3a7a",
+        "#4a2c6b",
+        "#1d4a3a",
+        "#111111"
       ]
     },
     "mage": {
@@ -285,6 +414,23 @@
         "#222233",
         "#2c3a7a",
         "#4a2c6b"
+      ],
+      "mains": [
+        "#4a3424",
+        "#2e2219"
+      ],
+      "bras": [
+        "#5a3a22",
+        "#4a2e1a"
+      ],
+      "epaules": [
+        "#a8acb4",
+        "#b8bcc4"
+      ],
+      "tete": [
+        "#222233",
+        "#2c3a7a",
+        "#4a2c6b"
       ]
     },
     "pretre": {
@@ -301,6 +447,25 @@
       "ceinture": [
         "#5a3a22",
         "#c8b88a"
+      ],
+      "mains": [
+        "#4a3424",
+        "#2e2219"
+      ],
+      "bras": [
+        "#5a3a22",
+        "#4a2e1a"
+      ],
+      "epaules": [
+        "#a8acb4",
+        "#b8bcc4"
+      ],
+      "tete": [
+        "#e8e0d0",
+        "#8a7a5a",
+        "#5a4a3a",
+        "#c8b88a",
+        "#3a3a3a"
       ]
     },
     "ombre": {
@@ -320,6 +485,23 @@
         "#2a1e14"
       ],
       "cape": [
+        "#1a1a1a",
+        "#2a2a2a",
+        "#26302a"
+      ],
+      "mains": [
+        "#4a3424",
+        "#2e2219"
+      ],
+      "bras": [
+        "#5a3a22",
+        "#4a2e1a"
+      ],
+      "epaules": [
+        "#a8acb4",
+        "#b8bcc4"
+      ],
+      "tete": [
         "#1a1a1a",
         "#2a2a2a",
         "#26302a"

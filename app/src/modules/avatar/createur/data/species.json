@@ -842,6 +842,39 @@
           "side": "double"
         },
         {
+          "id": "tenue_epaules",
+          "label": "Épaulières",
+          "target": [
+            "Tenue.epaules.metal"
+          ],
+          "property": "color",
+          "type": "color",
+          "default": "#a8acb4",
+          "side": "double"
+        },
+        {
+          "id": "tenue_bras",
+          "label": "Brassards",
+          "target": [
+            "Tenue.bras.cuir"
+          ],
+          "property": "color",
+          "type": "color",
+          "default": "#5a3a22",
+          "side": "double"
+        },
+        {
+          "id": "tenue_mains",
+          "label": "Gants",
+          "target": [
+            "Tenue.mains.cuir"
+          ],
+          "property": "color",
+          "type": "color",
+          "default": "#4a3424",
+          "side": "double"
+        },
+        {
           "id": "tenue_ceinture",
           "label": "Ceinture",
           "target": [
@@ -862,9 +895,20 @@
           "type": "color",
           "default": "#6b1d1d",
           "side": "double"
+        },
+        {
+          "id": "tenue_tete",
+          "label": "Coiffe",
+          "target": [
+            "Tenue.tete.tissu"
+          ],
+          "property": "color",
+          "type": "color",
+          "default": "#5a4a3a",
+          "side": "double"
         }
       ],
-      "_comment_assetSlots": "Emplacements d'assets. attachMode 'skinned' : l'asset est lié au squelette du corps (mêmes noms d'os) et porte les mêmes morphs, il suit donc la morphologie. 'head-bone' (ancien) : asset posé sur l'os 'attachBone'.",
+      "_comment_assetSlots": "Emplacements d'assets. attachMode 'skinned' : l'asset est lié au squelette du corps (mêmes noms d'os) et porte les mêmes morphs, il suit donc la morphologie. 'head-bone' (ancien) : asset posé sur l'os 'attachBone'. Option 'masque' : emplacements cachés tant que l'option est portée (une capuche cache la coiffure).",
       "assetSlots": [
         {
           "id": "hair",
@@ -1124,6 +1168,63 @@
           ]
         },
         {
+          "id": "epaules",
+          "label": "Épaulières",
+          "category": "tenue",
+          "attachMode": "skinned",
+          "default": null,
+          "options": [
+            {
+              "id": null,
+              "label": "Aucune",
+              "file": null
+            },
+            {
+              "id": "epaulieres",
+              "label": "Épaulières",
+              "file": "avatar/assets/species/human/epaules/epaulieres.glb"
+            }
+          ]
+        },
+        {
+          "id": "bras",
+          "label": "Brassards",
+          "category": "tenue",
+          "attachMode": "skinned",
+          "default": null,
+          "options": [
+            {
+              "id": null,
+              "label": "Aucun",
+              "file": null
+            },
+            {
+              "id": "brassards",
+              "label": "Brassards de cuir",
+              "file": "avatar/assets/species/human/bras/brassards.glb"
+            }
+          ]
+        },
+        {
+          "id": "mains",
+          "label": "Gants",
+          "category": "tenue",
+          "attachMode": "skinned",
+          "default": null,
+          "options": [
+            {
+              "id": null,
+              "label": "Aucun",
+              "file": null
+            },
+            {
+              "id": "gants",
+              "label": "Gants",
+              "file": "avatar/assets/species/human/mains/gants.glb"
+            }
+          ]
+        },
+        {
           "id": "ceinture",
           "label": "Ceinture",
           "category": "tenue",
@@ -1158,6 +1259,28 @@
               "id": "cape",
               "label": "Cape",
               "file": "avatar/assets/species/human/cape/cape.glb"
+            }
+          ]
+        },
+        {
+          "id": "tete",
+          "label": "Coiffe",
+          "category": "tenue",
+          "attachMode": "skinned",
+          "default": null,
+          "options": [
+            {
+              "id": null,
+              "label": "Aucune",
+              "file": null
+            },
+            {
+              "id": "capuche",
+              "label": "Capuche",
+              "file": "avatar/assets/species/human/tete/capuche.glb",
+              "masque": [
+                "hair"
+              ]
             }
           ]
         }

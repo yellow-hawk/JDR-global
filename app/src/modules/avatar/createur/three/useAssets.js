@@ -134,10 +134,17 @@ export function useAssets(baseRoot) {
     let cancelled = false
     const changer = () => setVersion((v) => v + 1)
 
+    // Emplacements caches par une option portee (option.masque, ex. capuche -> coiffure).
+    const masques = new Set()
+    slots.forEach((sl) => {
+      const o = (sl.options ?? []).find((x) => x.id === (assets?.[sl.id] ?? null))
+      ;(o?.masque ?? []).forEach((m) => masques.add(m))
+    })
+
     slots.forEach((slot) => {
       const selectedId = assets?.[slot.id] ?? null
       const option = (slot.options ?? []).find((o) => o.id === selectedId) ?? null
-      const file = option?.file ?? null
+      const file = masques.has(slot.id) ? null : option?.file ?? null
       const current = attachedRef.current[slot.id]
 
       // Rien a faire si l'asset attache correspond deja au fichier voulu.

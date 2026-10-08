@@ -900,6 +900,126 @@
           ]
         }
       ]
+    },
+    {
+      "slot": "mains",
+      "id": "gants",
+      "label": "Gants",
+      "ecart": 0.003,
+      "couche": 0.0,
+      "texture": "cuir",
+      "parties": [
+        {
+          "aide": "body",
+          "os": [
+            "hand_l",
+            "hand_r",
+            "index_01_l",
+            "index_01_r",
+            "index_02_l",
+            "index_02_r",
+            "index_03_l",
+            "index_03_r",
+            "middle_01_l",
+            "middle_01_r",
+            "middle_02_l",
+            "middle_02_r",
+            "middle_03_l",
+            "middle_03_r",
+            "pinky_01_l",
+            "pinky_01_r",
+            "pinky_02_l",
+            "pinky_02_r",
+            "pinky_03_l",
+            "pinky_03_r",
+            "ring_01_l",
+            "ring_01_r",
+            "ring_02_l",
+            "ring_02_r",
+            "ring_03_l",
+            "ring_03_r",
+            "thumb_01_l",
+            "thumb_01_r",
+            "thumb_02_l",
+            "thumb_02_r",
+            "thumb_03_l",
+            "thumb_03_r"
+          ]
+        }
+      ]
+    },
+    {
+      "slot": "bras",
+      "id": "brassards",
+      "label": "Brassards de cuir",
+      "ecart": 0.014,
+      "couche": 0.012,
+      "texture": "cuir",
+      "parties": [
+        {
+          "aide": "helper-tights",
+          "os": [
+            "lowerarm_l",
+            "lowerarm_r"
+          ]
+        }
+      ]
+    },
+    {
+      "slot": "epaules",
+      "id": "epaulieres",
+      "label": "Épaulières",
+      "ecart": 0.03,
+      "couche": 0.016,
+      "metal": true,
+      "texture": "metal",
+      "parties": [
+        {
+          "aide": "helper-tights",
+          "os": [
+            "clavicle_l",
+            "clavicle_r",
+            "upperarm_l",
+            "upperarm_r"
+          ],
+          "zmin": 1.33
+        }
+      ]
+    },
+    {
+      "slot": "tete",
+      "id": "capuche",
+      "label": "Capuche",
+      "ecart": 0.03,
+      "couche": 0.01,
+      "texture": "tissu",
+      "masque": [
+        "hair"
+      ],
+      "parties": [
+        {
+          "aide": "body",
+          "os": [
+            "head",
+            "neck_01"
+          ],
+          "zmin": 1.41,
+          "exclure_boites": [
+            [
+              0.078,
+              -0.055,
+              1.44,
+              1.635
+            ],
+            [
+              0.07,
+              -0.05,
+              0.0,
+              1.44
+            ]
+          ]
+        }
+      ]
     }
   ]
 }

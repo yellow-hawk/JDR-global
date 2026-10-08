@@ -835,6 +835,7 @@
    "label": "Chemise",
    "materiau": "Tenue.haut.tissu",
    "metal": false,
+   "masque": [],
    "fichier": "haut/chemise.glb",
    "sommets": 1292,
    "morphs": [
@@ -877,6 +878,7 @@
    "label": "Tunique",
    "materiau": "Tenue.haut.tissu",
    "metal": false,
+   "masque": [],
    "fichier": "haut/tunique.glb",
    "sommets": 1688,
    "morphs": [
@@ -921,6 +923,7 @@
    "label": "Gilet sans manches",
    "materiau": "Tenue.haut.tissu",
    "metal": false,
+   "masque": [],
    "fichier": "haut/gilet.glb",
    "sommets": 830,
    "morphs": [
@@ -963,6 +966,7 @@
    "label": "Robe longue",
    "materiau": "Tenue.haut.tissu",
    "metal": false,
+   "masque": [],
    "fichier": "haut/robe.glb",
    "sommets": 2012,
    "morphs": [
@@ -1007,6 +1011,7 @@
    "label": "Pantalon",
    "materiau": "Tenue.bas.tissu",
    "metal": false,
+   "masque": [],
    "fichier": "bas/pantalon.glb",
    "sommets": 1008,
    "morphs": [
@@ -1039,6 +1044,7 @@
    "label": "Jupe longue",
    "materiau": "Tenue.bas.tissu",
    "metal": false,
+   "masque": [],
    "fichier": "bas/jupe.glb",
    "sommets": 720,
    "morphs": [
@@ -1071,6 +1077,7 @@
    "label": "Bottes",
    "materiau": "Tenue.pieds.cuir",
    "metal": false,
+   "masque": [],
    "fichier": "pieds/bottes.glb",
    "sommets": 739,
    "morphs": [
@@ -1095,6 +1102,7 @@
    "label": "Plastron",
    "materiau": "Tenue.armure.metal",
    "metal": true,
+   "masque": [],
    "fichier": "armure/plastron.glb",
    "sommets": 660,
    "morphs": [
@@ -1136,6 +1144,7 @@
    "label": "Cotte de mailles",
    "materiau": "Tenue.armure.mailles",
    "metal": true,
+   "masque": [],
    "fichier": "armure/cotte.glb",
    "sommets": 1456,
    "morphs": [
@@ -1180,6 +1189,7 @@
    "label": "Ceinture",
    "materiau": "Tenue.ceinture.cuir",
    "metal": false,
+   "masque": [],
    "fichier": "ceinture/ceinture.glb",
    "sommets": 72,
    "morphs": [
@@ -1211,6 +1221,7 @@
    "label": "Cape",
    "materiau": "Tenue.cape.tissu",
    "metal": false,
+   "masque": [],
    "fichier": "cape/cape.glb",
    "sommets": 792,
    "morphs": [
@@ -1253,6 +1264,7 @@
    "label": "Barbe courte",
    "materiau": "Pilosite.barbe",
    "metal": false,
+   "masque": [],
    "fichier": "barbe/courte.glb",
    "sommets": 796,
    "morphs": [
@@ -1317,6 +1329,7 @@
    "label": "Barbe fournie",
    "materiau": "Pilosite.barbe",
    "metal": false,
+   "masque": [],
    "fichier": "barbe/fournie.glb",
    "sommets": 821,
    "morphs": [
@@ -1381,6 +1394,7 @@
    "label": "Bouc et moustache",
    "materiau": "Pilosite.barbe",
    "metal": false,
+   "masque": [],
    "fichier": "barbe/bouc.glb",
    "sommets": 389,
    "morphs": [
@@ -1438,6 +1452,7 @@
    "label": "Moustache",
    "materiau": "Pilosite.barbe",
    "metal": false,
+   "masque": [],
    "fichier": "barbe/moustache.glb",
    "sommets": 141,
    "morphs": [
@@ -1474,7 +1489,134 @@
     "l-cheek-bones-decr",
     "r-cheek-bones-decr"
    ]
+  },
+  {
+   "slot": "mains",
+   "id": "gants",
+   "objet": "mains-gants",
+   "label": "Gants",
+   "materiau": "Tenue.mains.cuir",
+   "metal": false,
+   "masque": [],
+   "fichier": "mains/gants.glb",
+   "sommets": 3190,
+   "morphs": [
+    "macro-feminin",
+    "macro-masculin",
+    "macro-age-vieux",
+    "macro-age-jeune",
+    "macro-muscle-plus",
+    "macro-poids-plus",
+    "macro-poids-moins",
+    "macro-taille-plus",
+    "macro-taille-moins",
+    "measure-shoulder-dist-incr",
+    "measure-shoulder-dist-decr"
+   ]
+  },
+  {
+   "slot": "bras",
+   "id": "brassards",
+   "objet": "bras-brassards",
+   "label": "Brassards de cuir",
+   "materiau": "Tenue.bras.cuir",
+   "metal": false,
+   "masque": [],
+   "fichier": "bras/brassards.glb",
+   "sommets": 196,
+   "morphs": [
+    "macro-feminin",
+    "macro-masculin",
+    "macro-age-vieux",
+    "macro-age-jeune",
+    "macro-muscle-plus",
+    "macro-muscle-moins",
+    "macro-poids-plus",
+    "macro-poids-moins",
+    "macro-taille-plus",
+    "macro-taille-moins",
+    "measure-shoulder-dist-incr",
+    "measure-shoulder-dist-decr",
+    "measure-upperarm-circ-incr",
+    "measure-upperarm-circ-decr"
+   ]
+  },
+  {
+   "slot": "epaules",
+   "id": "epaulieres",
+   "objet": "epaules-epaulieres",
+   "label": "Épaulières",
+   "materiau": "Tenue.epaules.metal",
+   "metal": true,
+   "masque": [],
+   "fichier": "epaules/epaulieres.glb",
+   "sommets": 84,
+   "morphs": [
+    "macro-feminin",
+    "macro-masculin",
+    "macro-age-vieux",
+    "macro-age-jeune",
+    "macro-muscle-plus",
+    "macro-muscle-moins",
+    "macro-poids-plus",
+    "macro-poids-moins",
+    "macro-taille-plus",
+    "macro-taille-moins",
+    "measure-neck-circ-incr",
+    "measure-neck-circ-decr",
+    "measure-shoulder-dist-incr",
+    "measure-shoulder-dist-decr",
+    "measure-frontchest-dist-incr",
+    "measure-frontchest-dist-decr",
+    "breast-trans-up",
+    "breast-trans-down"
+   ]
+  },
+  {
+   "slot": "tete",
+   "id": "capuche",
+   "objet": "tete-capuche",
+   "label": "Capuche",
+   "materiau": "Tenue.tete.tissu",
+   "metal": false,
+   "masque": [
+    "hair"
+   ],
+   "fichier": "tete/capuche.glb",
+   "sommets": 1127,
+   "morphs": [
+    "macro-feminin",
+    "macro-masculin",
+    "macro-age-vieux",
+    "macro-age-jeune",
+    "macro-muscle-plus",
+    "macro-muscle-moins",
+    "macro-poids-plus",
+    "macro-poids-moins",
+    "macro-taille-plus",
+    "macro-taille-moins",
+    "head-fat-incr",
+    "head-fat-decr",
+    "head-angle-out",
+    "head-angle-in",
+    "head-scale-vert-incr",
+    "head-scale-vert-decr",
+    "forehead-scale-vert-incr",
+    "forehead-scale-vert-decr",
+    "eyebrows-trans-up",
+    "nose-scale-vert-incr",
+    "chin-height-incr",
+    "l-ear-scale-incr",
+    "l-ear-scale-decr",
+    "r-ear-scale-incr",
+    "r-ear-scale-decr",
+    "l-ear-shape-pointed",
+    "r-ear-shape-pointed",
+    "measure-neck-circ-incr",
+    "measure-neck-circ-decr",
+    "measure-shoulder-dist-decr"
+   ]
   }
  ],
- "duree_s": 55.3
+ "duree_s": 57.2
 }

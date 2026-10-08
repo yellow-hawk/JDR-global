@@ -165,7 +165,8 @@ def os_dominant(h, noms_os):
     return res
 
 
-TEXTURE_PAR_SLOT = {'haut': 'tissu', 'bas': 'tissu', 'cape': 'tissu', 'pieds': 'cuir', 'ceinture': 'cuir', 'armure': 'mailles', 'barbe': 'poils'}
+TEXTURE_PAR_SLOT = {'haut': 'tissu', 'bas': 'tissu', 'cape': 'tissu', 'tete': 'tissu', 'pieds': 'cuir', 'ceinture': 'cuir', 'mains': 'cuir',
+                    'bras': 'cuir', 'armure': 'mailles', 'epaules': 'metal', 'barbe': 'poils'}
 DENSITE = {'tissu': 5.0, 'cuir': 3.0, 'mailles': 8.0, 'metal': 2.0, 'poils': 9.0}  # répétitions de texture par mètre
 
 
@@ -231,6 +232,8 @@ def construire_tenue(h, rig, t, corps0, deltas_corps, peau, dominant):
                 continue  # trous : (|x| max, z min) — narines au-dessus de la moustache…
             if exclus and any(g.group in exclus for g in v.groups if g.weight > 0.3):
                 continue
+            if any(abs(x) < xb and y < yb and zb0 < z < zb1 for xb, yb, zb0, zb1 in part.get('exclure_boites', [])):
+                continue  # ouvertures (visage d'une capuche…)
             ok[v.index] = True
         if part.get('dos'):
             # moitié arrière : y au-delà du centre de la tranche horizontale (l'avant du corps est vers -Y)
@@ -396,7 +399,7 @@ def construire():
                                             'sommets': len(o.data.vertices), 'morphs': manifeste_o})
         for t, o, cles in tenues:
             manifeste['assets'].append({'slot': t['slot'], 'id': t['id'], 'objet': o.name, 'label': t['label'],
-                                        'materiau': o['jdr_materiau'], 'metal': bool(t.get('metal')),
+                                        'materiau': o['jdr_materiau'], 'metal': bool(t.get('metal')), 'masque': t.get('masque', []),
                                         'fichier': f"{t['slot']}/{t['id']}.glb",
                                         'sommets': len(o.data.vertices), 'morphs': cles})
         # Export (le dossier est vidé : il reflète exactement la configuration)

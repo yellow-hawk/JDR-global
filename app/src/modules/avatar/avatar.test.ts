@@ -46,6 +46,8 @@ describe('tenue et peuple', () => {
   it('habille selon le rôle', () => {
     expect(pnj('capitaine de la garde').data.assets.armure).toBe('cotte');
     expect(pnj('chevalier errant').data.assets.armure).toBe('plastron');
+    expect(pnj('chevalier errant').data.assets.epaules).toBe('epaulieres');
+    expect(pnj('voleur').data.assets.mains).toBe('gants');
     expect(pnj('mage de la tour').data.assets.haut).toBe('robe');
     expect(pnj('forgeron').data.assets.armure).toBeNull();
     expect(pnj('aubergiste').data.assets.pieds).toBe('bottes');
