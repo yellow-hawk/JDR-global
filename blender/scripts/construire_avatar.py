@@ -8,6 +8,8 @@
 # La scène courante est remplacée (rien n'est enregistré dans le .blend maître).
 import bpy, bmesh, json, os, time
 import numpy as np
+import mathutils
+from mathutils.bvhtree import BVHTree
 from bl_ext.user_default.mpfb.services.humanservice import HumanService
 from bl_ext.user_default.mpfb.services.targetservice import TargetService
 from bl_ext.user_default.mpfb.services.clothesservice import ClothesService
@@ -110,6 +112,7 @@ def ajouter_cles(o, neutre, deltas):
         k = o.shape_key_add(name=nom, from_mix=False)
         k.data.foreach_set('co', (neutre + d).ravel())
         k.slider_min, k.slider_max = -2.0, 2.0
+        k.value = 0.0  # Blender 5 crée les clés à 1 : le GLB doit avoir des poids par défaut nuls
         gardes.append(nom)
     o.data.update()
     return gardes
@@ -134,6 +137,128 @@ def nettoyer_modificateurs(o):
     for mod in list(o.modifiers):
         if mod.type != 'ARMATURE':
             o.modifiers.remove(mod)
+
+
+def bvh_peau(h, corps0):
+    """Arbre de recherche de la peau (faces du groupe 'body') au neutre."""
+    gb = h.vertex_groups['body'].index
+    dans = np.zeros(len(h.data.vertices), bool)
+    for v in h.data.vertices:
+        if any(g.group == gb for g in v.groups):
+            dans[v.index] = True
+    faces = [p.vertices[:] for p in h.data.polygons if dans[list(p.vertices)].all()]
+    return BVHTree.FromPolygons([mathutils.Vector(c) for c in corps0], faces)
+
+
+def os_dominant(h, noms_os):
+    """Index -> nom de l'os de plus fort poids (ou None)."""
+    par_index = {g.index: g.name for g in h.vertex_groups if g.name in noms_os}
+    res = [None] * len(h.data.vertices)
+    for v in h.data.vertices:
+        meilleur = max((g for g in v.groups if g.group in par_index), key=lambda g: g.weight, default=None)
+        if meilleur:
+            res[v.index] = par_index[meilleur.group]
+    return res
+
+
+def materiau_tenue(slot, metal):
+    nom = f'Tenue.{slot}'
+    m = bpy.data.materials.get(nom) or bpy.data.materials.new(nom)
+    m.use_nodes = True
+    bsdf = next(n for n in m.node_tree.nodes if n.type == 'BSDF_PRINCIPLED')
+    bsdf.inputs['Base Color'].default_value = (1, 1, 1, 1)
+    bsdf.inputs['Metallic'].default_value = 0.85 if metal else 0.0
+    bsdf.inputs['Roughness'].default_value = 0.38 if metal else 0.85
+    return m
+
+
+def construire_tenue(h, rig, t, corps0, deltas_corps, peau, dominant):
+    """Découpe une tenue dans les aides du corps : mêmes sommets, donc mêmes morphs, même squelette."""
+    me = h.data
+    n = len(me.vertices)
+    gardes_faces = set()
+    for part in t['parties']:
+        ga = h.vertex_groups[part['aide']].index
+        ok = np.zeros(n, bool)
+        for v in me.vertices:
+            if not any(g.group == ga and g.weight > 0.5 for g in v.groups):
+                continue
+            z = corps0[v.index][2]
+            if z < part.get('zmin', -9) or z > part.get('zmax', 9):
+                continue
+            if 'os' in part and dominant[v.index] not in part['os']:
+                continue
+            ok[v.index] = True
+        if part.get('dos'):
+            # moitié arrière : y au-delà du centre de la tranche horizontale (l'avant du corps est vers -Y)
+            sel = np.flatnonzero(ok)
+            for i in sel:
+                tranche = sel[np.abs(corps0[sel, 2] - corps0[i, 2]) < 0.03]
+                if corps0[i, 1] < corps0[tranche, 1].mean() - 0.01:
+                    ok[i] = False
+        for p in me.polygons:
+            idx = list(p.vertices)
+            if ok[idx].all():
+                gardes_faces.add(p.index)
+    bm = bmesh.new()
+    bm.from_mesh(me)
+    orig = bm.verts.layers.int.new('orig')
+    for v in bm.verts:
+        v[orig] = v.index
+    bm.faces.ensure_lookup_table()
+    bmesh.ops.delete(bm, geom=[f for f in bm.faces if f.index not in gardes_faces], context='FACES_ONLY')
+    bmesh.ops.delete(bm, geom=[v for v in bm.verts if not v.link_faces], context='VERTS')
+    indices = np.array([v[orig] for v in bm.verts])
+    nom = f"{t['slot']}-{t['id']}"
+    data = bpy.data.meshes.new(nom)
+    bm.to_mesh(data)
+    bm.free()
+    o = bpy.data.objects.new(nom, data)
+    bpy.context.collection.objects.link(o)
+    if data.shape_keys:
+        o.shape_key_clear()
+    for g in [g for g in h.vertex_groups]:
+        o.vertex_groups.new(name=g.name)
+    # poids : copie des groupes d'os du corps (les aides sont déjà pondérées)
+    noms_os = {b.name for b in rig.data.bones}
+    for i, src in enumerate(indices):
+        for g in me.vertices[src].groups:
+            nom_g = h.vertex_groups[g.group].name
+            if nom_g in noms_os and g.weight > 0:
+                o.vertex_groups[nom_g].add([i], g.weight, 'REPLACE')
+    for g in [g for g in o.vertex_groups if g.name not in noms_os]:
+        o.vertex_groups.remove(g)
+    # écart à la peau : on pousse le long de la normale jusqu'à t['ecart']
+    neutre = corps0[indices].copy()
+    data.vertices.foreach_set('co', neutre.ravel())
+    data.update()
+    normales = np.array([v.normal for v in data.vertices])
+    pousse = np.zeros(len(neutre))
+    for i, p in enumerate(neutre):
+        loc, nrm, _, dist = peau.find_nearest(mathutils.Vector(p))
+        if loc is None:
+            continue
+        signe = 1 if (mathutils.Vector(p) - loc).dot(nrm) > 0 else -1
+        pousse[i] = max(0.0, t['ecart'] - signe * dist)
+    # 'couche' : décalage constant pour superposer les vêtements (bas < haut < armure < ceinture < cape)
+    neutre = neutre + normales * (pousse + t.get('couche', 0.0))[:, None]
+    if t.get('drape'):
+        # tombé : de haut en bas, chaque colonne ne revient jamais vers le corps (pas de creux au bas du dos)
+        colonnes = np.round(neutre[:, 0] / 0.025).astype(int)
+        for c in np.unique(colonnes):
+            idx = np.flatnonzero(colonnes == c)
+            idx = idx[np.argsort(-neutre[idx, 2])]
+            neutre[idx, 1] = np.maximum.accumulate(neutre[idx, 1])
+    deltas = {m: d[indices] for m, d in deltas_corps.items()}
+    cles = ajouter_cles(o, neutre, deltas)
+    for p in data.polygons:
+        p.use_smooth = True
+    data.materials.clear()
+    data.materials.append(materiau_tenue(t['slot'], t.get('metal')))
+    o.parent = rig
+    mod = o.modifiers.new('Armature', 'ARMATURE')
+    mod.object = rig
+    return o, cles
 
 
 def exporter(objets, rig, fichier):
@@ -192,6 +317,15 @@ def construire():
         reajuster(h, tous)
         note('morphs calculés', len(CONFIG['morphs']), round(time.time() - t0, 1), 's')
 
+        # Tenues découpées dans les aides du corps
+        peau = bvh_peau(h, corps0)
+        dominant = os_dominant(h, {b.name for b in rig.data.bones})
+        tenues = []
+        for t in CONFIG.get('tenues', []):
+            o, cles = construire_tenue(h, rig, t, corps0, deltas_corps, peau, dominant)
+            tenues.append((t, o, cles))
+        note('tenues', len(tenues), round(time.time() - t0, 1), 's')
+
         # Corps exporté : copie du basemesh sans macros ni aides, avec nos clés.
         corps = h.copy()
         corps.data = h.data.copy()
@@ -210,6 +344,11 @@ def construire():
                 manifeste['assets'].append({'slot': o['jdr_slot'], 'id': o['jdr_id'], 'objet': o.name,
                                             'fichier': f"{o['jdr_slot']}/{o['jdr_id']}.glb",
                                             'sommets': len(o.data.vertices), 'morphs': manifeste_o})
+        for t, o, cles in tenues:
+            manifeste['assets'].append({'slot': t['slot'], 'id': t['id'], 'objet': o.name, 'label': t['label'],
+                                        'materiau': f"Tenue.{t['slot']}", 'metal': bool(t.get('metal')),
+                                        'fichier': f"{t['slot']}/{t['id']}.glb",
+                                        'sommets': len(o.data.vertices), 'morphs': cles})
         # Export
         exporter([corps] + parties, rig, os.path.join(SORTIE, 'base.glb'))
         for a in manifeste['assets']:

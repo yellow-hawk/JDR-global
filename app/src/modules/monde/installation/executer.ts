@@ -72,7 +72,7 @@ export async function installerMonde(d: Dependances): Promise<{ univ: string; po
       const n = parNom.get(p.nom.toLowerCase());
       if (!n) return p;
       let q = p;
-      if (!q.apparence) q = { ...q, apparence: apparenceAuto({ nom: q.nom, apparence: n.apparence, feminin: n.feminin, peuple: n.peuple }) };
+      if (!q.apparence) q = { ...q, apparence: apparenceAuto({ nom: q.nom, apparence: n.apparence, feminin: n.feminin, peuple: n.peuple, role: n.role, peupleNom: n.peupleNom }) };
       // PNJ importés avant les stats par rôle : on leur donne des stats cohérentes (une seule fois).
       if (q.combat.stats.niveau === undefined) {
         const R = regles(x.campagne.regles);

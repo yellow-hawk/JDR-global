@@ -38,7 +38,7 @@ export function Page() {
   const butin = useMemo(() => genererButin(graine, tranche), [graine, tranche]);
 
   const garderPnj = (g: PnjGenere, graineP: string): string => {
-    const p = { ...pnjVersPersonnage(g, R, c.campagne.regles, ctx, graineP), apparence: apparenceAuto({ nom: g.nom, apparence: g.apparence, feminin: g.sexe === 'f', peuple: ctx.peuple?.cle ?? null }) };
+    const p = { ...pnjVersPersonnage(g, R, c.campagne.regles, ctx, graineP), apparence: apparenceAuto({ nom: g.nom, apparence: g.apparence, feminin: g.sexe === 'f', peuple: ctx.peuple?.cle ?? null, role: g.role, peupleNom: ctx.peuple?.nom }) };
     modifier((x) => donnerSortsAuxPnj({ ...x, personnages: [...x.personnages, p] }));
     return p.id;
   };

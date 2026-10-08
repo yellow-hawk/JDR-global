@@ -15,13 +15,45 @@ export const THUMB_FRAMING = {
   superSample: 2,   // rend a px*superSample puis downscale (anti-aliasing).
   quality: 0.7,     // qualite jpeg (0..1).
   fov: 35,          // champ de vision (deg). Plus petit = plus "zoom"/teleobjectif.
-  distanceH: 1.5,   // distance HORIZONTALE camera -> point vise.
+  distanceH: 1.15,  // distance HORIZONTALE camera -> point vise (JDR : 1.5 -> 1.15, tete et epaules).
   yawDeg: 30,       // angle horizontal : 0 = face, +/- = 3/4 face (droite/gauche).
   targetX: 0,       // point vise X (centre du perso).
   targetY: 1.55,    // point vise Y (tete/buste). Monte/descend le cadrage.
   targetZ: 0,       // point vise Z.
   cameraY: 1.35,    // hauteur camera. < targetY => contre-plongee (regard vers le haut).
   background: '#1a1a1f',
+  // JDR Global (08/10) : cadrage sur les yeux reels (morphs de stature, d'age… compris).
+  // repere = nom du materiau des yeux ; le point vise est decale de 'decalageY' sous les yeux,
+  // la camera de 'cameraSousCible' sous le point vise. Repli : targetX/Y/Z et cameraY ci-dessus.
+  repere: 'Human.high-poly',
+  decalageY: -0.04,
+  cameraSousCible: 0.12,
+}
+
+// Centre des yeux apres morphs et skinning (CPU, sur un echantillon de sommets), ou null.
+export function centreDesYeux() {
+  let mesh = null
+  scene?.traverse((o) => { if (!mesh && o.isSkinnedMesh && o.material?.name === THUMB_FRAMING.repere) mesh = o })
+  const pos = mesh?.geometry?.attributes?.position
+  if (!pos) return null
+  const morphs = mesh.geometry.morphAttributes.position ?? []
+  const infl = mesh.morphTargetInfluences ?? []
+  const somme = new THREE.Vector3()
+  const v = new THREE.Vector3()
+  const pas = Math.max(1, Math.floor(pos.count / 48))
+  let n = 0
+  mesh.updateMatrixWorld(true)
+  mesh.skeleton?.update()
+  for (let i = 0; i < pos.count; i += pas) {
+    v.fromBufferAttribute(pos, i)
+    morphs.forEach((m, k) => {
+      if (infl[k]) v.set(v.x + m.getX(i) * infl[k], v.y + m.getY(i) * infl[k], v.z + m.getZ(i) * infl[k])
+    })
+    mesh.applyBoneTransform(i, v)
+    somme.add(mesh.localToWorld(v))
+    n++
+  }
+  return n ? somme.divideScalar(n) : null
 }
 
 let renderer = null
@@ -48,11 +80,14 @@ function captureFixedFraming() {
 
   // Camera dediee : on ne touche jamais a la camera utilisateur (OrbitControls).
   const cam = new THREE.PerspectiveCamera(F.fov, 1, 0.1, 100)
-  const target = new THREE.Vector3(F.targetX, F.targetY, F.targetZ)
+  const yeux = centreDesYeux()
+  const target = yeux
+    ? new THREE.Vector3(yeux.x, yeux.y + F.decalageY, yeux.z)
+    : new THREE.Vector3(F.targetX, F.targetY, F.targetZ)
   const yaw = THREE.MathUtils.degToRad(F.yawDeg)
   cam.position.set(
     target.x + F.distanceH * Math.sin(yaw),
-    F.cameraY,
+    yeux ? target.y - F.cameraSousCible : F.cameraY,
     target.z + F.distanceH * Math.cos(yaw),
   )
   cam.lookAt(target)

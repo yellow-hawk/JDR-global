@@ -5,7 +5,9 @@
   "description": "Outils de la chaîne d'assets 3D (optimisation des GLB exportés par Blender).",
   "scripts": {
     "optimiser": "node scripts/optimiser.mjs",
-    "inspecter": "node scripts/inspect-glb.mjs"
+    "inspecter": "node scripts/inspect-glb.mjs",
+    "species": "node scripts/generer_species.cjs",
+    "tout": "npm run optimiser && npm run species"
   },
   "dependencies": {
     "@gltf-transform/core": "^4.2.1",

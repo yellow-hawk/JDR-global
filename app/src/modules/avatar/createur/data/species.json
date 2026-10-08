@@ -783,6 +783,60 @@
           "type": "color",
           "default": "#ffffff",
           "alphaTest": 0.4
+        },
+        {
+          "id": "tenue_haut",
+          "label": "Haut",
+          "target": "Tenue.haut",
+          "property": "color",
+          "type": "color",
+          "default": "#8a6a4a",
+          "side": "double"
+        },
+        {
+          "id": "tenue_bas",
+          "label": "Bas",
+          "target": "Tenue.bas",
+          "property": "color",
+          "type": "color",
+          "default": "#4a4038",
+          "side": "double"
+        },
+        {
+          "id": "tenue_pieds",
+          "label": "Chaussures",
+          "target": "Tenue.pieds",
+          "property": "color",
+          "type": "color",
+          "default": "#3b2a1c",
+          "side": "double"
+        },
+        {
+          "id": "tenue_armure",
+          "label": "Armure",
+          "target": "Tenue.armure",
+          "property": "color",
+          "type": "color",
+          "default": "#b8bcc4",
+          "side": "double"
+        },
+        {
+          "id": "tenue_ceinture",
+          "label": "Ceinture",
+          "target": "Tenue.ceinture",
+          "property": "color",
+          "type": "color",
+          "default": "#5a3a22",
+          "side": "double"
+        },
+        {
+          "id": "tenue_cape",
+          "label": "Cape",
+          "target": "Tenue.cape",
+          "property": "color",
+          "type": "color",
+          "default": "#6b1d1d",
+          "side": "double"
         }
       ],
       "_comment_assetSlots": "Emplacements d'assets. attachMode 'skinned' : l'asset est lié au squelette du corps (mêmes noms d'os) et porte les mêmes morphs, il suit donc la morphologie. 'head-bone' (ancien) : asset posé sur l'os 'attachBone'.",
@@ -790,6 +844,7 @@
         {
           "id": "hair",
           "label": "Coiffure",
+          "category": "pilosite",
           "attachMode": "skinned",
           "default": null,
           "options": [
@@ -853,6 +908,7 @@
         {
           "id": "eyebrows",
           "label": "Sourcils",
+          "category": "pilosite",
           "attachMode": "skinned",
           "default": "default",
           "options": [
@@ -886,6 +942,7 @@
         {
           "id": "eyelashes",
           "label": "Cils",
+          "category": "pilosite",
           "attachMode": "skinned",
           "default": "default",
           "options": [
@@ -905,6 +962,145 @@
               "file": "avatar/assets/species/human/eyelashes/longs.glb"
             }
           ]
+        },
+        {
+          "id": "haut",
+          "label": "Haut",
+          "category": "tenue",
+          "attachMode": "skinned",
+          "default": "chemise",
+          "options": [
+            {
+              "id": null,
+              "label": "Aucun",
+              "file": null
+            },
+            {
+              "id": "chemise",
+              "label": "Chemise",
+              "file": "avatar/assets/species/human/haut/chemise.glb"
+            },
+            {
+              "id": "tunique",
+              "label": "Tunique",
+              "file": "avatar/assets/species/human/haut/tunique.glb"
+            },
+            {
+              "id": "gilet",
+              "label": "Gilet sans manches",
+              "file": "avatar/assets/species/human/haut/gilet.glb"
+            },
+            {
+              "id": "robe",
+              "label": "Robe longue",
+              "file": "avatar/assets/species/human/haut/robe.glb"
+            }
+          ]
+        },
+        {
+          "id": "bas",
+          "label": "Bas",
+          "category": "tenue",
+          "attachMode": "skinned",
+          "default": "pantalon",
+          "options": [
+            {
+              "id": null,
+              "label": "Aucun",
+              "file": null
+            },
+            {
+              "id": "pantalon",
+              "label": "Pantalon",
+              "file": "avatar/assets/species/human/bas/pantalon.glb"
+            },
+            {
+              "id": "jupe",
+              "label": "Jupe longue",
+              "file": "avatar/assets/species/human/bas/jupe.glb"
+            }
+          ]
+        },
+        {
+          "id": "pieds",
+          "label": "Chaussures",
+          "category": "tenue",
+          "attachMode": "skinned",
+          "default": "bottes",
+          "options": [
+            {
+              "id": null,
+              "label": "Aucune",
+              "file": null
+            },
+            {
+              "id": "bottes",
+              "label": "Bottes",
+              "file": "avatar/assets/species/human/pieds/bottes.glb"
+            }
+          ]
+        },
+        {
+          "id": "armure",
+          "label": "Armure",
+          "category": "tenue",
+          "attachMode": "skinned",
+          "default": null,
+          "options": [
+            {
+              "id": null,
+              "label": "Aucune",
+              "file": null
+            },
+            {
+              "id": "plastron",
+              "label": "Plastron",
+              "file": "avatar/assets/species/human/armure/plastron.glb"
+            },
+            {
+              "id": "cotte",
+              "label": "Cotte de mailles",
+              "file": "avatar/assets/species/human/armure/cotte.glb"
+            }
+          ]
+        },
+        {
+          "id": "ceinture",
+          "label": "Ceinture",
+          "category": "tenue",
+          "attachMode": "skinned",
+          "default": null,
+          "options": [
+            {
+              "id": null,
+              "label": "Aucune",
+              "file": null
+            },
+            {
+              "id": "ceinture",
+              "label": "Ceinture",
+              "file": "avatar/assets/species/human/ceinture/ceinture.glb"
+            }
+          ]
+        },
+        {
+          "id": "cape",
+          "label": "Cape",
+          "category": "tenue",
+          "attachMode": "skinned",
+          "default": null,
+          "options": [
+            {
+              "id": null,
+              "label": "Aucune",
+              "file": null
+            },
+            {
+              "id": "cape",
+              "label": "Cape",
+              "file": "avatar/assets/species/human/cape/cape.glb"
+            }
+          ]
         }
       ],
       "morphCategories": [
@@ -919,6 +1115,16 @@
         {
           "id": "corps",
           "label": "Corps"
+        }
+      ],
+      "assetCategories": [
+        {
+          "id": "pilosite",
+          "label": "Coiffure et pilosité"
+        },
+        {
+          "id": "tenue",
+          "label": "Tenue"
         }
       ]
     }

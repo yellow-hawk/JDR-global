@@ -39,6 +39,32 @@ describe('apparenceAuto', () => {
   });
 });
 
+describe('tenue et peuple', () => {
+  type P = { data: { assets: Record<string, string | null>; morphs: { values: Record<string, number> }; colors: Record<string, string> } };
+  const pnj = (role: string, peupleNom = '', feminin = false) => apparenceAuto({ nom: 'Aldric', role, peupleNom, feminin }) as unknown as P;
+
+  it('habille selon le rôle', () => {
+    expect(pnj('capitaine de la garde').data.assets.armure).toBe('cotte');
+    expect(pnj('chevalier errant').data.assets.armure).toBe('plastron');
+    expect(pnj('mage de la tour').data.assets.haut).toBe('robe');
+    expect(pnj('forgeron').data.assets.armure).toBeNull();
+    expect(pnj('aubergiste').data.assets.pieds).toBe('bottes');
+  });
+
+  it('chaque tenue tirée existe dans species.json', () => {
+    const options = new Map(humain.assetSlots.map((s: { id: string; options: { id: string | null }[] }) => [s.id, new Set(s.options.map((o) => o.id))]));
+    for (const role of ['garde', 'chevalier', 'mage', 'prêtre', 'noble', 'voleur', 'chasseur', 'forgeron', 'inconnu'])
+      for (const feminin of [false, true])
+        for (const [slot, id] of Object.entries(pnj(role, '', feminin).data.assets)) expect(options.get(slot)?.has(id), `${role} ${slot}=${id}`).toBe(true);
+  });
+
+  it('traits du peuple : oreilles pointues des elfes, petite stature des nains', () => {
+    expect(pnj('marchand', 'Elfes des brumes').data.morphs.values.ear_pointed).toBe(1);
+    expect(pnj('marchand', 'Nains du Roc').data.morphs.values.stature).toBeLessThan(-0.5);
+    expect(pnj('marchand', 'Humains').data.morphs.values.ear_pointed).toBeUndefined();
+  });
+});
+
 describe('chargement tolérant des presets', () => {
   it('ignore un morph ou une option inconnus sans planter', () => {
     const { patch, warnings } = sanitizePreset({

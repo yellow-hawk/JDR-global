@@ -6,7 +6,8 @@ import { useCharacter } from '../store/useCharacter'
 //  - Phase 2 : un dossier par categorie de species.json (morphCategories : Silhouette,
 //    Visage, Corps…) = un slider par role de morph, + toggle "Asymetrie (avance)" qui
 //    dedouble les sliders des paires L/R.
-//  - Phase 3 : dossier "Assets" = un menu deroulant par slot.
+//  - Phase 3 : un dossier par categorie d'emplacements (Coiffure et pilosite, Tenue…) =
+//    un menu deroulant par slot.
 //
 // Version JDR Global : leva est remplace par des controles React natifs (classes
 // .avatar-*), aux couleurs de l'application. Les controles sont pilotes par le store
@@ -92,6 +93,8 @@ export default function ControlPanel() {
   // a la frontiere UI, et reconverti en null vers le store.
   const NONE = '__none__'
   const assetSlots = (species?.assetSlots ?? []).filter((sl) => !sl._example)
+  // Categories d'emplacements (species.json : assetCategories) ; repli : un seul dossier.
+  const assetCategories = species?.assetCategories ?? [{ id: 'assets', label: 'Coiffure et pilosité' }]
 
   return (
     <div className="avatar-panneau">
@@ -116,16 +119,21 @@ export default function ControlPanel() {
         return roles.length ? <Dossier key={c.id} titre={c.label} ouvert={c.id === categories[0].id}>{sliders(roles)}</Dossier> : null
       })}
 
-      <Dossier titre="Coiffure, pilosité et tenue">
-        {assetSlots.map((slot) => (
-          <label key={slot.id} className="avatar-choix">
-            <span>{slot.label}</span>
-            <select value={assets[slot.id] ?? NONE} onChange={(e) => setAsset(slot.id, e.target.value === NONE ? null : e.target.value)}>
-              {slot.options.map((o) => <option key={o.id ?? NONE} value={o.id ?? NONE}>{o.label}</option>)}
-            </select>
-          </label>
-        ))}
-      </Dossier>
+      {assetCategories.map((c) => {
+        const slotsDe = assetSlots.filter((sl) => (sl.category ?? assetCategories[0].id) === c.id)
+        return slotsDe.length ? (
+          <Dossier key={c.id} titre={c.label}>
+            {slotsDe.map((slot) => (
+              <label key={slot.id} className="avatar-choix">
+                <span>{slot.label}</span>
+                <select value={assets[slot.id] ?? NONE} onChange={(e) => setAsset(slot.id, e.target.value === NONE ? null : e.target.value)}>
+                  {slot.options.map((o) => <option key={o.id ?? NONE} value={o.id ?? NONE}>{o.label}</option>)}
+                </select>
+              </label>
+            ))}
+          </Dossier>
+        ) : null
+      })}
     </div>
   )
 }

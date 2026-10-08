@@ -8,125 +8,767 @@
     "langue": "tongue01"
   },
   "morphs": [
-    { "nom": "macro-feminin", "macro": { "gender": 0.0 } },
-    { "nom": "macro-masculin", "macro": { "gender": 1.0 } },
-    { "nom": "macro-age-vieux", "macro": { "age": 1.0 } },
-    { "nom": "macro-age-jeune", "macro": { "age": 0.3 } },
-    { "nom": "macro-muscle-plus", "macro": { "muscle": 1.0 } },
-    { "nom": "macro-muscle-moins", "macro": { "muscle": 0.0 } },
-    { "nom": "macro-poids-plus", "macro": { "weight": 1.0 } },
-    { "nom": "macro-poids-moins", "macro": { "weight": 0.0 } },
-    { "nom": "macro-taille-plus", "macro": { "height": 1.0 } },
-    { "nom": "macro-taille-moins", "macro": { "height": 0.0 } },
-    { "nom": "macro-poitrine-plus", "macro": { "cupsize": 1.0 } },
-    { "nom": "macro-poitrine-moins", "macro": { "cupsize": 0.0 } },
-
-    { "nom": "head-fat-incr", "cible": "head/head-fat-incr" },
-    { "nom": "head-fat-decr", "cible": "head/head-fat-decr" },
-    { "nom": "head-angle-out", "cible": "head/head-angle-out" },
-    { "nom": "head-angle-in", "cible": "head/head-angle-in" },
-    { "nom": "head-scale-vert-incr", "cible": "head/head-scale-vert-incr" },
-    { "nom": "head-scale-vert-decr", "cible": "head/head-scale-vert-decr" },
-    { "nom": "forehead-scale-vert-incr", "cible": "forehead/forehead-scale-vert-incr" },
-    { "nom": "forehead-scale-vert-decr", "cible": "forehead/forehead-scale-vert-decr" },
-    { "nom": "eyebrows-trans-up", "cible": "eyebrows/eyebrows-trans-up" },
-    { "nom": "eyebrows-trans-down", "cible": "eyebrows/eyebrows-trans-down" },
-    { "nom": "eyebrows-angle-up", "cible": "eyebrows/eyebrows-angle-up" },
-    { "nom": "eyebrows-angle-down", "cible": "eyebrows/eyebrows-angle-down" },
-
-    { "nom": "l-eye-scale-incr", "cible": "eyes/l-eye-scale-incr" },
-    { "nom": "l-eye-scale-decr", "cible": "eyes/l-eye-scale-decr" },
-    { "nom": "r-eye-scale-incr", "cible": "eyes/r-eye-scale-incr" },
-    { "nom": "r-eye-scale-decr", "cible": "eyes/r-eye-scale-decr" },
-    { "nom": "l-eye-corner1-up", "cible": "eyes/l-eye-corner1-up" },
-    { "nom": "l-eye-corner1-down", "cible": "eyes/l-eye-corner1-down" },
-    { "nom": "r-eye-corner1-up", "cible": "eyes/r-eye-corner1-up" },
-    { "nom": "r-eye-corner1-down", "cible": "eyes/r-eye-corner1-down" },
-    { "nom": "l-eye-trans-out", "cible": "eyes/l-eye-trans-out" },
-    { "nom": "l-eye-trans-in", "cible": "eyes/l-eye-trans-in" },
-    { "nom": "r-eye-trans-out", "cible": "eyes/r-eye-trans-out" },
-    { "nom": "r-eye-trans-in", "cible": "eyes/r-eye-trans-in" },
-
-    { "nom": "nose-scale-depth-incr", "cible": "nose/nose-scale-depth-incr" },
-    { "nom": "nose-scale-depth-decr", "cible": "nose/nose-scale-depth-decr" },
-    { "nom": "nose-scale-horiz-incr", "cible": "nose/nose-scale-horiz-incr" },
-    { "nom": "nose-scale-horiz-decr", "cible": "nose/nose-scale-horiz-decr" },
-    { "nom": "nose-scale-vert-incr", "cible": "nose/nose-scale-vert-incr" },
-    { "nom": "nose-scale-vert-decr", "cible": "nose/nose-scale-vert-decr" },
-    { "nom": "nose-hump-incr", "cible": "nose/nose-hump-incr" },
-    { "nom": "nose-hump-decr", "cible": "nose/nose-hump-decr" },
-    { "nom": "nose-point-up", "cible": "nose/nose-point-up" },
-    { "nom": "nose-point-down", "cible": "nose/nose-point-down" },
-
-    { "nom": "mouth-scale-horiz-incr", "cible": "mouth/mouth-scale-horiz-incr" },
-    { "nom": "mouth-scale-horiz-decr", "cible": "mouth/mouth-scale-horiz-decr" },
-    { "nom": "mouth-lowerlip-volume-incr", "cible": "mouth/mouth-lowerlip-volume-incr" },
-    { "nom": "mouth-lowerlip-volume-decr", "cible": "mouth/mouth-lowerlip-volume-decr" },
-    { "nom": "mouth-upperlip-volume-incr", "cible": "mouth/mouth-upperlip-volume-incr" },
-    { "nom": "mouth-upperlip-volume-decr", "cible": "mouth/mouth-upperlip-volume-decr" },
-    { "nom": "mouth-angles-up", "cible": "mouth/mouth-angles-up" },
-    { "nom": "mouth-angles-down", "cible": "mouth/mouth-angles-down" },
-
-    { "nom": "l-cheek-volume-incr", "cible": "cheek/l-cheek-volume-incr" },
-    { "nom": "l-cheek-volume-decr", "cible": "cheek/l-cheek-volume-decr" },
-    { "nom": "r-cheek-volume-incr", "cible": "cheek/r-cheek-volume-incr" },
-    { "nom": "r-cheek-volume-decr", "cible": "cheek/r-cheek-volume-decr" },
-    { "nom": "l-cheek-bones-incr", "cible": "cheek/l-cheek-bones-incr" },
-    { "nom": "l-cheek-bones-decr", "cible": "cheek/l-cheek-bones-decr" },
-    { "nom": "r-cheek-bones-incr", "cible": "cheek/r-cheek-bones-incr" },
-    { "nom": "r-cheek-bones-decr", "cible": "cheek/r-cheek-bones-decr" },
-
-    { "nom": "chin-height-incr", "cible": "chin/chin-height-incr" },
-    { "nom": "chin-height-decr", "cible": "chin/chin-height-decr" },
-    { "nom": "chin-prominent-incr", "cible": "chin/chin-prominent-incr" },
-    { "nom": "chin-prominent-decr", "cible": "chin/chin-prominent-decr" },
-    { "nom": "chin-width-incr", "cible": "chin/chin-width-incr" },
-    { "nom": "chin-width-decr", "cible": "chin/chin-width-decr" },
-
-    { "nom": "l-ear-scale-incr", "cible": "ears/l-ear-scale-incr" },
-    { "nom": "l-ear-scale-decr", "cible": "ears/l-ear-scale-decr" },
-    { "nom": "r-ear-scale-incr", "cible": "ears/r-ear-scale-incr" },
-    { "nom": "r-ear-scale-decr", "cible": "ears/r-ear-scale-decr" },
-    { "nom": "l-ear-shape-pointed", "cible": "ears/l-ear-shape-pointed" },
-    { "nom": "r-ear-shape-pointed", "cible": "ears/r-ear-shape-pointed" },
-
-    { "nom": "measure-neck-circ-incr", "cible": "neck/measure-neck-circ-incr" },
-    { "nom": "measure-neck-circ-decr", "cible": "neck/measure-neck-circ-decr" },
-    { "nom": "measure-shoulder-dist-incr", "cible": "torso/measure-shoulder-dist-incr" },
-    { "nom": "measure-shoulder-dist-decr", "cible": "torso/measure-shoulder-dist-decr" },
-    { "nom": "measure-frontchest-dist-incr", "cible": "torso/measure-frontchest-dist-incr" },
-    { "nom": "measure-frontchest-dist-decr", "cible": "torso/measure-frontchest-dist-decr" },
-    { "nom": "measure-waist-circ-incr", "cible": "torso/measure-waist-circ-incr" },
-    { "nom": "measure-waist-circ-decr", "cible": "torso/measure-waist-circ-decr" },
-    { "nom": "measure-upperarm-circ-incr", "cible": "armslegs/measure-upperarm-circ-incr" },
-    { "nom": "measure-upperarm-circ-decr", "cible": "armslegs/measure-upperarm-circ-decr" },
-    { "nom": "stomach-pregnant-incr", "cible": "stomach/stomach-pregnant-incr" },
-    { "nom": "stomach-pregnant-decr", "cible": "stomach/stomach-pregnant-decr" },
-    { "nom": "hip-scale-horiz-incr", "cible": "hip/hip-scale-horiz-incr" },
-    { "nom": "hip-scale-horiz-decr", "cible": "hip/hip-scale-horiz-decr" },
-    { "nom": "buttocks-volume-incr", "cible": "buttocks/buttocks-volume-incr" },
-    { "nom": "buttocks-volume-decr", "cible": "buttocks/buttocks-volume-decr" },
-    { "nom": "measure-upperleg-height-incr", "cible": "armslegs/measure-upperleg-height-incr" },
-    { "nom": "measure-upperleg-height-decr", "cible": "armslegs/measure-upperleg-height-decr" },
-    { "nom": "breast-trans-up", "cible": "breast/breast-trans-up" },
-    { "nom": "breast-trans-down", "cible": "breast/breast-trans-down" }
+    {
+      "nom": "macro-feminin",
+      "macro": {
+        "gender": 0.0
+      }
+    },
+    {
+      "nom": "macro-masculin",
+      "macro": {
+        "gender": 1.0
+      }
+    },
+    {
+      "nom": "macro-age-vieux",
+      "macro": {
+        "age": 1.0
+      }
+    },
+    {
+      "nom": "macro-age-jeune",
+      "macro": {
+        "age": 0.3
+      }
+    },
+    {
+      "nom": "macro-muscle-plus",
+      "macro": {
+        "muscle": 1.0
+      }
+    },
+    {
+      "nom": "macro-muscle-moins",
+      "macro": {
+        "muscle": 0.0
+      }
+    },
+    {
+      "nom": "macro-poids-plus",
+      "macro": {
+        "weight": 1.0
+      }
+    },
+    {
+      "nom": "macro-poids-moins",
+      "macro": {
+        "weight": 0.0
+      }
+    },
+    {
+      "nom": "macro-taille-plus",
+      "macro": {
+        "height": 1.0
+      }
+    },
+    {
+      "nom": "macro-taille-moins",
+      "macro": {
+        "height": 0.0
+      }
+    },
+    {
+      "nom": "macro-poitrine-plus",
+      "macro": {
+        "cupsize": 1.0
+      }
+    },
+    {
+      "nom": "macro-poitrine-moins",
+      "macro": {
+        "cupsize": 0.0
+      }
+    },
+    {
+      "nom": "head-fat-incr",
+      "cible": "head/head-fat-incr"
+    },
+    {
+      "nom": "head-fat-decr",
+      "cible": "head/head-fat-decr"
+    },
+    {
+      "nom": "head-angle-out",
+      "cible": "head/head-angle-out"
+    },
+    {
+      "nom": "head-angle-in",
+      "cible": "head/head-angle-in"
+    },
+    {
+      "nom": "head-scale-vert-incr",
+      "cible": "head/head-scale-vert-incr"
+    },
+    {
+      "nom": "head-scale-vert-decr",
+      "cible": "head/head-scale-vert-decr"
+    },
+    {
+      "nom": "forehead-scale-vert-incr",
+      "cible": "forehead/forehead-scale-vert-incr"
+    },
+    {
+      "nom": "forehead-scale-vert-decr",
+      "cible": "forehead/forehead-scale-vert-decr"
+    },
+    {
+      "nom": "eyebrows-trans-up",
+      "cible": "eyebrows/eyebrows-trans-up"
+    },
+    {
+      "nom": "eyebrows-trans-down",
+      "cible": "eyebrows/eyebrows-trans-down"
+    },
+    {
+      "nom": "eyebrows-angle-up",
+      "cible": "eyebrows/eyebrows-angle-up"
+    },
+    {
+      "nom": "eyebrows-angle-down",
+      "cible": "eyebrows/eyebrows-angle-down"
+    },
+    {
+      "nom": "l-eye-scale-incr",
+      "cible": "eyes/l-eye-scale-incr"
+    },
+    {
+      "nom": "l-eye-scale-decr",
+      "cible": "eyes/l-eye-scale-decr"
+    },
+    {
+      "nom": "r-eye-scale-incr",
+      "cible": "eyes/r-eye-scale-incr"
+    },
+    {
+      "nom": "r-eye-scale-decr",
+      "cible": "eyes/r-eye-scale-decr"
+    },
+    {
+      "nom": "l-eye-corner1-up",
+      "cible": "eyes/l-eye-corner1-up"
+    },
+    {
+      "nom": "l-eye-corner1-down",
+      "cible": "eyes/l-eye-corner1-down"
+    },
+    {
+      "nom": "r-eye-corner1-up",
+      "cible": "eyes/r-eye-corner1-up"
+    },
+    {
+      "nom": "r-eye-corner1-down",
+      "cible": "eyes/r-eye-corner1-down"
+    },
+    {
+      "nom": "l-eye-trans-out",
+      "cible": "eyes/l-eye-trans-out"
+    },
+    {
+      "nom": "l-eye-trans-in",
+      "cible": "eyes/l-eye-trans-in"
+    },
+    {
+      "nom": "r-eye-trans-out",
+      "cible": "eyes/r-eye-trans-out"
+    },
+    {
+      "nom": "r-eye-trans-in",
+      "cible": "eyes/r-eye-trans-in"
+    },
+    {
+      "nom": "nose-scale-depth-incr",
+      "cible": "nose/nose-scale-depth-incr"
+    },
+    {
+      "nom": "nose-scale-depth-decr",
+      "cible": "nose/nose-scale-depth-decr"
+    },
+    {
+      "nom": "nose-scale-horiz-incr",
+      "cible": "nose/nose-scale-horiz-incr"
+    },
+    {
+      "nom": "nose-scale-horiz-decr",
+      "cible": "nose/nose-scale-horiz-decr"
+    },
+    {
+      "nom": "nose-scale-vert-incr",
+      "cible": "nose/nose-scale-vert-incr"
+    },
+    {
+      "nom": "nose-scale-vert-decr",
+      "cible": "nose/nose-scale-vert-decr"
+    },
+    {
+      "nom": "nose-hump-incr",
+      "cible": "nose/nose-hump-incr"
+    },
+    {
+      "nom": "nose-hump-decr",
+      "cible": "nose/nose-hump-decr"
+    },
+    {
+      "nom": "nose-point-up",
+      "cible": "nose/nose-point-up"
+    },
+    {
+      "nom": "nose-point-down",
+      "cible": "nose/nose-point-down"
+    },
+    {
+      "nom": "mouth-scale-horiz-incr",
+      "cible": "mouth/mouth-scale-horiz-incr"
+    },
+    {
+      "nom": "mouth-scale-horiz-decr",
+      "cible": "mouth/mouth-scale-horiz-decr"
+    },
+    {
+      "nom": "mouth-lowerlip-volume-incr",
+      "cible": "mouth/mouth-lowerlip-volume-incr"
+    },
+    {
+      "nom": "mouth-lowerlip-volume-decr",
+      "cible": "mouth/mouth-lowerlip-volume-decr"
+    },
+    {
+      "nom": "mouth-upperlip-volume-incr",
+      "cible": "mouth/mouth-upperlip-volume-incr"
+    },
+    {
+      "nom": "mouth-upperlip-volume-decr",
+      "cible": "mouth/mouth-upperlip-volume-decr"
+    },
+    {
+      "nom": "mouth-angles-up",
+      "cible": "mouth/mouth-angles-up"
+    },
+    {
+      "nom": "mouth-angles-down",
+      "cible": "mouth/mouth-angles-down"
+    },
+    {
+      "nom": "l-cheek-volume-incr",
+      "cible": "cheek/l-cheek-volume-incr"
+    },
+    {
+      "nom": "l-cheek-volume-decr",
+      "cible": "cheek/l-cheek-volume-decr"
+    },
+    {
+      "nom": "r-cheek-volume-incr",
+      "cible": "cheek/r-cheek-volume-incr"
+    },
+    {
+      "nom": "r-cheek-volume-decr",
+      "cible": "cheek/r-cheek-volume-decr"
+    },
+    {
+      "nom": "l-cheek-bones-incr",
+      "cible": "cheek/l-cheek-bones-incr"
+    },
+    {
+      "nom": "l-cheek-bones-decr",
+      "cible": "cheek/l-cheek-bones-decr"
+    },
+    {
+      "nom": "r-cheek-bones-incr",
+      "cible": "cheek/r-cheek-bones-incr"
+    },
+    {
+      "nom": "r-cheek-bones-decr",
+      "cible": "cheek/r-cheek-bones-decr"
+    },
+    {
+      "nom": "chin-height-incr",
+      "cible": "chin/chin-height-incr"
+    },
+    {
+      "nom": "chin-height-decr",
+      "cible": "chin/chin-height-decr"
+    },
+    {
+      "nom": "chin-prominent-incr",
+      "cible": "chin/chin-prominent-incr"
+    },
+    {
+      "nom": "chin-prominent-decr",
+      "cible": "chin/chin-prominent-decr"
+    },
+    {
+      "nom": "chin-width-incr",
+      "cible": "chin/chin-width-incr"
+    },
+    {
+      "nom": "chin-width-decr",
+      "cible": "chin/chin-width-decr"
+    },
+    {
+      "nom": "l-ear-scale-incr",
+      "cible": "ears/l-ear-scale-incr"
+    },
+    {
+      "nom": "l-ear-scale-decr",
+      "cible": "ears/l-ear-scale-decr"
+    },
+    {
+      "nom": "r-ear-scale-incr",
+      "cible": "ears/r-ear-scale-incr"
+    },
+    {
+      "nom": "r-ear-scale-decr",
+      "cible": "ears/r-ear-scale-decr"
+    },
+    {
+      "nom": "l-ear-shape-pointed",
+      "cible": "ears/l-ear-shape-pointed"
+    },
+    {
+      "nom": "r-ear-shape-pointed",
+      "cible": "ears/r-ear-shape-pointed"
+    },
+    {
+      "nom": "measure-neck-circ-incr",
+      "cible": "neck/measure-neck-circ-incr"
+    },
+    {
+      "nom": "measure-neck-circ-decr",
+      "cible": "neck/measure-neck-circ-decr"
+    },
+    {
+      "nom": "measure-shoulder-dist-incr",
+      "cible": "torso/measure-shoulder-dist-incr"
+    },
+    {
+      "nom": "measure-shoulder-dist-decr",
+      "cible": "torso/measure-shoulder-dist-decr"
+    },
+    {
+      "nom": "measure-frontchest-dist-incr",
+      "cible": "torso/measure-frontchest-dist-incr"
+    },
+    {
+      "nom": "measure-frontchest-dist-decr",
+      "cible": "torso/measure-frontchest-dist-decr"
+    },
+    {
+      "nom": "measure-waist-circ-incr",
+      "cible": "torso/measure-waist-circ-incr"
+    },
+    {
+      "nom": "measure-waist-circ-decr",
+      "cible": "torso/measure-waist-circ-decr"
+    },
+    {
+      "nom": "measure-upperarm-circ-incr",
+      "cible": "armslegs/measure-upperarm-circ-incr"
+    },
+    {
+      "nom": "measure-upperarm-circ-decr",
+      "cible": "armslegs/measure-upperarm-circ-decr"
+    },
+    {
+      "nom": "stomach-pregnant-incr",
+      "cible": "stomach/stomach-pregnant-incr"
+    },
+    {
+      "nom": "stomach-pregnant-decr",
+      "cible": "stomach/stomach-pregnant-decr"
+    },
+    {
+      "nom": "hip-scale-horiz-incr",
+      "cible": "hip/hip-scale-horiz-incr"
+    },
+    {
+      "nom": "hip-scale-horiz-decr",
+      "cible": "hip/hip-scale-horiz-decr"
+    },
+    {
+      "nom": "buttocks-volume-incr",
+      "cible": "buttocks/buttocks-volume-incr"
+    },
+    {
+      "nom": "buttocks-volume-decr",
+      "cible": "buttocks/buttocks-volume-decr"
+    },
+    {
+      "nom": "measure-upperleg-height-incr",
+      "cible": "armslegs/measure-upperleg-height-incr"
+    },
+    {
+      "nom": "measure-upperleg-height-decr",
+      "cible": "armslegs/measure-upperleg-height-decr"
+    },
+    {
+      "nom": "breast-trans-up",
+      "cible": "breast/breast-trans-up"
+    },
+    {
+      "nom": "breast-trans-down",
+      "cible": "breast/breast-trans-down"
+    }
   ],
   "assets": [
-    { "slot": "hair", "id": "ponytail", "type": "hair", "source": "ponytail01" },
-    { "slot": "hair", "id": "court1", "type": "hair", "source": "short01" },
-    { "slot": "hair", "id": "court2", "type": "hair", "source": "short02" },
-    { "slot": "hair", "id": "court3", "type": "hair", "source": "short03" },
-    { "slot": "hair", "id": "court4", "type": "hair", "source": "short04" },
-    { "slot": "hair", "id": "long", "type": "hair", "source": "long01" },
-    { "slot": "hair", "id": "carre1", "type": "hair", "source": "bob01" },
-    { "slot": "hair", "id": "carre2", "type": "hair", "source": "bob02" },
-    { "slot": "hair", "id": "tresse", "type": "hair", "source": "braid01" },
-    { "slot": "hair", "id": "afro", "type": "hair", "source": "afro01" },
-    { "slot": "eyebrows", "id": "default", "type": "eyebrows", "source": "eyebrow001" },
-    { "slot": "eyebrows", "id": "fins", "type": "eyebrows", "source": "eyebrow002" },
-    { "slot": "eyebrows", "id": "epais", "type": "eyebrows", "source": "eyebrow006" },
-    { "slot": "eyebrows", "id": "arques", "type": "eyebrows", "source": "eyebrow009" },
-    { "slot": "eyelashes", "id": "default", "type": "eyelashes", "source": "eyelashes02" },
-    { "slot": "eyelashes", "id": "longs", "type": "eyelashes", "source": "eyelashes03" }
+    {
+      "slot": "hair",
+      "id": "ponytail",
+      "type": "hair",
+      "source": "ponytail01"
+    },
+    {
+      "slot": "hair",
+      "id": "court1",
+      "type": "hair",
+      "source": "short01"
+    },
+    {
+      "slot": "hair",
+      "id": "court2",
+      "type": "hair",
+      "source": "short02"
+    },
+    {
+      "slot": "hair",
+      "id": "court3",
+      "type": "hair",
+      "source": "short03"
+    },
+    {
+      "slot": "hair",
+      "id": "court4",
+      "type": "hair",
+      "source": "short04"
+    },
+    {
+      "slot": "hair",
+      "id": "long",
+      "type": "hair",
+      "source": "long01"
+    },
+    {
+      "slot": "hair",
+      "id": "carre1",
+      "type": "hair",
+      "source": "bob01"
+    },
+    {
+      "slot": "hair",
+      "id": "carre2",
+      "type": "hair",
+      "source": "bob02"
+    },
+    {
+      "slot": "hair",
+      "id": "tresse",
+      "type": "hair",
+      "source": "braid01"
+    },
+    {
+      "slot": "hair",
+      "id": "afro",
+      "type": "hair",
+      "source": "afro01"
+    },
+    {
+      "slot": "eyebrows",
+      "id": "default",
+      "type": "eyebrows",
+      "source": "eyebrow001"
+    },
+    {
+      "slot": "eyebrows",
+      "id": "fins",
+      "type": "eyebrows",
+      "source": "eyebrow002"
+    },
+    {
+      "slot": "eyebrows",
+      "id": "epais",
+      "type": "eyebrows",
+      "source": "eyebrow006"
+    },
+    {
+      "slot": "eyebrows",
+      "id": "arques",
+      "type": "eyebrows",
+      "source": "eyebrow009"
+    },
+    {
+      "slot": "eyelashes",
+      "id": "default",
+      "type": "eyelashes",
+      "source": "eyelashes02"
+    },
+    {
+      "slot": "eyelashes",
+      "id": "longs",
+      "type": "eyelashes",
+      "source": "eyelashes03"
+    }
+  ],
+  "_doc_tenues": "Tenues découpées dans les aides MakeHuman du corps (elles suivent donc tous les morphs). 'parties' : liste de {aide: helper-tights|helper-skirt, os: os dominants gardés, zmin/zmax (m, au neutre), dos: true = faces tournées vers l'arrière seulement}. 'ecart' : distance minimale à la peau (m). 'materiau' : Tenue.<slot> (teinte réglable dans l'app). 'couche' : décalage constant le long de la normale pour superposer les vêtements. 'drape' : tombé vertical (cape).",
+  "tenues": [
+    {
+      "slot": "haut",
+      "id": "chemise",
+      "label": "Chemise",
+      "ecart": 0.007,
+      "parties": [
+        {
+          "aide": "helper-tights",
+          "os": [
+            "spine_01",
+            "spine_02",
+            "spine_03",
+            "breast_l",
+            "breast_r",
+            "clavicle_l",
+            "clavicle_r",
+            "upperarm_l",
+            "upperarm_r",
+            "lowerarm_l",
+            "lowerarm_r",
+            "pelvis"
+          ],
+          "zmin": 0.87
+        }
+      ],
+      "couche": 0.004
+    },
+    {
+      "slot": "haut",
+      "id": "tunique",
+      "label": "Tunique",
+      "ecart": 0.008,
+      "parties": [
+        {
+          "aide": "helper-tights",
+          "os": [
+            "spine_01",
+            "spine_02",
+            "spine_03",
+            "breast_l",
+            "breast_r",
+            "clavicle_l",
+            "clavicle_r",
+            "upperarm_l",
+            "upperarm_r",
+            "lowerarm_l",
+            "lowerarm_r",
+            "pelvis"
+          ],
+          "zmin": 0.87
+        },
+        {
+          "aide": "helper-skirt",
+          "zmin": 0.55
+        }
+      ],
+      "couche": 0.004
+    },
+    {
+      "slot": "haut",
+      "id": "gilet",
+      "label": "Gilet sans manches",
+      "ecart": 0.01,
+      "parties": [
+        {
+          "aide": "helper-tights",
+          "os": [
+            "spine_01",
+            "spine_02",
+            "spine_03",
+            "breast_l",
+            "breast_r",
+            "clavicle_l",
+            "clavicle_r",
+            "pelvis"
+          ],
+          "zmin": 0.87
+        }
+      ],
+      "couche": 0.004
+    },
+    {
+      "slot": "haut",
+      "id": "robe",
+      "label": "Robe longue",
+      "ecart": 0.008,
+      "parties": [
+        {
+          "aide": "helper-tights",
+          "os": [
+            "spine_01",
+            "spine_02",
+            "spine_03",
+            "breast_l",
+            "breast_r",
+            "clavicle_l",
+            "clavicle_r",
+            "upperarm_l",
+            "upperarm_r",
+            "lowerarm_l",
+            "lowerarm_r",
+            "pelvis"
+          ],
+          "zmin": 0.87
+        },
+        {
+          "aide": "helper-skirt"
+        }
+      ],
+      "couche": 0.004
+    },
+    {
+      "slot": "bas",
+      "id": "pantalon",
+      "label": "Pantalon",
+      "ecart": 0.006,
+      "parties": [
+        {
+          "aide": "helper-tights",
+          "os": [
+            "pelvis",
+            "thigh_l",
+            "thigh_r",
+            "calf_l",
+            "calf_r",
+            "spine_01"
+          ],
+          "zmax": 1.0,
+          "zmin": 0.08
+        }
+      ],
+      "couche": 0.0
+    },
+    {
+      "slot": "bas",
+      "id": "jupe",
+      "label": "Jupe longue",
+      "ecart": 0.006,
+      "parties": [
+        {
+          "aide": "helper-skirt"
+        }
+      ],
+      "couche": 0.0
+    },
+    {
+      "slot": "pieds",
+      "id": "bottes",
+      "label": "Bottes",
+      "ecart": 0.012,
+      "parties": [
+        {
+          "aide": "helper-tights",
+          "os": [
+            "calf_l",
+            "calf_r",
+            "foot_l",
+            "foot_r",
+            "ball_l",
+            "ball_r"
+          ],
+          "zmax": 0.42
+        }
+      ],
+      "couche": 0.002
+    },
+    {
+      "slot": "armure",
+      "id": "plastron",
+      "label": "Plastron",
+      "ecart": 0.03,
+      "metal": true,
+      "parties": [
+        {
+          "aide": "helper-tights",
+          "os": [
+            "spine_02",
+            "spine_03",
+            "breast_l",
+            "breast_r",
+            "clavicle_l",
+            "clavicle_r"
+          ],
+          "zmin": 1.02
+        }
+      ],
+      "couche": 0.012
+    },
+    {
+      "slot": "armure",
+      "id": "cotte",
+      "label": "Cotte de mailles",
+      "ecart": 0.016,
+      "metal": true,
+      "parties": [
+        {
+          "aide": "helper-tights",
+          "os": [
+            "spine_01",
+            "spine_02",
+            "spine_03",
+            "breast_l",
+            "breast_r",
+            "clavicle_l",
+            "clavicle_r",
+            "upperarm_l",
+            "upperarm_r",
+            "pelvis"
+          ],
+          "zmin": 0.87
+        },
+        {
+          "aide": "helper-skirt",
+          "zmin": 0.62
+        }
+      ],
+      "couche": 0.012
+    },
+    {
+      "slot": "ceinture",
+      "id": "ceinture",
+      "label": "Ceinture",
+      "ecart": 0.02,
+      "parties": [
+        {
+          "aide": "helper-skirt",
+          "zmin": 0.93
+        }
+      ],
+      "couche": 0.022
+    },
+    {
+      "slot": "cape",
+      "id": "cape",
+      "label": "Cape",
+      "ecart": 0.04,
+      "parties": [
+        {
+          "aide": "helper-tights",
+          "os": [
+            "spine_01",
+            "spine_02",
+            "spine_03",
+            "breast_l",
+            "breast_r",
+            "clavicle_l",
+            "clavicle_r",
+            "pelvis"
+          ],
+          "zmin": 0.95,
+          "dos": true
+        },
+        {
+          "aide": "helper-skirt",
+          "zmin": 0.12,
+          "dos": true
+        }
+      ],
+      "couche": 0.03,
+      "drape": true
+    }
   ]
 }

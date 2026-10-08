@@ -94,7 +94,8 @@ describe('apparence automatique', () => {
     const f2 = apparenceAuto({ nom: 'Ilia', apparence: 'chauve', feminin: true }).data as { gender: string; assets: { hair: string | null }; morphs: { values: Record<string, number> } };
     expect(f2.gender).toBe('female');
     expect(f2.assets.hair).toBeNull();
-    expect(f2.morphs.values.breast_position).toBeGreaterThan(1);
+    expect(f2.morphs.values.genre).toBeGreaterThan(0.5);
+    expect(d.morphs.values.genre).toBeLessThan(-0.5);
     for (const v of Object.values(d.morphs.values)) expect(Math.abs(v)).toBeLessThanOrEqual(2);
   });
 });

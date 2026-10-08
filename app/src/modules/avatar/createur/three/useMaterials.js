@@ -65,6 +65,13 @@ export function useMaterials(root, version = 0) {
           mat.needsUpdate = true
         })
       }
+      // Surfaces sans epaisseur (vetements) : visibles des deux cotes.
+      if (role.side === 'double') {
+        found.forEach((mat) => {
+          mat.side = THREE.DoubleSide
+          mat.needsUpdate = true
+        })
+      }
       // Correction opacite (ex: yeux MPFB exportes en BLEND).
       if (role.forceOpaque) {
         found.forEach((mat) => {
