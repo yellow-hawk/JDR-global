@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Graphe complet JDR Global</title>
+<style>
+  :root { --fond: #14120f; --panneau: #1e1b17; --bord: #3a332a; --texte: #e8e0d2; --doux: #a89c88; --accent: #d9a560; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--fond); color: var(--texte); font: 13px/1.45 system-ui, sans-serif; overflow: hidden; }
+  #graphe { position: absolute; inset: 0; }
+  aside { position: absolute; top: 12px; left: 12px; width: 290px; max-height: calc(100% - 24px); overflow: auto;
+    background: var(--panneau); border: 1px solid var(--bord); border-radius: 10px; padding: 12px 14px; }
+  h1 { font-size: 15px; margin: 0 0 2px; color: var(--accent); }
+  .stats { color: var(--doux); margin-bottom: 10px; }
+  h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--doux); margin: 14px 0 6px; }
+  input[type=search] { width: 100%; padding: 6px 8px; background: var(--fond); color: var(--texte); border: 1px solid var(--bord); border-radius: 6px; }
+  label { display: flex; align-items: center; gap: 7px; cursor: pointer; padding: 2px 0; }
+  .pastille { width: 11px; height: 11px; border-radius: 50%; flex: none; }
+  .nb { margin-left: auto; color: var(--doux); font-variant-numeric: tabular-nums; }
+  .boutons { display: flex; gap: 6px; margin-top: 6px; }
+  button { flex: 1; background: var(--fond); color: var(--texte); border: 1px solid var(--bord); border-radius: 6px; padding: 4px; cursor: pointer; }
+  button:hover { border-color: var(--accent); }
+  #fiche { position: absolute; top: 12px; right: 12px; width: 340px; max-height: calc(100% - 24px); overflow: auto;
+    background: var(--panneau); border: 1px solid var(--bord); border-radius: 10px; padding: 12px 14px; display: none; }
+  #fiche h3 { margin: 0 0 4px; font-size: 14px; word-break: break-all; }
+  #fiche .chemin { color: var(--doux); font-family: ui-monospace, monospace; font-size: 11px; word-break: break-all; }
+  #fiche ul { padding-left: 16px; margin: 4px 0; }
+  #fiche li { cursor: pointer; } #fiche li:hover { color: var(--accent); }
+  .aide { color: var(--doux); font-size: 11px; margin-top: 12px; }
+</style>
+</head>
+<body>
+<div id="graphe"></div>
+<aside>
+  <h1 id="titre"></h1>
+  <div class="stats" id="stats"></div>
+  <input type="search" id="recherche" placeholder="Chercher un fichier ou une fonction…">
+  <h2>Couches</h2>
+  <div id="couches"></div>
+  <div class="boutons"><button id="toutes">Toutes</button><button id="aucune">Aucune</button></div>
+  <h2>Nœuds</h2>
+  <label><input type="checkbox" id="fonctions" checked> Fonctions et classes</label>
+  <label><input type="checkbox" id="regrouper" checked> Regrouper par couche</label>
+  <h2>Liens</h2>
+  <div id="liens"></div>
+  <div class="aide">Molette : zoom · glisser : déplacer · clic : fiche et voisins · clic dans le vide : tout réafficher. Les noms apparaissent en zoomant.</div>
+</aside>
+<div id="fiche"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3-force@3/dist/d3-force.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/force-graph@1/dist/force-graph.min.js"></script>
+<script>
+const D = /*DONNEES*/null;
+const COULEURS = ['#e6a157', '#6fb3e0', '#8fcf7a', '#d77ab8', '#e0d36a', '#e0705f', '#9b8cf0', '#5fd0c0', '#b0b0b0', '#c9a27a', '#f08fa0', '#7a9cf0'];
+const couleur = (c) => c < 0 ? '#666' : COULEURS[c % COULEURS.length];
+const TYPES_LIEN = { imports: '#6fb3e0', calls: '#e6a157', contains: '#8a7f6d', exports: '#555', tested_by: '#8fcf7a', documents: '#9b8cf0', depends_on: '#c9a27a' };
+const estFichier = (n) => n.type !== 'function' && n.type !== 'class';
+
+const etat = { couches: new Set(D.couches.map((_, i) => i)), fonctions: true, regrouper: true,
+  liens: new Set(['contains', 'imports', 'calls', 'tested_by', 'documents', 'depends_on', 'configures', 'related', 'implements', 'triggers', 'deploys']),
+  focus: null, voisins: null, recherche: '' };
+
+// Degré et voisinage (sur tous les liens)
+const degre = new Map(), voisinage = new Map();
+for (const n of D.nodes) { degre.set(n.id, 0); voisinage.set(n.id, new Set()); }
+for (const l of D.links) {
+  degre.set(l.source, degre.get(l.source) + 1); degre.set(l.target, degre.get(l.target) + 1);
+  voisinage.get(l.source).add(l.target); voisinage.get(l.target).add(l.source);
+}
+const parId = new Map(D.nodes.map((n) => [n.id, n]));
+
+// Ancre de chaque couche sur un cercle
+const R = 1400, ancre = D.couches.map((_, i) => {
+  const a = (i / D.couches.length) * 2 * Math.PI;
+  return { x: Math.cos(a) * R, y: Math.sin(a) * R };
+});
+
+document.getElementById('titre').textContent = `Graphe complet : ${D.projet}`;
+document.getElementById('stats').textContent = `${D.nodes.length} nœuds · ${D.links.length} liens · ${D.couches.length} couches`;
+
+// Légende des couches
+const parCouche = D.couches.map((_, i) => D.nodes.filter((n) => n.couche === i).length);
+document.getElementById('couches').innerHTML = D.couches.map((c, i) =>
+  `<label title="${c.description.replace(/"/g, '&quot;')}"><input type="checkbox" data-c="${i}" checked>
+   <span class="pastille" style="background:${couleur(i)}"></span>${c.nom}<span class="nb">${parCouche[i]}</span></label>`).join('');
+const nbLiens = {}; D.links.forEach((l) => nbLiens[l.type] = (nbLiens[l.type] ?? 0) + 1);
+document.getElementById('liens').innerHTML = Object.keys(nbLiens).sort((a, b) => nbLiens[b] - nbLiens[a]).map((t) =>
+  `<label><input type="checkbox" data-l="${t}" ${etat.liens.has(t) ? 'checked' : ''}>
+   <span class="pastille" style="background:${TYPES_LIEN[t] ?? '#888'}"></span>${t}<span class="nb">${nbLiens[t]}</span></label>`).join('');
+
+function donneesVisibles() {
+  const nodes = D.nodes.filter((n) => (etat.couches.has(n.couche) || n.couche < 0) && (etat.fonctions || estFichier(n)));
+  const vis = new Set(nodes.map((n) => n.id));
+  const links = D.links.filter((l) => etat.liens.has(l.type) && vis.has(l.source.id ?? l.source) && vis.has(l.target.id ?? l.target));
+  return { nodes, links };
+}
+
+const correspond = (n) => etat.recherche && (n.nom + ' ' + n.chemin).toLowerCase().includes(etat.recherche);
+const estAttenue = (n) => (etat.voisins && !etat.voisins.has(n.id)) || (etat.recherche && !correspond(n));
+
+const G = ForceGraph()(document.getElementById('graphe'))
+  .backgroundColor('#14120f')
+  .autoPauseRedraw(false)
+  .nodeId('id')
+  .nodeVal((n) => (estFichier(n) ? 3 : 1) + Math.sqrt(degre.get(n.id)))
+  .nodeLabel((n) => `<b>${n.nom}</b><br><span style="opacity:.7">${n.type} · ${D.couches[n.couche]?.nom ?? '—'}</span>`)
+  .nodeCanvasObject((n, ctx, s) => {
+    const r = Math.sqrt((estFichier(n) ? 3 : 1) + Math.sqrt(degre.get(n.id))) * 2.2;
+    ctx.globalAlpha = estAttenue(n) ? 0.08 : 1;
+    ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, 2 * Math.PI);
+    ctx.fillStyle = couleur(n.couche); ctx.fill();
+    if (estFichier(n)) { ctx.lineWidth = 1 / s; ctx.strokeStyle = '#fff8'; ctx.stroke(); }
+    if (n.id === etat.focus || correspond(n)) { ctx.lineWidth = 3 / s; ctx.strokeStyle = '#fff'; ctx.stroke(); }
+    const montrer = n.id === etat.focus || correspond(n) || (etat.voisins?.has(n.id)) || s > 2.6 || (estFichier(n) && s > 1.3 && degre.get(n.id) > 12);
+    if (montrer && !estAttenue(n)) {
+      ctx.font = `${11 / s}px system-ui`; ctx.fillStyle = '#e8e0d2'; ctx.textAlign = 'center';
+      ctx.fillText(n.nom, n.x, n.y + r + 10 / s);
+    }
+    ctx.globalAlpha = 1;
+  })
+  .nodePointerAreaPaint((n, c, ctx) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(n.x, n.y, 6, 0, 2 * Math.PI); ctx.fill(); })
+  .linkColor((l) => {
+    const actif = !etat.voisins || (etat.focus && (l.source.id === etat.focus || l.target.id === etat.focus));
+    return (TYPES_LIEN[l.type] ?? '#888') + (actif ? (etat.voisins ? 'ee' : '40') : '08');
+  })
+  .linkWidth((l) => etat.focus && (l.source.id === etat.focus || l.target.id === etat.focus) ? 1.5 : 0.4)
+  .linkDirectionalArrowLength((l) => etat.focus && (l.source.id === etat.focus || l.target.id === etat.focus) ? 4 : 0)
+  .cooldownTicks(300)
+  .onNodeClick((n) => ouvrir(n.id))
+  .onBackgroundClick(() => { etat.focus = null; etat.voisins = null; document.getElementById('fiche').style.display = 'none'; });
+
+G.d3Force('charge').strength(-18).distanceMax(400);
+G.d3Force('link').distance(25).strength(0.25);
+function forcesCouches() {
+  const k = etat.regrouper ? 0.12 : 0;
+  G.d3Force('x', d3.forceX((n) => n.couche < 0 ? 0 : ancre[n.couche].x).strength(k));
+  G.d3Force('y', d3.forceY((n) => n.couche < 0 ? 0 : ancre[n.couche].y).strength(k));
+}
+forcesCouches();
+
+function rafraichir() { G.graphData(donneesVisibles()); }
+rafraichir();
+G.onEngineStop(() => { if (!etat.cadre) { etat.cadre = true; G.zoomToFit(800, 60); } });
+
+function ouvrir(id) {
+  const n = parId.get(id); if (!n) return;
+  etat.focus = id; etat.voisins = new Set([id, ...voisinage.get(id)]);
+  const sortants = D.links.filter((l) => (l.source.id ?? l.source) === id), entrants = D.links.filter((l) => (l.target.id ?? l.target) === id);
+  const liste = (ls, cote) => ls.slice(0, 40).map((l) => { const autre = parId.get(l[cote].id ?? l[cote]);
+    return `<li data-id="${autre.id}"><span style="color:${TYPES_LIEN[l.type] ?? '#888'}">${l.type}</span> ${autre.nom}</li>`; }).join('');
+  const f = document.getElementById('fiche');
+  f.innerHTML = `<h3>${n.nom}</h3><div class="chemin">${n.type} · ${n.chemin}</div>
+    <p><span class="pastille" style="display:inline-block;background:${couleur(n.couche)}"></span> ${D.couches[n.couche]?.nom ?? '—'}</p>
+    <p>${n.resume}</p>
+    <h2>Sortants (${sortants.length})</h2><ul>${liste(sortants, 'target')}</ul>
+    <h2>Entrants (${entrants.length})</h2><ul>${liste(entrants, 'source')}</ul>`;
+  f.style.display = 'block';
+  f.querySelectorAll('li').forEach((li) => li.onclick = () => { ouvrir(li.dataset.id); const m = G.graphData().nodes.find((x) => x.id === li.dataset.id); if (m) G.centerAt(m.x, m.y, 600); });
+}
+
+document.getElementById('couches').addEventListener('change', (e) => {
+  const c = +e.target.dataset.c; e.target.checked ? etat.couches.add(c) : etat.couches.delete(c); rafraichir();
+});
+document.getElementById('liens').addEventListener('change', (e) => {
+  const t = e.target.dataset.l; e.target.checked ? etat.liens.add(t) : etat.liens.delete(t); rafraichir();
+});
+const toutCocher = (v) => { document.querySelectorAll('[data-c]').forEach((x) => x.checked = v);
+  etat.couches = new Set(v ? D.couches.map((_, i) => i) : []); rafraichir(); };
+document.getElementById('toutes').onclick = () => toutCocher(true);
+document.getElementById('aucune').onclick = () => toutCocher(false);
+document.getElementById('fonctions').onchange = (e) => { etat.fonctions = e.target.checked; rafraichir(); };
+document.getElementById('regrouper').onchange = (e) => { etat.regrouper = e.target.checked; forcesCouches(); G.d3ReheatSimulation(); };
+document.getElementById('recherche').oninput = (e) => {
+  etat.recherche = e.target.value.trim().toLowerCase();
+  const m = etat.recherche && G.graphData().nodes.find(correspond);
+  if (m) G.centerAt(m.x, m.y, 600);
+};
+</script>
+</body>
+</html>
