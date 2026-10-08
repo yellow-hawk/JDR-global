@@ -68,8 +68,11 @@ export function Page() {
           <img className="avatar-vignette" src={(perso!.apparence as { thumbnail: string }).thumbnail} alt={`Vignette de ${perso!.nom}`} />
         )}
         <p className="discret">
-          Glisser pour tourner, molette pour zoomer. Réglages à droite (couleurs, visage, corps, coiffure).
-          Le genre féminin et les vêtements arriveront plus tard (chaîne Blender).
+          Glisser pour tourner, molette pour zoomer. Réglages à droite : couleurs, silhouette, visage, corps, coiffure et tenue.
+        </p>
+        <p className="discret">
+          Une partie des coiffures, barbes et tenues vient de la communauté MakeHuman (CC0 et CC-BY) :{' '}
+          <a href="avatar/CREDITS.md" target="_blank" rel="noreferrer">crédits des auteurs</a>.
         </p>
       </aside>
       <section className="avatar-scene">

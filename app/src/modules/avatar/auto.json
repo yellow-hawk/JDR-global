@@ -1,5 +1,5 @@
 {
-  "_doc": "Règles de l'apparence automatique des PNJ (auto.ts). 'motifs' : expression régulière testée sur le rôle + la description. La première tenue qui correspond l'emporte ; 'defaut' sinon. Dans les tenues, une liste = choix tiré au hasard (graine du PNJ), null = rien. 'palette' : couleurs de tenue de la tenue.",
+  "_doc": "Règles de l'apparence automatique des PNJ (auto.ts). 'motifs' : expression régulière testée sur le rôle + la description. La première tenue qui correspond l'emporte ; 'defaut' sinon. Dans les tenues, une liste = choix tiré au hasard (graine du PNJ), null = rien. 'palette' : couleurs de tenue de la tenue. Les pièces de la bibliothèque MakeHuman (bure, robe_mage, templier, viking…) sont des options comme les autres (voir species.json).",
   "tenues": [
     {
       "id": "chevalier",
@@ -7,14 +7,25 @@
       "assets": {
         "haut": "chemise",
         "bas": "pantalon",
-        "pieds": "bottes",
+        "pieds": [
+          "bottes",
+          "medievales"
+        ],
         "armure": "plastron",
         "ceinture": "ceinture",
         "cape": "cape",
         "epaules": "epaulieres",
         "mains": "gants",
         "bras": null,
-        "tete": null
+        "tete": [
+          null,
+          "templier",
+          "corinthien"
+        ],
+        "arme": [
+          "epee",
+          "marteau"
+        ]
       },
       "palette": "noble",
       "muscle": 0.5
@@ -25,10 +36,19 @@
       "assets": {
         "haut": [
           "chemise",
-          "tunique"
+          "tunique",
+          "viking"
         ],
-        "bas": "pantalon",
-        "pieds": "bottes",
+        "bas": [
+          "pantalon",
+          "pantalon",
+          "viking"
+        ],
+        "pieds": [
+          "bottes",
+          "medievales",
+          "viking"
+        ],
         "armure": "cotte",
         "ceinture": "ceinture",
         "cape": [
@@ -48,7 +68,20 @@
           null,
           "gants"
         ],
-        "tete": null
+        "tete": [
+          null,
+          null,
+          "guerrier",
+          "guerrier2",
+          "cuir",
+          "cornes"
+        ],
+        "arme": [
+          "epee",
+          "dague",
+          "marteau",
+          null
+        ]
       },
       "palette": "soldat",
       "muscle": 0.4
@@ -57,7 +90,10 @@
       "id": "mage",
       "motifs": "mage|magicien|sorci|enchant|astrolog|alchimiste|érudit|erudit|savant|archiviste|scribe|devin|oracle|nécroman|necroman",
       "assets": {
-        "haut": "robe",
+        "haut": [
+          "robe",
+          "robe_mage"
+        ],
         "bas": null,
         "pieds": "bottes",
         "armure": null,
@@ -71,12 +107,16 @@
         ],
         "tete": [
           null,
-          null,
+          "chapeau_mage",
           "capuche"
         ],
         "mains": null,
         "bras": null,
-        "epaules": null
+        "epaules": null,
+        "arme": [
+          "sceptre",
+          null
+        ]
       },
       "palette": "mage",
       "muscle": -0.3
@@ -85,9 +125,17 @@
       "id": "pretre",
       "motifs": "prêtre|pretre|prêtresse|pretresse|moine|nonne|abbé|abbesse|clerc|druide|ermite|pèlerin|pelerin|chaman",
       "assets": {
-        "haut": "robe",
+        "haut": [
+          "robe",
+          "bure",
+          "bure_capuche_basse",
+          "bure_capuche"
+        ],
         "bas": null,
-        "pieds": "bottes",
+        "pieds": [
+          "bottes",
+          "basses"
+        ],
         "armure": null,
         "ceinture": "ceinture",
         "cape": null,
@@ -97,7 +145,8 @@
         ],
         "mains": null,
         "bras": null,
-        "epaules": null
+        "epaules": null,
+        "arme": null
       },
       "palette": "pretre"
     },
@@ -107,10 +156,15 @@
       "assets": {
         "haut": [
           "tunique",
-          "robe"
+          "robe",
+          "echarpe"
         ],
         "bas": "pantalon",
-        "pieds": "bottes",
+        "pieds": [
+          "bottes",
+          "cavalier",
+          "cuir_hautes"
+        ],
         "armure": null,
         "ceinture": "ceinture",
         "cape": "cape",
@@ -120,7 +174,8 @@
         ],
         "tete": null,
         "bras": null,
-        "epaules": null
+        "epaules": null,
+        "arme": null
       },
       "palette": "noble"
     },
@@ -130,7 +185,10 @@
       "assets": {
         "haut": "gilet",
         "bas": "pantalon",
-        "pieds": "bottes",
+        "pieds": [
+          "bottes",
+          "cuir"
+        ],
         "armure": null,
         "ceinture": "ceinture",
         "cape": [
@@ -147,7 +205,12 @@
           "brassards",
           null
         ],
-        "epaules": null
+        "epaules": null,
+        "arme": [
+          "dague",
+          "dague",
+          null
+        ]
       },
       "palette": "ombre"
     },
@@ -157,10 +220,15 @@
       "assets": {
         "haut": [
           "tunique",
-          "chemise"
+          "chemise",
+          "viking"
         ],
         "bas": "pantalon",
-        "pieds": "bottes",
+        "pieds": [
+          "bottes",
+          "cavalier",
+          "cuir"
+        ],
         "armure": null,
         "ceinture": "ceinture",
         "cape": [
@@ -179,7 +247,12 @@
           null,
           "gants"
         ],
-        "epaules": null
+        "epaules": null,
+        "arme": [
+          "arc",
+          "dague",
+          null
+        ]
       },
       "palette": "terre",
       "muscle": 0.2
@@ -191,10 +264,14 @@
         "haut": [
           "chemise",
           "gilet",
-          "tunique"
+          "tunique",
+          "blouse"
         ],
         "bas": "pantalon",
-        "pieds": "bottes",
+        "pieds": [
+          "bottes",
+          "basses"
+        ],
         "armure": null,
         "ceinture": [
           "ceinture",
@@ -208,7 +285,8 @@
           "brassards"
         ],
         "tete": null,
-        "epaules": null
+        "epaules": null,
+        "arme": null
       },
       "palette": "terre"
     }
@@ -218,7 +296,8 @@
       "haut": [
         "chemise",
         "tunique",
-        "gilet"
+        "gilet",
+        "blouse"
       ],
       "bas": "pantalon",
       "pieds": "bottes",
@@ -235,7 +314,8 @@
       "tete": null,
       "mains": null,
       "bras": null,
-      "epaules": null
+      "epaules": null,
+      "arme": null
     },
     "palette": "terre"
   },

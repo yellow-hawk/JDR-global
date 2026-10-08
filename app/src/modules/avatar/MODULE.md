@@ -21,4 +21,5 @@ Assets : **générés par la chaîne Blender** (`../blender/`, voir `blender/LIS
 `species.json` est **généré** (`cd blender && npm run species`) : rôles de morph bipolaires `{ neg, pos }`, catégories (`morphCategories`, `assetCategories`), couleurs par emplacement.
 `auto.json` : règles de `apparenceAuto` (tenue et palette selon le rôle, variante féminine, coiffures, couleurs, traits de peuple).
 Visualiseur : reflets `RoomEnvironment` (sans fichier). Portraits cadrés sur les yeux réels (`snapshot.js`, `centreDesYeux`).
-À faire : barbes, accessoires (capuche, gants…), poses (plus tard).
+Bibliothèque MakeHuman (08/10) : 22 coiffures, 12 barbes, 18 hauts (viking, bures, robe de magicien, tenues modernes…), 9 chaussures, 13 coiffes (casques, chapeaux), 3 gants, 5 armes. Peau cachée sous les vêtements : `createur/three/masqueCorps.js` (option `cacheCorps`, attribut `_id` du corps). Crédits : `public/avatar/CREDITS.md`.
+À faire : barbe longue, poses (plus tard).

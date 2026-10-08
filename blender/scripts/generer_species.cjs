@@ -69,15 +69,16 @@ const LIBELLES = { ponytail: 'Queue de cheval', court1: 'Court 1', court2: 'Cour
   carre1: 'Carré 1', carre2: 'Carré 2', tresse: 'Tresse', afro: 'Afro', default: 'Standard', fins: 'Fins', epais: 'Épais', arques: 'Arqués', longs: 'Longs' };
 const SLOTS = [['hair', 'Coiffure', null, 'Aucune'], ['barbe', 'Barbe', null, 'Aucune'], ['eyebrows', 'Sourcils', 'default', 'Aucun'], ['eyelashes', 'Cils', 'default', 'Aucun']];
 const assetsDe = (slot) => man.assets.filter((a) => a.slot === slot);
-const materiauxDe = (slot) => assetsDe(slot).filter((a) => a.source).map((a) => 'Human.' + a.source);
+const materiauxDe = (slot) => [...new Set(assetsDe(slot).map((a) => a.materiau).filter(Boolean))];
+const importes = man.assets.filter((a) => a.credit && a.materiau && !['hair', 'eyebrows', 'eyelashes', 'barbe'].includes(a.slot));
 
 // le manifeste ne garde pas la source MakeHuman : on la relit dans la config Blender
 const conf = JSON.parse(fs.readFileSync(path.join(RACINE, 'blender/avatar.json'), 'utf8'));
-for (const a of man.assets) a.source = conf.assets.find((c) => c.slot === a.slot && c.id === a.id)?.source;
+for (const a of man.assets) a.source = a.source ?? conf.assets.find((c) => c.slot === a.slot && c.id === a.id)?.source;
 const TENUES = [['haut', 'Haut', 'chemise', 'Aucun', '#8a6a4a'], ['bas', 'Bas', 'pantalon', 'Aucun', '#4a4038'], ['pieds', 'Chaussures', 'bottes', 'Aucune', '#3b2a1c'],
   ['armure', 'Armure', null, 'Aucune', '#b8bcc4'], ['epaules', 'Épaulières', null, 'Aucune', '#a8acb4'], ['bras', 'Brassards', null, 'Aucun', '#5a3a22'],
   ['mains', 'Gants', null, 'Aucun', '#4a3424'], ['ceinture', 'Ceinture', null, 'Aucune', '#5a3a22'], ['cape', 'Cape', null, 'Aucune', '#6b1d1d'],
-  ['tete', 'Coiffe', null, 'Aucune', '#5a4a3a']];
+  ['tete', 'Coiffe', null, 'Aucune', '#5a4a3a'], ['arme', 'Arme', null, 'Aucune', null]];
 
 h._comment_morphTargets = "Rôles de morph. 'targets' : nom de morph (valeur appliquée telle quelle) ou { neg, pos } (bipolaire : valeur < 0 -> cible neg avec |v|, > 0 -> cible pos). 'pair' : cibles gauche/droite pour le mode asymétrie. 'category' : un des morphCategories. Morphs générés par blender/scripts/construire_avatar.py (blender/avatar.json) ; les assets 'skinned' portent les mêmes morphs et suivent le corps.";
 h.morphCategories = [{ id: 'silhouette', label: 'Silhouette' }, { id: 'visage', label: 'Visage' }, { id: 'corps', label: 'Corps' }];
@@ -88,14 +89,26 @@ h.materials = [
   { id: 'hair', label: 'Cheveux', target: materiauxDe('hair'), property: 'color', type: 'color', default: '#ffffff', alphaTest: 0.5 },
   { id: 'eyebrows', label: 'Sourcils', target: materiauxDe('eyebrows'), property: 'color', type: 'color', default: '#ffffff', alphaTest: 0.4 },
   { id: 'eyelashes', label: 'Cils', target: materiauxDe('eyelashes'), property: 'color', type: 'color', default: '#ffffff', alphaTest: 0.4 },
-  { id: 'barbe', label: 'Barbe', target: [...new Set(assetsDe('barbe').map((a) => a.materiau))], property: 'color', type: 'color', default: '#5a3a20', alphaTest: 0.45, side: 'double' },
-  ...TENUES.map(([id, label, , , couleur]) => ({ id: 'tenue_' + id, label: label, target: [...new Set(assetsDe(id).map((a) => a.materiau))], property: 'color', type: 'color', default: couleur, side: 'double' })),
+  { id: 'barbe', label: 'Barbe', target: materiauxDe('barbe'), property: 'color', type: 'color', default: '#ffffff', alphaTest: 0.45, side: 'double' },
+  // tenues générées (Tenue.*) : une couleur par emplacement ; tenues importées : elles gardent leur texture
+  ...TENUES.map(([id, label, , , couleur]) => ({ id: 'tenue_' + id, label: label, target: materiauxDe(id).filter((m) => m.startsWith('Tenue.')), property: 'color', type: 'color', default: couleur, side: 'double' }))
+    .filter((r) => r.target.length),
+  { id: 'tenues_importees', label: 'Teinte des tenues de la bibliothèque', target: [...new Set(importes.map((a) => a.materiau))], property: 'color', type: 'color', default: '#ffffff', alphaTest: 0.5, side: 'double' },
 ];
 h._comment_assetSlots = "Emplacements d'assets. attachMode 'skinned' : l'asset est lié au squelette du corps (mêmes noms d'os) et porte les mêmes morphs, il suit donc la morphologie. 'head-bone' (ancien) : asset posé sur l'os 'attachBone'. Option 'masque' : emplacements cachés tant que l'option est portée (une capuche cache la coiffure).";
 h.assetCategories = [{ id: 'pilosite', label: 'Coiffure et pilosité' }, { id: 'tenue', label: 'Tenue' }];
 h.assetSlots = [...SLOTS.map((x) => [...x, 'pilosite']), ...TENUES.map(([id, label, def, aucun]) => [id, label, def, aucun, 'tenue'])].map(([id, label, def, aucun, category]) => ({
   id, label, category, attachMode: 'skinned', default: def,
-  options: [{ id: null, label: aucun, file: null }, ...assetsDe(id).map((a) => ({ id: a.id, label: a.label ?? LIBELLES[a.id] ?? a.id, file: 'avatar/assets/species/human/' + a.fichier, ...(a.masque?.length ? { masque: a.masque } : {}) }))],
+  options: [{ id: null, label: aucun, file: null }, ...assetsDe(id).map((a) => ({ id: a.id, label: a.label ?? LIBELLES[a.id] ?? a.id, file: 'avatar/assets/species/human/' + a.fichier, ...(a.masque?.length ? { masque: a.masque } : {}), ...(a.cacheCorps ? { cacheCorps: a.cacheCorps } : {}) }))],
 }));
 fs.writeFileSync(DATA, JSON.stringify(s, null, 2) + '\n');
 console.log(M.length, 'rôles ;', h.assetSlots.map((x) => x.id + ':' + x.options.length).join(' '));
+
+// Crédits des assets de la bibliothèque MakeHuman (CC-BY : citer l'auteur)
+const credits = man.assets.filter((a) => a.credit).map((a) => ({ slot: a.slot, id: a.id, label: a.label ?? LIBELLES[a.id] ?? a.id, asset: a.source, auteur: a.credit.auteur, licence: a.credit.licence, lien: a.credit.source, pack: a.credit.pack }));
+fs.writeFileSync(path.join(RACINE, 'app/public/avatar/assets/species/human/credits.json'), JSON.stringify(credits, null, 1) + '\n');
+const md = ["# Crédits des assets 3D de l'avatar", '', 'Assets de la communauté MakeHuman (https://static.makehumancommunity.org/assets/assetpacks/index.html), ajustés et optimisés pour JDR Global. CC0 : domaine public ; CC-BY : réutilisation libre en citant l\'auteur.', '',
+  '| Élément | Asset | Auteur | Licence | Source |', '|---|---|---|---|---|',
+  ...credits.map((c) => `| ${c.label} | ${c.asset} | ${c.auteur} | ${c.licence} | ${c.lien} |`)];
+fs.writeFileSync(path.join(RACINE, 'app/public/avatar/CREDITS.md'), md.join('\n') + '\n');
+console.log(credits.length, 'crédits');

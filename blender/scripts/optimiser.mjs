@@ -27,13 +27,13 @@ const fichiers = (d) => readdirSync(d).flatMap((f) => {
 });
 
 // Textures en WebP (textureCompress de gltf-transform échoue avec la version de sharp installée).
-const texturesWebp = () => async (doc) => {
+const texturesWebp = (maxi) => async (doc) => {
   doc.createExtension(EXTTextureWebP).setRequired(true);
   for (const t of doc.getRoot().listTextures()) {
     const img = t.getImage();
     if (!img || t.getMimeType() === 'image/webp') continue;
     const sortie = await sharp(Buffer.from(img))
-      .resize(2048, 2048, { fit: 'inside', withoutEnlargement: true }).webp({ quality: 88 }).toBuffer();
+      .resize(maxi, maxi, { fit: 'inside', withoutEnlargement: true }).webp({ quality: 88 }).toBuffer();
     t.setImage(new Uint8Array(sortie)).setMimeType('image/webp').setURI(t.getURI().replace(/\.(png|jpe?g)$/i, '.webp'));
   }
 };
@@ -47,8 +47,9 @@ for (const src of fichiers(SOURCE)) {
     dedup(),
     prune(),
     sparse({ ratio: 1 / 3 }),
-    texturesWebp(),
-    quantize(),
+    texturesWebp(rel === 'base.glb' ? 2048 : 1024),  // le corps garde sa peau en 2048, les assets 1024 suffisent
+    // _ID (index MakeHuman des sommets du corps) doit rester exact : pas quantifié
+    quantize({ pattern: /^(POSITION|NORMAL|TANGENT|TEXCOORD_\d+|JOINTS_\d+|WEIGHTS_\d+|COLOR_\d+)$/ }),
     meshopt({ encoder: MeshoptEncoder, level: 'medium' }),
   );
   mkdirSync(dirname(dst), { recursive: true });

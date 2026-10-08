@@ -505,6 +505,570 @@
       "id": "longs",
       "type": "eyelashes",
       "source": "eyelashes03"
+    },
+    {
+      "slot": "hair",
+      "id": "long2",
+      "type": "hair",
+      "source": "o4saken_long01",
+      "label": "Longs lisses"
+    },
+    {
+      "slot": "hair",
+      "id": "long3",
+      "type": "hair",
+      "source": "punkduck_alpha7_long",
+      "label": "Très longs"
+    },
+    {
+      "slot": "hair",
+      "id": "long4",
+      "type": "hair",
+      "source": "punkduck_alpha7_long2",
+      "label": "Très longs ondulés"
+    },
+    {
+      "slot": "hair",
+      "id": "boucle1",
+      "type": "hair",
+      "source": "punkduck_alpha7_curly",
+      "label": "Bouclés"
+    },
+    {
+      "slot": "hair",
+      "id": "tresse2",
+      "type": "hair",
+      "source": "elvs_double_mh_braid",
+      "label": "Double tresse"
+    },
+    {
+      "slot": "hair",
+      "id": "tresse3",
+      "type": "hair",
+      "source": "elvs_french_braid_variation",
+      "label": "Tresse couronne"
+    },
+    {
+      "slot": "hair",
+      "id": "tresse4",
+      "type": "hair",
+      "source": "elvs_unkempt_french_braid",
+      "label": "Tresse négligée"
+    },
+    {
+      "slot": "hair",
+      "id": "chignon1",
+      "type": "hair",
+      "source": "elvs_reverse_french_braid_bun",
+      "label": "Chignon tressé"
+    },
+    {
+      "slot": "hair",
+      "id": "chignon2",
+      "type": "hair",
+      "source": "rehmanpolanski_hair_bun_brown",
+      "label": "Chignon"
+    },
+    {
+      "slot": "hair",
+      "id": "nattes",
+      "type": "hair",
+      "source": "grinsegold_wig_bun_blonde_braids",
+      "label": "Nattes"
+    },
+    {
+      "slot": "hair",
+      "id": "hirsute",
+      "type": "hair",
+      "source": "cortu_short_messy_hair",
+      "label": "Court en bataille"
+    },
+    {
+      "slot": "hair",
+      "id": "sauvage",
+      "type": "hair",
+      "source": "sonntag78_junglebook_hair",
+      "label": "Sauvage"
+    },
+    {
+      "slot": "barbe",
+      "id": "viking",
+      "type": "clothes",
+      "source": "rehmanpolanski_beard_viking",
+      "label": "Barbe viking",
+      "cacheCorps": true
+    },
+    {
+      "slot": "barbe",
+      "id": "moustache_viking",
+      "type": "clothes",
+      "source": "rehmanpolanski_moustache_viking",
+      "label": "Moustache viking",
+      "cacheCorps": true
+    },
+    {
+      "slot": "barbe",
+      "id": "faune",
+      "type": "clothes",
+      "source": "culturalibre_faun_beard",
+      "label": "Barbe de faune",
+      "cacheCorps": true
+    },
+    {
+      "slot": "barbe",
+      "id": "hirsute",
+      "type": "clothes",
+      "source": "wdg_scruffy_beard",
+      "label": "Barbe hirsute",
+      "cacheCorps": true
+    },
+    {
+      "slot": "barbe",
+      "id": "pleine",
+      "type": "clothes",
+      "source": "grinsegold_full_beard",
+      "label": "Barbe pleine",
+      "cacheCorps": true
+    },
+    {
+      "slot": "barbe",
+      "id": "negligee",
+      "type": "clothes",
+      "source": "elvs_scruffy_beard1",
+      "label": "Barbe négligée",
+      "cacheCorps": true
+    },
+    {
+      "slot": "barbe",
+      "id": "moustache2",
+      "type": "clothes",
+      "source": "grinsegold_moustache",
+      "label": "Moustache épaisse",
+      "cacheCorps": true
+    },
+    {
+      "slot": "barbe",
+      "id": "moustache_dali",
+      "type": "clothes",
+      "source": "culturalibre_dal_moustache",
+      "label": "Moustache en crocs",
+      "cacheCorps": true
+    },
+    {
+      "slot": "haut",
+      "id": "viking",
+      "type": "clothes",
+      "source": "rehmanpolanski_viking_tunic",
+      "label": "Tunique viking",
+      "cacheCorps": true
+    },
+    {
+      "slot": "haut",
+      "id": "echarpe",
+      "type": "clothes",
+      "source": "drednicolson_asymmetric_tunic_and_sash",
+      "label": "Tunique à écharpe",
+      "cacheCorps": true
+    },
+    {
+      "slot": "haut",
+      "id": "blouse",
+      "type": "clothes",
+      "source": "elvs_ruffle_sleeve_peasant_blouse_1",
+      "label": "Blouse paysanne",
+      "cacheCorps": true
+    },
+    {
+      "slot": "haut",
+      "id": "robe_mage",
+      "type": "clothes",
+      "source": "maciekg_wizard_robe",
+      "label": "Robe de magicien",
+      "cacheCorps": true,
+      "masque": [
+        "bas"
+      ]
+    },
+    {
+      "slot": "haut",
+      "id": "bure",
+      "type": "clothes",
+      "source": "donitz_monk_robe",
+      "label": "Bure de moine",
+      "cacheCorps": true,
+      "masque": [
+        "bas"
+      ]
+    },
+    {
+      "slot": "haut",
+      "id": "bure_capuche",
+      "type": "clothes",
+      "source": "donitz_monk_robe_hood",
+      "label": "Bure, capuche relevée",
+      "cacheCorps": true,
+      "masque": [
+        "bas",
+        "hair",
+        "tete"
+      ]
+    },
+    {
+      "slot": "haut",
+      "id": "bure_capuche_basse",
+      "type": "clothes",
+      "source": "donitz_monk_robe_hood_down",
+      "label": "Bure, capuche baissée",
+      "cacheCorps": true,
+      "masque": [
+        "bas"
+      ]
+    },
+    {
+      "slot": "haut",
+      "id": "moderne_decontracte",
+      "type": "clothes",
+      "source": "male_casualsuit01",
+      "label": "Moderne : décontracté",
+      "cacheCorps": true,
+      "masque": [
+        "bas"
+      ]
+    },
+    {
+      "slot": "haut",
+      "id": "moderne_decontracte2",
+      "type": "clothes",
+      "source": "male_casualsuit03",
+      "label": "Moderne : décontracté 2",
+      "cacheCorps": true,
+      "masque": [
+        "bas"
+      ]
+    },
+    {
+      "slot": "haut",
+      "id": "moderne_travail",
+      "type": "clothes",
+      "source": "male_worksuit01",
+      "label": "Moderne : bleu de travail",
+      "cacheCorps": true,
+      "masque": [
+        "bas"
+      ]
+    },
+    {
+      "slot": "haut",
+      "id": "moderne_costume",
+      "type": "clothes",
+      "source": "male_elegantsuit01",
+      "label": "Moderne : costume",
+      "cacheCorps": true,
+      "masque": [
+        "bas"
+      ]
+    },
+    {
+      "slot": "haut",
+      "id": "moderne_decontractee",
+      "type": "clothes",
+      "source": "female_casualsuit01",
+      "label": "Moderne : décontractée",
+      "cacheCorps": true,
+      "masque": [
+        "bas"
+      ]
+    },
+    {
+      "slot": "haut",
+      "id": "moderne_tailleur",
+      "type": "clothes",
+      "source": "female_elegantsuit01",
+      "label": "Moderne : tailleur",
+      "cacheCorps": true,
+      "masque": [
+        "bas"
+      ]
+    },
+    {
+      "slot": "haut",
+      "id": "moderne_sport",
+      "type": "clothes",
+      "source": "female_sportsuit01",
+      "label": "Moderne : sport",
+      "cacheCorps": true,
+      "masque": [
+        "bas"
+      ]
+    },
+    {
+      "slot": "bas",
+      "id": "viking",
+      "type": "clothes",
+      "source": "rehmanpolanski_viking_pants",
+      "label": "Pantalon viking",
+      "cacheCorps": true
+    },
+    {
+      "slot": "pieds",
+      "id": "viking",
+      "type": "clothes",
+      "source": "rehmanpolanski_viking_boots",
+      "label": "Bottes viking",
+      "cacheCorps": true
+    },
+    {
+      "slot": "pieds",
+      "id": "medievales",
+      "type": "clothes",
+      "source": "punkduck_medieval_boots",
+      "label": "Bottes médiévales",
+      "cacheCorps": true
+    },
+    {
+      "slot": "pieds",
+      "id": "cuir",
+      "type": "clothes",
+      "source": "maciekg_leather_boots",
+      "label": "Bottes de cuir",
+      "cacheCorps": true
+    },
+    {
+      "slot": "pieds",
+      "id": "cuir_hautes",
+      "type": "clothes",
+      "source": "madmanny_tight_leather_boots",
+      "label": "Cuissardes de cuir",
+      "cacheCorps": true
+    },
+    {
+      "slot": "pieds",
+      "id": "cavalier",
+      "type": "clothes",
+      "source": "punkduck_riding_boots",
+      "label": "Bottes de cavalier",
+      "cacheCorps": true
+    },
+    {
+      "slot": "pieds",
+      "id": "basses",
+      "type": "clothes",
+      "source": "scailman_low-heeled_boots",
+      "label": "Bottines",
+      "cacheCorps": true
+    },
+    {
+      "slot": "pieds",
+      "id": "moderne_ville",
+      "type": "clothes",
+      "source": "shoes01",
+      "label": "Moderne : chaussures de ville",
+      "cacheCorps": true
+    },
+    {
+      "slot": "pieds",
+      "id": "moderne_baskets",
+      "type": "clothes",
+      "source": "shoes06",
+      "label": "Moderne : baskets",
+      "cacheCorps": true
+    },
+    {
+      "slot": "mains",
+      "id": "courts",
+      "type": "clothes",
+      "source": "toigo_gloves_short",
+      "label": "Gants courts",
+      "cacheCorps": true
+    },
+    {
+      "slot": "mains",
+      "id": "mi_longs",
+      "type": "clothes",
+      "source": "toigo_gloves_medium",
+      "label": "Gants mi-longs",
+      "cacheCorps": true
+    },
+    {
+      "slot": "mains",
+      "id": "longs",
+      "type": "clothes",
+      "source": "toigo_gloves_long",
+      "label": "Gants longs",
+      "cacheCorps": true
+    },
+    {
+      "slot": "tete",
+      "id": "chapeau_mage",
+      "type": "clothes",
+      "source": "maciekg_wizard_hat",
+      "label": "Chapeau de magicien",
+      "cacheCorps": true,
+      "masque": [
+        "hair"
+      ]
+    },
+    {
+      "slot": "tete",
+      "id": "chapeau_sorciere",
+      "type": "clothes",
+      "source": "elvs_witchy_hallows_hat1",
+      "label": "Chapeau de sorcière",
+      "cacheCorps": true,
+      "masque": [
+        "hair"
+      ]
+    },
+    {
+      "slot": "tete",
+      "id": "templier",
+      "type": "clothes",
+      "source": "javherre_casco_caballero_templario_templar_knight_helmet",
+      "label": "Heaume de templier",
+      "cacheCorps": true,
+      "masque": [
+        "hair",
+        "barbe"
+      ]
+    },
+    {
+      "slot": "tete",
+      "id": "corinthien",
+      "type": "clothes",
+      "source": "grinsegold_corinthian_helmet",
+      "label": "Casque corinthien",
+      "cacheCorps": true,
+      "masque": [
+        "hair"
+      ]
+    },
+    {
+      "slot": "tete",
+      "id": "guerrier",
+      "type": "clothes",
+      "source": "culturalibre_warrior_helmet",
+      "label": "Casque de guerrier",
+      "cacheCorps": true,
+      "masque": [
+        "hair"
+      ]
+    },
+    {
+      "slot": "tete",
+      "id": "guerrier2",
+      "type": "clothes",
+      "source": "culturalibre_warrior_helmet_02",
+      "label": "Casque de guerrier 2",
+      "cacheCorps": true,
+      "masque": [
+        "hair"
+      ]
+    },
+    {
+      "slot": "tete",
+      "id": "cornes",
+      "type": "clothes",
+      "source": "maciekg_horned_helmet",
+      "label": "Casque à cornes",
+      "cacheCorps": true,
+      "masque": [
+        "hair"
+      ]
+    },
+    {
+      "slot": "tete",
+      "id": "cuir",
+      "type": "clothes",
+      "source": "maciekg_leather_helmet",
+      "label": "Casque de cuir",
+      "cacheCorps": true,
+      "masque": [
+        "hair"
+      ]
+    },
+    {
+      "slot": "tete",
+      "id": "crane",
+      "type": "clothes",
+      "source": "culturalibre_skull_helmet",
+      "label": "Casque crâne",
+      "cacheCorps": true,
+      "masque": [
+        "hair"
+      ]
+    },
+    {
+      "slot": "tete",
+      "id": "moderne_fedora",
+      "type": "clothes",
+      "source": "fedora01",
+      "label": "Moderne : fedora",
+      "cacheCorps": true,
+      "masque": [
+        "hair"
+      ]
+    },
+    {
+      "slot": "tete",
+      "id": "moderne_casquette",
+      "type": "clothes",
+      "source": "elvs_male_flat_cap1",
+      "label": "Moderne : casquette plate",
+      "cacheCorps": true,
+      "masque": [
+        "hair"
+      ]
+    },
+    {
+      "slot": "tete",
+      "id": "moderne_bonnet",
+      "type": "clothes",
+      "source": "mindfront_knitted_hat_01",
+      "label": "Moderne : bonnet",
+      "cacheCorps": true,
+      "masque": [
+        "hair"
+      ]
+    },
+    {
+      "slot": "arme",
+      "id": "epee",
+      "type": "clothes",
+      "source": "joepal_crude_sword",
+      "label": "Épée",
+      "cacheCorps": false
+    },
+    {
+      "slot": "arme",
+      "id": "dague",
+      "type": "clothes",
+      "source": "o4saken_dagger",
+      "label": "Dague",
+      "cacheCorps": false
+    },
+    {
+      "slot": "arme",
+      "id": "marteau",
+      "type": "clothes",
+      "source": "culturalibre_war_hammer",
+      "label": "Marteau de guerre",
+      "cacheCorps": false
+    },
+    {
+      "slot": "arme",
+      "id": "arc",
+      "type": "clothes",
+      "source": "culturalibre_wooden_bow",
+      "label": "Arc",
+      "cacheCorps": false
+    },
+    {
+      "slot": "arme",
+      "id": "sceptre",
+      "type": "clothes",
+      "source": "culturalibre_magic_sceptre",
+      "label": "Sceptre",
+      "cacheCorps": false
     }
   ],
   "_doc_tenues": "Tenues découpées dans les aides MakeHuman du corps (elles suivent donc tous les morphs). 'parties' : liste de {aide: helper-tights|helper-skirt, os: os dominants gardés, zmin/zmax (m, au neutre), dos: true = faces tournées vers l'arrière seulement}. 'ecart' : distance minimale à la peau (m). 'materiau' : Tenue.<slot> (teinte réglable dans l'app). 'couche' : décalage constant le long de la normale pour superposer les vêtements. 'drape' : tombé vertical (cape).",
@@ -1021,5 +1585,6 @@
         }
       ]
     }
-  ]
+  ],
+  "_doc_assets": "Assets MakeHuman ajustés par MPFB. type hair|eyebrows|eyelashes|clothes ; 'label' (sinon LIBELLES de generer_species) ; 'masque' : emplacements cachés quand l'asset est porté ; 'cacheCorps' : la peau sous l'asset (delete group du .mhclo) n'est pas dessinée. Les crédits (auteur, licence) viennent des métadonnées des packs (mpfb/data/packs/*.json)."
 }

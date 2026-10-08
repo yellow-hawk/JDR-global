@@ -61,6 +61,48 @@ def chemin_mhclo(typ, source):
     return os.path.join(DONNEES_UTILISATEUR, typ, source, source + '.mhclo')
 
 
+def plages(indices):
+    """[3, 4, 5, 9] -> "3-5,9" (masques du corps compacts)."""
+    res, debut, prec = [], None, None
+    for i in sorted(set(indices)):
+        if debut is None:
+            debut = prec = i
+        elif i == prec + 1:
+            prec = i
+        else:
+            res.append(f'{debut}-{prec}' if prec > debut else str(debut))
+            debut = prec = i
+    if debut is not None:
+        res.append(f'{debut}-{prec}' if prec > debut else str(debut))
+    return ','.join(res)
+
+
+def peau_cachee(h, chemin):
+    """Index MakeHuman des sommets du corps cachés par l'asset (delete group de son .mhclo)."""
+    from bl_ext.user_default.mpfb.entities.clothes.mhclo import Mhclo
+    m = Mhclo()
+    m.load(chemin)
+    if not m.delete or not m.delverts:
+        return []
+    n = len(h.data.vertices)
+    liste = [int(v) for v in m.delverts if v < n]
+    ClothesService._conservative_mask(h, liste)  # même filtrage que MPFB (pas de trous isolés)
+    return liste
+
+
+def credits_packs():
+    """Métadonnées des packs installés : nom d'asset -> {auteur, licence, source, pack}."""
+    res = {}
+    dossier = os.path.join(DONNEES_UTILISATEUR, 'packs')
+    for f in os.listdir(dossier) if os.path.isdir(dossier) else []:
+        if f.endswith('.json'):
+            for nom, meta in json.load(open(os.path.join(dossier, f), encoding='utf-8')).items():
+                if isinstance(meta, dict):
+                    res[nom] = {'auteur': meta.get('author', ''), 'licence': meta.get('license', ''),
+                                'source': meta.get('source', ''), 'pack': f[:-5]}
+    return res
+
+
 def coords_corps(h):
     k = h.shape_key_add(name='__mix', from_mix=True)
     a = np.empty(len(k.data) * 3, dtype=np.float32)
@@ -324,7 +366,7 @@ def exporter(objets, rig, fichier):
     bpy.ops.export_scene.gltf(
         filepath=fichier, export_format='GLB', use_selection=True,
         export_apply=False, export_skins=True, export_morph=True, export_morph_normal=True,
-        export_animations=False, export_yup=True, export_extras=False)
+        export_animations=False, export_yup=True, export_extras=False, export_attributes=True)
 
 
 def construire():
@@ -345,12 +387,15 @@ def construire():
                                              subdiv_levels=0, material_type='MAKESKIN')
             parties.append(o)
         assets = []
+        credits = credits_packs()
         for a in CONFIG['assets']:
-            o = HumanService.add_mhclo_asset(chemin_mhclo(a['type'], a['source']), h,
-                                             asset_type=TYPES_MHCLO[a['type']], subdiv_levels=0,
+            chemin = chemin_mhclo(a['type'], a['source'])
+            o = HumanService.add_mhclo_asset(chemin, h, asset_type=TYPES_MHCLO[a['type']], subdiv_levels=0,
                                              material_type='MAKESKIN')
             o.name = f"{a['slot']}-{a['id']}"
             o['jdr_slot'], o['jdr_id'] = a['slot'], a['id']
+            o['jdr_cache'] = plages(peau_cachee(h, chemin)) if a.get('cacheCorps') else ''
+            o['jdr_credit'] = json.dumps(credits.get(a['source'], {}), ensure_ascii=False)
             assets.append(o)
         tous = parties + assets
         for o in tous + [h]:
@@ -387,6 +432,9 @@ def construire():
         for vg in [g for g in corps.vertex_groups if g.name.startswith(('helper-', 'joint-'))]:
             pass  # les groupes restent (inoffensifs), seuls les sommets d'aide partent
         cles_corps = ajouter_cles(corps, corps0, deltas_corps)
+        # index MakeHuman de chaque sommet (attribut '_ID' exporté) : sert à cacher la peau sous les vêtements
+        attr = corps.data.attributes.new('_ID', 'FLOAT', 'POINT')
+        attr.data.foreach_set('value', np.arange(len(corps.data.vertices), dtype=np.float32))
         retirer_aides(corps)
         h.hide_set(True)
         manifeste = {'corps': {'fichier': 'base.glb', 'sommets': len(corps.data.vertices), 'morphs': cles_corps},
@@ -394,9 +442,19 @@ def construire():
         for o in tous:
             manifeste_o = ajouter_cles(o, objets0[o.name], deltas_objets[o.name])
             if o in assets:
-                manifeste['assets'].append({'slot': o['jdr_slot'], 'id': o['jdr_id'], 'objet': o.name,
-                                            'fichier': f"{o['jdr_slot']}/{o['jdr_id']}.glb",
-                                            'sommets': len(o.data.vertices), 'morphs': manifeste_o})
+                conf = next(a for a in CONFIG['assets'] if a['slot'] == o['jdr_slot'] and a['id'] == o['jdr_id'])
+                entree = {'slot': o['jdr_slot'], 'id': o['jdr_id'], 'objet': o.name, 'source': conf['source'],
+                          'fichier': f"{o['jdr_slot']}/{o['jdr_id']}.glb",
+                          'materiau': o.data.materials[0].name if o.data.materials else None,
+                          'sommets': len(o.data.vertices), 'morphs': manifeste_o}
+                for cle in ('label', 'masque'):
+                    if conf.get(cle):
+                        entree[cle] = conf[cle]
+                if o['jdr_cache']:
+                    entree['cacheCorps'] = o['jdr_cache']
+                if json.loads(o['jdr_credit']):
+                    entree['credit'] = json.loads(o['jdr_credit'])
+                manifeste['assets'].append(entree)
         for t, o, cles in tenues:
             manifeste['assets'].append({'slot': t['slot'], 'id': t['id'], 'objet': o.name, 'label': t['label'],
                                         'materiau': o['jdr_materiau'], 'metal': bool(t.get('metal')), 'masque': t.get('masque', []),

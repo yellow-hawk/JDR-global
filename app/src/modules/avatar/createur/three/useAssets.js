@@ -4,6 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
 import { clone as cloneSquelette } from 'three/examples/jsm/utils/SkeletonUtils.js'
 import { useCharacter } from '../store/useCharacter'
+import { lirePlages, masquerCorps } from './masqueCorps'
 
 // Hook : monte/demonte les assets (coiffures, sourcils, cils, vetements) sur le
 // modele de base, selon les selections du store.
@@ -206,6 +207,18 @@ export function useAssets(baseRoot) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [baseRoot, speciesId, assets])
+
+  // Peau cachee sous les assets portes (option.cacheCorps), recalculee a chaque changement.
+  useEffect(() => {
+    if (!baseRoot) return
+    const caches = new Set()
+    slots.forEach((slot) => {
+      const o = (slot.options ?? []).find((x) => x.id === (assets?.[slot.id] ?? null))
+      if (o?.cacheCorps && attachedRef.current[slot.id]) lirePlages(o.cacheCorps).forEach((i) => caches.add(i))
+    })
+    masquerCorps(baseRoot, caches)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [baseRoot, assets, version])
 
   // Nettoyage complet quand le modele de base change/se demonte.
   useEffect(() => {

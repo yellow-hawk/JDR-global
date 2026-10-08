@@ -1,0 +1,792 @@
+[
+ {
+  "slot": "hair",
+  "id": "ponytail",
+  "label": "Queue de cheval",
+  "asset": "ponytail01",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "hair",
+  "id": "court1",
+  "label": "Court 1",
+  "asset": "short01",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "hair",
+  "id": "court2",
+  "label": "Court 2",
+  "asset": "short02",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "hair",
+  "id": "court3",
+  "label": "Court 3",
+  "asset": "short03",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "hair",
+  "id": "court4",
+  "label": "Court 4",
+  "asset": "short04",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "hair",
+  "id": "long",
+  "label": "Longs",
+  "asset": "long01",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "hair",
+  "id": "carre1",
+  "label": "Carré 1",
+  "asset": "bob01",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "hair",
+  "id": "carre2",
+  "label": "Carré 2",
+  "asset": "bob02",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "hair",
+  "id": "tresse",
+  "label": "Tresse",
+  "asset": "braid01",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "hair",
+  "id": "afro",
+  "label": "Afro",
+  "asset": "afro01",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "eyebrows",
+  "id": "default",
+  "label": "Standard",
+  "asset": "eyebrow001",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "eyebrows",
+  "id": "fins",
+  "label": "Fins",
+  "asset": "eyebrow002",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "eyebrows",
+  "id": "epais",
+  "label": "Épais",
+  "asset": "eyebrow006",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "eyebrows",
+  "id": "arques",
+  "label": "Arqués",
+  "asset": "eyebrow009",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "eyelashes",
+  "id": "default",
+  "label": "Standard",
+  "asset": "eyelashes02",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "eyelashes",
+  "id": "longs",
+  "label": "Longs",
+  "asset": "eyelashes03",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "hair",
+  "id": "long2",
+  "label": "Longs lisses",
+  "asset": "o4saken_long01",
+  "auteur": "punkduck",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/1471",
+  "pack": "hair01"
+ },
+ {
+  "slot": "hair",
+  "id": "long3",
+  "label": "Très longs",
+  "asset": "punkduck_alpha7_long",
+  "auteur": "punkduck",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/482",
+  "pack": "hair03"
+ },
+ {
+  "slot": "hair",
+  "id": "long4",
+  "label": "Très longs ondulés",
+  "asset": "punkduck_alpha7_long2",
+  "auteur": "punkduck",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/492",
+  "pack": "hair03"
+ },
+ {
+  "slot": "hair",
+  "id": "boucle1",
+  "label": "Bouclés",
+  "asset": "punkduck_alpha7_curly",
+  "auteur": "punkduck",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/480",
+  "pack": "hair03"
+ },
+ {
+  "slot": "hair",
+  "id": "tresse2",
+  "label": "Double tresse",
+  "asset": "elvs_double_mh_braid",
+  "auteur": "Elvaerwyn",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/1336",
+  "pack": "hair01"
+ },
+ {
+  "slot": "hair",
+  "id": "tresse3",
+  "label": "Tresse couronne",
+  "asset": "elvs_french_braid_variation",
+  "auteur": "Elvaerwyn",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/1335",
+  "pack": "hair01"
+ },
+ {
+  "slot": "hair",
+  "id": "tresse4",
+  "label": "Tresse négligée",
+  "asset": "elvs_unkempt_french_braid",
+  "auteur": "Elvaerwyn",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/1334",
+  "pack": "hair01"
+ },
+ {
+  "slot": "hair",
+  "id": "chignon1",
+  "label": "Chignon tressé",
+  "asset": "elvs_reverse_french_braid_bun",
+  "auteur": "Elvaerwyn",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/1337",
+  "pack": "hair01"
+ },
+ {
+  "slot": "hair",
+  "id": "chignon2",
+  "label": "Chignon",
+  "asset": "rehmanpolanski_hair_bun_brown",
+  "auteur": "RehmanPolanski",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/2477",
+  "pack": "hair01"
+ },
+ {
+  "slot": "hair",
+  "id": "nattes",
+  "label": "Nattes",
+  "asset": "grinsegold_wig_bun_blonde_braids",
+  "auteur": "grinsegold",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/172",
+  "pack": "hair03"
+ },
+ {
+  "slot": "hair",
+  "id": "hirsute",
+  "label": "Court en bataille",
+  "asset": "cortu_short_messy_hair",
+  "auteur": "Cortu",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/2809",
+  "pack": "hair01"
+ },
+ {
+  "slot": "hair",
+  "id": "sauvage",
+  "label": "Sauvage",
+  "asset": "sonntag78_junglebook_hair",
+  "auteur": "sonntag78",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/174",
+  "pack": "hair01"
+ },
+ {
+  "slot": "barbe",
+  "id": "viking",
+  "label": "Barbe viking",
+  "asset": "rehmanpolanski_beard_viking",
+  "auteur": "RehmanPolanski",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/2614",
+  "pack": "bodyparts05"
+ },
+ {
+  "slot": "barbe",
+  "id": "moustache_viking",
+  "label": "Moustache viking",
+  "asset": "rehmanpolanski_moustache_viking",
+  "auteur": "RehmanPolanski",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/2615",
+  "pack": "bodyparts05"
+ },
+ {
+  "slot": "barbe",
+  "id": "faune",
+  "label": "Barbe de faune",
+  "asset": "culturalibre_faun_beard",
+  "auteur": "culturalibre",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/2356",
+  "pack": "bodyparts05"
+ },
+ {
+  "slot": "barbe",
+  "id": "hirsute",
+  "label": "Barbe hirsute",
+  "asset": "wdg_scruffy_beard",
+  "auteur": "WDG",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/1769",
+  "pack": "bodyparts05"
+ },
+ {
+  "slot": "barbe",
+  "id": "pleine",
+  "label": "Barbe pleine",
+  "asset": "grinsegold_full_beard",
+  "auteur": "grinsegold",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/188",
+  "pack": "bodyparts06"
+ },
+ {
+  "slot": "barbe",
+  "id": "negligee",
+  "label": "Barbe négligée",
+  "asset": "elvs_scruffy_beard1",
+  "auteur": "Elvaerwyn",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/2611",
+  "pack": "bodyparts06"
+ },
+ {
+  "slot": "barbe",
+  "id": "moustache2",
+  "label": "Moustache épaisse",
+  "asset": "grinsegold_moustache",
+  "auteur": "grinsegold",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/187",
+  "pack": "bodyparts06"
+ },
+ {
+  "slot": "barbe",
+  "id": "moustache_dali",
+  "label": "Moustache en crocs",
+  "asset": "culturalibre_dal_moustache",
+  "auteur": "culturalibre",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/2872",
+  "pack": "bodyparts06"
+ },
+ {
+  "slot": "haut",
+  "id": "viking",
+  "label": "Tunique viking",
+  "asset": "rehmanpolanski_viking_tunic",
+  "auteur": "RehmanPolanski",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/2617",
+  "pack": "suits02"
+ },
+ {
+  "slot": "haut",
+  "id": "echarpe",
+  "label": "Tunique à écharpe",
+  "asset": "drednicolson_asymmetric_tunic_and_sash",
+  "auteur": "DredNicolson",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/409",
+  "pack": "shirts03"
+ },
+ {
+  "slot": "haut",
+  "id": "blouse",
+  "label": "Blouse paysanne",
+  "asset": "elvs_ruffle_sleeve_peasant_blouse_1",
+  "auteur": "Elvaerwyn",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/1256",
+  "pack": "shirts03"
+ },
+ {
+  "slot": "haut",
+  "id": "robe_mage",
+  "label": "Robe de magicien",
+  "asset": "maciekg_wizard_robe",
+  "auteur": "MaciekG",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/1482",
+  "pack": "suits03"
+ },
+ {
+  "slot": "haut",
+  "id": "bure",
+  "label": "Bure de moine",
+  "asset": "donitz_monk_robe",
+  "auteur": "Donitz",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/3238",
+  "pack": "suits02"
+ },
+ {
+  "slot": "haut",
+  "id": "bure_capuche",
+  "label": "Bure, capuche relevée",
+  "asset": "donitz_monk_robe_hood",
+  "auteur": "Donitz",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/3235",
+  "pack": "suits02"
+ },
+ {
+  "slot": "haut",
+  "id": "bure_capuche_basse",
+  "label": "Bure, capuche baissée",
+  "asset": "donitz_monk_robe_hood_down",
+  "auteur": "Donitz",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/3236",
+  "pack": "suits02"
+ },
+ {
+  "slot": "haut",
+  "id": "moderne_decontracte",
+  "label": "Moderne : décontracté",
+  "asset": "male_casualsuit01",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "haut",
+  "id": "moderne_decontracte2",
+  "label": "Moderne : décontracté 2",
+  "asset": "male_casualsuit03",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "haut",
+  "id": "moderne_travail",
+  "label": "Moderne : bleu de travail",
+  "asset": "male_worksuit01",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "haut",
+  "id": "moderne_costume",
+  "label": "Moderne : costume",
+  "asset": "male_elegantsuit01",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "haut",
+  "id": "moderne_decontractee",
+  "label": "Moderne : décontractée",
+  "asset": "female_casualsuit01",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "haut",
+  "id": "moderne_tailleur",
+  "label": "Moderne : tailleur",
+  "asset": "female_elegantsuit01",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "haut",
+  "id": "moderne_sport",
+  "label": "Moderne : sport",
+  "asset": "female_sportsuit01",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "bas",
+  "id": "viking",
+  "label": "Pantalon viking",
+  "asset": "rehmanpolanski_viking_pants",
+  "auteur": "RehmanPolanski",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/2618",
+  "pack": "suits02"
+ },
+ {
+  "slot": "pieds",
+  "id": "viking",
+  "label": "Bottes viking",
+  "asset": "rehmanpolanski_viking_boots",
+  "auteur": "RehmanPolanski",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/2619",
+  "pack": "suits02"
+ },
+ {
+  "slot": "pieds",
+  "id": "medievales",
+  "label": "Bottes médiévales",
+  "asset": "punkduck_medieval_boots",
+  "auteur": "punkduck",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/1381",
+  "pack": "shoes03"
+ },
+ {
+  "slot": "pieds",
+  "id": "cuir",
+  "label": "Bottes de cuir",
+  "asset": "maciekg_leather_boots",
+  "auteur": "MaciekG",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/1461",
+  "pack": "shoes03"
+ },
+ {
+  "slot": "pieds",
+  "id": "cuir_hautes",
+  "label": "Cuissardes de cuir",
+  "asset": "madmanny_tight_leather_boots",
+  "auteur": "madmanny",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/1448",
+  "pack": "shoes03"
+ },
+ {
+  "slot": "pieds",
+  "id": "cavalier",
+  "label": "Bottes de cavalier",
+  "asset": "punkduck_riding_boots",
+  "auteur": "punkduck",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/1566",
+  "pack": "shoes03"
+ },
+ {
+  "slot": "pieds",
+  "id": "basses",
+  "label": "Bottines",
+  "asset": "scailman_low-heeled_boots",
+  "auteur": "scailman",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/853",
+  "pack": "shoes03"
+ },
+ {
+  "slot": "pieds",
+  "id": "moderne_ville",
+  "label": "Moderne : chaussures de ville",
+  "asset": "shoes01",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "pieds",
+  "id": "moderne_baskets",
+  "label": "Moderne : baskets",
+  "asset": "shoes06",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "mains",
+  "id": "courts",
+  "label": "Gants courts",
+  "asset": "toigo_gloves_short",
+  "auteur": "MargaretToigo",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/1852",
+  "pack": "gloves01"
+ },
+ {
+  "slot": "mains",
+  "id": "mi_longs",
+  "label": "Gants mi-longs",
+  "asset": "toigo_gloves_medium",
+  "auteur": "MargaretToigo",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/1851",
+  "pack": "gloves01"
+ },
+ {
+  "slot": "mains",
+  "id": "longs",
+  "label": "Gants longs",
+  "asset": "toigo_gloves_long",
+  "auteur": "MargaretToigo",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/1850",
+  "pack": "gloves01"
+ },
+ {
+  "slot": "tete",
+  "id": "chapeau_mage",
+  "label": "Chapeau de magicien",
+  "asset": "maciekg_wizard_hat",
+  "auteur": "MaciekG",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/1481",
+  "pack": "hats03"
+ },
+ {
+  "slot": "tete",
+  "id": "chapeau_sorciere",
+  "label": "Chapeau de sorcière",
+  "asset": "elvs_witchy_hallows_hat1",
+  "auteur": "Elvaerwyn",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/1708",
+  "pack": "hats03"
+ },
+ {
+  "slot": "tete",
+  "id": "templier",
+  "label": "Heaume de templier",
+  "asset": "javherre_casco_caballero_templario_templar_knight_helmet",
+  "auteur": "javherre",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/2014",
+  "pack": "hats02"
+ },
+ {
+  "slot": "tete",
+  "id": "corinthien",
+  "label": "Casque corinthien",
+  "asset": "grinsegold_corinthian_helmet",
+  "auteur": "grinsegold",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/667",
+  "pack": "hats02"
+ },
+ {
+  "slot": "tete",
+  "id": "guerrier",
+  "label": "Casque de guerrier",
+  "asset": "culturalibre_warrior_helmet",
+  "auteur": "culturalibre",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/2351",
+  "pack": "hats02"
+ },
+ {
+  "slot": "tete",
+  "id": "guerrier2",
+  "label": "Casque de guerrier 2",
+  "asset": "culturalibre_warrior_helmet_02",
+  "auteur": "culturalibre",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/2505",
+  "pack": "hats04"
+ },
+ {
+  "slot": "tete",
+  "id": "cornes",
+  "label": "Casque à cornes",
+  "asset": "maciekg_horned_helmet",
+  "auteur": "MaciekG",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/1487",
+  "pack": "hats04"
+ },
+ {
+  "slot": "tete",
+  "id": "cuir",
+  "label": "Casque de cuir",
+  "asset": "maciekg_leather_helmet",
+  "auteur": "MaciekG",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/1457",
+  "pack": "hats04"
+ },
+ {
+  "slot": "tete",
+  "id": "crane",
+  "label": "Casque crâne",
+  "asset": "culturalibre_skull_helmet",
+  "auteur": "culturalibre",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/2349",
+  "pack": "hats02"
+ },
+ {
+  "slot": "tete",
+  "id": "moderne_fedora",
+  "label": "Moderne : fedora",
+  "asset": "fedora01",
+  "auteur": "makehuman_system",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org",
+  "pack": "makehuman_system_assets"
+ },
+ {
+  "slot": "tete",
+  "id": "moderne_casquette",
+  "label": "Moderne : casquette plate",
+  "asset": "elvs_male_flat_cap1",
+  "auteur": "Elvaerwyn",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/1814",
+  "pack": "hats03"
+ },
+ {
+  "slot": "tete",
+  "id": "moderne_bonnet",
+  "label": "Moderne : bonnet",
+  "asset": "mindfront_knitted_hat_01",
+  "auteur": "Mindfront",
+  "licence": "CC-BY",
+  "lien": "http://www.makehumancommunity.org/node/745",
+  "pack": "hats03"
+ },
+ {
+  "slot": "arme",
+  "id": "epee",
+  "label": "Épée",
+  "asset": "joepal_crude_sword",
+  "auteur": "Joel Palmius",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/428",
+  "pack": "equipment01"
+ },
+ {
+  "slot": "arme",
+  "id": "dague",
+  "label": "Dague",
+  "asset": "o4saken_dagger",
+  "auteur": "o4saken",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/809",
+  "pack": "equipment01"
+ },
+ {
+  "slot": "arme",
+  "id": "marteau",
+  "label": "Marteau de guerre",
+  "asset": "culturalibre_war_hammer",
+  "auteur": "culturalibre",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/2051",
+  "pack": "equipment01"
+ },
+ {
+  "slot": "arme",
+  "id": "arc",
+  "label": "Arc",
+  "asset": "culturalibre_wooden_bow",
+  "auteur": "culturalibre",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/2362",
+  "pack": "equipment01"
+ },
+ {
+  "slot": "arme",
+  "id": "sceptre",
+  "label": "Sceptre",
+  "asset": "culturalibre_magic_sceptre",
+  "auteur": "culturalibre",
+  "licence": "CC0",
+  "lien": "http://www.makehumancommunity.org/node/2358",
+  "pack": "equipment01"
+ }
+]

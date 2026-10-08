@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { apparenceAuto } from './auto';
 import { sanitizePreset } from './createur/store/presets.js';
 import especes from './createur/data/species.json';
+import * as THREE from 'three';
+import { lirePlages, masquerCorps } from './createur/three/masqueCorps.js';
 
 type Preset = { data: { morphs: { values: Record<string, number> }; assets: Record<string, string | null> } };
 const humain = especes.species[0];
@@ -76,5 +78,26 @@ describe('chargement tolérant des presets', () => {
     });
     expect(warnings.length).toBe(2);
     expect((patch.morphs as Record<string, number>).inconnu).toBeUndefined();
+  });
+});
+
+describe('peau cachée sous les vêtements', () => {
+  it('lit les plages compactes', () => {
+    expect([...lirePlages('3-5,9')]).toEqual([3, 4, 5, 9]);
+    expect(lirePlages('').size).toBe(0);
+  });
+
+  it('retire les triangles touchant un sommet caché, puis les rend', () => {
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(new Array(12).fill(0), 3));
+    geo.setAttribute('_id', new THREE.Float32BufferAttribute([10, 11, 12, 13], 1));
+    geo.setIndex([0, 1, 2, 1, 3, 2]);
+    const racine = new THREE.Group();
+    racine.add(new THREE.Mesh(geo));
+    masquerCorps(racine, new Set([13]));
+    expect(geo.drawRange.count).toBe(3);
+    expect([...geo.index!.array.slice(0, 3)]).toEqual([0, 1, 2]);
+    masquerCorps(racine, new Set());
+    expect(geo.drawRange.count).toBe(6);
   });
 });
