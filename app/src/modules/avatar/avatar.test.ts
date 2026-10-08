@@ -62,6 +62,8 @@ describe('tenue et peuple', () => {
     expect(pnj('marchand', 'Elfes des brumes').data.morphs.values.ear_pointed).toBe(1);
     expect(pnj('marchand', 'Nains du Roc').data.morphs.values.stature).toBeLessThan(-0.5);
     expect(pnj('marchand', 'Humains').data.morphs.values.ear_pointed).toBeUndefined();
+    expect(pnj('forgeron', 'Nains du Roc').data.assets.barbe).toBe('fournie');
+    expect(pnj('forgeron', 'Nains du Roc', true).data.assets.barbe).toBeNull();
   });
 });
 

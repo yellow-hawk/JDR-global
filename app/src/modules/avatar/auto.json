@@ -4,54 +4,164 @@
     {
       "id": "chevalier",
       "motifs": "chevalier|paladin|champion|seigneur de guerre|général",
-      "assets": { "haut": "chemise", "bas": "pantalon", "pieds": "bottes", "armure": "plastron", "ceinture": "ceinture", "cape": "cape" },
-      "palette": "noble", "muscle": 0.5
+      "assets": {
+        "haut": "chemise",
+        "bas": "pantalon",
+        "pieds": "bottes",
+        "armure": "plastron",
+        "ceinture": "ceinture",
+        "cape": "cape"
+      },
+      "palette": "noble",
+      "muscle": 0.5
     },
     {
       "id": "soldat",
       "motifs": "garde|soldat|sergent|capitaine|guerri|mercenaire|milic|sentinelle|lieutenant|gladiat|vétéran|veteran|brute|bandit",
-      "assets": { "haut": ["chemise", "tunique"], "bas": "pantalon", "pieds": "bottes", "armure": "cotte", "ceinture": "ceinture", "cape": [null, null, "cape"] },
-      "palette": "soldat", "muscle": 0.4
+      "assets": {
+        "haut": [
+          "chemise",
+          "tunique"
+        ],
+        "bas": "pantalon",
+        "pieds": "bottes",
+        "armure": "cotte",
+        "ceinture": "ceinture",
+        "cape": [
+          null,
+          null,
+          "cape"
+        ]
+      },
+      "palette": "soldat",
+      "muscle": 0.4
     },
     {
       "id": "mage",
       "motifs": "mage|magicien|sorci|enchant|astrolog|alchimiste|érudit|erudit|savant|archiviste|scribe|devin|oracle|nécroman|necroman",
-      "assets": { "haut": "robe", "bas": null, "pieds": "bottes", "armure": null, "ceinture": ["ceinture", null], "cape": [null, "cape"] },
-      "palette": "mage", "muscle": -0.3
+      "assets": {
+        "haut": "robe",
+        "bas": null,
+        "pieds": "bottes",
+        "armure": null,
+        "ceinture": [
+          "ceinture",
+          null
+        ],
+        "cape": [
+          null,
+          "cape"
+        ]
+      },
+      "palette": "mage",
+      "muscle": -0.3
     },
     {
       "id": "pretre",
       "motifs": "prêtre|pretre|prêtresse|pretresse|moine|nonne|abbé|abbesse|clerc|druide|ermite|pèlerin|pelerin|chaman",
-      "assets": { "haut": "robe", "bas": null, "pieds": "bottes", "armure": null, "ceinture": "ceinture", "cape": null },
+      "assets": {
+        "haut": "robe",
+        "bas": null,
+        "pieds": "bottes",
+        "armure": null,
+        "ceinture": "ceinture",
+        "cape": null
+      },
       "palette": "pretre"
     },
     {
       "id": "noble",
       "motifs": "noble|seigneur|dame|roi|reine|prince|princesse|duc|duchesse|comte|comtesse|baron|baronne|marquis|courtisan|ambassad|conseill|chancel|régent|regent|héritier|heritier",
-      "assets": { "haut": ["tunique", "robe"], "bas": "pantalon", "pieds": "bottes", "armure": null, "ceinture": "ceinture", "cape": "cape" },
+      "assets": {
+        "haut": [
+          "tunique",
+          "robe"
+        ],
+        "bas": "pantalon",
+        "pieds": "bottes",
+        "armure": null,
+        "ceinture": "ceinture",
+        "cape": "cape"
+      },
       "palette": "noble"
     },
     {
       "id": "ombre",
       "motifs": "voleu|espion|assassin|contrebandi|receleu|pickpocket|cambriol|malfrat|truand",
-      "assets": { "haut": "gilet", "bas": "pantalon", "pieds": "bottes", "armure": null, "ceinture": "ceinture", "cape": ["cape", null] },
+      "assets": {
+        "haut": "gilet",
+        "bas": "pantalon",
+        "pieds": "bottes",
+        "armure": null,
+        "ceinture": "ceinture",
+        "cape": [
+          "cape",
+          null
+        ]
+      },
       "palette": "ombre"
     },
     {
       "id": "voyageur",
       "motifs": "chasseu|rôdeu|rodeu|éclaireu|eclaireu|pisteu|guide|marin|capitaine de navire|pirate|aventuri|explorat|messager|nomade",
-      "assets": { "haut": ["tunique", "chemise"], "bas": "pantalon", "pieds": "bottes", "armure": null, "ceinture": "ceinture", "cape": ["cape", null] },
-      "palette": "terre", "muscle": 0.2
+      "assets": {
+        "haut": [
+          "tunique",
+          "chemise"
+        ],
+        "bas": "pantalon",
+        "pieds": "bottes",
+        "armure": null,
+        "ceinture": "ceinture",
+        "cape": [
+          "cape",
+          null
+        ]
+      },
+      "palette": "terre",
+      "muscle": 0.2
     },
     {
       "id": "artisan",
       "motifs": "forgeron|marchand|aubergiste|tavernier|artisan|boulang|meunier|tanneu|charpenti|tisserand|potier|herboriste|apothicaire|guérisseu|guerisseu|fermier|paysan|berger|pêcheu|pecheu|serveu|palefrenier|marin",
-      "assets": { "haut": ["chemise", "gilet", "tunique"], "bas": "pantalon", "pieds": "bottes", "armure": null, "ceinture": ["ceinture", null], "cape": null },
+      "assets": {
+        "haut": [
+          "chemise",
+          "gilet",
+          "tunique"
+        ],
+        "bas": "pantalon",
+        "pieds": "bottes",
+        "armure": null,
+        "ceinture": [
+          "ceinture",
+          null
+        ],
+        "cape": null
+      },
       "palette": "terre"
     }
   ],
   "defaut": {
-    "assets": { "haut": ["chemise", "tunique", "gilet"], "bas": "pantalon", "pieds": "bottes", "armure": null, "ceinture": [null, "ceinture"], "cape": [null, null, "cape"] },
+    "assets": {
+      "haut": [
+        "chemise",
+        "tunique",
+        "gilet"
+      ],
+      "bas": "pantalon",
+      "pieds": "bottes",
+      "armure": null,
+      "ceinture": [
+        null,
+        "ceinture"
+      ],
+      "cape": [
+        null,
+        null,
+        "cape"
+      ]
+    },
     "palette": "terre"
   },
   "feminin": {
@@ -60,23 +170,252 @@
     "jupe": 0.25
   },
   "palettes": {
-    "terre": { "haut": ["#8a6a4a", "#7a6b52", "#9c8a6a", "#6e5a43", "#a08060", "#5f6b4a"], "bas": ["#4a4038", "#5a4a3a", "#3e3a34", "#5c5244"], "pieds": ["#3b2a1c", "#4a3424", "#2e2219"], "ceinture": ["#5a3a22", "#4a2e1a"], "cape": ["#5a4a3a", "#4f5a3c", "#6b5a40"] },
-    "soldat": { "haut": ["#6e5a43", "#7a2e2e", "#3e4a6b", "#5a5a5a"], "bas": ["#3e3a34", "#4a4038"], "pieds": ["#2e2219", "#3b2a1c"], "armure": ["#a8acb4", "#9a9ea6", "#b8bcc4"], "ceinture": ["#4a2e1a"], "cape": ["#7a1d1d", "#2c3a6b", "#3d4a2c", "#5a1d4a"] },
-    "noble": { "haut": ["#6b1d2e", "#2c3a7a", "#4a2c6b", "#1d5a4a", "#8a6a1d", "#e8e0d0"], "bas": ["#2a2a33", "#3a2a2a", "#e0d8c8"], "pieds": ["#1e1a18", "#3b2a1c"], "armure": ["#c8ccd4", "#d4b46a"], "ceinture": ["#8a6a1d", "#3a2618"], "cape": ["#7a1d1d", "#2c3a7a", "#4a2c6b", "#1d4a3a", "#111111"] },
-    "mage": { "haut": ["#2c3a7a", "#4a2c6b", "#1d4a5a", "#5a5a6e", "#6b1d2e", "#222233"], "pieds": ["#2e2219"], "ceinture": ["#8a6a1d", "#3a2618", "#5a5a6e"], "cape": ["#222233", "#2c3a7a", "#4a2c6b"] },
-    "pretre": { "haut": ["#e8e0d0", "#8a7a5a", "#5a4a3a", "#c8b88a", "#3a3a3a"], "pieds": ["#3b2a1c"], "ceinture": ["#5a3a22", "#c8b88a"] },
-    "ombre": { "haut": ["#2a2a2a", "#3a3530", "#2c2f3a"], "bas": ["#1e1e1e", "#2a2622"], "pieds": ["#1e1a18"], "ceinture": ["#2a1e14"], "cape": ["#1a1a1a", "#2a2a2a", "#26302a"] }
+    "terre": {
+      "haut": [
+        "#8a6a4a",
+        "#7a6b52",
+        "#9c8a6a",
+        "#6e5a43",
+        "#a08060",
+        "#5f6b4a"
+      ],
+      "bas": [
+        "#4a4038",
+        "#5a4a3a",
+        "#3e3a34",
+        "#5c5244"
+      ],
+      "pieds": [
+        "#3b2a1c",
+        "#4a3424",
+        "#2e2219"
+      ],
+      "ceinture": [
+        "#5a3a22",
+        "#4a2e1a"
+      ],
+      "cape": [
+        "#5a4a3a",
+        "#4f5a3c",
+        "#6b5a40"
+      ]
+    },
+    "soldat": {
+      "haut": [
+        "#6e5a43",
+        "#7a2e2e",
+        "#3e4a6b",
+        "#5a5a5a"
+      ],
+      "bas": [
+        "#3e3a34",
+        "#4a4038"
+      ],
+      "pieds": [
+        "#2e2219",
+        "#3b2a1c"
+      ],
+      "armure": [
+        "#a8acb4",
+        "#9a9ea6",
+        "#b8bcc4"
+      ],
+      "ceinture": [
+        "#4a2e1a"
+      ],
+      "cape": [
+        "#7a1d1d",
+        "#2c3a6b",
+        "#3d4a2c",
+        "#5a1d4a"
+      ]
+    },
+    "noble": {
+      "haut": [
+        "#6b1d2e",
+        "#2c3a7a",
+        "#4a2c6b",
+        "#1d5a4a",
+        "#8a6a1d",
+        "#e8e0d0"
+      ],
+      "bas": [
+        "#2a2a33",
+        "#3a2a2a",
+        "#e0d8c8"
+      ],
+      "pieds": [
+        "#1e1a18",
+        "#3b2a1c"
+      ],
+      "armure": [
+        "#c8ccd4",
+        "#d4b46a"
+      ],
+      "ceinture": [
+        "#8a6a1d",
+        "#3a2618"
+      ],
+      "cape": [
+        "#7a1d1d",
+        "#2c3a7a",
+        "#4a2c6b",
+        "#1d4a3a",
+        "#111111"
+      ]
+    },
+    "mage": {
+      "haut": [
+        "#2c3a7a",
+        "#4a2c6b",
+        "#1d4a5a",
+        "#5a5a6e",
+        "#6b1d2e",
+        "#222233"
+      ],
+      "pieds": [
+        "#2e2219"
+      ],
+      "ceinture": [
+        "#8a6a1d",
+        "#3a2618",
+        "#5a5a6e"
+      ],
+      "cape": [
+        "#222233",
+        "#2c3a7a",
+        "#4a2c6b"
+      ]
+    },
+    "pretre": {
+      "haut": [
+        "#e8e0d0",
+        "#8a7a5a",
+        "#5a4a3a",
+        "#c8b88a",
+        "#3a3a3a"
+      ],
+      "pieds": [
+        "#3b2a1c"
+      ],
+      "ceinture": [
+        "#5a3a22",
+        "#c8b88a"
+      ]
+    },
+    "ombre": {
+      "haut": [
+        "#2a2a2a",
+        "#3a3530",
+        "#2c2f3a"
+      ],
+      "bas": [
+        "#1e1e1e",
+        "#2a2622"
+      ],
+      "pieds": [
+        "#1e1a18"
+      ],
+      "ceinture": [
+        "#2a1e14"
+      ],
+      "cape": [
+        "#1a1a1a",
+        "#2a2a2a",
+        "#26302a"
+      ]
+    }
   },
-  "cheveux": ["#ffffff", "#e8d8b0", "#c09060", "#8a5a30", "#5a3a20", "#3a2818", "#2a1e16", "#a04a20", "#d8c8a0"],
-  "cheveuxAges": ["#d8d8d8", "#b8b8b8", "#e8e8e8"],
+  "cheveux": [
+    "#ffffff",
+    "#e8d8b0",
+    "#c09060",
+    "#8a5a30",
+    "#5a3a20",
+    "#3a2818",
+    "#2a1e16",
+    "#a04a20",
+    "#d8c8a0"
+  ],
+  "cheveuxAges": [
+    "#d8d8d8",
+    "#b8b8b8",
+    "#e8e8e8"
+  ],
   "coiffures": {
-    "f": ["long", "ponytail", "tresse", "carre1", "carre2", "court3", "afro", "long"],
-    "m": ["court1", "court2", "court3", "court4", "court2", "long", "afro", "ponytail", null]
+    "f": [
+      "long",
+      "ponytail",
+      "tresse",
+      "carre1",
+      "carre2",
+      "court3",
+      "afro",
+      "long"
+    ],
+    "m": [
+      "court1",
+      "court2",
+      "court3",
+      "court4",
+      "court2",
+      "long",
+      "afro",
+      "ponytail",
+      null
+    ]
   },
   "peuples": [
-    { "motifs": "elf|elfe|sylv|fée|fee", "morphs": { "ear_pointed": 1, "stature": 0.2, "poids": -0.3 } },
-    { "motifs": "nain|naine|dwar", "morphs": { "stature": -1, "poids": 0.4, "muscle": 0.3 } },
-    { "motifs": "orc|orque|demi-orc", "morphs": { "muscle": 0.6, "jaw_width": 0.8, "stature": 0.4 } },
-    { "motifs": "halfelin|hobbit|petit peuple|gnome", "morphs": { "stature": -1, "poids": 0.2 } }
-  ]
+    {
+      "motifs": "elf|elfe|sylv|fée|fee",
+      "morphs": {
+        "ear_pointed": 1,
+        "stature": 0.2,
+        "poids": -0.3
+      }
+    },
+    {
+      "motifs": "nain|naine|dwar",
+      "morphs": {
+        "stature": -1,
+        "poids": 0.4,
+        "muscle": 0.3
+      },
+      "barbe": "fournie"
+    },
+    {
+      "motifs": "orc|orque|demi-orc",
+      "morphs": {
+        "muscle": 0.6,
+        "jaw_width": 0.8,
+        "stature": 0.4
+      }
+    },
+    {
+      "motifs": "halfelin|hobbit|petit peuple|gnome",
+      "morphs": {
+        "stature": -1,
+        "poids": 0.2
+      }
+    }
+  ],
+  "barbes": {
+    "_doc": "Barbe des PNJ masculins (tirage) ; 'ages' remplace la liste pour les PNJ âgés.",
+    "m": [
+      null,
+      null,
+      null,
+      "courte",
+      "fournie",
+      "bouc",
+      "moustache"
+    ],
+    "ages": [
+      "fournie",
+      "fournie",
+      "courte",
+      null,
+      "moustache"
+    ]
+  }
 }

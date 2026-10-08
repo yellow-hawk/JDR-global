@@ -63,14 +63,27 @@ def _normale(h, force):
     return np.stack([(-gx / l + 1) / 2, (-gy / l + 1) / 2, (nz / l + 1) / 2], -1)
 
 
-FORCE = {'tissu': 3.0, 'cuir': 4.0, 'mailles': 10.0, 'metal': 1.5}
+FORCE = {'tissu': 3.0, 'cuir': 4.0, 'mailles': 10.0, 'metal': 1.5, 'poils': 2.0}
 
 
-def image(nom, rgb, non_couleur=False):
-    img = bpy.data.images.get(nom) or bpy.data.images.new(nom, TAILLE, TAILLE, alpha=False)
+def _poils(rng, n):
+    """Mèches verticales : (hauteur, couleur, alpha). Les poils suivent l'axe V (vers le bas)."""
+    y, x = np.mgrid[0:n, 0:n] / n
+    meches = _bruit(rng, n, (64, 128, 256), (0.3, 0.4, 0.3))
+    etire = np.repeat(meches.mean(axis=0, keepdims=True), n, axis=0)  # constant le long de V
+    ondule = _bruit(rng, n, (4, 8), (0.6, 0.4))
+    h = np.clip(0.65 * etire + 0.35 * np.roll(meches, n // 7, 1) * ondule, 0, 1)
+    alpha = np.clip((h - 0.32) * 4.0, 0, 1)
+    couleur = 0.55 + 0.45 * h
+    return h, couleur, alpha
+
+
+def image(nom, rgb, non_couleur=False, alpha=None):
+    img = bpy.data.images.get(nom) or bpy.data.images.new(nom, TAILLE, TAILLE, alpha=alpha is not None)
     # l'espace colorimétrique d'abord : le changer ensuite régénère l'image (pixels perdus)
     img.colorspace_settings.name = 'Non-Color' if non_couleur else 'sRGB'
-    px = np.concatenate([rgb, np.ones(rgb.shape[:2] + (1,))], -1).astype(np.float32)
+    a = np.ones(rgb.shape[:2]) if alpha is None else alpha
+    px = np.concatenate([rgb, a[..., None]], -1).astype(np.float32)
     img.pixels.foreach_set(px[::-1].ravel())  # Blender : origine en bas à gauche
     img.update()
     img.pack()
@@ -82,5 +95,8 @@ def textures(sorte):
     nc, nn = f'tenue-{sorte}', f'tenue-{sorte}-normale'
     if nc in bpy.data.images and nn in bpy.data.images:
         return bpy.data.images[nc], bpy.data.images[nn]
+    if sorte == 'poils':
+        h, c, a = _poils(np.random.default_rng(5), TAILLE)
+        return image(nc, np.repeat(c[..., None], 3, -1), alpha=a), image(nn, _normale(h, FORCE[sorte]), True)
     h, c = _hauteur(sorte)
     return image(nc, np.repeat(c[..., None], 3, -1)), image(nn, _normale(h, FORCE[sorte]), True)

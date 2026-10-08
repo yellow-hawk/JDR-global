@@ -21,7 +21,8 @@ const R = REGLES_AUTO as unknown as {
   tenues: Tenue[]; defaut: Tenue; feminin: { robe: number; jupe: number };
   palettes: Record<string, Record<string, string[]>>; cheveux: string[]; cheveuxAges: string[];
   coiffures: { f: (string | null)[]; m: (string | null)[] };
-  peuples: { motifs: string; morphs: Record<string, number> }[];
+  peuples: { motifs: string; morphs: Record<string, number>; barbe?: string }[];
+  barbes: { m: (string | null)[]; ages: (string | null)[] };
 };
 
 /** Teintes de peau (multiplient la texture du modèle) : une base par peuple, une variation par personne. */
@@ -97,12 +98,15 @@ export function apparenceAuto(d: DescriptionPnj): Record<string, unknown> {
   assets.hair = chauve ? null : tirer(d.feminin ? R.coiffures.f : R.coiffures.m);
   assets.eyebrows = tirer(['default', 'default', 'fins', 'epais', 'arques']);
   assets.eyelashes = d.feminin ? 'longs' : 'default';
+  const peupleBarbu = R.peuples.find((p) => p.barbe && new RegExp(p.motifs, 'i').test(`${d.peupleNom ?? ''} ${texte}`));
+  assets.barbe = d.feminin ? null : /imberbe|rasé de près/i.test(texte) ? null
+    : /barbe|barbu/i.test(texte) || peupleBarbu ? (peupleBarbu?.barbe ?? 'fournie') : tirer(values.age > 0.5 ? R.barbes.ages : R.barbes.m);
 
   return {
     presetVersion: 1, name: d.nom, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), thumbnail: null, auto: true,
     data: {
       species: 'human', gender: d.feminin ? 'female' : 'male',
-      colors: { skin: peau, eyes: tirer(YEUX), teeth: '#ffffff', tongue: '#ffffff', hair: cheveux, eyebrows: cheveux, eyelashes: '#ffffff', ...couleursTenue },
+      colors: { skin: peau, eyes: tirer(YEUX), teeth: '#ffffff', tongue: '#ffffff', hair: cheveux, eyebrows: cheveux, barbe: cheveux, eyelashes: '#ffffff', ...couleursTenue },
       morphs: { values, asymmetry: false, lr: {} },
       assets,
     },

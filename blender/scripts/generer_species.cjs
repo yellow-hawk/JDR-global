@@ -67,9 +67,9 @@ for (const m of M) for (const t of m.targets) for (const n of (typeof t === 'str
 
 const LIBELLES = { ponytail: 'Queue de cheval', court1: 'Court 1', court2: 'Court 2', court3: 'Court 3', court4: 'Court 4', long: 'Longs',
   carre1: 'Carré 1', carre2: 'Carré 2', tresse: 'Tresse', afro: 'Afro', default: 'Standard', fins: 'Fins', epais: 'Épais', arques: 'Arqués', longs: 'Longs' };
-const SLOTS = [['hair', 'Coiffure', null, 'Aucune'], ['eyebrows', 'Sourcils', 'default', 'Aucun'], ['eyelashes', 'Cils', 'default', 'Aucun']];
+const SLOTS = [['hair', 'Coiffure', null, 'Aucune'], ['barbe', 'Barbe', null, 'Aucune'], ['eyebrows', 'Sourcils', 'default', 'Aucun'], ['eyelashes', 'Cils', 'default', 'Aucun']];
 const assetsDe = (slot) => man.assets.filter((a) => a.slot === slot);
-const materiauxDe = (slot) => assetsDe(slot).map((a) => 'Human.' + a.source);
+const materiauxDe = (slot) => assetsDe(slot).filter((a) => a.source).map((a) => 'Human.' + a.source);
 
 // le manifeste ne garde pas la source MakeHuman : on la relit dans la config Blender
 const conf = JSON.parse(fs.readFileSync(path.join(RACINE, 'blender/avatar.json'), 'utf8'));
@@ -86,6 +86,7 @@ h.materials = [
   { id: 'hair', label: 'Cheveux', target: materiauxDe('hair'), property: 'color', type: 'color', default: '#ffffff', alphaTest: 0.5 },
   { id: 'eyebrows', label: 'Sourcils', target: materiauxDe('eyebrows'), property: 'color', type: 'color', default: '#ffffff', alphaTest: 0.4 },
   { id: 'eyelashes', label: 'Cils', target: materiauxDe('eyelashes'), property: 'color', type: 'color', default: '#ffffff', alphaTest: 0.4 },
+  { id: 'barbe', label: 'Barbe', target: [...new Set(assetsDe('barbe').map((a) => a.materiau))], property: 'color', type: 'color', default: '#5a3a20', alphaTest: 0.45, side: 'double' },
   ...TENUES.map(([id, label, , , couleur]) => ({ id: 'tenue_' + id, label: label, target: [...new Set(assetsDe(id).map((a) => a.materiau))], property: 'color', type: 'color', default: couleur, side: 'double' })),
 ];
 h._comment_assetSlots = "Emplacements d'assets. attachMode 'skinned' : l'asset est lié au squelette du corps (mêmes noms d'os) et porte les mêmes morphs, il suit donc la morphologie. 'head-bone' (ancien) : asset posé sur l'os 'attachBone'.";

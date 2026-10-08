@@ -8,7 +8,7 @@ import { dedup, meshopt, prune, quantize, sparse } from '@gltf-transform/functio
 import { EXTTextureWebP } from '@gltf-transform/extensions';
 import { MeshoptDecoder, MeshoptEncoder } from 'meshoptimizer';
 import sharp from 'sharp';
-import { copyFileSync, mkdirSync, readdirSync, statSync } from 'node:fs';
+import { copyFileSync, mkdirSync, readdirSync, rmSync, statSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -58,4 +58,7 @@ for (const src of fichiers(SOURCE)) {
   console.log(`${rel.padEnd(28)} ${(a / 1e6).toFixed(2).padStart(6)} Mo → ${(b / 1e6).toFixed(2).padStart(5)} Mo`);
 }
 copyFileSync(join(SOURCE, 'manifeste.json'), join(CIBLE, 'manifeste.json'));
+// Les GLB de l'application qui n'existent plus dans l'export sont retirés (assets supprimés de la config).
+const sources = new Set(fichiers(SOURCE).map((f) => relative(SOURCE, f)));
+for (const f of fichiers(CIBLE)) if (!sources.has(relative(CIBLE, f))) { rmSync(f); console.log(`retiré : ${relative(CIBLE, f)}`); }
 console.log(`Total : ${(avant / 1e6).toFixed(1)} Mo → ${(apres / 1e6).toFixed(1)} Mo`);

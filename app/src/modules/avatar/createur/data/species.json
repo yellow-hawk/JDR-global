@@ -785,6 +785,18 @@
           "alphaTest": 0.4
         },
         {
+          "id": "barbe",
+          "label": "Barbe",
+          "target": [
+            "Pilosite.barbe"
+          ],
+          "property": "color",
+          "type": "color",
+          "default": "#5a3a20",
+          "alphaTest": 0.45,
+          "side": "double"
+        },
+        {
           "id": "tenue_haut",
           "label": "Haut",
           "target": [
@@ -915,6 +927,40 @@
               "id": "afro",
               "label": "Afro",
               "file": "avatar/assets/species/human/hair/afro.glb"
+            }
+          ]
+        },
+        {
+          "id": "barbe",
+          "label": "Barbe",
+          "category": "pilosite",
+          "attachMode": "skinned",
+          "default": null,
+          "options": [
+            {
+              "id": null,
+              "label": "Aucune",
+              "file": null
+            },
+            {
+              "id": "courte",
+              "label": "Barbe courte",
+              "file": "avatar/assets/species/human/barbe/courte.glb"
+            },
+            {
+              "id": "fournie",
+              "label": "Barbe fournie",
+              "file": "avatar/assets/species/human/barbe/fournie.glb"
+            },
+            {
+              "id": "bouc",
+              "label": "Bouc et moustache",
+              "file": "avatar/assets/species/human/barbe/bouc.glb"
+            },
+            {
+              "id": "moustache",
+              "label": "Moustache",
+              "file": "avatar/assets/species/human/barbe/moustache.glb"
             }
           ]
         },

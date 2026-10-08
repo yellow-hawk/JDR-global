@@ -165,13 +165,13 @@ def os_dominant(h, noms_os):
     return res
 
 
-TEXTURE_PAR_SLOT = {'haut': 'tissu', 'bas': 'tissu', 'cape': 'tissu', 'pieds': 'cuir', 'ceinture': 'cuir', 'armure': 'mailles'}
-DENSITE = {'tissu': 5.0, 'cuir': 3.0, 'mailles': 8.0, 'metal': 2.0}  # répétitions de texture par mètre
+TEXTURE_PAR_SLOT = {'haut': 'tissu', 'bas': 'tissu', 'cape': 'tissu', 'pieds': 'cuir', 'ceinture': 'cuir', 'armure': 'mailles', 'barbe': 'poils'}
+DENSITE = {'tissu': 5.0, 'cuir': 3.0, 'mailles': 8.0, 'metal': 2.0, 'poils': 9.0}  # répétitions de texture par mètre
 
 
 def materiau_tenue(slot, metal, sorte):
     """Matériau Tenue.<slot>.<sorte> : texture grise (teintée par l'app) + normal map, métal ou non."""
-    nom = f'Tenue.{slot}.{sorte}'
+    nom = f'Pilosite.{slot}' if sorte == 'poils' else f'Tenue.{slot}.{sorte}'
     m = bpy.data.materials.get(nom) or bpy.data.materials.new(nom)
     m.use_nodes = True
     nt = m.node_tree
@@ -183,6 +183,8 @@ def materiau_tenue(slot, metal, sorte):
     tn = nt.nodes.new('ShaderNodeTexImage'); tn.image = normale
     nm = nt.nodes.new('ShaderNodeNormalMap')
     nt.links.new(tc.outputs['Color'], bsdf.inputs['Base Color'])
+    if sorte == 'poils':
+        nt.links.new(tc.outputs['Alpha'], bsdf.inputs['Alpha'])
     nt.links.new(tn.outputs['Color'], nm.inputs['Color'])
     nt.links.new(nm.outputs['Normal'], bsdf.inputs['Normal'])
     bsdf.inputs['Metallic'].default_value = 0.85 if metal else 0.0
@@ -212,6 +214,7 @@ def construire_tenue(h, rig, t, corps0, deltas_corps, peau, dominant):
     gardes_faces = set()
     for part in t['parties']:
         ga = h.vertex_groups[part['aide']].index
+        exclus = {h.vertex_groups[g].index for g in part.get('exclure', [])}
         ok = np.zeros(n, bool)
         for v in me.vertices:
             if not any(g.group == ga and g.weight > 0.5 for g in v.groups):
@@ -220,6 +223,13 @@ def construire_tenue(h, rig, t, corps0, deltas_corps, peau, dominant):
             if z < part.get('zmin', -9) or z > part.get('zmax', 9):
                 continue
             if 'os' in part and dominant[v.index] not in part['os']:
+                continue
+            x, y = corps0[v.index][0], corps0[v.index][1]
+            if abs(x) > part.get('xmax', 9) or y > part.get('ymax', 9):
+                continue
+            if any(z > zl and abs(x) < xl for xl, zl in part.get('trous', [])):
+                continue  # trous : (|x| max, z min) — narines au-dessus de la moustache…
+            if exclus and any(g.group in exclus for g in v.groups if g.weight > 0.3):
                 continue
             ok[v.index] = True
         if part.get('dos'):
@@ -274,6 +284,10 @@ def construire_tenue(h, rig, t, corps0, deltas_corps, peau, dominant):
         signe = 1 if (mathutils.Vector(p) - loc).dot(nrm) > 0 else -1
         pousse[i] = max(0.0, t['ecart'] - signe * dist)
     # 'couche' : décalage constant pour superposer les vêtements (bas < haut < armure < ceinture < cape)
+    # 'volume' : [z, pente] l'écart augmente de pente × (z − hauteur) sous z (barbe fournie)
+    if 'volume' in t:
+        zv, pente = t['volume']
+        pousse = pousse + np.clip(zv - neutre[:, 2], 0, None) * pente
     neutre = neutre + normales * (pousse + t.get('couche', 0.0))[:, None]
     if t.get('drape'):
         # tombé : de haut en bas, chaque colonne ne revient jamais vers le corps (pas de creux au bas du dos)
@@ -385,7 +399,9 @@ def construire():
                                         'materiau': o['jdr_materiau'], 'metal': bool(t.get('metal')),
                                         'fichier': f"{t['slot']}/{t['id']}.glb",
                                         'sommets': len(o.data.vertices), 'morphs': cles})
-        # Export
+        # Export (le dossier est vidé : il reflète exactement la configuration)
+        import shutil
+        shutil.rmtree(SORTIE, ignore_errors=True)
         exporter([corps] + parties, rig, os.path.join(SORTIE, 'base.glb'))
         for a in manifeste['assets']:
             exporter([bpy.data.objects[a['objet']]], rig, os.path.join(SORTIE, a['fichier']))

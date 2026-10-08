@@ -769,6 +769,137 @@
       ],
       "couche": 0.03,
       "drape": true
+    },
+    {
+      "slot": "barbe",
+      "id": "courte",
+      "label": "Barbe courte",
+      "ecart": 0.004,
+      "couche": 0.0,
+      "parties": [
+        {
+          "aide": "body",
+          "os": [
+            "head",
+            "neck_01"
+          ],
+          "zmin": 1.415,
+          "zmax": 1.515,
+          "ymax": -0.035,
+          "exclure": [
+            "lips"
+          ],
+          "trous": [
+            [
+              0.011,
+              1.5095
+            ],
+            [
+              0.022,
+              1.513
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "slot": "barbe",
+      "id": "fournie",
+      "label": "Barbe fournie",
+      "ecart": 0.006,
+      "volume": [
+        1.47,
+        0.35
+      ],
+      "parties": [
+        {
+          "aide": "body",
+          "os": [
+            "head",
+            "neck_01"
+          ],
+          "zmin": 1.4,
+          "zmax": 1.515,
+          "ymax": -0.035,
+          "exclure": [
+            "lips"
+          ],
+          "trous": [
+            [
+              0.011,
+              1.5095
+            ],
+            [
+              0.022,
+              1.513
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "slot": "barbe",
+      "id": "bouc",
+      "label": "Bouc et moustache",
+      "ecart": 0.004,
+      "parties": [
+        {
+          "aide": "body",
+          "os": [
+            "head",
+            "neck_01"
+          ],
+          "zmin": 1.435,
+          "zmax": 1.515,
+          "xmax": 0.032,
+          "ymax": -0.09,
+          "exclure": [
+            "lips"
+          ],
+          "trous": [
+            [
+              0.011,
+              1.5095
+            ],
+            [
+              0.022,
+              1.513
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "slot": "barbe",
+      "id": "moustache",
+      "label": "Moustache",
+      "ecart": 0.004,
+      "parties": [
+        {
+          "aide": "body",
+          "os": [
+            "head",
+            "neck_01"
+          ],
+          "zmin": 1.4985,
+          "zmax": 1.515,
+          "xmax": 0.036,
+          "ymax": -0.125,
+          "exclure": [
+            "lips"
+          ],
+          "trous": [
+            [
+              0.011,
+              1.5095
+            ],
+            [
+              0.022,
+              1.513
+            ]
+          ]
+        }
+      ]
     }
   ]
 }
