@@ -1,13 +1,15 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
+import { clone as cloneSquelette } from 'three/examples/jsm/utils/SkeletonUtils.js'
 import { useCharacter } from '../store/useCharacter'
 
-// Hook : monte/demonte les assets "poses" (coiffures, sourcils, cils) sur le
-// squelette du modele de base, selon les selections du store.
+// Hook : monte/demonte les assets (coiffures, sourcils, cils, vetements) sur le
+// modele de base, selon les selections du store.
 //
 // Data-driven : on ne connait AUCUN chemin ni nom de bone en dur. On lit la
-// section 'assetSlots' de species.json (slot -> attachBone, attachMode, options).
+// section 'assetSlots' de species.json (slot -> attachMode, attachBone, options).
 //
 // Approche : chargement IMPERATIF (GLTFLoader) plutot que le hook useGLTF, car les
 // URLs sont dynamiques et conditionnelles par slot (les Rules of Hooks interdisent
@@ -16,15 +18,24 @@ import { useCharacter } from '../store/useCharacter'
 // apparait quand il est pret — pas de Suspense bloquant, pas de flash ni de crash.
 //
 // attachMode :
+//  - "skinned" (JDR Global, 08/10) : l'asset est exporte avec le meme squelette que le
+//    corps et les MEMES morphs (blender/scripts/construire_avatar.py). Ses SkinnedMesh
+//    sont relies aux os du corps (par nom) : il suit la morphologie et, plus tard, les poses.
 //  - "head-bone" : le mesh (non skinne) est attache au bone via bone.attach(), qui
 //    PRESERVE la transform monde (l'asset est deja au bon endroit dans son
-//    referentiel) — aucun repositionnement manuel.
-//  - "skinned" : reserve au futur (assets rigges) -> warning, non implemente.
+//    referentiel) — aucun repositionnement manuel. Ne suit pas les morphs.
+//
+// Renvoie un numero de version, incremente a chaque asset attache ou retire : useMorphs et
+// useMaterials s'en servent pour reindexer les nouveaux meshes.
 
 // Cache module : url -> Promise<Group template> (parse une seule fois par fichier).
 // Les GLB sont compresses (meshopt + textures WebP) : le decodeur meshopt est obligatoire.
 const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder)
 const templateCache = new Map()
+
+// Chargements en cours (tous visualiseurs confondus) : la fabrique de portraits attend 0.
+let enCours = 0
+export const chargementsEnCours = () => enCours
 
 function loadTemplate(url) {
   if (!templateCache.has(url)) {
@@ -41,8 +52,9 @@ function loadTemplate(url) {
 // Clone profond qui POSSEDE ses geometries/materiaux (pour pouvoir les disposer
 // sans corrompre le template en cache). Les textures restent partagees avec le
 // cache (bornees, non disposees) -> pas de fuite, pas de re-decodage.
+// SkeletonUtils.clone garde les SkinnedMesh relies a leurs os clones.
 function ownClone(template) {
-  const instance = template.clone(true)
+  const instance = cloneSquelette(template)
   instance.traverse((o) => {
     if (!o.isMesh) return
     o.geometry = o.geometry.clone()
@@ -77,10 +89,39 @@ function findBone(root, name) {
   return found
 }
 
+// Relie chaque SkinnedMesh de l'asset aux os du corps portant le meme nom.
+// Les boneInverses de l'asset sont conserves : asset et corps partagent la pose de repos.
+// Renvoie un Group contenant les meshes relies (a ajouter sous la racine du corps), ou null.
+function relierAuSquelette(baseRoot, instance, slotId) {
+  const osDuCorps = new Map()
+  baseRoot.traverse((o) => { if (o.isBone) osDuCorps.set(o.name, o) })
+  const meshes = []
+  instance.traverse((o) => { if (o.isSkinnedMesh) meshes.push(o) })
+  if (!meshes.length) {
+    console.warn(`[useAssets] slot "${slotId}" : aucun SkinnedMesh dans l'asset (attachMode "skinned").`)
+    return null
+  }
+  const groupe = new THREE.Group()
+  for (const mesh of meshes) {
+    const os = mesh.skeleton.bones.map((b) => osDuCorps.get(b.name))
+    const manquant = mesh.skeleton.bones.find((b, i) => !os[i])
+    if (manquant) {
+      console.warn(`[useAssets] slot "${slotId}" : os "${manquant.name}" absent du corps (mesh ignore).`)
+      continue
+    }
+    mesh.removeFromParent()
+    mesh.bind(new THREE.Skeleton(os, mesh.skeleton.boneInverses), mesh.bindMatrix)
+    mesh.frustumCulled = false // la boite englobante de repos ne suit pas les morphs
+    groupe.add(mesh)
+  }
+  return groupe.children.length ? groupe : null
+}
+
 export function useAssets(baseRoot) {
   const speciesList = useCharacter((s) => s.speciesList)
   const speciesId = useCharacter((s) => s.speciesId)
   const assets = useCharacter((s) => s.assets)
+  const [version, setVersion] = useState(0)
 
   const species = speciesList.find((s) => s.id === speciesId)
   const slots = (species?.assetSlots ?? []).filter((sl) => !sl._example)
@@ -91,6 +132,7 @@ export function useAssets(baseRoot) {
   useEffect(() => {
     if (!baseRoot) return
     let cancelled = false
+    const changer = () => setVersion((v) => v + 1)
 
     slots.forEach((slot) => {
       const selectedId = assets?.[slot.id] ?? null
@@ -106,35 +148,26 @@ export function useAssets(baseRoot) {
         current.removeFromParent()
         disposeInstance(current)
         delete attachedRef.current[slot.id]
+        changer()
       }
 
       // 2) "Aucun" / pas de fichier -> rien a attacher.
       if (!file) return
 
       // 3) Mode d'attache.
-      if (slot.attachMode === 'skinned') {
-        console.warn(
-          `[useAssets] slot "${slot.id}" : attachMode "skinned" non supporte pour l'instant (asset ignore).`,
-        )
+      const mode = slot.attachMode
+      if (mode !== 'skinned' && mode !== 'head-bone') {
+        console.warn(`[useAssets] slot "${slot.id}" : attachMode "${mode}" inconnu (asset ignore).`)
         return
       }
-      if (slot.attachMode !== 'head-bone') {
-        console.warn(
-          `[useAssets] slot "${slot.id}" : attachMode "${slot.attachMode}" inconnu (asset ignore).`,
-        )
-        return
-      }
-
-      // 4) Retrouver le bone d'attache dans le squelette du base.
-      const bone = findBone(baseRoot, slot.attachBone)
-      if (!bone) {
-        console.warn(
-          `[useAssets] slot "${slot.id}" : bone "${slot.attachBone}" introuvable dans le squelette.`,
-        )
+      const bone = mode === 'head-bone' ? findBone(baseRoot, slot.attachBone) : null
+      if (mode === 'head-bone' && !bone) {
+        console.warn(`[useAssets] slot "${slot.id}" : bone "${slot.attachBone}" introuvable dans le squelette.`)
         return
       }
 
-      // 5) Charger (async) puis attacher en preservant la transform monde.
+      // 4) Charger (async) puis attacher.
+      enCours++
       loadTemplate(file)
         .then((template) => {
           if (cancelled) return
@@ -144,16 +177,21 @@ export function useAssets(baseRoot) {
           if ((attachedRef.current[slot.id]?.__file ?? null) === file) return
 
           const instance = ownClone(template)
-          instance.name = `asset:${slot.id}:${selectedId}`
-          instance.__file = file
-          bone.attach(instance) // preserve la position monde de l'asset
-          attachedRef.current[slot.id] = instance
+          const attache = mode === 'skinned' ? relierAuSquelette(baseRoot, instance, slot.id) : instance
+          if (!attache) return
+          attache.name = `asset:${slot.id}:${selectedId}`
+          attache.__file = file
+          if (mode === 'skinned') baseRoot.add(attache)
+          else bone.attach(attache) // preserve la position monde de l'asset
+          attachedRef.current[slot.id] = attache
+          changer()
         })
         .catch((err) => {
           if (!cancelled) {
             console.error(`[useAssets] echec de chargement "${file}" :`, err?.message ?? err)
           }
         })
+        .finally(() => { enCours-- })
     })
 
     return () => {
@@ -173,4 +211,6 @@ export function useAssets(baseRoot) {
       attachedRef.current = {}
     }
   }, [baseRoot])
+
+  return version
 }

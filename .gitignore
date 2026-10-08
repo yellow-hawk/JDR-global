@@ -14,3 +14,8 @@ desktop.ini
 .ua/intermediate/
 .ua/tmp/
 .ua/.trash-*/
+
+# Chaîne Blender : GLB bruts régénérables (les GLB optimisés vont dans app/public)
+blender/export/
+blender/node_modules/
+*.blend1

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import * as THREE from 'three'
 import { useCharacter } from '../store/useCharacter'
 
 // Hook : applique les couleurs du store aux materiaux du modele charge.
@@ -18,7 +19,7 @@ function asArray(v) {
   return Array.isArray(v) ? v : [v]
 }
 
-export function useMaterials(root) {
+export function useMaterials(root, version = 0) {
   const speciesList = useCharacter((s) => s.speciesList)
   const speciesId = useCharacter((s) => s.speciesId)
   const colors = useCharacter((s) => s.colors)
@@ -54,6 +55,16 @@ export function useMaterials(root) {
       })
       roleMatsRef.current[role.id] = found
 
+      // Decoupe nette (cheveux, cils) : pas de tri de transparence, pas de trous de profondeur.
+      if (role.alphaTest) {
+        found.forEach((mat) => {
+          mat.transparent = false
+          mat.depthWrite = true
+          mat.alphaTest = role.alphaTest
+          mat.side = THREE.DoubleSide
+          mat.needsUpdate = true
+        })
+      }
       // Correction opacite (ex: yeux MPFB exportes en BLEND).
       if (role.forceOpaque) {
         found.forEach((mat) => {
@@ -64,9 +75,10 @@ export function useMaterials(root) {
         })
       }
     })
-    // roles depend de species ; on resync l'indexation a chaque changement de modele.
+    // roles depend de species ; on resync l'indexation a chaque changement de modele
+    // ou d'asset attache (version, voir useAssets).
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [root, speciesId])
+  }, [root, speciesId, version])
 
   // 2) TEINTE : a chaque changement de couleur dans le store.
   useEffect(() => {
@@ -77,5 +89,5 @@ export function useMaterials(root) {
       })
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [colors, speciesId])
+  }, [colors, speciesId, version])
 }

@@ -20,14 +20,12 @@
       "assetSlots": "Emplacements d'assets interchangeables (Phase 3) : coiffures, sourcils, barbes. Chaque slot liste ses options (GLB) et le point de montage sur le squelette."
     }
   },
-
   "species": [
     {
       "id": "human",
       "label": "Humain",
       "defaultGender": "male",
       "assetsBasePath": "avatar/assets/species/human",
-
       "_comment_genders": "Le 'model' est le GLB de base charge par AvatarModel.jsx (Phase 0). Pour l'instant les deux genres pointent vers le meme base.glb : remplace par un mesh masculin/feminin distinct quand tu les auras. Si le fichier est absent, un mannequin primitif s'affiche a la place (placeholder).",
       "genders": {
         "male": {
@@ -39,88 +37,594 @@
           "model": "avatar/assets/species/human/base.glb"
         }
       },
-
-      "_comment_morphTargets": "Phase 2. Chaque entree = un ROLE logique expose comme slider. 'targets' = noms EXACTS de morph targets du GLB (cles de mesh.morphTargetDictionary) ; un role peut en piloter plusieurs (paires gauche/droite), bouges ensemble en mode symetrique. 'category' = 'visage' ou 'corps' (regroupement UI). 'pair' (optionnel) = { left, right } : marque un role L/R pilotable en asymetrie (left->cible l-*, right->cible r-*). min/max/default bornent le slider (defaut 0..1 ; -1 possible si le morph le supporte). IMPORTANT : tout morph target du GLB NON liste ici (notamment les macros MakeHuman $md-/universal/...max$hg) est ignore : aucun slider, son influence par defaut n'est jamais modifiee.",
+      "_comment_morphTargets": "Rôles de morph. 'targets' : nom de morph (valeur appliquée telle quelle) ou { neg, pos } (bipolaire : valeur < 0 -> cible neg avec |v|, > 0 -> cible pos). 'pair' : cibles gauche/droite pour le mode asymétrie. 'category' : un des morphCategories. Morphs générés par blender/scripts/construire_avatar.py (blender/avatar.json) ; les assets 'skinned' portent les mêmes morphs et suivent le corps.",
       "morphTargets": [
         {
-          "id": "nose_depth",
-          "label": "Nez (profondeur)",
-          "category": "visage",
-          "targets": ["nose-scale-depth-incr"],
-          "min": -2,
-          "max": 2,
+          "id": "genre",
+          "label": "Genre (masculin ↔ féminin)",
+          "category": "silhouette",
+          "targets": [
+            {
+              "neg": "macro-masculin",
+              "pos": "macro-feminin"
+            }
+          ],
+          "min": -1,
+          "max": 1,
           "default": 0
         },
         {
-          "id": "mouth_width",
-          "label": "Bouche (largeur)",
-          "category": "visage",
-          "targets": ["mouth-scale-horiz-incr"],
-          "min": -2,
-          "max": 2,
+          "id": "age",
+          "label": "Âge (jeune ↔ âgé)",
+          "category": "silhouette",
+          "targets": [
+            {
+              "neg": "macro-age-jeune",
+              "pos": "macro-age-vieux"
+            }
+          ],
+          "min": -1,
+          "max": 1,
           "default": 0
         },
         {
-          "id": "chin_height",
-          "label": "Menton (hauteur)",
+          "id": "muscle",
+          "label": "Musculature",
+          "category": "silhouette",
+          "targets": [
+            {
+              "neg": "macro-muscle-moins",
+              "pos": "macro-muscle-plus"
+            }
+          ],
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "poids",
+          "label": "Corpulence",
+          "category": "silhouette",
+          "targets": [
+            {
+              "neg": "macro-poids-moins",
+              "pos": "macro-poids-plus"
+            }
+          ],
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "stature",
+          "label": "Stature",
+          "category": "silhouette",
+          "targets": [
+            {
+              "neg": "macro-taille-moins",
+              "pos": "macro-taille-plus"
+            }
+          ],
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "poitrine_volume",
+          "label": "Poitrine (volume)",
+          "category": "silhouette",
+          "targets": [
+            {
+              "neg": "macro-poitrine-moins",
+              "pos": "macro-poitrine-plus"
+            }
+          ],
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "head_width",
+          "label": "Largeur du visage",
           "category": "visage",
-          "targets": ["chin-height-incr"],
-          "min": -2,
-          "max": 2,
+          "targets": [
+            {
+              "neg": "head-fat-decr",
+              "pos": "head-fat-incr"
+            }
+          ],
+          "min": -1,
+          "max": 1,
           "default": 0
         },
         {
           "id": "skull_shape",
           "label": "Forme du crâne",
           "category": "visage",
-          "targets": ["head-angle-out"],
+          "targets": [
+            {
+              "neg": "head-angle-in",
+              "pos": "head-angle-out"
+            }
+          ],
           "min": -2,
           "max": 2,
           "default": 0
         },
         {
-          "id": "cheeks",
-          "label": "Joues",
+          "id": "head_height",
+          "label": "Hauteur de la tête",
           "category": "visage",
-          "targets": ["l-cheek-volume-incr", "r-cheek-volume-incr"],
-          "pair": { "left": "l-cheek-volume-incr", "right": "r-cheek-volume-incr" },
-          "min": -2,
-          "max": 2,
+          "targets": [
+            {
+              "neg": "head-scale-vert-decr",
+              "pos": "head-scale-vert-incr"
+            }
+          ],
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "forehead",
+          "label": "Front (hauteur)",
+          "category": "visage",
+          "targets": [
+            {
+              "neg": "forehead-scale-vert-decr",
+              "pos": "forehead-scale-vert-incr"
+            }
+          ],
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "brow_height",
+          "label": "Sourcils (hauteur)",
+          "category": "visage",
+          "targets": [
+            {
+              "neg": "eyebrows-trans-down",
+              "pos": "eyebrows-trans-up"
+            }
+          ],
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "brow_angle",
+          "label": "Sourcils (angle)",
+          "category": "visage",
+          "targets": [
+            {
+              "neg": "eyebrows-angle-down",
+              "pos": "eyebrows-angle-up"
+            }
+          ],
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "eye_size",
+          "label": "Yeux (taille)",
+          "category": "visage",
+          "targets": [
+            {
+              "neg": "l-eye-scale-decr",
+              "pos": "l-eye-scale-incr"
+            },
+            {
+              "neg": "r-eye-scale-decr",
+              "pos": "r-eye-scale-incr"
+            }
+          ],
+          "pair": {
+            "left": {
+              "neg": "l-eye-scale-decr",
+              "pos": "l-eye-scale-incr"
+            },
+            "right": {
+              "neg": "r-eye-scale-decr",
+              "pos": "r-eye-scale-incr"
+            }
+          },
+          "min": -1,
+          "max": 1,
           "default": 0
         },
         {
           "id": "eye_corners",
           "label": "Coin des yeux",
           "category": "visage",
-          "targets": ["l-eye-corner1-up", "r-eye-corner1-up"],
-          "pair": { "left": "l-eye-corner1-up", "right": "r-eye-corner1-up" },
+          "targets": [
+            {
+              "neg": "l-eye-corner1-down",
+              "pos": "l-eye-corner1-up"
+            },
+            {
+              "neg": "r-eye-corner1-down",
+              "pos": "r-eye-corner1-up"
+            }
+          ],
+          "pair": {
+            "left": {
+              "neg": "l-eye-corner1-down",
+              "pos": "l-eye-corner1-up"
+            },
+            "right": {
+              "neg": "r-eye-corner1-down",
+              "pos": "r-eye-corner1-up"
+            }
+          },
           "min": -2,
           "max": 2,
           "default": 0
         },
         {
-          "id": "arm_circumference",
-          "label": "Bras (circonférence)",
-          "category": "corps",
-          "targets": ["measure-upperarm-circ-incr"],
+          "id": "eye_spacing",
+          "label": "Écart des yeux",
+          "category": "visage",
+          "targets": [
+            {
+              "neg": "l-eye-trans-in",
+              "pos": "l-eye-trans-out"
+            },
+            {
+              "neg": "r-eye-trans-in",
+              "pos": "r-eye-trans-out"
+            }
+          ],
+          "pair": {
+            "left": {
+              "neg": "l-eye-trans-in",
+              "pos": "l-eye-trans-out"
+            },
+            "right": {
+              "neg": "r-eye-trans-in",
+              "pos": "r-eye-trans-out"
+            }
+          },
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "nose_depth",
+          "label": "Nez (profondeur)",
+          "category": "visage",
+          "targets": [
+            {
+              "neg": "nose-scale-depth-decr",
+              "pos": "nose-scale-depth-incr"
+            }
+          ],
           "min": -2,
           "max": 2,
+          "default": 0
+        },
+        {
+          "id": "nose_width",
+          "label": "Nez (largeur)",
+          "category": "visage",
+          "targets": [
+            {
+              "neg": "nose-scale-horiz-decr",
+              "pos": "nose-scale-horiz-incr"
+            }
+          ],
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "nose_length",
+          "label": "Nez (longueur)",
+          "category": "visage",
+          "targets": [
+            {
+              "neg": "nose-scale-vert-decr",
+              "pos": "nose-scale-vert-incr"
+            }
+          ],
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "nose_hump",
+          "label": "Nez (bosse)",
+          "category": "visage",
+          "targets": [
+            {
+              "neg": "nose-hump-decr",
+              "pos": "nose-hump-incr"
+            }
+          ],
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "nose_tip",
+          "label": "Pointe du nez",
+          "category": "visage",
+          "targets": [
+            {
+              "neg": "nose-point-down",
+              "pos": "nose-point-up"
+            }
+          ],
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "mouth_width",
+          "label": "Bouche (largeur)",
+          "category": "visage",
+          "targets": [
+            {
+              "neg": "mouth-scale-horiz-decr",
+              "pos": "mouth-scale-horiz-incr"
+            }
+          ],
+          "min": -2,
+          "max": 2,
+          "default": 0
+        },
+        {
+          "id": "lip_lower",
+          "label": "Lèvre inférieure",
+          "category": "visage",
+          "targets": [
+            {
+              "neg": "mouth-lowerlip-volume-decr",
+              "pos": "mouth-lowerlip-volume-incr"
+            }
+          ],
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "lip_upper",
+          "label": "Lèvre supérieure",
+          "category": "visage",
+          "targets": [
+            {
+              "neg": "mouth-upperlip-volume-decr",
+              "pos": "mouth-upperlip-volume-incr"
+            }
+          ],
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "mouth_corners",
+          "label": "Coins de la bouche",
+          "category": "visage",
+          "targets": [
+            {
+              "neg": "mouth-angles-down",
+              "pos": "mouth-angles-up"
+            }
+          ],
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "cheeks",
+          "label": "Joues",
+          "category": "visage",
+          "targets": [
+            {
+              "neg": "l-cheek-volume-decr",
+              "pos": "l-cheek-volume-incr"
+            },
+            {
+              "neg": "r-cheek-volume-decr",
+              "pos": "r-cheek-volume-incr"
+            }
+          ],
+          "pair": {
+            "left": {
+              "neg": "l-cheek-volume-decr",
+              "pos": "l-cheek-volume-incr"
+            },
+            "right": {
+              "neg": "r-cheek-volume-decr",
+              "pos": "r-cheek-volume-incr"
+            }
+          },
+          "min": -2,
+          "max": 2,
+          "default": 0
+        },
+        {
+          "id": "cheekbones",
+          "label": "Pommettes",
+          "category": "visage",
+          "targets": [
+            {
+              "neg": "l-cheek-bones-decr",
+              "pos": "l-cheek-bones-incr"
+            },
+            {
+              "neg": "r-cheek-bones-decr",
+              "pos": "r-cheek-bones-incr"
+            }
+          ],
+          "pair": {
+            "left": {
+              "neg": "l-cheek-bones-decr",
+              "pos": "l-cheek-bones-incr"
+            },
+            "right": {
+              "neg": "r-cheek-bones-decr",
+              "pos": "r-cheek-bones-incr"
+            }
+          },
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "chin_height",
+          "label": "Menton (hauteur)",
+          "category": "visage",
+          "targets": [
+            {
+              "neg": "chin-height-decr",
+              "pos": "chin-height-incr"
+            }
+          ],
+          "min": -2,
+          "max": 2,
+          "default": 0
+        },
+        {
+          "id": "chin_prominent",
+          "label": "Menton (saillant)",
+          "category": "visage",
+          "targets": [
+            {
+              "neg": "chin-prominent-decr",
+              "pos": "chin-prominent-incr"
+            }
+          ],
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "jaw_width",
+          "label": "Mâchoire (largeur)",
+          "category": "visage",
+          "targets": [
+            {
+              "neg": "chin-width-decr",
+              "pos": "chin-width-incr"
+            }
+          ],
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "ear_size",
+          "label": "Oreilles (taille)",
+          "category": "visage",
+          "targets": [
+            {
+              "neg": "l-ear-scale-decr",
+              "pos": "l-ear-scale-incr"
+            },
+            {
+              "neg": "r-ear-scale-decr",
+              "pos": "r-ear-scale-incr"
+            }
+          ],
+          "pair": {
+            "left": {
+              "neg": "l-ear-scale-decr",
+              "pos": "l-ear-scale-incr"
+            },
+            "right": {
+              "neg": "r-ear-scale-decr",
+              "pos": "r-ear-scale-incr"
+            }
+          },
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "ear_pointed",
+          "label": "Oreilles pointues",
+          "category": "visage",
+          "targets": [
+            "l-ear-shape-pointed",
+            "r-ear-shape-pointed"
+          ],
+          "pair": {
+            "left": "l-ear-shape-pointed",
+            "right": "r-ear-shape-pointed"
+          },
+          "min": 0,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "neck",
+          "label": "Cou",
+          "category": "corps",
+          "targets": [
+            {
+              "neg": "measure-neck-circ-decr",
+              "pos": "measure-neck-circ-incr"
+            }
+          ],
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "shoulders",
+          "label": "Épaules",
+          "category": "corps",
+          "targets": [
+            {
+              "neg": "measure-shoulder-dist-decr",
+              "pos": "measure-shoulder-dist-incr"
+            }
+          ],
+          "min": -1,
+          "max": 1,
           "default": 0
         },
         {
           "id": "chest_breadth",
           "label": "Carrure (buste)",
           "category": "corps",
-          "targets": ["measure-frontchest-dist-incr"],
+          "targets": [
+            {
+              "neg": "measure-frontchest-dist-decr",
+              "pos": "measure-frontchest-dist-incr"
+            }
+          ],
           "min": -2,
           "max": 2,
           "default": 0
         },
         {
-          "id": "legs_height",
-          "label": "Jambes (hauteur)",
+          "id": "waist",
+          "label": "Tour de taille",
           "category": "corps",
-          "targets": ["measure-upperleg-height-incr"],
+          "targets": [
+            {
+              "neg": "measure-waist-circ-decr",
+              "pos": "measure-waist-circ-incr"
+            }
+          ],
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "arm_circumference",
+          "label": "Bras (circonférence)",
+          "category": "corps",
+          "targets": [
+            {
+              "neg": "measure-upperarm-circ-decr",
+              "pos": "measure-upperarm-circ-incr"
+            }
+          ],
           "min": -2,
           "max": 2,
           "default": 0
@@ -129,7 +633,12 @@
           "id": "belly",
           "label": "Ventre",
           "category": "corps",
-          "targets": ["stomach-pregnant-incr"],
+          "targets": [
+            {
+              "neg": "stomach-pregnant-decr",
+              "pos": "stomach-pregnant-incr"
+            }
+          ],
           "min": -2,
           "max": 2,
           "default": 0
@@ -138,7 +647,40 @@
           "id": "hips_width",
           "label": "Hanches (largeur)",
           "category": "corps",
-          "targets": ["hip-scale-horiz-incr"],
+          "targets": [
+            {
+              "neg": "hip-scale-horiz-decr",
+              "pos": "hip-scale-horiz-incr"
+            }
+          ],
+          "min": -2,
+          "max": 2,
+          "default": 0
+        },
+        {
+          "id": "buttocks",
+          "label": "Fessiers",
+          "category": "corps",
+          "targets": [
+            {
+              "neg": "buttocks-volume-decr",
+              "pos": "buttocks-volume-incr"
+            }
+          ],
+          "min": -1,
+          "max": 1,
+          "default": 0
+        },
+        {
+          "id": "legs_height",
+          "label": "Jambes (hauteur)",
+          "category": "corps",
+          "targets": [
+            {
+              "neg": "measure-upperleg-height-decr",
+              "pos": "measure-upperleg-height-incr"
+            }
+          ],
           "min": -2,
           "max": 2,
           "default": 0
@@ -147,14 +689,18 @@
           "id": "breast_position",
           "label": "Poitrine (position)",
           "category": "corps",
-          "targets": ["breast-trans-up"],
+          "targets": [
+            {
+              "neg": "breast-trans-down",
+              "pos": "breast-trans-up"
+            }
+          ],
           "min": -2,
           "max": 2,
           "default": 0
         }
       ],
-
-      "_comment_materials": "Phase 1. Mappe des ROLES logiques -> noms reels de materiaux du GLB (decouverts via 'node scripts/inspect-glb.mjs'). 'target' = nom du materiau dans le GLB (string OU tableau si un role couvre plusieurs materiaux). 'property' = propriete colorable ('color'). 'type' = 'color'. 'default' = teinte initiale en hexa : BLANC #ffffff = aucune teinte = texture d'origine intacte (la couleur multiplie la map dans Three.js, les sliders ne font que teinter). 'forceOpaque' = true force material.transparent=false + depthWrite=true (corrige les materiaux MPFB exportes en alphaMode=BLEND qui apparaissent transparents, ex: les yeux). NOTE: ce GLB n'a PAS de materiau sourcils/cils separe (peints dans la texture du corps), donc pas de role 'sourcils' ici.",
+      "_comment_materials": "Rôles de couleur (teinte multiplicative, blanc = texture d'origine). 'forceOpaque' : matériau MPFB en BLEND rendu opaque. 'alphaTest' : découpe nette (cheveux, cils), sans tri de transparence.",
       "materials": [
         {
           "id": "skin",
@@ -191,43 +737,188 @@
           "type": "color",
           "default": "#ffffff",
           "forceOpaque": true
+        },
+        {
+          "id": "hair",
+          "label": "Cheveux",
+          "target": [
+            "Human.ponytail01",
+            "Human.short01",
+            "Human.short02",
+            "Human.short03",
+            "Human.short04",
+            "Human.long01",
+            "Human.bob01",
+            "Human.bob02",
+            "Human.braid01",
+            "Human.afro01"
+          ],
+          "property": "color",
+          "type": "color",
+          "default": "#ffffff",
+          "alphaTest": 0.5
+        },
+        {
+          "id": "eyebrows",
+          "label": "Sourcils",
+          "target": [
+            "Human.eyebrow001",
+            "Human.eyebrow002",
+            "Human.eyebrow006",
+            "Human.eyebrow009"
+          ],
+          "property": "color",
+          "type": "color",
+          "default": "#ffffff",
+          "alphaTest": 0.4
+        },
+        {
+          "id": "eyelashes",
+          "label": "Cils",
+          "target": [
+            "Human.eyelashes02",
+            "Human.eyelashes03"
+          ],
+          "property": "color",
+          "type": "color",
+          "default": "#ffffff",
+          "alphaTest": 0.4
         }
       ],
-
-      "_comment_assetSlots": "Phase 3. Assets interchangeables poses sur le squelette. Chaque slot : 'id' (hair/eyebrows/eyelashes...), 'label' FR, 'attachBone' = nom EXACT du bone d'attache dans le squelette du base (ici 'head', trouve via inspect-glb.mjs), 'attachMode' = 'head-bone' (le mesh est attache au bone en preservant sa position monde ; PAS de skinning) ; 'skinned' est RESERVE au futur (assets rigges) et n'est PAS implemente (le hook logge un warning). 'default' = id d'option initiale (null = Aucun). 'options' = liste { id, label, file } ; inclure une option { id:null, file:null } = 'Aucun' pour retirer l'asset. Les chemins 'file' sont publics (/assets/...). Le code ne connait aucun chemin/bone en dur : tout vient d'ici. Ajouter une coiffure = deposer le GLB + ajouter une option ici.",
+      "_comment_assetSlots": "Emplacements d'assets. attachMode 'skinned' : l'asset est lié au squelette du corps (mêmes noms d'os) et porte les mêmes morphs, il suit donc la morphologie. 'head-bone' (ancien) : asset posé sur l'os 'attachBone'.",
       "assetSlots": [
         {
           "id": "hair",
           "label": "Coiffure",
-          "attachBone": "head",
-          "attachMode": "head-bone",
+          "attachMode": "skinned",
           "default": null,
           "options": [
-            { "id": null, "label": "Aucune", "file": null },
-            { "id": "ponytail", "label": "Queue de cheval", "file": "avatar/assets/species/human/hair/hair_ponytail.glb" }
+            {
+              "id": null,
+              "label": "Aucune",
+              "file": null
+            },
+            {
+              "id": "ponytail",
+              "label": "Queue de cheval",
+              "file": "avatar/assets/species/human/hair/ponytail.glb"
+            },
+            {
+              "id": "court1",
+              "label": "Court 1",
+              "file": "avatar/assets/species/human/hair/court1.glb"
+            },
+            {
+              "id": "court2",
+              "label": "Court 2",
+              "file": "avatar/assets/species/human/hair/court2.glb"
+            },
+            {
+              "id": "court3",
+              "label": "Court 3",
+              "file": "avatar/assets/species/human/hair/court3.glb"
+            },
+            {
+              "id": "court4",
+              "label": "Court 4",
+              "file": "avatar/assets/species/human/hair/court4.glb"
+            },
+            {
+              "id": "long",
+              "label": "Longs",
+              "file": "avatar/assets/species/human/hair/long.glb"
+            },
+            {
+              "id": "carre1",
+              "label": "Carré 1",
+              "file": "avatar/assets/species/human/hair/carre1.glb"
+            },
+            {
+              "id": "carre2",
+              "label": "Carré 2",
+              "file": "avatar/assets/species/human/hair/carre2.glb"
+            },
+            {
+              "id": "tresse",
+              "label": "Tresse",
+              "file": "avatar/assets/species/human/hair/tresse.glb"
+            },
+            {
+              "id": "afro",
+              "label": "Afro",
+              "file": "avatar/assets/species/human/hair/afro.glb"
+            }
           ]
         },
         {
           "id": "eyebrows",
           "label": "Sourcils",
-          "attachBone": "head",
-          "attachMode": "head-bone",
+          "attachMode": "skinned",
           "default": "default",
           "options": [
-            { "id": null, "label": "Aucun", "file": null },
-            { "id": "default", "label": "Standard", "file": "avatar/assets/species/human/eyebrows/eyebrow_default.glb" }
+            {
+              "id": null,
+              "label": "Aucun",
+              "file": null
+            },
+            {
+              "id": "default",
+              "label": "Standard",
+              "file": "avatar/assets/species/human/eyebrows/default.glb"
+            },
+            {
+              "id": "fins",
+              "label": "Fins",
+              "file": "avatar/assets/species/human/eyebrows/fins.glb"
+            },
+            {
+              "id": "epais",
+              "label": "Épais",
+              "file": "avatar/assets/species/human/eyebrows/epais.glb"
+            },
+            {
+              "id": "arques",
+              "label": "Arqués",
+              "file": "avatar/assets/species/human/eyebrows/arques.glb"
+            }
           ]
         },
         {
           "id": "eyelashes",
           "label": "Cils",
-          "attachBone": "head",
-          "attachMode": "head-bone",
+          "attachMode": "skinned",
           "default": "default",
           "options": [
-            { "id": null, "label": "Aucun", "file": null },
-            { "id": "default", "label": "Standard", "file": "avatar/assets/species/human/eyelashes/eyelashes_default.glb" }
+            {
+              "id": null,
+              "label": "Aucun",
+              "file": null
+            },
+            {
+              "id": "default",
+              "label": "Standard",
+              "file": "avatar/assets/species/human/eyelashes/default.glb"
+            },
+            {
+              "id": "longs",
+              "label": "Longs",
+              "file": "avatar/assets/species/human/eyelashes/longs.glb"
+            }
           ]
+        }
+      ],
+      "morphCategories": [
+        {
+          "id": "silhouette",
+          "label": "Silhouette"
+        },
+        {
+          "id": "visage",
+          "label": "Visage"
+        },
+        {
+          "id": "corps",
+          "label": "Corps"
         }
       ]
     }

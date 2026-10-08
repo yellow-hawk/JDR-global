@@ -3,6 +3,7 @@
 import { Suspense, lazy, useEffect, useRef } from 'react';
 import { buildPresetFromCurrent, loadPresetIntoStore } from './createur/store/presets';
 import { captureThumbnail, modeleCharge } from './createur/three/snapshot';
+import { chargementsEnCours } from './createur/three/useAssets';
 
 const AvatarViewer = lazy(() => import('./createur/three/AvatarViewer'));
 
@@ -23,11 +24,14 @@ export function FabriqueDePortraits({ taches, onPortrait, onFini }: Props) {
     if (lance.current) return;
     lance.current = true;
     void (async () => {
-      // Attente du vrai modèle (12 Mo) : 60 s au plus.
+      // Attente du vrai modèle : 60 s au plus.
       for (let t = 0; t < 600 && !modeleCharge(); t++) await attendre(100);
       for (const [i, t] of taches.entries()) {
         loadPresetIntoStore(t.apparence);
-        await attendre(t.apparence && (t.apparence as { data?: { assets?: { hair?: string | null } } }).data?.assets?.hair ? 900 : 450);
+        // Laisse React appliquer le preset, puis attend que les assets (coiffure, tenue…) soient chargés.
+        await attendre(150);
+        for (let k = 0; k < 100 && chargementsEnCours() > 0; k++) await attendre(100);
+        await attendre(150);
         const vignette = modeleCharge() ? captureThumbnail() : null;
         const apparence = buildPresetFromCurrent(t.nom, { thumbnail: vignette });
         onPortrait({ id: t.id, apparence: { ...apparence, auto: true }, vignette }, i);

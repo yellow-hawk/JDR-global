@@ -33,12 +33,13 @@ function RealModel({ url }) {
     console.groupEnd()
   }, [scene, url])
 
+  // Phase 3 — monte/demonte les assets sur le squelette (data-driven). 'version' change
+  // a chaque asset attache : teintes et morphs reindexent alors les nouveaux meshes.
+  const version = useAssets(scene)
   // Phase 1 — applique les teintes du store aux materiaux (data-driven).
-  useMaterials(scene)
+  useMaterials(scene, version)
   // Phase 2 — applique les influences de morph du store (data-driven).
-  useMorphs(scene)
-  // Phase 3 — monte/demonte les assets poses sur le squelette (data-driven).
-  useAssets(scene)
+  useMorphs(scene, version)
 
   return <primitive object={scene} />
 }

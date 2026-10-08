@@ -3,8 +3,9 @@ import { useCharacter } from '../store/useCharacter'
 // Panneau de controle, entierement genere depuis species.json
 // (aucun role/nom en dur).
 //  - Phase 1 : dossier "Couleurs" = un color picker par role de materiau.
-//  - Phase 2 : dossiers "Visage" / "Corps" = un slider par role de morph,
-//    + toggle "Asymetrie (avance)" qui dedouble les sliders des paires L/R.
+//  - Phase 2 : un dossier par categorie de species.json (morphCategories : Silhouette,
+//    Visage, Corps…) = un slider par role de morph, + toggle "Asymetrie (avance)" qui
+//    dedouble les sliders des paires L/R.
 //  - Phase 3 : dossier "Assets" = un menu deroulant par slot.
 //
 // Version JDR Global : leva est remplace par des controles React natifs (classes
@@ -83,8 +84,8 @@ export default function ControlPanel() {
         valeur={morphs[role.id] ?? role.default ?? 0} onChange={(v) => setMorph(role.id, v)} />
     })
 
-  const faceRoles = morphRoles.filter((r) => r.category === 'visage')
-  const bodyRoles = morphRoles.filter((r) => r.category === 'corps')
+  // Categories declarees dans species.json (repli : visage + corps).
+  const categories = species?.morphCategories ?? [{ id: 'visage', label: 'Visage' }, { id: 'corps', label: 'Corps' }]
 
   // --- Phase 3 : Assets (menu deroulant par slot) ---
   // Le select HTML ne connait pas null : "Aucun" est mappe sur un sentinel
@@ -109,13 +110,13 @@ export default function ControlPanel() {
           <input type="checkbox" checked={asymmetry} onChange={(e) => setAsymmetry(e.target.checked)} />
           Asymétrie (avancé)
         </label>
-        <h4>Visage</h4>
-        {sliders(faceRoles)}
-        <h4>Corps</h4>
-        {sliders(bodyRoles)}
       </Dossier>
+      {categories.map((c) => {
+        const roles = morphRoles.filter((r) => r.category === c.id)
+        return roles.length ? <Dossier key={c.id} titre={c.label} ouvert={c.id === categories[0].id}>{sliders(roles)}</Dossier> : null
+      })}
 
-      <Dossier titre="Coiffure et pilosité">
+      <Dossier titre="Coiffure, pilosité et tenue">
         {assetSlots.map((slot) => (
           <label key={slot.id} className="avatar-choix">
             <span>{slot.label}</span>

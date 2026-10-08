@@ -1,0 +1,20 @@
+{
+  "name": "jdr-global-blender",
+  "private": true,
+  "type": "module",
+  "description": "Outils de la chaîne d'assets 3D (optimisation des GLB exportés par Blender).",
+  "scripts": {
+    "optimiser": "node scripts/optimiser.mjs",
+    "inspecter": "node scripts/inspect-glb.mjs"
+  },
+  "dependencies": {
+    "@gltf-transform/core": "^4.2.1",
+    "@gltf-transform/extensions": "^4.2.1",
+    "@gltf-transform/functions": "^4.2.1",
+    "meshoptimizer": "^0.25.0",
+    "sharp": "^0.34.5"
+  },
+  "overrides": {
+    "sharp": "$sharp"
+  }
+}

@@ -15,13 +15,18 @@ import { useCharacter } from '../store/useCharacter'
 //
 // IMPORTANT : seules les cibles listees dans species.json sont touchees. Tout
 // morph non mappe (macros MakeHuman, etc.) garde son influence par defaut.
+//
+// Une cible est soit un nom de morph (valeur ecrite telle quelle, eventuellement
+// negative), soit { neg, pos } (bipolaire) : valeur < 0 -> 'neg' recoit |v| et 'pos' 0,
+// valeur > 0 -> l'inverse. Les assets "skinned" portent les memes noms de morph : ils
+// sont indexes a chaque nouvelle 'version' (asset attache ou retire, voir useAssets).
 
 function asArray(v) {
   if (v == null) return []
   return Array.isArray(v) ? v : [v]
 }
 
-export function useMorphs(root) {
+export function useMorphs(root, version = 0) {
   const speciesList = useCharacter((s) => s.speciesList)
   const speciesId = useCharacter((s) => s.speciesId)
   const morphs = useCharacter((s) => s.morphs)
@@ -48,15 +53,21 @@ export function useMorphs(root) {
     }
     targetIndexRef.current = index
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [root, speciesId])
+  }, [root, speciesId, version])
 
   // 2) APPLICATION : a chaque changement d'influence dans le store.
   useEffect(() => {
     const index = targetIndexRef.current
-    const apply = (name, value) => {
+    const ecrire = (name, value) => {
       ;(index[name] ?? []).forEach(({ mesh, index: i }) => {
         mesh.morphTargetInfluences[i] = value
       })
+    }
+    const apply = (cible, value) => {
+      if (cible == null) return
+      if (typeof cible === 'string') return ecrire(cible, value)
+      ecrire(cible.neg, Math.max(0, -value))
+      ecrire(cible.pos, Math.max(0, value))
     }
 
     roles.forEach((role) => {
@@ -66,9 +77,9 @@ export function useMorphs(root) {
         apply(role.pair.right, lr.right ?? role.default ?? 0)
       } else {
         const v = morphs[role.id] ?? role.default ?? 0
-        asArray(role.targets).forEach((name) => apply(name, v))
+        asArray(role.targets).forEach((cible) => apply(cible, v))
       }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [root, morphs, morphsLR, asymmetry, speciesId])
+  }, [root, morphs, morphsLR, asymmetry, speciesId, version])
 }
