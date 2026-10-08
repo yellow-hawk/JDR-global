@@ -1,4 +1,6 @@
 import { useEffect } from 'react'
+import * as THREE from 'three'
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
 import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls, Grid } from '@react-three/drei'
 import AvatarModel from './AvatarModel'
@@ -6,6 +8,25 @@ import { registerThree } from './snapshot'
 
 // Le <Canvas> R3F : camera, lumieres, sol/grille et controles d'orbite.
 // Eclairage manuel (pas d'Environment HDR) pour rester 100% hors-ligne et fiable.
+// JDR Global (08/10) : + reflets d'une piece generee (RoomEnvironment, sans fichier) pour
+// que les armures metalliques ne paraissent pas noires.
+
+function Reflets({ intensite = 0.45 }) {
+  const gl = useThree((s) => s.gl)
+  const scene = useThree((s) => s.scene)
+  useEffect(() => {
+    const pmrem = new THREE.PMREMGenerator(gl)
+    const env = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
+    scene.environment = env
+    scene.environmentIntensity = intensite
+    return () => {
+      scene.environment = null
+      env.dispose()
+      pmrem.dispose()
+    }
+  }, [gl, scene, intensite])
+  return null
+}
 
 // Enregistre le renderer + la scene pour la capture de vignette off-screen
 // (cadrage fixe). Composant interne au Canvas : useThree donne gl + scene de
@@ -28,6 +49,7 @@ export default function AvatarViewer() {
       gl={{ antialias: true, preserveDrawingBuffer: true }}
     >
       <SnapshotBridge />
+      <Reflets />
       {/* --- Eclairage : ciel/sol doux + key light (ombres) + fill --- */}
       <hemisphereLight args={['#cdd6e0', '#33373d', 0.6]} />
       <ambientLight intensity={0.25} />

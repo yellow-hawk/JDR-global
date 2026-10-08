@@ -17,6 +17,10 @@ from bl_ext.user_default.mpfb.services.locationservice import LocationService
 from bl_ext.user_default.mpfb.entities.objectproperties import HumanObjectProperties
 
 RACINE = globals().get('RACINE_JDR') or r"D:\projet claude\projet JDR Global"
+import importlib.util, sys
+_spec = importlib.util.spec_from_file_location('textures_tenues', os.path.join(RACINE, 'blender', 'scripts', 'textures_tenues.py'))
+textures_tenues = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(textures_tenues)
 CONFIG = json.load(open(os.path.join(RACINE, 'blender', 'avatar.json'), encoding='utf-8'))
 SORTIE = os.path.join(RACINE, 'blender', 'export')
 SEUIL = 1e-5  # en dessous (en m), un morph ne déplace pas l'objet : il n'est pas exporté pour lui
@@ -161,15 +165,44 @@ def os_dominant(h, noms_os):
     return res
 
 
-def materiau_tenue(slot, metal):
-    nom = f'Tenue.{slot}'
+TEXTURE_PAR_SLOT = {'haut': 'tissu', 'bas': 'tissu', 'cape': 'tissu', 'pieds': 'cuir', 'ceinture': 'cuir', 'armure': 'mailles'}
+DENSITE = {'tissu': 5.0, 'cuir': 3.0, 'mailles': 8.0, 'metal': 2.0}  # répétitions de texture par mètre
+
+
+def materiau_tenue(slot, metal, sorte):
+    """Matériau Tenue.<slot>.<sorte> : texture grise (teintée par l'app) + normal map, métal ou non."""
+    nom = f'Tenue.{slot}.{sorte}'
     m = bpy.data.materials.get(nom) or bpy.data.materials.new(nom)
     m.use_nodes = True
-    bsdf = next(n for n in m.node_tree.nodes if n.type == 'BSDF_PRINCIPLED')
-    bsdf.inputs['Base Color'].default_value = (1, 1, 1, 1)
+    nt = m.node_tree
+    bsdf = next(n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED')
+    for n in [n for n in nt.nodes if n.type in ('TEX_IMAGE', 'NORMAL_MAP')]:
+        nt.nodes.remove(n)
+    couleur, normale = textures_tenues.textures(sorte)
+    tc = nt.nodes.new('ShaderNodeTexImage'); tc.image = couleur
+    tn = nt.nodes.new('ShaderNodeTexImage'); tn.image = normale
+    nm = nt.nodes.new('ShaderNodeNormalMap')
+    nt.links.new(tc.outputs['Color'], bsdf.inputs['Base Color'])
+    nt.links.new(tn.outputs['Color'], nm.inputs['Color'])
+    nt.links.new(nm.outputs['Normal'], bsdf.inputs['Normal'])
     bsdf.inputs['Metallic'].default_value = 0.85 if metal else 0.0
-    bsdf.inputs['Roughness'].default_value = 0.38 if metal else 0.85
+    bsdf.inputs['Roughness'].default_value = 0.4 if metal else (0.6 if sorte == 'cuir' else 0.88)
     return m
+
+
+def uv_boite(o, densite):
+    """UV en projection cubique à l'échelle réelle : la texture garde la même taille partout."""
+    me = o.data
+    uv = me.uv_layers.new(name='UVTenue')
+    for uvl in [u for u in me.uv_layers if u.name != 'UVTenue']:
+        me.uv_layers.remove(uvl)
+    co = np.array([v.co for v in me.vertices])
+    for p in me.polygons:
+        n = np.abs(np.array(p.normal))
+        axes = (0, 1) if n[2] >= max(n[0], n[1]) else ((1, 2) if n[0] >= n[1] else (0, 2))
+        for li in p.loop_indices:
+            c = co[me.loops[li].vertex_index]
+            uv.data[li].uv = (c[axes[0]] * densite, c[axes[1]] * densite)
 
 
 def construire_tenue(h, rig, t, corps0, deltas_corps, peau, dominant):
@@ -253,8 +286,11 @@ def construire_tenue(h, rig, t, corps0, deltas_corps, peau, dominant):
     cles = ajouter_cles(o, neutre, deltas)
     for p in data.polygons:
         p.use_smooth = True
+    sorte = t.get('texture') or ('metal' if t['id'] == 'plastron' else TEXTURE_PAR_SLOT.get(t['slot'], 'tissu'))
+    uv_boite(o, DENSITE[sorte])
     data.materials.clear()
-    data.materials.append(materiau_tenue(t['slot'], t.get('metal')))
+    data.materials.append(materiau_tenue(t['slot'], t.get('metal'), sorte))
+    o['jdr_materiau'] = data.materials[0].name
     o.parent = rig
     mod = o.modifiers.new('Armature', 'ARMATURE')
     mod.object = rig
@@ -346,7 +382,7 @@ def construire():
                                             'sommets': len(o.data.vertices), 'morphs': manifeste_o})
         for t, o, cles in tenues:
             manifeste['assets'].append({'slot': t['slot'], 'id': t['id'], 'objet': o.name, 'label': t['label'],
-                                        'materiau': f"Tenue.{t['slot']}", 'metal': bool(t.get('metal')),
+                                        'materiau': o['jdr_materiau'], 'metal': bool(t.get('metal')),
                                         'fichier': f"{t['slot']}/{t['id']}.glb",
                                         'sommets': len(o.data.vertices), 'morphs': cles})
         # Export

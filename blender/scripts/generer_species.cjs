@@ -86,7 +86,7 @@ h.materials = [
   { id: 'hair', label: 'Cheveux', target: materiauxDe('hair'), property: 'color', type: 'color', default: '#ffffff', alphaTest: 0.5 },
   { id: 'eyebrows', label: 'Sourcils', target: materiauxDe('eyebrows'), property: 'color', type: 'color', default: '#ffffff', alphaTest: 0.4 },
   { id: 'eyelashes', label: 'Cils', target: materiauxDe('eyelashes'), property: 'color', type: 'color', default: '#ffffff', alphaTest: 0.4 },
-  ...TENUES.map(([id, label, , , couleur]) => ({ id: 'tenue_' + id, label: label, target: 'Tenue.' + id, property: 'color', type: 'color', default: couleur, side: 'double' })),
+  ...TENUES.map(([id, label, , , couleur]) => ({ id: 'tenue_' + id, label: label, target: [...new Set(assetsDe(id).map((a) => a.materiau))], property: 'color', type: 'color', default: couleur, side: 'double' })),
 ];
 h._comment_assetSlots = "Emplacements d'assets. attachMode 'skinned' : l'asset est lié au squelette du corps (mêmes noms d'os) et porte les mêmes morphs, il suit donc la morphologie. 'head-bone' (ancien) : asset posé sur l'os 'attachBone'.";
 h.assetCategories = [{ id: 'pilosite', label: 'Coiffure et pilosité' }, { id: 'tenue', label: 'Tenue' }];

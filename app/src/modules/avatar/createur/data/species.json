@@ -787,7 +787,9 @@
         {
           "id": "tenue_haut",
           "label": "Haut",
-          "target": "Tenue.haut",
+          "target": [
+            "Tenue.haut.tissu"
+          ],
           "property": "color",
           "type": "color",
           "default": "#8a6a4a",
@@ -796,7 +798,9 @@
         {
           "id": "tenue_bas",
           "label": "Bas",
-          "target": "Tenue.bas",
+          "target": [
+            "Tenue.bas.tissu"
+          ],
           "property": "color",
           "type": "color",
           "default": "#4a4038",
@@ -805,7 +809,9 @@
         {
           "id": "tenue_pieds",
           "label": "Chaussures",
-          "target": "Tenue.pieds",
+          "target": [
+            "Tenue.pieds.cuir"
+          ],
           "property": "color",
           "type": "color",
           "default": "#3b2a1c",
@@ -814,7 +820,10 @@
         {
           "id": "tenue_armure",
           "label": "Armure",
-          "target": "Tenue.armure",
+          "target": [
+            "Tenue.armure.metal",
+            "Tenue.armure.mailles"
+          ],
           "property": "color",
           "type": "color",
           "default": "#b8bcc4",
@@ -823,7 +832,9 @@
         {
           "id": "tenue_ceinture",
           "label": "Ceinture",
-          "target": "Tenue.ceinture",
+          "target": [
+            "Tenue.ceinture.cuir"
+          ],
           "property": "color",
           "type": "color",
           "default": "#5a3a22",
@@ -832,7 +843,9 @@
         {
           "id": "tenue_cape",
           "label": "Cape",
-          "target": "Tenue.cape",
+          "target": [
+            "Tenue.cape.tissu"
+          ],
           "property": "color",
           "type": "color",
           "default": "#6b1d1d",

@@ -59,6 +59,7 @@ npm run build                    # dist/ (types vérifiés avant)
 | `src/modules/reseau` | Graphe de la campagne (centralité, communautés, réputation, relations entre personnages) | idem |
 | `src/modules/organigrammes` | Institutions par régime, successions, quêtes, cartes, personnages | idem |
 | `public/atlas/` | Atlas d'origine (scripts classiques) + `23-pont.js` | `src/modules/monde/MODULE.md` |
+| `../blender/` | Chaîne Blender scriptée de l'avatar (MPFB) : corps, morphs, coiffures, tenues → `public/avatar/` | `../blender/LISEZMOI.md` |
 
 Référence du format de données : `../docs/format-jdr-global.md`. Journal : `../docs/journal-de-bord.md`.
 
@@ -100,4 +101,5 @@ repère de carte → rencontre (« Lancer le combat »), Atlas masqué en aperç
 (moteur / rendu / interface, plus de cadre). leva remplacé par un panneau natif dans Avatar.
 **Installation complète d'un monde** (Monde → « Ajouter le ciel affiché ») : toutes les cartes de l'Atlas, PNJ avec avatar et portrait, cartes de bataille générées (`cartes/generateur/`) + rencontres prêtes. Ajouts suivants : combat diffusé automatiquement, stats des PNJ selon leur rôle, sorts réels de campagne (auto dans le combat, PNJ lanceurs), packs d'univers (rien de l'Épée de vérité dans le code), modules **Pays**, **Généalogie**, **Organigrammes**, **Réseau**.
 Puis : plateau de dés partagé et **dés 3D** sur l'écran joueurs, modules **Chronologie** (horloge du temps de jeu), **Documents**, **Générateurs**, brouillard des cartes, réputation des peuples, relations entre personnages, préparation de séance, **sauvegardes automatiques** (instantanés + dossier).
-Suite possible : avatars H/F, vêtements et coiffures (Blender, plus tard), déploiement GitHub Pages, monde fait main dans les vues de l'Atlas.
+Avatar refait le 08/10 : chaîne Blender scriptée (`../blender/`), genre H/F et 41 réglages, coiffures et 11 tenues attachées au squelette, PNJ habillés selon leur rôle.
+Suite possible : barbes et accessoires, poses, monde fait main dans les vues de l'Atlas.

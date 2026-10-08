@@ -17,5 +17,8 @@
 Stockage : `personnage.apparence` = preset `presetVersion 1` complet (avec vignette).
 API publique : `definition`, `ouvrirAvatarPour`, `apparenceAuto`, `FabriqueDePortraits`.
 Tests : `avatar.test.ts` (`apparenceAuto` déterministe, morphs connus et bornés, preset chargé sans avertissement par `sanitizePreset`).
-Assets compressés le 07/10 (meshopt + textures WebP, 17 Mo → 2,4 Mo) : tout GLTFLoader doit avoir `setMeshoptDecoder` (déjà le cas de `useGLTF`). Recompresser un nouvel asset : `npx @gltf-transform/cli webp in.glb t.glb --quality 90 && npx @gltf-transform/cli meshopt t.glb out.glb`.
-À faire : genre H/F (pas prioritaire), vêtements.
+Assets : **générés par la chaîne Blender** (`../blender/`, voir `blender/LISEZMOI.md`) — corps neutre + 94 morphs (genre, âge, muscle, corpulence, stature, poitrine, visage, oreilles pointues, corps), 10 coiffures, 4 sourcils, 2 cils, 11 tenues (chemise, tunique, gilet, robe, pantalon, jupe, bottes, plastron, cotte de mailles, ceinture, cape), tous **attachés au squelette** et portant les mêmes morphs (`useAssets` mode `skinned`). Ne pas modifier les GLB à la main : reconstruire.
+`species.json` est **généré** (`cd blender && npm run species`) : rôles de morph bipolaires `{ neg, pos }`, catégories (`morphCategories`, `assetCategories`), couleurs par emplacement.
+`auto.json` : règles de `apparenceAuto` (tenue et palette selon le rôle, variante féminine, coiffures, couleurs, traits de peuple).
+Visualiseur : reflets `RoomEnvironment` (sans fichier). Portraits cadrés sur les yeux réels (`snapshot.js`, `centreDesYeux`).
+À faire : barbes, accessoires (capuche, gants…), poses (plus tard).
