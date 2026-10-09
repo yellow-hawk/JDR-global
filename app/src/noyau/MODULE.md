@@ -39,6 +39,8 @@ Socle partagé, sans interface et sans React. Cinq sous-modules, chacun avec son
 - `des.ts` : `lancer(formule, rng, critique)`, `d20(mode)`, `formuleValide`.
 - `types.ts` (suite) : `SystemeAvecFiche` = `SystemeRegles` + `catalogue` (compétences, caracs, objets, alignements, langues, historiques, monnaies, `source`) + `calculer(p)` → `FicheCalculee` (niveau, maîtrise, caracs, sauvegardes, compétences, dérivés, attaques, `stats` à reporter) ; `aUneFiche(R)`.
 - `dnd5e/fiche.ts` + `catalogue.json` (SRD 5.1, CC-BY 4.0 : 36 armes, 13 armures, équipement ; historiques maison) : `calculer`, `bonusMaitrise`, `niveauDe`, `effetsActifs`, `entreeCatalogue`.
+- `dnd5e/classes.json` (12 classes SRD avec aptitudes 1-20, une sous-classe, incantation ; 9 peuples) + `progression.ts` : `CLASSES`, `PEUPLES`, `XP_NIVEAUX`, `niveauPourXp`, `aptitudesActives` (effets automatiques : défense sans armure, vitesse, PV par niveau…), `pvMaxSuggere`, `incantation` (DD, attaque, emplacements complet / demi / pacte).
+- `dnd5e/creation.ts` + `creation.json` (noms par peuple, personnalités, classe selon le rôle) : `R.creation` = tableau standard, achat de points (27), tirage 4d6, `aleatoire(graine, options)` (reproductible), `creer(choix)` → stats + fiche (bonus du peuple, maîtrises, équipement de départ équipé, PV).
 - `dnd5e/` : système 5e (`mod`, `signe`) ; `profil.ts` + `archetypes.json` : stats d'un PNJ selon son rôle (archétype, niveau, caractéristiques ordonnées, ajustements de la description, PV, CA, dégâts, bonus d'attaque) ; sorts : 1 point de puissance = 1d6 (max 10d6), valeur moyenne appliquée en combat. Nouveau système = nouveau dossier + `enregistrerRegles`.
 
 ## Tests

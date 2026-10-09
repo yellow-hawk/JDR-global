@@ -59,6 +59,39 @@ export interface ValeurCalculee {
 
 export interface AttaqueCalculee { nom: string; bonus: number; degats: string; portee?: string; proprietes?: string[] }
 
+/** Aptitude d'une classe, d'une sous-classe ou d'un peuple ; `effets` appliqués automatiquement. */
+export interface AptitudeRegles { niveau: number; nom: string; texte: string; effets?: import('../contrat').Effet[]; amelioration?: boolean }
+
+export interface ClasseRegles {
+  id: string; nom: string; texte?: string;
+  deVie: number;
+  principales: string[];
+  sauvegardes: string[];
+  competences: { choix: number; parmi: string[] };
+  maitrises: { armes: string[]; armures: string[] };
+  /** Équipement de départ (refs du catalogue). */
+  equipement: string[];
+  aptitudes: AptitudeRegles[];
+  niveauSousClasse: number;
+  sousClasses: { id: string; nom: string; aptitudes: AptitudeRegles[] }[];
+  incantation?: { carac: string; type: 'complet' | 'demi' | 'pacte' };
+}
+
+export interface PeupleRegles {
+  id: string; nom: string;
+  bonus: Record<string, number>;
+  /** Points de caractéristique à répartir librement (+1 chacun). */
+  bonusLibres?: number;
+  vitesse: number; taille: string; vision: number;
+  langues: string[]; languesLibres?: number;
+  competences?: string[]; competencesLibres?: number;
+  traits: { nom: string; texte: string; effets?: import('../contrat').Effet[] }[];
+  /** Nom de peuple donné à l'avatar automatique (oreilles d'elfe, stature des nains…). */
+  avatar?: string;
+}
+
+export interface IncantationCalculee { classe: string; carac: string; dd: number; attaque: number }
+
 /** Tout ce que la fiche affiche sans saisie : calculé à partir des stats, des maîtrises, de l'équipement et des effets. */
 export interface FicheCalculee {
   niveau: number;
@@ -69,6 +102,14 @@ export interface FicheCalculee {
   /** CA, initiative, perception passive, vitesse, encombrement… */
   derives: ValeurCalculee[];
   attaques: AttaqueCalculee[];
+  /** Aptitudes actives (classes, sous-classes, peuple), dans l'ordre des niveaux. */
+  aptitudes?: (AptitudeRegles & { source: string })[];
+  incantation?: IncantationCalculee[];
+  /** Emplacements de sorts par niveau de sort (index 0 = niveau 1) ; pacte d'occultiste à part. */
+  emplacements?: number[];
+  pacte?: { nombre: number; niveau: number } | null;
+  /** PV maximum suggérés (dé de vie maximal au niveau 1, moyenne ensuite, CON et bonus par niveau). */
+  pvMaxSuggere?: number;
   /** Valeurs à reporter dans `combat.stats` (CA, dégâts, bonus d'attaque, niveau) quand la fiche les détermine. */
   stats: Record<string, unknown>;
 }
@@ -93,14 +134,52 @@ export interface CatalogueRegles {
   langues: string[];
   historiques: { id: string; nom: string; competences?: string[]; texte?: string }[];
   monnaies: { id: string; libelle: string }[];
+  classes: ClasseRegles[];
+  peuples: PeupleRegles[];
   /** Mention de la source des données (licence). */
   source?: string;
 }
 
-/** Extension facultative d'un système : fiche détaillée calculée. */
+/** Choix de l'assistant de création (ou tirés au hasard). `caracs` : valeurs de base, avant les bonus du peuple. */
+export interface ChoixCreation {
+  nom: string;
+  feminin?: boolean;
+  espece?: string;
+  classe?: string;
+  sousClasse?: string;
+  niveau: number;
+  historique?: string;
+  caracs: Record<string, number>;
+  /** Caractéristiques recevant les +1 libres du peuple (demi-elfe). */
+  bonusLibres?: string[];
+  competences?: string[];
+  alignement?: string;
+  personnalite?: { traits?: string; ideaux?: string; liens?: string; defauts?: string };
+  /** Équipement de départ de la classe. */
+  equipement?: boolean;
+}
+
+export interface OptionsAleatoire {
+  nom?: string; feminin?: boolean; espece?: string; classe?: string; niveau?: number;
+  /** Rôle d'un PNJ (« capitaine de la garde ») : oriente la classe. */
+  role?: string;
+  methode?: 'standard' | 'tirage';
+}
+
+/** Création de personnage propre au système. */
+export interface CreationRegles {
+  tableauStandard: number[];
+  achat: { points: number; cout(v: number): number | undefined };
+  tirage(graine: string): number[];
+  aleatoire(graine: string, options?: OptionsAleatoire): ChoixCreation;
+  creer(choix: ChoixCreation): { nom: string; stats: Record<string, unknown>; fiche: import('../contrat').FichePersonnage };
+}
+
+/** Extension facultative d'un système : fiche détaillée calculée et création de personnage. */
 export interface SystemeAvecFiche extends SystemeRegles {
   catalogue: CatalogueRegles;
   calculer(p: Personnage): FicheCalculee;
+  creation: CreationRegles;
 }
 
 export const aUneFiche = (R: SystemeRegles): R is SystemeAvecFiche =>

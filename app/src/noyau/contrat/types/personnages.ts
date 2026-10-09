@@ -32,6 +32,8 @@ export interface FichePersonnage {
   identite?: {
     age?: string; genre?: string; taille?: string; poids?: string; yeux?: string; cheveux?: string;
     alignement?: string; divinite?: string; historique?: string; origine?: string; langues?: string[];
+    /** Peuple au sens des règles (5e : « haut-elfe », « nain-des-collines »…) ; `personnage.peuple` reste le peuple du monde. */
+    espece?: string;
   };
   personnalite?: { traits?: string; ideaux?: string; liens?: string; defauts?: string };
   progression?: {

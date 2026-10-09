@@ -59,3 +59,31 @@ describe('fiche 5e calculée', () => {
     expect(f.derives.find((d) => d.cle === 'encombrement')!.valeur).toBe(1.5 + 27.5 + 3 + 5);
   });
 });
+
+describe('classes et peuples', () => {
+  it('défense sans armure du moine, aptitudes actives, peuple', async () => {
+    const p = guerrier();
+    p.fiche = { identite: { espece: 'nain-des-collines' }, progression: { classes: [{ id: 'moine', niveau: 5, sousClasse: 'main-ouverte' }] }, inventaire: { objets: [] } };
+    p.combat.stats.carac = { for: 10, dex: 16, con: 14, int: 10, sag: 14, cha: 8 };
+    const f = calculer(p);
+    expect(f.derives.find((d) => d.cle === 'ca')!.valeur).toBe(15); // 10 + 3 DEX + 2 SAG
+    expect(f.derives.find((d) => d.cle === 'vitesse')!.valeur).toBe(8); // 6 + 2 déplacement sans armure
+    expect(f.aptitudes!.map((a) => a.nom)).toEqual(expect.arrayContaining(['Ki', 'Attaque supplémentaire', 'Technique de la main ouverte', 'Ténacité naine']));
+    expect(f.aptitudes!.map((a) => a.nom)).not.toContain('Dérobade'); // niveau 7
+    // PV : 8 + 5 + 3×4 (moyenne d8 = 5, CON +2, +1 ténacité naine) = 8+2+1 + 4×(5+2+1)
+    expect(f.pvMaxSuggere).toBe(11 + 4 * 8);
+  });
+
+  it('incantation : DD, attaque, emplacements (lanceur complet, demi, pacte)', () => {
+    const p = guerrier();
+    p.combat.stats.carac = { for: 10, dex: 12, con: 12, int: 16, sag: 10, cha: 14 };
+    p.fiche = { progression: { classes: [{ id: 'magicien', niveau: 5 }] } };
+    const f = calculer(p);
+    expect(f.incantation![0]).toMatchObject({ dd: 14, attaque: 6 });
+    expect(f.emplacements).toEqual([4, 3, 2]);
+    p.fiche = { progression: { classes: [{ id: 'paladin', niveau: 5 }, { id: 'occultiste', niveau: 3 }] } };
+    const g = calculer(p);
+    expect(g.emplacements).toEqual([3]); // demi-lanceur 5 → niveau de lanceur 2
+    expect(g.pacte).toEqual({ nombre: 2, niveau: 2 });
+  });
+});

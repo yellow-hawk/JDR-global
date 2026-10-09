@@ -3,8 +3,9 @@
 import type { Effet, Personnage } from '../../contrat';
 import type { AttaqueCalculee, CatalogueRegles, EntreeCatalogue, FicheCalculee, ValeurCalculee } from '../types';
 import CATALOGUE_JSON from './catalogue.json';
+import { CLASSES, PEUPLES, aptitudesActives, effetsDesAptitudes, incantation, pvMaxSuggere } from './progression';
 
-export const CATALOGUE = CATALOGUE_JSON as unknown as CatalogueRegles;
+export const CATALOGUE = { ...(CATALOGUE_JSON as object), classes: CLASSES, peuples: PEUPLES } as unknown as CatalogueRegles;
 const PAR_ID = new Map<string, EntreeCatalogue>(CATALOGUE.objets.map((o) => [o.id, o]));
 export const entreeCatalogue = (ref: string | null | undefined): EntreeCatalogue | undefined => (ref ? PAR_ID.get(ref) : undefined);
 
@@ -22,11 +23,11 @@ export function niveauDe(p: Personnage): number {
   return total > 0 ? total : Math.max(1, num(p.combat.stats.niveau, 1));
 }
 
-/** Effets actifs : objets équipés (et harmonisés si besoin) + aptitudes. */
+/** Effets actifs : objets équipés, aptitudes notées à la main, aptitudes des classes et du peuple. */
 export function effetsActifs(p: Personnage): Effet[] {
   const objets = (p.fiche?.inventaire?.objets ?? []).filter((o) => o.equipe);
   const aptitudes = p.fiche?.progression?.aptitudes ?? [];
-  return [...objets.flatMap((o) => o.effets ?? []), ...aptitudes.flatMap((a) => a.effets ?? [])];
+  return [...objets.flatMap((o) => o.effets ?? []), ...aptitudes.flatMap((a) => a.effets ?? []), ...effetsDesAptitudes(p)];
 }
 
 const somme = (effets: Effet[], cible: string): number => effets.filter((e) => e.cible === cible).reduce((s, e) => s + e.valeur, 0);
@@ -69,6 +70,12 @@ export function calculer(p: Personnage): FicheCalculee {
     const dexUtile = dexMax === 0 ? 0 : dexMax == null ? dex : Math.min(dex, dexMax);
     ca = (armure ? (armure.ca as number) : 10) + dexUtile + (bouclier ? 2 : 0);
     detailCa = `${armure ? `${armure.ca} ${armure.nom.toLowerCase()}` : '10'}${dexUtile ? ` ${signe(dexUtile)} DEX` : ''}${bouclier ? ' +2 bouclier' : ''}`;
+  } else if (effets.some((e) => e.cible.startsWith('caSansArmure.'))) {
+    // Défense sans armure (barbare : CON, moine : SAG, lignée draconique : base 13)
+    const base = effets.some((e) => e.cible === 'caSansArmure.base13') ? 13 : 10;
+    const ajouts = [...new Set(effets.filter((e) => e.cible.startsWith('caSansArmure.') && e.cible !== 'caSansArmure.base13').map((e) => e.cible.split('.')[1]))];
+    ca = base + dex + ajouts.reduce((t, c) => t + modDe(c), 0);
+    detailCa = `${base} ${signe(dex)} DEX${ajouts.map((c) => ` ${signe(modDe(c))} ${c.toUpperCase()}`).join('')} (sans armure)`;
   } else {
     ca = num(stats.ca, 10 + dex);
     detailCa = 'saisie sur la fiche';
@@ -109,11 +116,22 @@ export function calculer(p: Personnage): FicheCalculee {
     { cle: 'encombrement', libelle: 'Charge (kg)', valeur: Math.round(poids * 10) / 10, texte: `${Math.round(poids * 10) / 10} / ${capacite}`, detail: poids > capacite ? 'surchargé' : undefined },
   ];
 
+  const pvSugg = pvMaxSuggere(p, modDe('con'), somme(effets, 'pvParNiveau'));
+  if (pvSugg) derives.push({ cle: 'pvMaxSuggere', libelle: 'PV max suggérés', valeur: pvSugg, texte: String(pvSugg), detail: 'dé de vie, moyenne ensuite' });
+  const magie = incantation(p, modDe, pb);
+  for (const i of magie.incantation) {
+    derives.push({ cle: `dd.${i.classe}`, libelle: `DD des sorts (${i.classe})`, valeur: i.dd, texte: String(i.dd), carac: i.carac });
+    derives.push({ cle: `attaqueSort.${i.classe}`, libelle: `Attaque de sort (${i.classe})`, valeur: i.attaque, texte: signe(i.attaque), carac: i.carac });
+  }
+
   const synchro: Record<string, unknown> = { niveau };
-  if (armure || bouclier || bonusCa) synchro.ca = ca;
+  if (armure || bouclier || bonusCa || detailCa.endsWith('(sans armure)')) synchro.ca = ca;
   if (attaques.length) {
     synchro.bonusAttaque = attaques[0].bonus;
     synchro.degats = attaques[0].degats.split(' ')[0];
   }
-  return { niveau, bonusMaitrise: pb, caracs, sauvegardes, competences, derives, attaques, stats: synchro };
+  return {
+    niveau, bonusMaitrise: pb, caracs, sauvegardes, competences, derives, attaques, stats: synchro,
+    aptitudes: aptitudesActives(p), incantation: magie.incantation, emplacements: magie.emplacements, pacte: magie.pacte, pvMaxSuggere: pvSugg,
+  };
 }

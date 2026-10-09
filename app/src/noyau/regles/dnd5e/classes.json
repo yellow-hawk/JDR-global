@@ -1,0 +1,2123 @@
+{
+ "_doc": "Classes et peuples D&D 5e de JDR Global : mécanique d'après le SRD 5.1 (Wizards of the Coast, CC-BY 4.0), textes résumés en français. Une sous-classe par classe (celle du SRD). 'effets' : appliqués automatiquement dès le niveau de l'aptitude. 'incantation.type' : complet, demi ou pacte.",
+ "classes": [
+  {
+   "id": "barbare",
+   "nom": "Barbare",
+   "deVie": 12,
+   "principales": [
+    "for"
+   ],
+   "sauvegardes": [
+    "for",
+    "con"
+   ],
+   "competences": {
+    "choix": 2,
+    "parmi": [
+     "dressage",
+     "athletisme",
+     "intimidation",
+     "nature",
+     "perception",
+     "survie"
+    ]
+   },
+   "maitrises": {
+    "armes": [
+     "simple",
+     "guerre"
+    ],
+    "armures": [
+     "legere",
+     "intermediaire",
+     "bouclier"
+    ]
+   },
+   "equipement": [
+    "arme:hache-a-deux-mains",
+    "arme:hachette",
+    "arme:hachette",
+    "arme:javeline",
+    "arme:javeline",
+    "objet:sac-a-dos",
+    "objet:rations"
+   ],
+   "aptitudes": [
+    {
+     "niveau": 1,
+     "nom": "Rage",
+     "texte": "Bonus aux dégâts au corps à corps, résistance aux dégâts contondants, perforants et tranchants ; 2 rages par long repos (plus aux niveaux supérieurs)."
+    },
+    {
+     "niveau": 1,
+     "nom": "Défense sans armure",
+     "texte": "Sans armure, CA = 10 + DEX + CON.",
+     "effets": [
+      {
+       "cible": "caSansArmure.con",
+       "valeur": 1
+      }
+     ]
+    },
+    {
+     "niveau": 2,
+     "nom": "Attaque téméraire",
+     "texte": "Avantage aux attaques de FOR ce tour, mais les attaques contre vous aussi."
+    },
+    {
+     "niveau": 2,
+     "nom": "Sens du danger",
+     "texte": "Avantage aux sauvegardes de DEX contre les effets visibles."
+    },
+    {
+     "niveau": 4,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 5,
+     "nom": "Attaque supplémentaire",
+     "texte": "Deux attaques par action Attaquer."
+    },
+    {
+     "niveau": 5,
+     "nom": "Déplacement rapide",
+     "texte": "+2 cases de vitesse sans armure lourde.",
+     "effets": [
+      {
+       "cible": "vitesse",
+       "valeur": 2
+      }
+     ]
+    },
+    {
+     "niveau": 7,
+     "nom": "Instinct sauvage",
+     "texte": "Avantage à l'initiative ; agir pendant la surprise en entrant en rage."
+    },
+    {
+     "niveau": 8,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 9,
+     "nom": "Critique brutal",
+     "texte": "Un dé de dégâts supplémentaire sur un critique (2 au niveau 13, 3 au 17)."
+    },
+    {
+     "niveau": 11,
+     "nom": "Rage implacable",
+     "texte": "Rester à 1 PV au lieu de tomber, sur sauvegarde de CON."
+    },
+    {
+     "niveau": 12,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 15,
+     "nom": "Rage persistante",
+     "texte": "La rage ne s'arrête plus faute d'attaquer."
+    },
+    {
+     "niveau": 16,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 18,
+     "nom": "Puissance indomptable",
+     "texte": "Un jet de FOR inférieur à la valeur de FOR prend cette valeur."
+    },
+    {
+     "niveau": 19,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 20,
+     "nom": "Champion primitif",
+     "texte": "+4 FOR et +4 CON (maximum 24).",
+     "effets": [
+      {
+       "cible": "carac.for",
+       "valeur": 4
+      },
+      {
+       "cible": "carac.con",
+       "valeur": 4
+      }
+     ]
+    }
+   ],
+   "niveauSousClasse": 3,
+   "sousClasses": [
+    {
+     "id": "berserker",
+     "nom": "Voie du berserker",
+     "aptitudes": [
+      {
+       "niveau": 3,
+       "nom": "Frénésie",
+       "texte": "En rage, une attaque supplémentaire en action bonus ; un niveau d'épuisement à la fin."
+      },
+      {
+       "niveau": 6,
+       "nom": "Rage aveugle",
+       "texte": "Immunisé contre charmé et effrayé en rage."
+      },
+      {
+       "niveau": 10,
+       "nom": "Présence intimidante",
+       "texte": "Effrayer une créature d'une action."
+      },
+      {
+       "niveau": 14,
+       "nom": "Représailles",
+       "texte": "Attaquer en réaction quand on est blessé au contact."
+      }
+     ]
+    }
+   ],
+   "texte": "Guerrier sauvage porté par la rage."
+  },
+  {
+   "id": "barde",
+   "nom": "Barde",
+   "deVie": 8,
+   "principales": [
+    "cha"
+   ],
+   "sauvegardes": [
+    "dex",
+    "cha"
+   ],
+   "competences": {
+    "choix": 3,
+    "parmi": [
+     "acrobaties",
+     "arcanes",
+     "athletisme",
+     "discretion",
+     "dressage",
+     "escamotage",
+     "histoire",
+     "intimidation",
+     "intuition",
+     "investigation",
+     "medecine",
+     "nature",
+     "perception",
+     "persuasion",
+     "religion",
+     "representation",
+     "survie",
+     "tromperie"
+    ]
+   },
+   "maitrises": {
+    "armes": [
+     "simple",
+     "arbalete-de-poing",
+     "epee-longue",
+     "rapiere",
+     "epee-courte"
+    ],
+    "armures": [
+     "legere"
+    ]
+   },
+   "equipement": [
+    "arme:rapiere",
+    "objet:sac-a-dos",
+    "armure:cuir",
+    "arme:dague"
+   ],
+   "aptitudes": [
+    {
+     "niveau": 1,
+     "nom": "Inspiration bardique",
+     "texte": "Donner un dé d'inspiration (d6, puis d8, d10, d12) à un allié, CHA fois par long repos."
+    },
+    {
+     "niveau": 2,
+     "nom": "Touche-à-tout",
+     "texte": "Moitié du bonus de maîtrise aux tests sans maîtrise."
+    },
+    {
+     "niveau": 2,
+     "nom": "Chant reposant",
+     "texte": "Soins supplémentaires lors d'un court repos."
+    },
+    {
+     "niveau": 3,
+     "nom": "Expertise",
+     "texte": "Doubler la maîtrise de deux compétences (deux autres au niveau 10)."
+    },
+    {
+     "niveau": 4,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 5,
+     "nom": "Source d'inspiration",
+     "texte": "L'inspiration revient aussi après un court repos."
+    },
+    {
+     "niveau": 6,
+     "nom": "Contre-charme",
+     "texte": "Avantage contre la peur et le charme pour les alliés proches."
+    },
+    {
+     "niveau": 8,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 10,
+     "nom": "Secrets magiques",
+     "texte": "Apprendre deux sorts de n'importe quelle liste (aussi aux niveaux 14 et 18)."
+    },
+    {
+     "niveau": 12,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 16,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 19,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 20,
+     "nom": "Inspiration supérieure",
+     "texte": "Récupérer une inspiration au début du combat si on n'en a plus."
+    }
+   ],
+   "niveauSousClasse": 3,
+   "sousClasses": [
+    {
+     "id": "savoir",
+     "nom": "Collège du savoir",
+     "aptitudes": [
+      {
+       "niveau": 3,
+       "nom": "Mots cinglants",
+       "texte": "Retrancher un dé d'inspiration au jet d'un ennemi."
+      },
+      {
+       "niveau": 6,
+       "nom": "Secrets magiques supplémentaires",
+       "texte": "Deux sorts de n'importe quelle liste."
+      },
+      {
+       "niveau": 14,
+       "nom": "Talent incomparable",
+       "texte": "Ajouter un dé d'inspiration à ses propres tests."
+      }
+     ]
+    }
+   ],
+   "texte": "Artiste et lanceur de sorts dont la musique façonne la magie.",
+   "incantation": {
+    "carac": "cha",
+    "type": "complet"
+   }
+  },
+  {
+   "id": "clerc",
+   "nom": "Clerc",
+   "deVie": 8,
+   "principales": [
+    "sag"
+   ],
+   "sauvegardes": [
+    "sag",
+    "cha"
+   ],
+   "competences": {
+    "choix": 2,
+    "parmi": [
+     "histoire",
+     "intuition",
+     "medecine",
+     "persuasion",
+     "religion"
+    ]
+   },
+   "maitrises": {
+    "armes": [
+     "simple"
+    ],
+    "armures": [
+     "legere",
+     "intermediaire",
+     "bouclier"
+    ]
+   },
+   "equipement": [
+    "arme:masse",
+    "armure:ecailles",
+    "armure:bouclier",
+    "objet:symbole-sacre",
+    "objet:sac-a-dos"
+   ],
+   "aptitudes": [
+    {
+     "niveau": 1,
+     "nom": "Domaine divin",
+     "texte": "Le domaine choisi donne sorts et aptitudes."
+    },
+    {
+     "niveau": 2,
+     "nom": "Conduit divin",
+     "texte": "Renvoi des morts-vivants et pouvoir du domaine, une fois par repos (plus aux niveaux 6 et 18)."
+    },
+    {
+     "niveau": 4,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 5,
+     "nom": "Destruction des morts-vivants",
+     "texte": "Le renvoi détruit les morts-vivants faibles."
+    },
+    {
+     "niveau": 8,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 10,
+     "nom": "Intervention divine",
+     "texte": "Implorer l'aide de sa divinité (réussite automatique au niveau 20)."
+    },
+    {
+     "niveau": 12,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 16,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 19,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    }
+   ],
+   "niveauSousClasse": 1,
+   "sousClasses": [
+    {
+     "id": "vie",
+     "nom": "Domaine de la vie",
+     "aptitudes": [
+      {
+       "niveau": 1,
+       "nom": "Disciple de la vie",
+       "texte": "Les sorts de soins rendent 2 + niveau du sort PV de plus."
+      },
+      {
+       "niveau": 2,
+       "nom": "Préserver la vie",
+       "texte": "Conduit divin : répartir 5 × niveau PV de soins."
+      },
+      {
+       "niveau": 6,
+       "nom": "Guérisseur béni",
+       "texte": "Se soigner en soignant les autres."
+      },
+      {
+       "niveau": 8,
+       "nom": "Frappe divine",
+       "texte": "+1d8 dégâts radiants une fois par tour (2d8 au niveau 14)."
+      },
+      {
+       "niveau": 17,
+       "nom": "Guérison suprême",
+       "texte": "Les soins sont au maximum."
+      }
+     ]
+    }
+   ],
+   "texte": "Prêtre guerrier, canal de la puissance divine.",
+   "incantation": {
+    "carac": "sag",
+    "type": "complet"
+   }
+  },
+  {
+   "id": "druide",
+   "nom": "Druide",
+   "deVie": 8,
+   "principales": [
+    "sag"
+   ],
+   "sauvegardes": [
+    "int",
+    "sag"
+   ],
+   "competences": {
+    "choix": 2,
+    "parmi": [
+     "arcanes",
+     "dressage",
+     "intuition",
+     "medecine",
+     "nature",
+     "perception",
+     "religion",
+     "survie"
+    ]
+   },
+   "maitrises": {
+    "armes": [
+     "gourdin",
+     "dague",
+     "flechette",
+     "javeline",
+     "masse",
+     "baton",
+     "cimeterre",
+     "serpe",
+     "fronde",
+     "lance"
+    ],
+    "armures": [
+     "legere",
+     "intermediaire",
+     "bouclier"
+    ]
+   },
+   "equipement": [
+    "armure:bouclier",
+    "arme:cimeterre",
+    "armure:cuir",
+    "objet:sac-a-dos",
+    "arme:baton"
+   ],
+   "aptitudes": [
+    {
+     "niveau": 1,
+     "nom": "Druidique",
+     "texte": "Langue secrète des druides."
+    },
+    {
+     "niveau": 2,
+     "nom": "Forme sauvage",
+     "texte": "Se changer en bête deux fois par court repos (FP croissant avec le niveau)."
+    },
+    {
+     "niveau": 4,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 8,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 12,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 16,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 18,
+     "nom": "Jeunesse éternelle",
+     "texte": "Vieillit dix fois moins vite ; incanter sous forme sauvage."
+    },
+    {
+     "niveau": 19,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 20,
+     "nom": "Archidruide",
+     "texte": "Forme sauvage illimitée."
+    }
+   ],
+   "niveauSousClasse": 2,
+   "sousClasses": [
+    {
+     "id": "terre",
+     "nom": "Cercle de la terre",
+     "aptitudes": [
+      {
+       "niveau": 2,
+       "nom": "Récupération naturelle",
+       "texte": "Récupérer des emplacements de sorts lors d'un court repos."
+      },
+      {
+       "niveau": 6,
+       "nom": "Déplacement tellurique",
+       "texte": "Ignorer les terrains difficiles naturels."
+      },
+      {
+       "niveau": 10,
+       "nom": "Protection de la nature",
+       "texte": "Immunité au poison et aux maladies, pas charmé ni effrayé par les fées et élémentaires."
+      },
+      {
+       "niveau": 14,
+       "nom": "Sanctuaire naturel",
+       "texte": "Les bêtes et plantes hésitent à vous attaquer."
+      }
+     ]
+    }
+   ],
+   "texte": "Gardien de la nature, change de forme.",
+   "incantation": {
+    "carac": "sag",
+    "type": "complet"
+   }
+  },
+  {
+   "id": "ensorceleur",
+   "nom": "Ensorceleur",
+   "deVie": 6,
+   "principales": [
+    "cha"
+   ],
+   "sauvegardes": [
+    "con",
+    "cha"
+   ],
+   "competences": {
+    "choix": 2,
+    "parmi": [
+     "arcanes",
+     "intuition",
+     "intimidation",
+     "persuasion",
+     "religion",
+     "tromperie"
+    ]
+   },
+   "maitrises": {
+    "armes": [
+     "dague",
+     "flechette",
+     "fronde",
+     "baton",
+     "arbalete-legere"
+    ],
+    "armures": []
+   },
+   "equipement": [
+    "arme:arbalete-legere",
+    "objet:focaliseur",
+    "objet:sac-a-dos",
+    "arme:dague",
+    "arme:dague"
+   ],
+   "aptitudes": [
+    {
+     "niveau": 1,
+     "nom": "Origine magique",
+     "texte": "La source du pouvoir : sa lignée."
+    },
+    {
+     "niveau": 2,
+     "nom": "Source de magie",
+     "texte": "Points de sorcellerie (égaux au niveau), convertibles en emplacements."
+    },
+    {
+     "niveau": 3,
+     "nom": "Métamagie",
+     "texte": "Modifier ses sorts (prolongé, intensifié, discret…) ; options supplémentaires aux niveaux 10 et 17."
+    },
+    {
+     "niveau": 4,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 8,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 12,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 16,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 19,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 20,
+     "nom": "Restauration ensorcelée",
+     "texte": "Récupérer 4 points de sorcellerie lors d'un court repos."
+    }
+   ],
+   "niveauSousClasse": 1,
+   "sousClasses": [
+    {
+     "id": "draconique",
+     "nom": "Lignée draconique",
+     "aptitudes": [
+      {
+       "niveau": 1,
+       "nom": "Résilience draconique",
+       "texte": "+1 PV par niveau ; sans armure, CA = 13 + DEX.",
+       "effets": [
+        {
+         "cible": "pvParNiveau",
+         "valeur": 1
+        },
+        {
+         "cible": "caSansArmure.base13",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "niveau": 6,
+       "nom": "Affinité élémentaire",
+       "texte": "Ajouter CHA aux dégâts de l'élément de sa lignée."
+      },
+      {
+       "niveau": 14,
+       "nom": "Ailes de dragon",
+       "texte": "Déployer des ailes : vitesse de vol."
+      },
+      {
+       "niveau": 18,
+       "nom": "Présence draconique",
+       "texte": "Aura de terreur ou de fascination."
+      }
+     ]
+    }
+   ],
+   "texte": "La magie coule dans ses veines.",
+   "incantation": {
+    "carac": "cha",
+    "type": "complet"
+   }
+  },
+  {
+   "id": "guerrier",
+   "nom": "Guerrier",
+   "deVie": 10,
+   "principales": [
+    "for",
+    "dex"
+   ],
+   "sauvegardes": [
+    "for",
+    "con"
+   ],
+   "competences": {
+    "choix": 2,
+    "parmi": [
+     "acrobaties",
+     "dressage",
+     "athletisme",
+     "histoire",
+     "intuition",
+     "intimidation",
+     "perception",
+     "survie"
+    ]
+   },
+   "maitrises": {
+    "armes": [
+     "simple",
+     "guerre"
+    ],
+    "armures": [
+     "legere",
+     "intermediaire",
+     "lourde",
+     "bouclier"
+    ]
+   },
+   "equipement": [
+    "armure:cotte-de-mailles",
+    "arme:epee-longue",
+    "armure:bouclier",
+    "arme:arbalete-legere",
+    "objet:sac-a-dos"
+   ],
+   "aptitudes": [
+    {
+     "niveau": 1,
+     "nom": "Style de combat",
+     "texte": "Défense (+1 CA en armure), Archerie, Duel, Arme à deux mains, Protection…"
+    },
+    {
+     "niveau": 1,
+     "nom": "Second souffle",
+     "texte": "Récupérer 1d10 + niveau PV en action bonus, une fois par court repos."
+    },
+    {
+     "niveau": 2,
+     "nom": "Fougue",
+     "texte": "Une action supplémentaire, une fois par court repos (deux au niveau 17)."
+    },
+    {
+     "niveau": 4,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 5,
+     "nom": "Attaque supplémentaire",
+     "texte": "Deux attaques par action Attaquer (trois au niveau 11, quatre au 20)."
+    },
+    {
+     "niveau": 6,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 8,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 9,
+     "nom": "Inflexible",
+     "texte": "Relancer une sauvegarde ratée, une fois par long repos (plus aux niveaux 13 et 17)."
+    },
+    {
+     "niveau": 12,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 14,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 16,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 19,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    }
+   ],
+   "niveauSousClasse": 3,
+   "sousClasses": [
+    {
+     "id": "champion",
+     "nom": "Champion",
+     "aptitudes": [
+      {
+       "niveau": 3,
+       "nom": "Critique amélioré",
+       "texte": "Coup critique sur 19-20."
+      },
+      {
+       "niveau": 7,
+       "nom": "Athlète remarquable",
+       "texte": "Moitié de la maîtrise aux tests de FOR, DEX, CON sans maîtrise."
+      },
+      {
+       "niveau": 10,
+       "nom": "Style de combat supplémentaire",
+       "texte": "Un deuxième style de combat."
+      },
+      {
+       "niveau": 15,
+       "nom": "Critique supérieur",
+       "texte": "Coup critique sur 18-20."
+      },
+      {
+       "niveau": 18,
+       "nom": "Survivant",
+       "texte": "Récupérer des PV à chaque tour sous la moitié de ses PV."
+      }
+     ]
+    }
+   ],
+   "texte": "Maître des armes et des armures."
+  },
+  {
+   "id": "magicien",
+   "nom": "Magicien",
+   "deVie": 6,
+   "principales": [
+    "int"
+   ],
+   "sauvegardes": [
+    "int",
+    "sag"
+   ],
+   "competences": {
+    "choix": 2,
+    "parmi": [
+     "arcanes",
+     "histoire",
+     "intuition",
+     "investigation",
+     "medecine",
+     "religion"
+    ]
+   },
+   "maitrises": {
+    "armes": [
+     "dague",
+     "flechette",
+     "fronde",
+     "baton",
+     "arbalete-legere"
+    ],
+    "armures": []
+   },
+   "equipement": [
+    "arme:baton",
+    "objet:focaliseur",
+    "objet:grimoire",
+    "objet:sac-a-dos"
+   ],
+   "aptitudes": [
+    {
+     "niveau": 1,
+     "nom": "Grimoire",
+     "texte": "Les sorts appris sont écrits dans le grimoire."
+    },
+    {
+     "niveau": 1,
+     "nom": "Restauration arcanique",
+     "texte": "Récupérer des emplacements lors d'un court repos."
+    },
+    {
+     "niveau": 2,
+     "nom": "Tradition arcanique",
+     "texte": "L'école de magie choisie."
+    },
+    {
+     "niveau": 4,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 8,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 12,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 16,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 18,
+     "nom": "Maîtrise des sorts",
+     "texte": "Deux sorts de bas niveau sans emplacement."
+    },
+    {
+     "niveau": 19,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 20,
+     "nom": "Sorts de prédilection",
+     "texte": "Deux sorts de niveau 3 lancés gratuitement une fois par repos."
+    }
+   ],
+   "niveauSousClasse": 2,
+   "sousClasses": [
+    {
+     "id": "evocation",
+     "nom": "École d'évocation",
+     "aptitudes": [
+      {
+       "niveau": 2,
+       "nom": "Façonner les sorts",
+       "texte": "Protéger des alliés de ses sorts d'évocation."
+      },
+      {
+       "niveau": 6,
+       "nom": "Sorts mineurs puissants",
+       "texte": "Les sorts mineurs font la moitié des dégâts même réussis."
+      },
+      {
+       "niveau": 10,
+       "nom": "Évocation renforcée",
+       "texte": "Ajouter INT aux dégâts des évocations."
+      },
+      {
+       "niveau": 14,
+       "nom": "Surcharge",
+       "texte": "Dégâts maximaux, au prix de sa santé."
+      }
+     ]
+    }
+   ],
+   "texte": "Érudit des arcanes.",
+   "incantation": {
+    "carac": "int",
+    "type": "complet"
+   }
+  },
+  {
+   "id": "moine",
+   "nom": "Moine",
+   "deVie": 8,
+   "principales": [
+    "dex",
+    "sag"
+   ],
+   "sauvegardes": [
+    "for",
+    "dex"
+   ],
+   "competences": {
+    "choix": 2,
+    "parmi": [
+     "acrobaties",
+     "athletisme",
+     "histoire",
+     "intuition",
+     "religion",
+     "discretion"
+    ]
+   },
+   "maitrises": {
+    "armes": [
+     "simple",
+     "epee-courte"
+    ],
+    "armures": []
+   },
+   "equipement": [
+    "arme:epee-courte",
+    "objet:sac-a-dos",
+    "arme:flechette"
+   ],
+   "aptitudes": [
+    {
+     "niveau": 1,
+     "nom": "Défense sans armure",
+     "texte": "Sans armure ni bouclier, CA = 10 + DEX + SAG.",
+     "effets": [
+      {
+       "cible": "caSansArmure.sag",
+       "valeur": 1
+      }
+     ]
+    },
+    {
+     "niveau": 1,
+     "nom": "Arts martiaux",
+     "texte": "Attaques à mains nues avec DEX, dé d'arts martiaux (d4 puis d6, d8, d10)."
+    },
+    {
+     "niveau": 2,
+     "nom": "Ki",
+     "texte": "Points de ki (égaux au niveau) : déluge de coups, défense patiente, pas du vent."
+    },
+    {
+     "niveau": 2,
+     "nom": "Déplacement sans armure",
+     "texte": "+2 cases de vitesse sans armure (plus aux niveaux suivants).",
+     "effets": [
+      {
+       "cible": "vitesse",
+       "valeur": 2
+      }
+     ]
+    },
+    {
+     "niveau": 3,
+     "nom": "Parade de projectiles",
+     "texte": "Réduire les dégâts d'un projectile, le renvoyer."
+    },
+    {
+     "niveau": 4,
+     "nom": "Chute ralentie",
+     "texte": "Réduire les dégâts de chute."
+    },
+    {
+     "niveau": 4,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 5,
+     "nom": "Attaque supplémentaire",
+     "texte": "Deux attaques par action Attaquer."
+    },
+    {
+     "niveau": 5,
+     "nom": "Frappe étourdissante",
+     "texte": "Dépenser du ki pour étourdir."
+    },
+    {
+     "niveau": 7,
+     "nom": "Dérobade",
+     "texte": "Aucun dégât sur une sauvegarde de DEX réussie."
+    },
+    {
+     "niveau": 8,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 10,
+     "nom": "Pureté du corps",
+     "texte": "Immunité aux maladies et au poison."
+    },
+    {
+     "niveau": 12,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 14,
+     "nom": "Âme de diamant",
+     "texte": "Maîtrise de toutes les sauvegardes.",
+     "effets": []
+    },
+    {
+     "niveau": 16,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 18,
+     "nom": "Corps vide",
+     "texte": "Devenir invisible avec le ki."
+    },
+    {
+     "niveau": 19,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 20,
+     "nom": "Perfection de l'être",
+     "texte": "Récupérer 4 ki au début du combat."
+    }
+   ],
+   "niveauSousClasse": 3,
+   "sousClasses": [
+    {
+     "id": "main-ouverte",
+     "nom": "Voie de la main ouverte",
+     "aptitudes": [
+      {
+       "niveau": 3,
+       "nom": "Technique de la main ouverte",
+       "texte": "Le déluge de coups renverse, repousse ou empêche les réactions."
+      },
+      {
+       "niveau": 6,
+       "nom": "Plénitude du corps",
+       "texte": "Se soigner de 3 × niveau PV."
+      },
+      {
+       "niveau": 11,
+       "nom": "Tranquillité",
+       "texte": "Effet de sanctuaire après un long repos."
+      },
+      {
+       "niveau": 17,
+       "nom": "Paume vibratoire",
+       "texte": "Une vibration mortelle."
+      }
+     ]
+    }
+   ],
+   "texte": "Combattant à mains nues, maître du ki."
+  },
+  {
+   "id": "paladin",
+   "nom": "Paladin",
+   "deVie": 10,
+   "principales": [
+    "for",
+    "cha"
+   ],
+   "sauvegardes": [
+    "sag",
+    "cha"
+   ],
+   "competences": {
+    "choix": 2,
+    "parmi": [
+     "athletisme",
+     "intuition",
+     "intimidation",
+     "medecine",
+     "persuasion",
+     "religion"
+    ]
+   },
+   "maitrises": {
+    "armes": [
+     "simple",
+     "guerre"
+    ],
+    "armures": [
+     "legere",
+     "intermediaire",
+     "lourde",
+     "bouclier"
+    ]
+   },
+   "equipement": [
+    "armure:cotte-de-mailles",
+    "arme:epee-longue",
+    "armure:bouclier",
+    "arme:javeline",
+    "objet:symbole-sacre"
+   ],
+   "aptitudes": [
+    {
+     "niveau": 1,
+     "nom": "Sens divin",
+     "texte": "Détecter célestes, fiélons et morts-vivants."
+    },
+    {
+     "niveau": 1,
+     "nom": "Imposition des mains",
+     "texte": "Réserve de soins de 5 × niveau PV."
+    },
+    {
+     "niveau": 2,
+     "nom": "Style de combat",
+     "texte": "Défense, Duel, Arme à deux mains ou Protection."
+    },
+    {
+     "niveau": 2,
+     "nom": "Châtiment divin",
+     "texte": "Dépenser un emplacement : +2d8 dégâts radiants (plus par niveau d'emplacement)."
+    },
+    {
+     "niveau": 3,
+     "nom": "Santé divine",
+     "texte": "Immunité aux maladies."
+    },
+    {
+     "niveau": 4,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 5,
+     "nom": "Attaque supplémentaire",
+     "texte": "Deux attaques par action Attaquer."
+    },
+    {
+     "niveau": 6,
+     "nom": "Aura de protection",
+     "texte": "Les alliés proches ajoutent votre CHA à leurs sauvegardes."
+    },
+    {
+     "niveau": 8,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 10,
+     "nom": "Aura de courage",
+     "texte": "Les alliés proches ne peuvent être effrayés."
+    },
+    {
+     "niveau": 11,
+     "nom": "Châtiment divin amélioré",
+     "texte": "+1d8 dégâts radiants à chaque coup au contact."
+    },
+    {
+     "niveau": 12,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 14,
+     "nom": "Contact purifiant",
+     "texte": "Mettre fin à un sort par imposition des mains."
+    },
+    {
+     "niveau": 16,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 19,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    }
+   ],
+   "niveauSousClasse": 3,
+   "sousClasses": [
+    {
+     "id": "devotion",
+     "nom": "Serment de dévotion",
+     "aptitudes": [
+      {
+       "niveau": 3,
+       "nom": "Arme sacrée",
+       "texte": "Conduit divin : +CHA à l'attaque, l'arme brille."
+      },
+      {
+       "niveau": 7,
+       "nom": "Aura de dévotion",
+       "texte": "Les alliés proches ne peuvent être charmés."
+      },
+      {
+       "niveau": 15,
+       "nom": "Pureté d'esprit",
+       "texte": "Protection permanente contre le mal et le bien."
+      },
+      {
+       "niveau": 20,
+       "nom": "Nimbe sacré",
+       "texte": "Aura de lumière qui brûle les ennemis."
+      }
+     ]
+    }
+   ],
+   "texte": "Chevalier lié par un serment sacré.",
+   "incantation": {
+    "carac": "cha",
+    "type": "demi"
+   }
+  },
+  {
+   "id": "rodeur",
+   "nom": "Rôdeur",
+   "deVie": 10,
+   "principales": [
+    "dex",
+    "sag"
+   ],
+   "sauvegardes": [
+    "for",
+    "dex"
+   ],
+   "competences": {
+    "choix": 3,
+    "parmi": [
+     "dressage",
+     "athletisme",
+     "intuition",
+     "investigation",
+     "nature",
+     "perception",
+     "discretion",
+     "survie"
+    ]
+   },
+   "maitrises": {
+    "armes": [
+     "simple",
+     "guerre"
+    ],
+    "armures": [
+     "legere",
+     "intermediaire",
+     "bouclier"
+    ]
+   },
+   "equipement": [
+    "armure:ecailles",
+    "arme:epee-courte",
+    "arme:epee-courte",
+    "arme:arc-long",
+    "objet:fleches",
+    "objet:sac-a-dos"
+   ],
+   "aptitudes": [
+    {
+     "niveau": 1,
+     "nom": "Ennemi juré",
+     "texte": "Avantage pour pister et se souvenir d'un type d'ennemi."
+    },
+    {
+     "niveau": 1,
+     "nom": "Explorateur-né",
+     "texte": "Un type de terrain favori : voyage, survie et pistage facilités."
+    },
+    {
+     "niveau": 2,
+     "nom": "Style de combat",
+     "texte": "Archerie, Défense, Duel ou Combat à deux armes."
+    },
+    {
+     "niveau": 3,
+     "nom": "Vigilance primitive",
+     "texte": "Sentir la présence de certains types de créatures."
+    },
+    {
+     "niveau": 4,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 5,
+     "nom": "Attaque supplémentaire",
+     "texte": "Deux attaques par action Attaquer."
+    },
+    {
+     "niveau": 8,
+     "nom": "Traversée des terrains",
+     "texte": "Ignorer les terrains difficiles naturels."
+    },
+    {
+     "niveau": 8,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 10,
+     "nom": "Camouflage naturel",
+     "texte": "Se cacher dans la nature (+10 Discrétion immobile)."
+    },
+    {
+     "niveau": 12,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 14,
+     "nom": "Disparition",
+     "texte": "Se cacher en action bonus ; impossible à pister par magie."
+    },
+    {
+     "niveau": 16,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 18,
+     "nom": "Sens sauvages",
+     "texte": "Percevoir les créatures invisibles proches."
+    },
+    {
+     "niveau": 19,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 20,
+     "nom": "Tueur d'ennemis",
+     "texte": "+SAG à l'attaque ou aux dégâts contre son ennemi juré."
+    }
+   ],
+   "niveauSousClasse": 3,
+   "sousClasses": [
+    {
+     "id": "chasseur",
+     "nom": "Chasseur",
+     "aptitudes": [
+      {
+       "niveau": 3,
+       "nom": "Proie du chasseur",
+       "texte": "Tueur de colosses, Pourfendeur de géants ou Briseur de hordes."
+      },
+      {
+       "niveau": 7,
+       "nom": "Tactiques défensives",
+       "texte": "Échapper à la horde, Défense contre les attaques multiples…"
+      },
+      {
+       "niveau": 11,
+       "nom": "Attaque multiple",
+       "texte": "Volée ou Attaque tourbillonnante."
+      },
+      {
+       "niveau": 15,
+       "nom": "Défense supérieure du chasseur",
+       "texte": "Dérobade, Résister à la marée…"
+      }
+     ]
+    }
+   ],
+   "texte": "Pisteur et chasseur des terres sauvages.",
+   "incantation": {
+    "carac": "sag",
+    "type": "demi"
+   }
+  },
+  {
+   "id": "roublard",
+   "nom": "Roublard",
+   "deVie": 8,
+   "principales": [
+    "dex"
+   ],
+   "sauvegardes": [
+    "dex",
+    "int"
+   ],
+   "competences": {
+    "choix": 4,
+    "parmi": [
+     "acrobaties",
+     "athletisme",
+     "tromperie",
+     "intuition",
+     "intimidation",
+     "investigation",
+     "perception",
+     "representation",
+     "persuasion",
+     "escamotage",
+     "discretion"
+    ]
+   },
+   "maitrises": {
+    "armes": [
+     "simple",
+     "arbalete-de-poing",
+     "epee-longue",
+     "rapiere",
+     "epee-courte"
+    ],
+    "armures": [
+     "legere"
+    ]
+   },
+   "equipement": [
+    "arme:rapiere",
+    "arme:arc-court",
+    "objet:fleches",
+    "armure:cuir",
+    "arme:dague",
+    "arme:dague",
+    "objet:outils-voleur",
+    "objet:sac-a-dos"
+   ],
+   "aptitudes": [
+    {
+     "niveau": 1,
+     "nom": "Expertise",
+     "texte": "Doubler la maîtrise de deux compétences (deux autres au niveau 6)."
+    },
+    {
+     "niveau": 1,
+     "nom": "Attaque sournoise",
+     "texte": "+1d6 dégâts une fois par tour avec avantage ou un allié proche (+1d6 tous les deux niveaux)."
+    },
+    {
+     "niveau": 1,
+     "nom": "Jargon des voleurs",
+     "texte": "Langage secret des bas-fonds."
+    },
+    {
+     "niveau": 2,
+     "nom": "Ruse",
+     "texte": "Se précipiter, se désengager ou se cacher en action bonus."
+    },
+    {
+     "niveau": 4,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 5,
+     "nom": "Esquive instinctive",
+     "texte": "Diviser par deux les dégâts d'une attaque en réaction."
+    },
+    {
+     "niveau": 7,
+     "nom": "Dérobade",
+     "texte": "Aucun dégât sur une sauvegarde de DEX réussie."
+    },
+    {
+     "niveau": 8,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 10,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 11,
+     "nom": "Talent fiable",
+     "texte": "Un 1 à 9 au d20 compte comme 10 sur les compétences maîtrisées."
+    },
+    {
+     "niveau": 12,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 14,
+     "nom": "Perception aveugle",
+     "texte": "Percevoir les créatures cachées proches."
+    },
+    {
+     "niveau": 15,
+     "nom": "Esprit fuyant",
+     "texte": "Maîtrise des sauvegardes de SAG."
+    },
+    {
+     "niveau": 16,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 18,
+     "nom": "Insaisissable",
+     "texte": "Aucune attaque n'a l'avantage contre vous."
+    },
+    {
+     "niveau": 19,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 20,
+     "nom": "Coup de chance",
+     "texte": "Transformer un échec en réussite, une fois par repos."
+    }
+   ],
+   "niveauSousClasse": 3,
+   "sousClasses": [
+    {
+     "id": "voleur",
+     "nom": "Voleur",
+     "aptitudes": [
+      {
+       "niveau": 3,
+       "nom": "Mains lestes",
+       "texte": "Escamotage, outils de voleur ou utiliser un objet en action bonus."
+      },
+      {
+       "niveau": 3,
+       "nom": "Monte-en-l'air",
+       "texte": "Escalade rapide, saut plus long."
+      },
+      {
+       "niveau": 9,
+       "nom": "Discrétion suprême",
+       "texte": "Avantage en Discrétion en se déplaçant lentement."
+      },
+      {
+       "niveau": 13,
+       "nom": "Utilisation d'objets magiques",
+       "texte": "Ignorer les restrictions des objets magiques."
+      },
+      {
+       "niveau": 17,
+       "nom": "Réflexes de voleur",
+       "texte": "Deux tours au premier round."
+      }
+     ]
+    }
+   ],
+   "texte": "Expert de la discrétion et des coups bas."
+  },
+  {
+   "id": "occultiste",
+   "nom": "Occultiste",
+   "deVie": 8,
+   "principales": [
+    "cha"
+   ],
+   "sauvegardes": [
+    "sag",
+    "cha"
+   ],
+   "competences": {
+    "choix": 2,
+    "parmi": [
+     "arcanes",
+     "tromperie",
+     "histoire",
+     "intimidation",
+     "investigation",
+     "nature",
+     "religion"
+    ]
+   },
+   "maitrises": {
+    "armes": [
+     "simple"
+    ],
+    "armures": [
+     "legere"
+    ]
+   },
+   "equipement": [
+    "arme:arbalete-legere",
+    "objet:focaliseur",
+    "armure:cuir",
+    "arme:dague",
+    "arme:dague"
+   ],
+   "aptitudes": [
+    {
+     "niveau": 1,
+     "nom": "Patron d'outre-monde",
+     "texte": "Le pacte conclu avec une entité puissante."
+    },
+    {
+     "niveau": 1,
+     "nom": "Magie de pacte",
+     "texte": "Peu d'emplacements, toujours au plus haut niveau, récupérés au court repos."
+    },
+    {
+     "niveau": 2,
+     "nom": "Manifestations occultes",
+     "texte": "Pouvoirs invoqués permanents (plus en montant de niveau)."
+    },
+    {
+     "niveau": 3,
+     "nom": "Faveur de pacte",
+     "texte": "Pacte de la lame, de la chaîne ou du grimoire."
+    },
+    {
+     "niveau": 4,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 8,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 11,
+     "nom": "Arcanum mystique",
+     "texte": "Un sort de niveau 6 une fois par long repos (7, 8, 9 aux niveaux 13, 15, 17)."
+    },
+    {
+     "niveau": 12,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 16,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 19,
+     "nom": "Amélioration de caractéristiques",
+     "texte": "+2 à une caractéristique ou +1 à deux (ou un don).",
+     "amelioration": true
+    },
+    {
+     "niveau": 20,
+     "nom": "Maître de l'occulte",
+     "texte": "Récupérer ses emplacements de pacte en priant son patron."
+    }
+   ],
+   "niveauSousClasse": 1,
+   "sousClasses": [
+    {
+     "id": "fielon",
+     "nom": "Le Fiélon",
+     "aptitudes": [
+      {
+       "niveau": 1,
+       "nom": "Bénédiction du ténébreux",
+       "texte": "PV temporaires en abattant un ennemi."
+      },
+      {
+       "niveau": 6,
+       "nom": "Chance du ténébreux",
+       "texte": "Ajouter 1d10 à un test ou une sauvegarde."
+      },
+      {
+       "niveau": 10,
+       "nom": "Résistance fiélonne",
+       "texte": "Une résistance au choix après chaque repos."
+      },
+      {
+       "niveau": 14,
+       "nom": "Traversée des enfers",
+       "texte": "Envoyer une créature en enfer un instant."
+      }
+     ]
+    }
+   ],
+   "texte": "Lié à une puissance d'outre-monde.",
+   "incantation": {
+    "carac": "cha",
+    "type": "pacte"
+   }
+  }
+ ],
+ "peuples": [
+  {
+   "id": "humain",
+   "nom": "Humain",
+   "bonus": {
+    "for": 1,
+    "dex": 1,
+    "con": 1,
+    "int": 1,
+    "sag": 1,
+    "cha": 1
+   },
+   "vitesse": 6,
+   "taille": "M",
+   "vision": 0,
+   "langues": [
+    "Commun"
+   ],
+   "languesLibres": 1,
+   "avatar": "Humains",
+   "traits": []
+  },
+  {
+   "id": "haut-elfe",
+   "nom": "Elfe (haut-elfe)",
+   "bonus": {
+    "dex": 2,
+    "int": 1
+   },
+   "vitesse": 6,
+   "taille": "M",
+   "vision": 12,
+   "langues": [
+    "Commun",
+    "Elfique"
+   ],
+   "languesLibres": 1,
+   "avatar": "Elfes",
+   "competences": [
+    "perception"
+   ],
+   "traits": [
+    {
+     "nom": "Vision dans le noir",
+     "texte": "Voir dans la pénombre à 18 m."
+    },
+    {
+     "nom": "Ascendance féerique",
+     "texte": "Avantage contre le charme ; la magie ne peut l'endormir."
+    },
+    {
+     "nom": "Transe",
+     "texte": "Quatre heures de méditation valent un repos."
+    },
+    {
+     "nom": "Sort mineur",
+     "texte": "Un sort mineur de magicien."
+    }
+   ]
+  },
+  {
+   "id": "nain-des-collines",
+   "nom": "Nain (des collines)",
+   "bonus": {
+    "con": 2,
+    "sag": 1
+   },
+   "vitesse": 5,
+   "taille": "M",
+   "vision": 12,
+   "langues": [
+    "Commun",
+    "Nain"
+   ],
+   "avatar": "Nains",
+   "traits": [
+    {
+     "nom": "Vision dans le noir",
+     "texte": "Voir dans la pénombre à 18 m."
+    },
+    {
+     "nom": "Résistance naine",
+     "texte": "Avantage contre le poison, résistance aux dégâts de poison."
+    },
+    {
+     "nom": "Ténacité naine",
+     "texte": "+1 PV par niveau.",
+     "effets": [
+      {
+       "cible": "pvParNiveau",
+       "valeur": 1
+      }
+     ]
+    },
+    {
+     "nom": "Connaissance de la pierre",
+     "texte": "Double maîtrise en Histoire sur la pierre."
+    }
+   ]
+  },
+  {
+   "id": "halfelin-pied-leger",
+   "nom": "Halfelin (pied-léger)",
+   "bonus": {
+    "dex": 2,
+    "cha": 1
+   },
+   "vitesse": 5,
+   "taille": "P",
+   "vision": 0,
+   "langues": [
+    "Commun",
+    "Halfelin"
+   ],
+   "avatar": "Halfelins",
+   "traits": [
+    {
+     "nom": "Chanceux",
+     "texte": "Relancer un 1 au d20."
+    },
+    {
+     "nom": "Brave",
+     "texte": "Avantage contre la peur."
+    },
+    {
+     "nom": "Agilité halfeline",
+     "texte": "Traverser l'espace des créatures plus grandes."
+    },
+    {
+     "nom": "Discrétion naturelle",
+     "texte": "Se cacher derrière une créature plus grande."
+    }
+   ]
+  },
+  {
+   "id": "drakeide",
+   "nom": "Drakéide",
+   "bonus": {
+    "for": 2,
+    "cha": 1
+   },
+   "vitesse": 6,
+   "taille": "M",
+   "vision": 0,
+   "langues": [
+    "Commun",
+    "Draconique"
+   ],
+   "avatar": "Drakéides",
+   "traits": [
+    {
+     "nom": "Ascendance draconique",
+     "texte": "Un type de dragon : élément du souffle et de la résistance."
+    },
+    {
+     "nom": "Souffle",
+     "texte": "2d6 dégâts (plus aux niveaux 6, 11, 16), une fois par repos."
+    },
+    {
+     "nom": "Résistance",
+     "texte": "Résistance aux dégâts de son élément."
+    }
+   ]
+  },
+  {
+   "id": "gnome-des-roches",
+   "nom": "Gnome (des roches)",
+   "bonus": {
+    "int": 2,
+    "con": 1
+   },
+   "vitesse": 5,
+   "taille": "P",
+   "vision": 12,
+   "langues": [
+    "Commun",
+    "Gnome"
+   ],
+   "avatar": "Gnomes",
+   "traits": [
+    {
+     "nom": "Vision dans le noir",
+     "texte": "Voir dans la pénombre à 18 m."
+    },
+    {
+     "nom": "Ruse gnome",
+     "texte": "Avantage aux sauvegardes d'INT, SAG et CHA contre la magie."
+    },
+    {
+     "nom": "Bricoleur",
+     "texte": "Fabriquer de petits mécanismes."
+    }
+   ]
+  },
+  {
+   "id": "demi-elfe",
+   "nom": "Demi-elfe",
+   "bonus": {
+    "cha": 2
+   },
+   "bonusLibres": 2,
+   "vitesse": 6,
+   "taille": "M",
+   "vision": 12,
+   "langues": [
+    "Commun",
+    "Elfique"
+   ],
+   "languesLibres": 1,
+   "competencesLibres": 2,
+   "avatar": "Demi-elfes",
+   "traits": [
+    {
+     "nom": "Vision dans le noir",
+     "texte": "Voir dans la pénombre à 18 m."
+    },
+    {
+     "nom": "Ascendance féerique",
+     "texte": "Avantage contre le charme ; la magie ne peut l'endormir."
+    }
+   ]
+  },
+  {
+   "id": "demi-orc",
+   "nom": "Demi-orc",
+   "bonus": {
+    "for": 2,
+    "con": 1
+   },
+   "vitesse": 6,
+   "taille": "M",
+   "vision": 12,
+   "langues": [
+    "Commun",
+    "Orque"
+   ],
+   "competences": [
+    "intimidation"
+   ],
+   "avatar": "Demi-orcs",
+   "traits": [
+    {
+     "nom": "Vision dans le noir",
+     "texte": "Voir dans la pénombre à 18 m."
+    },
+    {
+     "nom": "Endurance implacable",
+     "texte": "Tomber à 1 PV au lieu de 0, une fois par long repos."
+    },
+    {
+     "nom": "Attaques sauvages",
+     "texte": "Un dé de dégâts supplémentaire sur un critique au contact."
+    }
+   ]
+  },
+  {
+   "id": "tieffelin",
+   "nom": "Tieffelin",
+   "bonus": {
+    "cha": 2,
+    "int": 1
+   },
+   "vitesse": 6,
+   "taille": "M",
+   "vision": 12,
+   "langues": [
+    "Commun",
+    "Infernal"
+   ],
+   "avatar": "Tieffelins",
+   "traits": [
+    {
+     "nom": "Vision dans le noir",
+     "texte": "Voir dans la pénombre à 18 m."
+    },
+    {
+     "nom": "Résistance infernale",
+     "texte": "Résistance aux dégâts de feu."
+    },
+    {
+     "nom": "Héritage infernal",
+     "texte": "Sorts innés : thaumaturgie, puis représailles infernales et ténèbres."
+    }
+   ]
+  }
+ ]
+}

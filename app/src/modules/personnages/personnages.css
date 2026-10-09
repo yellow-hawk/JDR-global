@@ -62,3 +62,7 @@
   .perso-caracs { grid-template-columns: repeat(3, 1fr); }
   .perso-colonnes { grid-template-columns: 1fr; }
 }
+
+/* Création */
+.perso-creation progress { width: 100%; }
+.perso-erreur { color: var(--danger, #b42318); font-size: 0.9rem; }

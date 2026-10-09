@@ -14,6 +14,10 @@ Fiche unique d'un personnage (PJ, allié, PNJ, neutre, ennemi). État : **prêt*
 Règle de visibilité : les joueurs voient toutes les stats des PJ et alliés, seulement les champs `publicEnnemi` des autres.
 Fiche : champ « Rôle ou métier » (`personnage.role`), bouton « Stats selon le rôle » (`R.statsPourProfil`), bouton « Arbre généalogique » (module Généalogie).
 
+## Création (`creation/`)
+
+`+ PJ / + PNJ / + Ennemi` ouvrent le panneau `Creation.tsx` : **Aléatoire** (`Aleatoire.tsx` : sorte, nombre, rôle, niveau, classe, peuple, genre, méthode ; lot jusqu'à 20), **Assistant pas à pas** (`Assistant.tsx` : origine, caractéristiques standard / achat de points / 4d6, compétences, personnalité, résumé), **Fiche vierge**. `logique.ts` (pur, testé) : `genererLot` (PJ : `R.creation.aleatoire` ; PNJ : + générateur de PNJ pour rôle, manières, motivation, secret), `personnageDepuisChoix`, `apparencePour` (tenue selon la classe ou le rôle via `apparenceAuto`, puis arme et armure de l'inventaire), `assetsDeLInventaire`. Portraits (jetons) rendus ensuite par `FabriqueDePortraits`.
+
 API publique : `definition`, `SORTES`, `libelleSorte`, `campJoueurs`, `sceneJoueurs`.
 
 ## Relations

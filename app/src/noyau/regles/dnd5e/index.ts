@@ -2,6 +2,8 @@
 import type { SystemeAvecFiche } from '../types';
 import { statsPourProfil } from './profil';
 import { CATALOGUE, calculer } from './fiche';
+import { ACHAT_POINTS, TABLEAU_STANDARD, choixAleatoires, coutAchat, creer, tirage4d6 } from './creation';
+import { rngFor } from '../../hasard';
 
 const CARACS = [
   ['for', 'FOR'], ['dex', 'DEX'], ['con', 'CON'], ['int', 'INT'], ['sag', 'SAG'], ['cha', 'CHA'],
@@ -53,4 +55,11 @@ export const dnd5e: SystemeAvecFiche = {
   depuisTable: (s, j) => ({ ...s, pv: Math.max(0, num(j.hp, num(s.pv, 0))) }),
   catalogue: CATALOGUE,
   calculer,
+  creation: {
+    tableauStandard: TABLEAU_STANDARD,
+    achat: { points: ACHAT_POINTS, cout: coutAchat },
+    tirage: (graine) => tirage4d6(rngFor(graine, 'tirage')),
+    aleatoire: choixAleatoires,
+    creer,
+  },
 };

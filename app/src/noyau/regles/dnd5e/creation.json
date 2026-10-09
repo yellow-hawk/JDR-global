@@ -1,0 +1,31 @@
+{
+  "_doc": "Données de création de personnage 5e de JDR Global (maison) : noms par peuple, personnalités, classes probables selon un rôle de PNJ.",
+  "standard": [15, 14, 13, 12, 10, 8],
+  "achat": { "points": 27, "couts": { "8": 0, "9": 1, "10": 2, "11": 3, "12": 4, "13": 5, "14": 7, "15": 9 } },
+  "noms": {
+    "humain": { "m": ["Aldric", "Bertrand", "Cédric", "Gauthier", "Hugues", "Lambert", "Mathis", "Odon", "Renaud", "Thibaut", "Yvain", "Garin"], "f": ["Aliénor", "Blanche", "Clémence", "Ermengarde", "Gisèle", "Héloïse", "Isaure", "Mahaut", "Oriane", "Sibylle", "Yolande", "Adèle"] },
+    "haut-elfe": { "m": ["Aelar", "Erevan", "Galinndan", "Ivellios", "Laucian", "Riardon", "Thamior", "Varis", "Aramil", "Theren"], "f": ["Adrie", "Birel", "Caelynn", "Enna", "Keyleth", "Meriele", "Naivara", "Sariel", "Thia", "Valanthe"] },
+    "nain-des-collines": { "m": ["Adrik", "Baern", "Dain", "Eberk", "Harbek", "Morgran", "Orsik", "Rurik", "Thorin", "Vondal"], "f": ["Amber", "Bardryn", "Dagnal", "Eldeth", "Gunnloda", "Helja", "Kathra", "Riswynn", "Torbera", "Vistra"] },
+    "halfelin-pied-leger": { "m": ["Alton", "Cade", "Eldon", "Garret", "Lyle", "Milo", "Osborn", "Roscoe", "Wellby", "Perrin"], "f": ["Andry", "Bree", "Callie", "Cora", "Euphemia", "Kithri", "Lavinia", "Merla", "Seraphina", "Verna"] },
+    "drakeide": { "m": ["Arjhan", "Balasar", "Donaar", "Ghesh", "Kriv", "Medrash", "Nadarr", "Rhogar", "Torinn", "Pandjed"], "f": ["Akra", "Biri", "Daar", "Harann", "Jheri", "Kava", "Mishann", "Nala", "Sora", "Thava"] },
+    "gnome-des-roches": { "m": ["Alston", "Boddynock", "Dimble", "Fonkin", "Glim", "Orryn", "Roondar", "Warryn", "Zook", "Jebeddo"], "f": ["Bimpnottin", "Caramip", "Duvamil", "Ellyjobell", "Lilli", "Nissa", "Orla", "Roywyn", "Tana", "Zanna"] },
+    "demi-elfe": { "m": ["Arannis", "Corin", "Elian", "Fendrel", "Lorien", "Mael", "Silvan", "Tavian", "Varian", "Eryndor"], "f": ["Aelith", "Ciara", "Elowen", "Ilyana", "Lyra", "Maelis", "Sylvie", "Tessaly", "Yselle", "Arwyn"] },
+    "demi-orc": { "m": ["Dench", "Feng", "Gell", "Henk", "Holg", "Imsh", "Keth", "Krusk", "Ront", "Thokk"], "f": ["Baggi", "Emen", "Engong", "Kansif", "Myev", "Neega", "Ovak", "Shautha", "Sutha", "Vola"] },
+    "tieffelin": { "m": ["Akmenos", "Amnon", "Barakas", "Damakos", "Ekemon", "Kairon", "Leucis", "Melech", "Mordai", "Skamos"], "f": ["Akta", "Bryseis", "Criella", "Damaia", "Ea", "Kallista", "Lerissa", "Makaria", "Nemeia", "Orianna"] }
+  },
+  "personnalite": {
+    "traits": ["Toujours une blague au mauvais moment.", "Parle peu, observe beaucoup.", "Généreux jusqu'à l'imprudence.", "Méfiant envers les inconnus.", "Curieux de tout ce qui est ancien.", "Ne recule jamais devant un défi.", "Calme en toutes circonstances.", "Collectionne les petites babioles.", "Cite des proverbes de sa région.", "Se vexe facilement mais pardonne vite."],
+    "ideaux": ["Honneur : une promesse est sacrée.", "Liberté : personne ne devrait porter de chaînes.", "Savoir : la connaissance mène au progrès.", "Charité : aider ceux qui souffrent.", "Pouvoir : seuls les forts décident.", "Tradition : les anciennes coutumes protègent.", "Justice : chacun doit répondre de ses actes.", "Aventure : la vie est trop courte pour rester chez soi."],
+    "liens": ["Doit la vie à un mentor disparu.", "Protège un frère ou une sœur cadette.", "Cherche le responsable de la ruine de sa famille.", "Garde un objet de valeur dont il ignore l'origine.", "Est lié par un serment à un ordre ancien.", "Veut revoir le village où il a grandi.", "Aime quelqu'un qu'il ne peut pas épouser.", "A une dette envers une guilde peu recommandable."],
+    "defauts": ["Ne supporte pas d'avoir tort.", "Joueur invétéré.", "Trop confiant envers les belles paroles.", "Rancunier.", "Peur panique des espaces clos.", "Ment pour se donner de l'importance.", "Avide de richesses.", "Fuit les responsabilités."]
+  },
+  "classesParRole": [
+    { "motifs": "garde|soldat|sergent|capitaine|guerri|mercenaire|milic|chevalier|sentinelle|gladiat|vétéran|bandit|brute", "classes": ["guerrier", "guerrier", "paladin", "barbare"] },
+    { "motifs": "mage|magicien|sorci|enchant|astrolog|alchimiste|érudit|savant|archiviste", "classes": ["magicien", "magicien", "ensorceleur", "occultiste"] },
+    { "motifs": "prêtre|pretre|prêtresse|moine|nonne|clerc|abbé|pèlerin|guérisseu", "classes": ["clerc", "clerc", "moine"] },
+    { "motifs": "druide|ermite|chaman|herboriste|berger", "classes": ["druide", "druide", "rodeur"] },
+    { "motifs": "voleu|espion|assassin|contrebandi|receleu|pickpocket|malfrat|truand", "classes": ["roublard", "roublard", "barde"] },
+    { "motifs": "chasseu|rôdeu|rodeu|éclaireu|pisteu|guide", "classes": ["rodeur", "rodeur", "roublard"] },
+    { "motifs": "barde|ménestrel|troubadour|saltimbanque|conteu|courtisan|noble|ambassad", "classes": ["barde", "roublard", "paladin"] }
+  ]
+}

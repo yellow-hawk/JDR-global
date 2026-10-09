@@ -32,7 +32,7 @@
     },
     {
       "id": "soldat",
-      "motifs": "garde|soldat|sergent|capitaine|guerri|mercenaire|milic|sentinelle|lieutenant|gladiat|vétéran|veteran|brute|bandit",
+      "motifs": "garde|soldat|sergent|capitaine|guerri|mercenaire|milic|sentinelle|lieutenant|gladiat|vétéran|veteran|brute|bandit|barbare",
       "assets": {
         "haut": [
           "chemise",
@@ -88,7 +88,7 @@
     },
     {
       "id": "mage",
-      "motifs": "mage|magicien|sorci|enchant|astrolog|alchimiste|érudit|erudit|savant|archiviste|scribe|devin|oracle|nécroman|necroman",
+      "motifs": "mage|magicien|sorci|enchant|astrolog|alchimiste|érudit|erudit|savant|archiviste|scribe|devin|oracle|nécroman|necroman|ensorcel|occultiste",
       "assets": {
         "haut": [
           "robe",
@@ -181,7 +181,7 @@
     },
     {
       "id": "ombre",
-      "motifs": "voleu|espion|assassin|contrebandi|receleu|pickpocket|cambriol|malfrat|truand",
+      "motifs": "voleu|espion|assassin|contrebandi|receleu|pickpocket|cambriol|malfrat|truand|roublard",
       "assets": {
         "haut": "gilet",
         "bas": "pantalon",
@@ -216,7 +216,7 @@
     },
     {
       "id": "voyageur",
-      "motifs": "chasseu|rôdeu|rodeu|éclaireu|eclaireu|pisteu|guide|marin|capitaine de navire|pirate|aventuri|explorat|messager|nomade",
+      "motifs": "chasseu|rôdeu|rodeu|éclaireu|eclaireu|pisteu|guide|marin|capitaine de navire|pirate|aventuri|explorat|messager|nomade|barde|ménestrel",
       "assets": {
         "haut": [
           "tunique",
