@@ -1,11 +1,18 @@
-// Fiche d'un personnage : identité, portrait, stats (générées depuis le système de règles), bloc MJ.
+// Fiche d'un personnage : en-tête (portrait, identité, résumé calculé), onglets, actions.
+// Chaque onglet est dans fiche/ ; les valeurs dérivées viennent du système de règles (R.calculer).
+import { useMemo, useState } from 'react';
 import type { Personnage, SortePersonnage } from '../../noyau/contrat';
 import type { SystemeRegles } from '../../noyau/regles';
-import { ecrireStat, lireStat } from '../../noyau/regles';
-import { emettre } from '../../noyau/bus';
-import { BlocMj, Champ } from '../../interface/composants';
-import { SORTES, champsVisibles } from './logique';
-import { Relations } from './PanneauRelations';
+import { aUneFiche } from '../../noyau/regles';
+import { Champ, Onglets } from '../../interface/composants';
+import { ONGLETS, SORTES, avecStatsCalculees, ongletsVisibles, type Onglet } from './logique';
+import { Identite } from './fiche/Identite';
+import { Caracteristiques } from './fiche/Caracteristiques';
+import { Combat } from './fiche/Combat';
+import { Progression } from './fiche/Progression';
+import { Magie } from './fiche/Magie';
+import { Inventaire } from './fiche/Inventaire';
+import { Histoire } from './fiche/Histoire';
 
 interface Props {
   perso: Personnage;
@@ -20,11 +27,22 @@ interface Props {
   onAvatar(): void;
 }
 
-export function Fiche({ perso: p, R, role, lectureSeule, urlPortrait, maj, onPortrait, onMontrer, onSupprimer, onAvatar }: Props) {
-  const champs = champsVisibles(p, R, role);
-  const groupes = [...new Set(champs.map((c) => c.groupe ?? ''))];
-  const mj = (p.mj ?? {}) as { notes?: string; cache?: boolean };
-  const majMj = (patch: Record<string, unknown>) => maj((x) => ({ ...x, mj: { ...(x.mj ?? {}), ...patch } }));
+const CLE_ONGLET = 'jdr.perso.onglet';
+const lireOnglet = (): Onglet => { try { return (localStorage.getItem(CLE_ONGLET) as Onglet) || 'identite'; } catch { return 'identite'; } };
+
+export function Fiche({ perso: p, R, role, lectureSeule, urlPortrait, maj: majBrut, onPortrait, onMontrer, onSupprimer, onAvatar }: Props) {
+  const [onglet, setOnglet] = useState<Onglet>(lireOnglet);
+  const visibles = ongletsVisibles(p, R, role);
+  const actif = visibles.includes(onglet) ? onglet : visibles[0];
+  const choisir = (o: Onglet) => { setOnglet(o); try { localStorage.setItem(CLE_ONGLET, o); } catch { /* navigation privée */ } };
+  // Toute modification repasse par le calcul : CA, attaque et niveau suivent l'équipement et les classes.
+  const maj = (f: (x: Personnage) => Personnage) => majBrut((x) => avecStatsCalculees(f(x), R));
+  const calcul = useMemo(() => (aUneFiche(R) ? R.calculer(p) : null), [p, R]);
+  const mj = (p.mj ?? {}) as { cache?: boolean };
+  const props = { p, R, role, lectureSeule, maj };
+  const resume = calcul
+    ? [`Niv. ${calcul.niveau}`, `CA ${calcul.derives.find((d) => d.cle === 'ca')?.texte}`, `PV ${String(p.combat.stats.pv ?? '?')}/${String(p.combat.stats.pvMax ?? '?')}`, `Init. ${calcul.derives.find((d) => d.cle === 'initiative')?.texte}`]
+    : [R.resume(p.combat.stats)];
 
   return (
     <div className="carte-ui pile perso-fiche">
@@ -51,68 +69,26 @@ export function Fiche({ perso: p, R, role, lectureSeule, urlPortrait, maj, onPor
               </Champ>
             )}
           </fieldset>
+          {(role === 'mj' || visibles.includes('caracs')) && <div className="perso-resume">{resume.map((r) => <span key={r}>{r}</span>)}</div>}
         </div>
       </div>
 
-      {groupes.map((g) => (
-        <fieldset key={g} disabled={lectureSeule} className="perso-groupe">
-          {g && <legend>{g}</legend>}
-          <div className="champs">
-            {champs.filter((c) => (c.groupe ?? '') === g).map((c) => {
-              const v = lireStat(p.combat.stats, c.cle);
-              return (
-                <Champ key={c.cle} libelle={c.libelle}>
-                  <input
-                    type={c.sorte === 'nombre' ? 'number' : 'text'}
-                    min={c.min} max={c.max}
-                    value={v === undefined || v === null ? '' : String(v)}
-                    onChange={(e) => {
-                      const brut = e.target.value;
-                      const val = c.sorte === 'nombre' ? (brut === '' ? '' : Number(brut)) : brut;
-                      maj((x) => ({ ...x, combat: { ...x.combat, stats: ecrireStat(x.combat.stats, c.cle, val) } }));
-                    }}
-                  />
-                </Champ>
-              );
-            })}
-          </div>
-        </fieldset>
-      ))}
-      {role === 'mj' && (
-        <button className="btn btn-petit" style={{ alignSelf: 'flex-start' }} onClick={() => emettre('naviguer', { page: 'genealogie', cible: p.id })}>Arbre généalogique</button>
-      )}
-      {role === 'mj' && !lectureSeule && p.sorte !== 'pj' && (
+      <Onglets onglets={ONGLETS.filter(([id]) => visibles.includes(id)).map(([id, l]) => [id, l] as [Onglet, string])} actif={actif} onChoix={choisir} />
+
+      {actif === 'identite' && <Identite {...props} />}
+      {actif === 'caracs' && calcul && aUneFiche(R) && <Caracteristiques {...props} R={R} calcul={calcul} />}
+      {actif === 'combat' && <Combat {...props} calcul={calcul} />}
+      {actif === 'progression' && <Progression {...props} calcul={calcul} />}
+      {actif === 'magie' && <Magie {...props} />}
+      {actif === 'inventaire' && <Inventaire {...props} calcul={calcul} />}
+      {actif === 'histoire' && <Histoire {...props} />}
+
+      {role === 'mj' && !lectureSeule && p.sorte !== 'pj' && actif === 'combat' && (
         <button className="btn btn-petit" style={{ alignSelf: 'flex-start' }}
           title="Recalcule caractéristiques, PV, CA, dégâts et niveau d’après le rôle, la description et la sorte"
           onClick={() => window.confirm('Remplacer les statistiques par celles du rôle ?') && maj((x) => ({ ...x, combat: { ...x.combat, stats: { ...R.statsPourProfil({ role: x.role ?? x.nom, description: x.notes, sorte: x.sorte, antagoniste: !!(x.mj as { antagoniste?: boolean } | undefined)?.antagoniste, graine: x.id }) } } }))}>
           Stats selon le rôle
         </button>
-      )}
-      {p.combat.conditions?.length ? <p className="discret">États en cours : {p.combat.conditions.join(', ')}</p> : null}
-      {role === 'joueurs' && champs.length < R.champs.length && (
-        <p className="discret">Les autres statistiques ne sont pas visibles par les joueurs.</p>
-      )}
-
-      <fieldset disabled={lectureSeule} className="perso-groupe">
-        <Champ libelle="Notes (visibles par les joueurs)">
-          <textarea value={p.notes ?? ''} onChange={(e) => maj((x) => ({ ...x, notes: e.target.value }))} />
-        </Champ>
-      </fieldset>
-
-      <Relations persoId={p.id} />
-
-      {role === 'mj' && (
-        <BlocMj>
-          <div className="pile" style={{ gap: 10 }}>
-            <Champ libelle="Secrets, motivations, tactique">
-              <textarea value={mj.notes ?? ''} onChange={(e) => majMj({ notes: e.target.value })} />
-            </Champ>
-            <label className="ligne discret">
-              <input type="checkbox" checked={!!mj.cache} onChange={(e) => majMj({ cache: e.target.checked })} />
-              Personnage entièrement caché aux joueurs
-            </label>
-          </div>
-        </BlocMj>
       )}
 
       {!lectureSeule && (
@@ -123,6 +99,7 @@ export function Fiche({ perso: p, R, role, lectureSeule, urlPortrait, maj, onPor
           <button className="btn btn-danger" onClick={onSupprimer}>Supprimer</button>
         </div>
       )}
+      {aUneFiche(R) && R.catalogue.source && role === 'mj' && <p className="discret perso-source">{R.catalogue.source}</p>}
     </div>
   );
 }

@@ -17,6 +17,17 @@ export function Champ({ libelle, children }: { libelle: string; children: ReactN
   return <label className="champ"><span>{libelle}</span>{children}</label>;
 }
 
+/** Barre d'onglets : `onglets` = [id, libellé] ; `actif` contrôlé par le parent. */
+export function Onglets<T extends string>({ onglets, actif, onChoix }: { onglets: [T, string][]; actif: T; onChoix(id: T): void }) {
+  return (
+    <div className="onglets" role="tablist">
+      {onglets.map(([id, libelle]) => (
+        <button key={id} role="tab" aria-selected={id === actif} className="onglet" onClick={() => onChoix(id)}>{libelle}</button>
+      ))}
+    </div>
+  );
+}
+
 /** Bloc réservé au MJ (masqué en aperçu joueurs par le module qui l'utilise). */
 export function BlocMj({ children }: { children: ReactNode }) {
   return <div className="bloc-mj"><span className="etiquette-mj">Réservé au MJ</span>{children}</div>;

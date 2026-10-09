@@ -37,6 +37,8 @@ Socle partagé, sans interface et sans React. Cinq sous-modules, chacun avec son
 - `types.ts` : `SystemeRegles { id, nom, champs: ChampStat[], statsParDefaut, statsPourProfil(ProfilPnj), resume, initiative, degatsSort(puissance), versTable(stats), depuisTable(stats, jeton) }`. `ChampStat.publicEnnemi` = visible des joueurs pour un ennemi.
 - `index.ts` : `regles(id)` (repli 5e), `listeRegles`, `enregistrerRegles`, `lireStat` / `ecrireStat` (chemin `carac.for`).
 - `des.ts` : `lancer(formule, rng, critique)`, `d20(mode)`, `formuleValide`.
+- `types.ts` (suite) : `SystemeAvecFiche` = `SystemeRegles` + `catalogue` (compétences, caracs, objets, alignements, langues, historiques, monnaies, `source`) + `calculer(p)` → `FicheCalculee` (niveau, maîtrise, caracs, sauvegardes, compétences, dérivés, attaques, `stats` à reporter) ; `aUneFiche(R)`.
+- `dnd5e/fiche.ts` + `catalogue.json` (SRD 5.1, CC-BY 4.0 : 36 armes, 13 armures, équipement ; historiques maison) : `calculer`, `bonusMaitrise`, `niveauDe`, `effetsActifs`, `entreeCatalogue`.
 - `dnd5e/` : système 5e (`mod`, `signe`) ; `profil.ts` + `archetypes.json` : stats d'un PNJ selon son rôle (archétype, niveau, caractéristiques ordonnées, ajustements de la description, PV, CA, dégâts, bonus d'attaque) ; sorts : 1 point de puissance = 1d6 (max 10d6), valeur moyenne appliquée en combat. Nouveau système = nouveau dossier + `enregistrerRegles`.
 
 ## Tests

@@ -1,6 +1,7 @@
 // Système D&D 5e (version simplifiée reprise de la Table de combat v7).
-import type { SystemeRegles } from '../types';
+import type { SystemeAvecFiche } from '../types';
 import { statsPourProfil } from './profil';
+import { CATALOGUE, calculer } from './fiche';
 
 const CARACS = [
   ['for', 'FOR'], ['dex', 'DEX'], ['con', 'CON'], ['int', 'INT'], ['sag', 'SAG'], ['cha', 'CHA'],
@@ -14,7 +15,7 @@ const num = (v: unknown, defaut: number): number => (typeof v === 'number' && is
 const carac = (s: Record<string, unknown>, k: string): number =>
   num((s.carac as Record<string, unknown> | undefined)?.[k], 10);
 
-export const dnd5e: SystemeRegles = {
+export const dnd5e: SystemeAvecFiche = {
   id: 'dnd5e',
   nom: 'D&D 5e',
   champs: [
@@ -50,4 +51,6 @@ export const dnd5e: SystemeRegles = {
     ...(typeof s.bonusAttaque === 'number' ? { attackBonus: s.bonusAttaque } : {}),
   }),
   depuisTable: (s, j) => ({ ...s, pv: Math.max(0, num(j.hp, num(s.pv, 0))) }),
+  catalogue: CATALOGUE,
+  calculer,
 };

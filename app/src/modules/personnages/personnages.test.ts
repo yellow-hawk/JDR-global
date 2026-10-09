@@ -56,3 +56,28 @@ describe('relations', () => {
     expect(relationsDe(c, a.id).map((r) => r.libelle)).toEqual(['espionné par']);
   });
 });
+
+describe('fiche détaillée', () => {
+  it('reporte CA, attaque et niveau calculés dans combat.stats', async () => {
+    const { avecStatsCalculees } = await import('./logique');
+    const { regles } = await import('../../noyau/regles');
+    const { nouveauPersonnage } = await import('../../noyau/contrat');
+    const R = regles('dnd5e');
+    const p = { ...nouveauPersonnage('Brann', 'pj', 'dnd5e', R.statsParDefaut()), fiche: {
+      progression: { classes: [{ id: 'guerrier', niveau: 3 }] },
+      inventaire: { objets: [{ id: 'a', nom: 'Cotte', ref: 'armure:cotte-de-mailles', quantite: 1, equipe: true }] },
+    } };
+    const q = avecStatsCalculees(p, R);
+    expect(q.combat.stats).toMatchObject({ ca: 16, niveau: 3 });
+    expect(avecStatsCalculees(q, R)).toBe(q); // rien ne change : même objet
+  });
+
+  it('les joueurs ne voient que l’identité et le combat d’un ennemi', async () => {
+    const { ongletsVisibles } = await import('./logique');
+    const { regles } = await import('../../noyau/regles');
+    const { nouveauPersonnage } = await import('../../noyau/contrat');
+    const R = regles('dnd5e');
+    expect(ongletsVisibles(nouveauPersonnage('Orc', 'ennemi', 'dnd5e', {}), R, 'joueurs')).toEqual(['identite', 'combat']);
+    expect(ongletsVisibles(nouveauPersonnage('Lys', 'pj', 'dnd5e', {}), R, 'joueurs')).toHaveLength(7);
+  });
+});

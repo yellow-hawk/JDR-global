@@ -1,0 +1,1146 @@
+{
+ "_doc": "Catalogue D&D 5e de JDR Global. Armes, armures et équipement d’après le SRD 5.1 (Wizards of the Coast, licence CC-BY 4.0), noms traduits ; poids en kg, portées en cases de 1,5 m. Historiques : liste maison inspirée des archétypes classiques. 'avatar' : option de l’avatar 3D portée avec l’objet.",
+ "source": "Contient des données du System Reference Document 5.1 de Wizards of the Coast LLC, sous licence Creative Commons Attribution 4.0 (https://creativecommons.org/licenses/by/4.0/).",
+ "caracs": [
+  {
+   "id": "for",
+   "libelle": "Force"
+  },
+  {
+   "id": "dex",
+   "libelle": "Dextérité"
+  },
+  {
+   "id": "con",
+   "libelle": "Constitution"
+  },
+  {
+   "id": "int",
+   "libelle": "Intelligence"
+  },
+  {
+   "id": "sag",
+   "libelle": "Sagesse"
+  },
+  {
+   "id": "cha",
+   "libelle": "Charisme"
+  }
+ ],
+ "competences": [
+  {
+   "id": "acrobaties",
+   "libelle": "Acrobaties",
+   "carac": "dex"
+  },
+  {
+   "id": "arcanes",
+   "libelle": "Arcanes",
+   "carac": "int"
+  },
+  {
+   "id": "athletisme",
+   "libelle": "Athlétisme",
+   "carac": "for"
+  },
+  {
+   "id": "discretion",
+   "libelle": "Discrétion",
+   "carac": "dex"
+  },
+  {
+   "id": "dressage",
+   "libelle": "Dressage",
+   "carac": "sag"
+  },
+  {
+   "id": "escamotage",
+   "libelle": "Escamotage",
+   "carac": "dex"
+  },
+  {
+   "id": "histoire",
+   "libelle": "Histoire",
+   "carac": "int"
+  },
+  {
+   "id": "intimidation",
+   "libelle": "Intimidation",
+   "carac": "cha"
+  },
+  {
+   "id": "intuition",
+   "libelle": "Intuition",
+   "carac": "sag"
+  },
+  {
+   "id": "investigation",
+   "libelle": "Investigation",
+   "carac": "int"
+  },
+  {
+   "id": "medecine",
+   "libelle": "Médecine",
+   "carac": "sag"
+  },
+  {
+   "id": "nature",
+   "libelle": "Nature",
+   "carac": "int"
+  },
+  {
+   "id": "perception",
+   "libelle": "Perception",
+   "carac": "sag"
+  },
+  {
+   "id": "persuasion",
+   "libelle": "Persuasion",
+   "carac": "cha"
+  },
+  {
+   "id": "religion",
+   "libelle": "Religion",
+   "carac": "int"
+  },
+  {
+   "id": "representation",
+   "libelle": "Représentation",
+   "carac": "cha"
+  },
+  {
+   "id": "survie",
+   "libelle": "Survie",
+   "carac": "sag"
+  },
+  {
+   "id": "tromperie",
+   "libelle": "Tromperie",
+   "carac": "cha"
+  }
+ ],
+ "alignements": [
+  "Loyal bon",
+  "Neutre bon",
+  "Chaotique bon",
+  "Loyal neutre",
+  "Neutre",
+  "Chaotique neutre",
+  "Loyal mauvais",
+  "Neutre mauvais",
+  "Chaotique mauvais"
+ ],
+ "langues": [
+  "Commun",
+  "Elfique",
+  "Nain",
+  "Halfelin",
+  "Gnome",
+  "Orque",
+  "Géant",
+  "Gobelin",
+  "Draconique",
+  "Infernal",
+  "Céleste",
+  "Abyssal",
+  "Sylvestre",
+  "Primordial",
+  "Profond",
+  "Commun des profondeurs"
+ ],
+ "monnaies": [
+  {
+   "id": "pc",
+   "libelle": "pc (cuivre)"
+  },
+  {
+   "id": "pa",
+   "libelle": "pa (argent)"
+  },
+  {
+   "id": "pe",
+   "libelle": "pe (électrum)"
+  },
+  {
+   "id": "po",
+   "libelle": "po (or)"
+  },
+  {
+   "id": "pp",
+   "libelle": "pp (platine)"
+  }
+ ],
+ "historiques": [
+  {
+   "id": "acolyte",
+   "nom": "Acolyte",
+   "competences": [
+    "intuition",
+    "religion"
+   ]
+  },
+  {
+   "id": "artisan",
+   "nom": "Artisan de guilde",
+   "competences": [
+    "intuition",
+    "persuasion"
+   ]
+  },
+  {
+   "id": "charlatan",
+   "nom": "Charlatan",
+   "competences": [
+    "escamotage",
+    "tromperie"
+   ]
+  },
+  {
+   "id": "criminel",
+   "nom": "Criminel",
+   "competences": [
+    "discretion",
+    "tromperie"
+   ]
+  },
+  {
+   "id": "enfant-des-rues",
+   "nom": "Enfant des rues",
+   "competences": [
+    "escamotage",
+    "discretion"
+   ]
+  },
+  {
+   "id": "ermite",
+   "nom": "Ermite",
+   "competences": [
+    "medecine",
+    "religion"
+   ]
+  },
+  {
+   "id": "heros-du-peuple",
+   "nom": "Héros du peuple",
+   "competences": [
+    "dressage",
+    "survie"
+   ]
+  },
+  {
+   "id": "marin",
+   "nom": "Marin",
+   "competences": [
+    "athletisme",
+    "perception"
+   ]
+  },
+  {
+   "id": "noble",
+   "nom": "Noble",
+   "competences": [
+    "histoire",
+    "persuasion"
+   ]
+  },
+  {
+   "id": "sage",
+   "nom": "Sage",
+   "competences": [
+    "arcanes",
+    "histoire"
+   ]
+  },
+  {
+   "id": "saltimbanque",
+   "nom": "Saltimbanque",
+   "competences": [
+    "acrobaties",
+    "representation"
+   ]
+  },
+  {
+   "id": "sauvageon",
+   "nom": "Sauvageon",
+   "competences": [
+    "athletisme",
+    "survie"
+   ]
+  },
+  {
+   "id": "soldat",
+   "nom": "Soldat",
+   "competences": [
+    "athletisme",
+    "intimidation"
+   ]
+  }
+ ],
+ "objets": [
+  {
+   "id": "arme:gourdin",
+   "nom": "Gourdin",
+   "sorte": "arme",
+   "categorie": "simple",
+   "type": "cac",
+   "degats": "1d4",
+   "typeDegats": "contondant",
+   "poids": 1,
+   "prix": "1 pa",
+   "proprietes": [
+    "léger"
+   ]
+  },
+  {
+   "id": "arme:dague",
+   "nom": "Dague",
+   "sorte": "arme",
+   "categorie": "simple",
+   "type": "cac",
+   "degats": "1d4",
+   "typeDegats": "perforant",
+   "poids": 0.5,
+   "prix": "2 po",
+   "proprietes": [
+    "finesse",
+    "léger",
+    "lancer"
+   ],
+   "portee": "4/12",
+   "avatar": "arme:dague"
+  },
+  {
+   "id": "arme:massue",
+   "nom": "Massue",
+   "sorte": "arme",
+   "categorie": "simple",
+   "type": "cac",
+   "degats": "1d8",
+   "typeDegats": "contondant",
+   "poids": 5,
+   "prix": "2 pa",
+   "proprietes": [
+    "deux mains"
+   ]
+  },
+  {
+   "id": "arme:hachette",
+   "nom": "Hachette",
+   "sorte": "arme",
+   "categorie": "simple",
+   "type": "cac",
+   "degats": "1d6",
+   "typeDegats": "tranchant",
+   "poids": 1,
+   "prix": "5 po",
+   "proprietes": [
+    "léger",
+    "lancer"
+   ],
+   "portee": "4/12"
+  },
+  {
+   "id": "arme:javeline",
+   "nom": "Javeline",
+   "sorte": "arme",
+   "categorie": "simple",
+   "type": "cac",
+   "degats": "1d6",
+   "typeDegats": "perforant",
+   "poids": 1,
+   "prix": "5 pa",
+   "proprietes": [
+    "lancer"
+   ],
+   "portee": "6/24"
+  },
+  {
+   "id": "arme:marteau-leger",
+   "nom": "Marteau léger",
+   "sorte": "arme",
+   "categorie": "simple",
+   "type": "cac",
+   "degats": "1d4",
+   "typeDegats": "contondant",
+   "poids": 1,
+   "prix": "2 po",
+   "proprietes": [
+    "léger",
+    "lancer"
+   ],
+   "portee": "4/12"
+  },
+  {
+   "id": "arme:masse",
+   "nom": "Masse d’armes",
+   "sorte": "arme",
+   "categorie": "simple",
+   "type": "cac",
+   "degats": "1d6",
+   "typeDegats": "contondant",
+   "poids": 2,
+   "prix": "5 po",
+   "proprietes": []
+  },
+  {
+   "id": "arme:baton",
+   "nom": "Bâton",
+   "sorte": "arme",
+   "categorie": "simple",
+   "type": "cac",
+   "degats": "1d6",
+   "typeDegats": "contondant",
+   "poids": 2,
+   "prix": "2 pa",
+   "proprietes": [
+    "polyvalent"
+   ],
+   "polyvalent": "1d8",
+   "avatar": "arme:sceptre"
+  },
+  {
+   "id": "arme:serpe",
+   "nom": "Serpe",
+   "sorte": "arme",
+   "categorie": "simple",
+   "type": "cac",
+   "degats": "1d4",
+   "typeDegats": "tranchant",
+   "poids": 1,
+   "prix": "1 po",
+   "proprietes": [
+    "léger"
+   ]
+  },
+  {
+   "id": "arme:lance",
+   "nom": "Lance",
+   "sorte": "arme",
+   "categorie": "simple",
+   "type": "cac",
+   "degats": "1d6",
+   "typeDegats": "perforant",
+   "poids": 1.5,
+   "prix": "1 po",
+   "proprietes": [
+    "lancer",
+    "polyvalent"
+   ],
+   "polyvalent": "1d8",
+   "portee": "4/12"
+  },
+  {
+   "id": "arme:arbalete-legere",
+   "nom": "Arbalète légère",
+   "sorte": "arme",
+   "categorie": "simple",
+   "type": "distance",
+   "degats": "1d8",
+   "typeDegats": "perforant",
+   "poids": 2.5,
+   "prix": "25 po",
+   "proprietes": [
+    "munitions",
+    "chargement",
+    "deux mains"
+   ],
+   "portee": "16/64"
+  },
+  {
+   "id": "arme:flechette",
+   "nom": "Fléchette",
+   "sorte": "arme",
+   "categorie": "simple",
+   "type": "distance",
+   "degats": "1d4",
+   "typeDegats": "perforant",
+   "poids": 0.1,
+   "prix": "5 pc",
+   "proprietes": [
+    "finesse",
+    "lancer"
+   ],
+   "portee": "4/12"
+  },
+  {
+   "id": "arme:arc-court",
+   "nom": "Arc court",
+   "sorte": "arme",
+   "categorie": "simple",
+   "type": "distance",
+   "degats": "1d6",
+   "typeDegats": "perforant",
+   "poids": 1,
+   "prix": "25 po",
+   "proprietes": [
+    "munitions",
+    "deux mains"
+   ],
+   "portee": "16/64",
+   "avatar": "arme:arc"
+  },
+  {
+   "id": "arme:fronde",
+   "nom": "Fronde",
+   "sorte": "arme",
+   "categorie": "simple",
+   "type": "distance",
+   "degats": "1d4",
+   "typeDegats": "contondant",
+   "poids": 0,
+   "prix": "1 pa",
+   "proprietes": [
+    "munitions"
+   ],
+   "portee": "6/24"
+  },
+  {
+   "id": "arme:hache-de-bataille",
+   "nom": "Hache de bataille",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "cac",
+   "degats": "1d8",
+   "typeDegats": "tranchant",
+   "poids": 2,
+   "prix": "10 po",
+   "proprietes": [
+    "polyvalent"
+   ],
+   "polyvalent": "1d10"
+  },
+  {
+   "id": "arme:fleau",
+   "nom": "Fléau",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "cac",
+   "degats": "1d8",
+   "typeDegats": "contondant",
+   "poids": 1,
+   "prix": "10 po",
+   "proprietes": []
+  },
+  {
+   "id": "arme:coutille",
+   "nom": "Coutille",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "cac",
+   "degats": "1d10",
+   "typeDegats": "tranchant",
+   "poids": 3,
+   "prix": "20 po",
+   "proprietes": [
+    "lourd",
+    "allonge",
+    "deux mains"
+   ]
+  },
+  {
+   "id": "arme:hache-a-deux-mains",
+   "nom": "Hache à deux mains",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "cac",
+   "degats": "1d12",
+   "typeDegats": "tranchant",
+   "poids": 3.5,
+   "prix": "30 po",
+   "proprietes": [
+    "lourd",
+    "deux mains"
+   ]
+  },
+  {
+   "id": "arme:epee-a-deux-mains",
+   "nom": "Épée à deux mains",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "cac",
+   "degats": "2d6",
+   "typeDegats": "tranchant",
+   "poids": 3,
+   "prix": "50 po",
+   "proprietes": [
+    "lourd",
+    "deux mains"
+   ],
+   "avatar": "arme:epee"
+  },
+  {
+   "id": "arme:hallebarde",
+   "nom": "Hallebarde",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "cac",
+   "degats": "1d10",
+   "typeDegats": "tranchant",
+   "poids": 3,
+   "prix": "20 po",
+   "proprietes": [
+    "lourd",
+    "allonge",
+    "deux mains"
+   ]
+  },
+  {
+   "id": "arme:lance-d-arcon",
+   "nom": "Lance d’arçon",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "cac",
+   "degats": "1d12",
+   "typeDegats": "perforant",
+   "poids": 3,
+   "prix": "10 po",
+   "proprietes": [
+    "allonge",
+    "spécial"
+   ]
+  },
+  {
+   "id": "arme:epee-longue",
+   "nom": "Épée longue",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "cac",
+   "degats": "1d8",
+   "typeDegats": "tranchant",
+   "poids": 1.5,
+   "prix": "15 po",
+   "proprietes": [
+    "polyvalent"
+   ],
+   "polyvalent": "1d10",
+   "avatar": "arme:epee"
+  },
+  {
+   "id": "arme:maillet",
+   "nom": "Maillet d’armes",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "cac",
+   "degats": "2d6",
+   "typeDegats": "contondant",
+   "poids": 5,
+   "prix": "10 po",
+   "proprietes": [
+    "lourd",
+    "deux mains"
+   ],
+   "avatar": "arme:marteau"
+  },
+  {
+   "id": "arme:morgenstern",
+   "nom": "Morgenstern",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "cac",
+   "degats": "1d8",
+   "typeDegats": "perforant",
+   "poids": 2,
+   "prix": "15 po",
+   "proprietes": []
+  },
+  {
+   "id": "arme:pique",
+   "nom": "Pique",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "cac",
+   "degats": "1d10",
+   "typeDegats": "perforant",
+   "poids": 9,
+   "prix": "5 po",
+   "proprietes": [
+    "lourd",
+    "allonge",
+    "deux mains"
+   ]
+  },
+  {
+   "id": "arme:rapiere",
+   "nom": "Rapière",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "cac",
+   "degats": "1d8",
+   "typeDegats": "perforant",
+   "poids": 1,
+   "prix": "25 po",
+   "proprietes": [
+    "finesse"
+   ],
+   "avatar": "arme:epee"
+  },
+  {
+   "id": "arme:cimeterre",
+   "nom": "Cimeterre",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "cac",
+   "degats": "1d6",
+   "typeDegats": "tranchant",
+   "poids": 1.5,
+   "prix": "25 po",
+   "proprietes": [
+    "finesse",
+    "léger"
+   ],
+   "avatar": "arme:epee"
+  },
+  {
+   "id": "arme:epee-courte",
+   "nom": "Épée courte",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "cac",
+   "degats": "1d6",
+   "typeDegats": "perforant",
+   "poids": 1,
+   "prix": "10 po",
+   "proprietes": [
+    "finesse",
+    "léger"
+   ],
+   "avatar": "arme:epee"
+  },
+  {
+   "id": "arme:trident",
+   "nom": "Trident",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "cac",
+   "degats": "1d6",
+   "typeDegats": "perforant",
+   "poids": 2,
+   "prix": "5 po",
+   "proprietes": [
+    "lancer",
+    "polyvalent"
+   ],
+   "polyvalent": "1d8",
+   "portee": "4/12"
+  },
+  {
+   "id": "arme:pic-de-guerre",
+   "nom": "Pic de guerre",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "cac",
+   "degats": "1d8",
+   "typeDegats": "perforant",
+   "poids": 1,
+   "prix": "5 po",
+   "proprietes": []
+  },
+  {
+   "id": "arme:marteau-de-guerre",
+   "nom": "Marteau de guerre",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "cac",
+   "degats": "1d8",
+   "typeDegats": "contondant",
+   "poids": 1,
+   "prix": "15 po",
+   "proprietes": [
+    "polyvalent"
+   ],
+   "polyvalent": "1d10",
+   "avatar": "arme:marteau"
+  },
+  {
+   "id": "arme:fouet",
+   "nom": "Fouet",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "cac",
+   "degats": "1d4",
+   "typeDegats": "tranchant",
+   "poids": 1.5,
+   "prix": "2 po",
+   "proprietes": [
+    "finesse",
+    "allonge"
+   ]
+  },
+  {
+   "id": "arme:sarbacane",
+   "nom": "Sarbacane",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "distance",
+   "degats": "1",
+   "typeDegats": "perforant",
+   "poids": 0.5,
+   "prix": "10 po",
+   "proprietes": [
+    "munitions",
+    "chargement"
+   ],
+   "portee": "5/20"
+  },
+  {
+   "id": "arme:arbalete-de-poing",
+   "nom": "Arbalète de poing",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "distance",
+   "degats": "1d6",
+   "typeDegats": "perforant",
+   "poids": 1.5,
+   "prix": "75 po",
+   "proprietes": [
+    "munitions",
+    "léger",
+    "chargement"
+   ],
+   "portee": "6/24"
+  },
+  {
+   "id": "arme:arbalete-lourde",
+   "nom": "Arbalète lourde",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "distance",
+   "degats": "1d10",
+   "typeDegats": "perforant",
+   "poids": 9,
+   "prix": "50 po",
+   "proprietes": [
+    "munitions",
+    "lourd",
+    "chargement",
+    "deux mains"
+   ],
+   "portee": "20/80"
+  },
+  {
+   "id": "arme:arc-long",
+   "nom": "Arc long",
+   "sorte": "arme",
+   "categorie": "guerre",
+   "type": "distance",
+   "degats": "1d8",
+   "typeDegats": "perforant",
+   "poids": 1,
+   "prix": "50 po",
+   "proprietes": [
+    "munitions",
+    "lourd",
+    "deux mains"
+   ],
+   "portee": "30/120",
+   "avatar": "arme:arc"
+  },
+  {
+   "id": "armure:matelassee",
+   "nom": "Armure matelassée",
+   "sorte": "armure",
+   "categorie": "legere",
+   "ca": 11,
+   "dexMax": null,
+   "poids": 4,
+   "prix": "5 po",
+   "discretion": true
+  },
+  {
+   "id": "armure:cuir",
+   "nom": "Armure de cuir",
+   "sorte": "armure",
+   "categorie": "legere",
+   "ca": 11,
+   "dexMax": null,
+   "poids": 5,
+   "prix": "10 po"
+  },
+  {
+   "id": "armure:cuir-cloute",
+   "nom": "Armure de cuir clouté",
+   "sorte": "armure",
+   "categorie": "legere",
+   "ca": 12,
+   "dexMax": null,
+   "poids": 6.5,
+   "prix": "45 po"
+  },
+  {
+   "id": "armure:peaux",
+   "nom": "Armure de peaux",
+   "sorte": "armure",
+   "categorie": "intermediaire",
+   "ca": 12,
+   "dexMax": 2,
+   "poids": 6,
+   "prix": "10 po"
+  },
+  {
+   "id": "armure:chemise-de-mailles",
+   "nom": "Chemise de mailles",
+   "sorte": "armure",
+   "categorie": "intermediaire",
+   "ca": 13,
+   "dexMax": 2,
+   "poids": 10,
+   "prix": "50 po",
+   "avatar": "armure:cotte"
+  },
+  {
+   "id": "armure:ecailles",
+   "nom": "Armure d’écailles",
+   "sorte": "armure",
+   "categorie": "intermediaire",
+   "ca": 14,
+   "dexMax": 2,
+   "poids": 22.5,
+   "prix": "50 po",
+   "discretion": true
+  },
+  {
+   "id": "armure:cuirasse",
+   "nom": "Cuirasse",
+   "sorte": "armure",
+   "categorie": "intermediaire",
+   "ca": 14,
+   "dexMax": 2,
+   "poids": 10,
+   "prix": "400 po",
+   "avatar": "armure:plastron"
+  },
+  {
+   "id": "armure:demi-plate",
+   "nom": "Demi-plate",
+   "sorte": "armure",
+   "categorie": "intermediaire",
+   "ca": 15,
+   "dexMax": 2,
+   "poids": 20,
+   "prix": "750 po",
+   "discretion": true,
+   "avatar": "armure:plastron"
+  },
+  {
+   "id": "armure:broigne",
+   "nom": "Broigne",
+   "sorte": "armure",
+   "categorie": "lourde",
+   "ca": 14,
+   "dexMax": 0,
+   "poids": 20,
+   "prix": "30 po",
+   "discretion": true
+  },
+  {
+   "id": "armure:cotte-de-mailles",
+   "nom": "Cotte de mailles",
+   "sorte": "armure",
+   "categorie": "lourde",
+   "ca": 16,
+   "dexMax": 0,
+   "poids": 27.5,
+   "prix": "75 po",
+   "force": 13,
+   "discretion": true,
+   "avatar": "armure:cotte"
+  },
+  {
+   "id": "armure:clibanion",
+   "nom": "Clibanion",
+   "sorte": "armure",
+   "categorie": "lourde",
+   "ca": 17,
+   "dexMax": 0,
+   "poids": 30,
+   "prix": "200 po",
+   "force": 15,
+   "discretion": true
+  },
+  {
+   "id": "armure:harnois",
+   "nom": "Harnois",
+   "sorte": "armure",
+   "categorie": "lourde",
+   "ca": 18,
+   "dexMax": 0,
+   "poids": 32.5,
+   "prix": "1500 po",
+   "force": 15,
+   "discretion": true,
+   "avatar": "armure:plastron"
+  },
+  {
+   "id": "armure:bouclier",
+   "nom": "Bouclier",
+   "sorte": "armure",
+   "categorie": "bouclier",
+   "ca": 2,
+   "dexMax": null,
+   "poids": 3,
+   "prix": "10 po"
+  },
+  {
+   "id": "objet:sac-a-dos",
+   "nom": "Sac à dos",
+   "sorte": "objet",
+   "poids": 2.5,
+   "prix": "2 po"
+  },
+  {
+   "id": "objet:couverture",
+   "nom": "Couverture",
+   "sorte": "objet",
+   "poids": 1.5,
+   "prix": "5 pa"
+  },
+  {
+   "id": "objet:corde",
+   "nom": "Corde de chanvre (15 m)",
+   "sorte": "objet",
+   "poids": 5,
+   "prix": "1 po"
+  },
+  {
+   "id": "objet:torche",
+   "nom": "Torche",
+   "sorte": "objet",
+   "poids": 0.5,
+   "prix": "1 pc"
+  },
+  {
+   "id": "objet:rations",
+   "nom": "Rations (1 jour)",
+   "sorte": "objet",
+   "poids": 1,
+   "prix": "5 pa"
+  },
+  {
+   "id": "objet:outre",
+   "nom": "Outre",
+   "sorte": "objet",
+   "poids": 2.5,
+   "prix": "2 pa"
+  },
+  {
+   "id": "objet:briquet",
+   "nom": "Silex et amorce",
+   "sorte": "objet",
+   "poids": 0.5,
+   "prix": "5 pa"
+  },
+  {
+   "id": "objet:lanterne",
+   "nom": "Lanterne à capote",
+   "sorte": "objet",
+   "poids": 1,
+   "prix": "5 po"
+  },
+  {
+   "id": "objet:huile",
+   "nom": "Flasque d’huile",
+   "sorte": "objet",
+   "poids": 0.5,
+   "prix": "1 pa"
+  },
+  {
+   "id": "objet:trousse-soins",
+   "nom": "Trousse de soins",
+   "sorte": "objet",
+   "poids": 1.5,
+   "prix": "5 po"
+  },
+  {
+   "id": "objet:potion-soins",
+   "nom": "Potion de soins",
+   "sorte": "objet",
+   "poids": 0.25,
+   "prix": "50 po",
+   "texte": "Rend 2d4+2 PV."
+  },
+  {
+   "id": "objet:tente",
+   "nom": "Tente (2 personnes)",
+   "sorte": "objet",
+   "poids": 10,
+   "prix": "2 po"
+  },
+  {
+   "id": "objet:pied-de-biche",
+   "nom": "Pied-de-biche",
+   "sorte": "objet",
+   "poids": 2.5,
+   "prix": "2 po"
+  },
+  {
+   "id": "objet:grappin",
+   "nom": "Grappin",
+   "sorte": "objet",
+   "poids": 2,
+   "prix": "2 po"
+  },
+  {
+   "id": "objet:outils-voleur",
+   "nom": "Outils de voleur",
+   "sorte": "objet",
+   "poids": 0.5,
+   "prix": "25 po"
+  },
+  {
+   "id": "objet:focaliseur",
+   "nom": "Focaliseur arcanique",
+   "sorte": "objet",
+   "poids": 1,
+   "prix": "10 po"
+  },
+  {
+   "id": "objet:symbole-sacre",
+   "nom": "Symbole sacré",
+   "sorte": "objet",
+   "poids": 0.5,
+   "prix": "5 po"
+  },
+  {
+   "id": "objet:grimoire",
+   "nom": "Grimoire",
+   "sorte": "objet",
+   "poids": 1.5,
+   "prix": "50 po"
+  },
+  {
+   "id": "objet:fleches",
+   "nom": "Flèches (20)",
+   "sorte": "objet",
+   "poids": 0.5,
+   "prix": "1 po"
+  },
+  {
+   "id": "objet:carreaux",
+   "nom": "Carreaux (20)",
+   "sorte": "objet",
+   "poids": 0.75,
+   "prix": "1 po"
+  },
+  {
+   "id": "objet:vetements-voyage",
+   "nom": "Vêtements de voyage",
+   "sorte": "objet",
+   "poids": 2,
+   "prix": "2 po"
+  },
+  {
+   "id": "objet:vetements-fins",
+   "nom": "Vêtements fins",
+   "sorte": "objet",
+   "poids": 3,
+   "prix": "15 po"
+  },
+  {
+   "id": "objet:bourse",
+   "nom": "Bourse",
+   "sorte": "objet",
+   "poids": 0.5,
+   "prix": "5 pa"
+  }
+ ]
+}

@@ -2,7 +2,8 @@
 import type { SystemeRegles } from './types';
 import { dnd5e } from './dnd5e';
 
-export type { SystemeRegles, ChampStat, ProfilPnj } from './types';
+export type { SystemeRegles, ChampStat, ProfilPnj, SystemeAvecFiche, FicheCalculee, ValeurCalculee, AttaqueCalculee, CatalogueRegles, EntreeCatalogue } from './types';
+export { aUneFiche } from './types';
 export { lancer, d20, formuleValide, jeter, texteJet } from './des';
 export type { ResultatDes, JetDes, DeJete, ModeJet } from './des';
 

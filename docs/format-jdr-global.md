@@ -159,6 +159,29 @@ Une carte Inkarnate n'est pas dessinée en projection géographique : l'enrouler
 
 `combat.stats` appartient au module de règles indiqué : la 5e définit les champs ci-dessus ; un autre système définira les siens sans changer le reste du format.
 
+### 5.1 Fiche détaillée (`personnage.fiche`, facultative)
+
+```jsonc
+"fiche": {
+  "identite": { "age": "34 ans", "genre": "", "taille": "", "poids": "", "yeux": "", "cheveux": "", "alignement": "Neutre bon",
+                "divinite": "", "historique": "soldat", "origine": "", "langues": ["Commun", "Nain"] },
+  "personnalite": { "traits": "", "ideaux": "", "liens": "", "defauts": "" },
+  "progression": { "classes": [{ "id": "guerrier", "niveau": 5, "sousClasse": "champion" }], "xp": 6500,
+                   "journalXp": [{ "quand": "…", "gain": 450, "raison": "Combat du gué" }],
+                   "talents": ["guerrier.defense.1"], "aptitudes": [{ "nom": "Second souffle", "texte": "…", "effets": [] }] },
+  "maitrises": { "competences": { "athletisme": 1, "perception": 2 }, "sauvegardes": ["for", "con"], "armes": [], "armures": [], "outils": [] },
+  "inventaire": { "objets": [{ "id": "obj-…", "nom": "Épée longue", "ref": "arme:epee-longue", "quantite": 1, "poids": 1.5,
+                               "equipe": true, "harmonise": false, "description": "", "effets": [{ "cible": "ca", "valeur": 1 }] }],
+                  "monnaie": { "po": 12, "pa": 4 } },
+  "defense": { "pvTemp": 0, "desVie": 5, "resistances": "", "immunites": "", "vulnerabilites": "", "mortSucces": 0, "mortEchecs": 0 },
+  "journal": [{ "quand": "…", "texte": "…", "mj": { "cache": true } }]
+}
+```
+
+- Compétences : 1 = maîtrise, 2 = expertise. `ref` d'un objet : entrée du catalogue du système (`noyau/regles/dnd5e/catalogue.json`, données SRD 5.1 CC-BY 4.0).
+- `effets` : `{ cible, valeur }`, cibles comprises par le système (5e : `ca`, `carac.for`, `competence.perception`, `sauvegarde.dex`, `vitesse`, `pvMax`, `initiative`, `attaque`, `degats`). Comptent pour les objets **équipés** et les aptitudes.
+- Valeurs dérivées (modificateurs, compétences, CA de l'armure portée, attaques des armes équipées, charge) : calculées par `R.calculer(p)` ; CA, bonus d'attaque, dégâts et niveau sont reportés dans `combat.stats` (la Table de combat les lit).
+
 ---
 
 ## 6. Sorts

@@ -2,7 +2,7 @@
 import type { Campagne, Personnage, SortePersonnage } from '../../noyau/contrat';
 import { nouveauPersonnage } from '../../noyau/contrat';
 import type { ChampStat, SystemeRegles } from '../../noyau/regles';
-import { lireStat } from '../../noyau/regles';
+import { aUneFiche, lireStat } from '../../noyau/regles';
 import type { Scene } from '../../noyau/bus';
 
 export const SORTES: { id: SortePersonnage; libelle: string; pluriel: string }[] = [
@@ -20,6 +20,26 @@ export const campJoueurs = (s: SortePersonnage): boolean => s === 'pj' || s === 
 export function champsVisibles(p: Personnage, R: SystemeRegles, role: 'mj' | 'joueurs'): ChampStat[] {
   if (role === 'mj' || campJoueurs(p.sorte)) return R.champs;
   return R.champs.filter((c) => c.publicEnnemi);
+}
+
+/** Reporte dans combat.stats ce que la fiche détermine (CA de l'armure portée, attaque de l'arme, niveau). */
+export function avecStatsCalculees(p: Personnage, R: SystemeRegles): Personnage {
+  if (!aUneFiche(R) || !p.fiche) return p;
+  const calc = R.calculer(p).stats;
+  const change = Object.entries(calc).some(([k, v]) => p.combat.stats[k] !== v);
+  return change ? { ...p, combat: { ...p.combat, stats: { ...p.combat.stats, ...calc } } } : p;
+}
+
+/** Onglets de la fiche visibles : les joueurs ne voient que l'identité des personnages hors de leur camp. */
+export const ONGLETS = [
+  ['identite', 'Identité'], ['caracs', 'Caractéristiques'], ['combat', 'Combat'], ['progression', 'Progression'],
+  ['magie', 'Magie'], ['inventaire', 'Inventaire'], ['histoire', 'Histoire'],
+] as const;
+export type Onglet = (typeof ONGLETS)[number][0];
+export function ongletsVisibles(p: Personnage, R: SystemeRegles, role: 'mj' | 'joueurs'): Onglet[] {
+  const tous = ONGLETS.map((o) => o[0]).filter((o) => o !== 'caracs' || aUneFiche(R));
+  if (role === 'mj' || campJoueurs(p.sorte)) return tous;
+  return ['identite', 'combat'];
 }
 
 export function ajouter(c: Campagne, sorte: SortePersonnage, R: SystemeRegles): { campagne: Campagne; id: string } {
