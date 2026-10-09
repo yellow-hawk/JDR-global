@@ -74,3 +74,22 @@
 .perso-aptitudes { margin: 4px 0 8px; padding-left: 18px; display: grid; gap: 3px; font-size: 0.92rem; }
 .perso-montee { border: 1px solid var(--accent); border-radius: var(--rayon); padding: 12px; }
 .perso-liste-defilante { max-height: 260px; overflow: auto; }
+
+/* Arbres de talents */
+.perso-points { color: var(--accent); }
+.perso-arbre { display: grid; gap: 10px 12px; }
+.perso-branche-titre { font-family: var(--titre); text-align: center; border-bottom: 3px solid var(--trait); padding-bottom: 4px; }
+.perso-talent { position: relative; display: flex; flex-direction: column; gap: 2px; text-align: left; font: inherit; color: var(--encre);
+  border: 2px solid var(--trait); border-radius: var(--rayon); background: var(--fond-2); padding: 8px 10px; cursor: pointer; min-height: 58px; }
+.perso-talent small { color: var(--encre-2); font-size: 0.78rem; }
+.perso-talent::before { content: ''; position: absolute; top: -12px; left: 50%; width: 2px; height: 10px; background: var(--trait); }
+.perso-talent-acquis { background: var(--panneau); box-shadow: inset 0 0 0 1px var(--accent); }
+.perso-talent-acquis small { color: var(--accent); }
+.perso-talent-disponible { border-style: dashed; border-color: var(--accent); }
+.perso-talent-verrouille { opacity: 0.55; }
+.perso-talent-choisi { outline: 2px solid var(--accent); outline-offset: 2px; }
+.perso-talent-detail { border-color: var(--accent); }
+.perso-talent-racine::before { display: none; }
+.perso-editeur { display: grid; grid-template-columns: minmax(170px, 220px) 1fr; gap: 16px; align-items: start; }
+.perso-editeur-noeud { border: 1px solid var(--accent); border-radius: var(--rayon); padding: 10px; }
+@media (max-width: 760px) { .perso-editeur { grid-template-columns: 1fr; } }

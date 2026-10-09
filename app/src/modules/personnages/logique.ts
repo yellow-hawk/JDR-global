@@ -32,12 +32,12 @@ export function avecStatsCalculees(p: Personnage, R: SystemeRegles): Personnage 
 
 /** Onglets de la fiche visibles : les joueurs ne voient que l'identité des personnages hors de leur camp. */
 export const ONGLETS = [
-  ['identite', 'Identité'], ['caracs', 'Caractéristiques'], ['combat', 'Combat'], ['progression', 'Progression'],
+  ['identite', 'Identité'], ['caracs', 'Caractéristiques'], ['combat', 'Combat'], ['progression', 'Progression'], ['talents', 'Talents'],
   ['magie', 'Magie'], ['inventaire', 'Inventaire'], ['histoire', 'Histoire'],
 ] as const;
 export type Onglet = (typeof ONGLETS)[number][0];
 export function ongletsVisibles(p: Personnage, R: SystemeRegles, role: 'mj' | 'joueurs'): Onglet[] {
-  const tous = ONGLETS.map((o) => o[0]).filter((o) => o !== 'caracs' || aUneFiche(R));
+  const tous = ONGLETS.map((o) => o[0]).filter((o) => (o !== 'caracs' && o !== 'talents') || aUneFiche(R));
   if (role === 'mj' || campJoueurs(p.sorte)) return tous;
   return ['identite', 'combat'];
 }

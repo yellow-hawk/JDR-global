@@ -4,6 +4,11 @@ import type { Effet, Personnage } from '../../contrat';
 import type { AttaqueCalculee, CatalogueRegles, EntreeCatalogue, FicheCalculee, ValeurCalculee } from '../types';
 import CATALOGUE_JSON from './catalogue.json';
 import { CLASSES, PEUPLES, aptitudesActives, effetsDesAptitudes, incantation, pvMaxSuggere } from './progression';
+import { effetsTalents, enregistrerArbresDesRegles, type ArbreTalents } from '../../talents';
+import TALENTS_JSON from './talents.json';
+
+export const TALENTS = TALENTS_JSON as unknown as { pointsParNiveau: number; arbres: ArbreTalents[] };
+enregistrerArbresDesRegles(TALENTS.arbres);
 
 export const CATALOGUE = { ...(CATALOGUE_JSON as object), classes: CLASSES, peuples: PEUPLES } as unknown as CatalogueRegles;
 const PAR_ID = new Map<string, EntreeCatalogue>(CATALOGUE.objets.map((o) => [o.id, o]));
@@ -23,11 +28,11 @@ export function niveauDe(p: Personnage): number {
   return total > 0 ? total : Math.max(1, num(p.combat.stats.niveau, 1));
 }
 
-/** Effets actifs : objets équipés, aptitudes notées à la main, aptitudes des classes et du peuple. */
+/** Effets actifs : objets équipés, aptitudes notées à la main, aptitudes des classes et du peuple, talents acquis. */
 export function effetsActifs(p: Personnage): Effet[] {
   const objets = (p.fiche?.inventaire?.objets ?? []).filter((o) => o.equipe);
   const aptitudes = p.fiche?.progression?.aptitudes ?? [];
-  return [...objets.flatMap((o) => o.effets ?? []), ...aptitudes.flatMap((a) => a.effets ?? []), ...effetsDesAptitudes(p)];
+  return [...objets.flatMap((o) => o.effets ?? []), ...aptitudes.flatMap((a) => a.effets ?? []), ...effetsDesAptitudes(p), ...effetsTalents(p)];
 }
 
 const somme = (effets: Effet[], cible: string): number => effets.filter((e) => e.cible === cible).reduce((s, e) => s + e.valeur, 0);
@@ -119,6 +124,7 @@ export function calculer(p: Personnage): FicheCalculee {
   const pvSugg = pvMaxSuggere(p, modDe('con'), somme(effets, 'pvParNiveau'));
   if (pvSugg) derives.push({ cle: 'pvMaxSuggere', libelle: 'PV max suggérés', valeur: pvSugg, texte: String(pvSugg), detail: 'dé de vie, moyenne ensuite' });
   const magie = incantation(p, modDe, pb);
+  for (const i of magie.incantation) { i.dd += somme(effets, 'dd'); i.attaque += somme(effets, 'attaque.sort'); }
   for (const i of magie.incantation) {
     derives.push({ cle: `dd.${i.classe}`, libelle: `DD des sorts (${i.classe})`, valeur: i.dd, texte: String(i.dd), carac: i.carac });
     derives.push({ cle: `attaqueSort.${i.classe}`, libelle: `Attaque de sort (${i.classe})`, valeur: i.attaque, texte: signe(i.attaque), carac: i.carac });

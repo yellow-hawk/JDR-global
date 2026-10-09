@@ -10,6 +10,8 @@ import { ouvrirAvatarPour } from '../avatar';
 import { Fiche } from './Fiche';
 import { Creation } from './creation/Creation';
 import { Recompense } from './progression/Recompense';
+import { EditeurTalents, arbresDeCampagne } from './talents/EditeurTalents';
+import { enregistrerArbresDeCampagne } from '../../noyau/talents';
 import { aUneFiche } from '../../noyau/regles';
 import { ajouter, grouper, modifierPerso, sceneJoueurs, supprimer } from './logique';
 import './personnages.css';
@@ -30,11 +32,15 @@ export function Page() {
   const [selection, setSelection] = useState<string | null>(() => prendreCible('personnages') ?? null);
   const [creation, setCreation] = useState<Personnage['sorte'] | null>(null);
   const [recompense, setRecompense] = useState(false);
+  const [editeur, setEditeur] = useState(false);
   const c = vue!;
   const idCampagne = c.campagne.id;
   const R = regles(c.campagne.regles);
   const perso = c.personnages.find((p) => p.id === selection) ?? null;
   const urlPortrait = useUrlFichier(idCampagne, perso?.portrait);
+
+  // Arbres de talents du MJ (campagne) : remplacent ou complètent ceux des règles.
+  useEffect(() => { if (campagne) enregistrerArbresDeCampagne(arbresDeCampagne(campagne)); }, [campagne]);
 
   // Sélection perdue (personnage supprimé ou caché en aperçu joueurs) → rien de sélectionné.
   useEffect(() => { if (selection && !perso) setSelection(null); }, [selection, perso]);
@@ -92,7 +98,8 @@ export function Page() {
             <button className="btn btn-petit" onClick={() => setCreation('pnj')}>+ PNJ</button>
             <button className="btn btn-petit" onClick={() => setCreation('ennemi')}>+ Ennemi</button>
             <button className="btn btn-petit" title="Fiche vierge, sans assistant" onClick={() => nouveau('pj')}>Fiche vierge</button>
-            {role === 'mj' && aUneFiche(R) && <button className="btn btn-petit" title="Donner de l’expérience aux PJ" onClick={() => { setCreation(null); setRecompense(true); }}>★ Récompenser</button>}
+            {role === 'mj' && aUneFiche(R) && <button className="btn btn-petit" title="Donner de l’expérience aux PJ" onClick={() => { setCreation(null); setEditeur(false); setRecompense(true); }}>★ Récompenser</button>}
+            {role === 'mj' && aUneFiche(R) && <button className="btn btn-petit" title="Voir et modifier les arbres de talents" onClick={() => { setCreation(null); setRecompense(false); setEditeur(true); }}>Arbres de talents</button>}
           </div>
         )}
         {groupes.length === 0 && <p className="discret">Aucun personnage pour l'instant.</p>}
@@ -106,7 +113,9 @@ export function Page() {
         ))}
       </aside>
       <section className="perso-detail">
-        {recompense && !lectureSeule && aUneFiche(R) ? (
+        {editeur && !lectureSeule && aUneFiche(R) ? (
+          <EditeurTalents c={campagne!} R={R} modifier={modifier} onFermer={() => setEditeur(false)} />
+        ) : recompense && !lectureSeule && aUneFiche(R) ? (
           <Recompense c={campagne!} R={R} modifier={modifier} onFermer={() => setRecompense(false)} />
         ) : creation && !lectureSeule ? (
           <Creation key={creation} R={R} sorte={creation} onCree={(id) => window.setTimeout(() => setSelection(id), 0)} onFermer={() => setCreation(null)} />

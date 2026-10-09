@@ -78,6 +78,6 @@ describe('fiche détaillée', () => {
     const { nouveauPersonnage } = await import('../../noyau/contrat');
     const R = regles('dnd5e');
     expect(ongletsVisibles(nouveauPersonnage('Orc', 'ennemi', 'dnd5e', {}), R, 'joueurs')).toEqual(['identite', 'combat']);
-    expect(ongletsVisibles(nouveauPersonnage('Lys', 'pj', 'dnd5e', {}), R, 'joueurs')).toHaveLength(7);
+    expect(ongletsVisibles(nouveauPersonnage('Lys', 'pj', 'dnd5e', {}), R, 'joueurs')).toHaveLength(8);
   });
 });

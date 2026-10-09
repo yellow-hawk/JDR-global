@@ -22,6 +22,10 @@ Fiche : champ « Rôle ou métier » (`personnage.role`), bouton « Stats selon 
 
 `logique.ts` (pur, testé) : `etatProgression` (niveau, XP, seuil suivant, prêt), `appliquerNiveau` (classe ou multiclasse, sous-classe, PV, amélioration ou don, dés de vie, entrée de journal), `donnerXp` (partage, `journalXp`), `xpRencontre` (XP des adversaires selon leur niveau). `MonteeNiveau.tsx` : assistant (PV moyenne ou jet + CON + bonus d'aptitudes, nouvelles aptitudes, sous-classe, +2 / +1+1 / don). `Recompense.tsx` (bouton « ★ Récompenser » de la liste, MJ) : bénéficiaires, adversaires vaincus, XP libre, raison, partage. Onglet Progression : classes du catalogue, barre d'XP, aptitudes actives par source, incantation, dons, historique d'XP.
 
+## Talents
+
+Onglet **Talents** (`fiche/Talents.tsx`) : arbres applicables, points (1 par niveau), grille branches × rangs (acquis / disponible / verrouillé), détail, acquérir, retirer, « Rendre tous les points » (MJ). **Éditeur MJ** (`talents/EditeurTalents.tsx` + `EditeurNoeud.tsx`, bouton « Arbres de talents ») : copier un arbre des règles pour le modifier, créer un arbre, branches (nom, couleur), talents (rang, niveau, coût, prérequis, effets, magie), import / export JSON ; rangés dans `campagne.modules.personnages.arbres` et enregistrés à l'ouverture (`definition.preparerCampagne`).
+
 API publique : `definition`, `SORTES`, `libelleSorte`, `campJoueurs`, `sceneJoueurs`.
 
 ## Relations

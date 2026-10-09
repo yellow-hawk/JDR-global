@@ -5,6 +5,7 @@ import { CATALOGUE, calculer } from './fiche';
 import { ACHAT_POINTS, TABLEAU_STANDARD, choixAleatoires, coutAchat, creer, tirage4d6 } from './creation';
 import { rngFor } from '../../hasard';
 import { XP_NIVEAUX, gainPv, niveauPourXp, nouveautes, xpAdversaire } from './progression';
+import { TALENTS } from './fiche';
 
 const CARACS = [
   ['for', 'FOR'], ['dex', 'DEX'], ['con', 'CON'], ['int', 'INT'], ['sag', 'SAG'], ['cha', 'CHA'],
@@ -64,4 +65,5 @@ export const dnd5e: SystemeAvecFiche = {
     creer,
   },
   progression: { xpNiveaux: XP_NIVEAUX, niveauPourXp, xpAdversaire, gainPv, nouveautes },
+  talents: TALENTS,
 };

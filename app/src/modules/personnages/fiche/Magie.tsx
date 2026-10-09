@@ -21,7 +21,7 @@ export function Magie({ p, role }: PropsOnglet) {
           {m ? 'Ouvrir dans l’Atelier de tracé' : 'Lui apprendre la magie (Atelier)'}
         </button>
       )}
-      <p className="discret">Bientôt : un arbre de magie relie l’apprentissage des Cœurs, Rameaux et Nœuds à la progression.</p>
+      <p className="discret">Les signes et les rangs s’apprennent avec l’arbre « Magie des sceaux » (onglet Talents) ; le grimoire et le calibrage se font dans l’Atelier.</p>
     </div>
   );
 }

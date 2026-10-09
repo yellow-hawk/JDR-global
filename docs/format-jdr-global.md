@@ -180,6 +180,7 @@ Une carte Inkarnate n'est pas dessinée en projection géographique : l'enrouler
 
 - Compétences : 1 = maîtrise, 2 = expertise. `ref` d'un objet : entrée du catalogue du système (`noyau/regles/dnd5e/catalogue.json`, données SRD 5.1 CC-BY 4.0).
 - `effets` : `{ cible, valeur }`, cibles comprises par le système (5e : `ca`, `carac.for`, `competence.perception`, `sauvegarde.dex`, `vitesse`, `pvMax`, `initiative`, `attaque`, `degats`). Comptent pour les objets **équipés** et les aptitudes.
+- `progression.talents` : ids des talents acquis (arbres des règles ou de la campagne, `modules.personnages.arbres` : `ArbreTalents[]`, voir `noyau/talents`).
 - Valeurs dérivées (modificateurs, compétences, CA de l'armure portée, attaques des armes équipées, charge) : calculées par `R.calculer(p)` ; CA, bonus d'attaque, dégâts et niveau sont reportés dans `combat.stats` (la Table de combat les lit).
 
 ---

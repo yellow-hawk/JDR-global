@@ -1,0 +1,2618 @@
+{
+ "_doc": "Arbres de talents de JDR Global (contenu maison, en complément de la 5e). 1 point par niveau. Rang 1 dès le niveau 1, rang 2 au 3, rang 3 au 6, rang 4 au 10 ; coût 1, 1, 2, 3. 'requis' : tous les talents listés ; 'effets' appliqués à la fiche ; 'magie' : signes de l'Atelier appris, rang, emplacements, 'eveil' (premiers signes). 'pour' : classes, tous, magie.",
+ "pointsParNiveau": 1,
+ "arbres": [
+  {
+   "id": "guerrier",
+   "nom": "Guerrier",
+   "texte": "",
+   "pour": {
+    "classes": [
+     "guerrier"
+    ]
+   },
+   "branches": [
+    {
+     "id": "guerrier.defense",
+     "nom": "Défense",
+     "noeuds": [
+      {
+       "id": "guerrier.defense.1",
+       "nom": "Garde solide",
+       "texte": "+1 à la CA quand vous portez une armure.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "ca",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "guerrier.defense.2",
+       "nom": "Inébranlable",
+       "texte": "Avantage aux sauvegardes contre la chute à terre et le déplacement forcé ; +1 aux sauvegardes de CON.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "guerrier.defense.1"
+       ],
+       "effets": [
+        {
+         "cible": "sauvegarde.con",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "guerrier.defense.3",
+       "nom": "Rempart vivant",
+       "texte": "En réaction, imposer le désavantage à une attaque contre un allié adjacent.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "guerrier.defense.2"
+       ]
+      },
+      {
+       "id": "guerrier.defense.4",
+       "nom": "Forteresse",
+       "texte": "Résistance aux dégâts contondants, perforants et tranchants non magiques tant que vous avez plus de la moitié de vos PV.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "guerrier.defense.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "guerrier.assaut",
+     "nom": "Assaut",
+     "noeuds": [
+      {
+       "id": "guerrier.assaut.1",
+       "nom": "Frappe assurée",
+       "texte": "+1 aux jets d'attaque avec les armes.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "attaque",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "guerrier.assaut.2",
+       "nom": "Coup puissant",
+       "texte": "+1 aux dégâts des armes.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "guerrier.assaut.1"
+       ],
+       "effets": [
+        {
+         "cible": "degats",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "guerrier.assaut.3",
+       "nom": "Enchaînement",
+       "texte": "Quand vous abattez un ennemi, attaque supplémentaire en action bonus.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "guerrier.assaut.2"
+       ]
+      },
+      {
+       "id": "guerrier.assaut.4",
+       "nom": "Tempête d'acier",
+       "texte": "Une fois par court repos, attaquer chaque ennemi à portée de corps à corps.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "guerrier.assaut.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "guerrier.commandement",
+     "nom": "Commandement",
+     "noeuds": [
+      {
+       "id": "guerrier.commandement.1",
+       "nom": "Voix de commandement",
+       "texte": "Maîtrise de l'Intimidation ou de la Persuasion ; +1 en Intimidation.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "competence.intimidation",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "guerrier.commandement.2",
+       "nom": "Ralliement",
+       "texte": "Action bonus : un allié qui vous entend gagne 1d6 + niveau PV temporaires, une fois par court repos.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "guerrier.commandement.1"
+       ]
+      },
+      {
+       "id": "guerrier.commandement.3",
+       "nom": "Ordre tactique",
+       "texte": "Céder une de vos attaques à un allié qui frappe en réaction.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "guerrier.commandement.2"
+       ]
+      },
+      {
+       "id": "guerrier.commandement.4",
+       "nom": "Bannière",
+       "texte": "Les alliés à 3 cases ajoutent +1 à leurs sauvegardes et ne peuvent être effrayés.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "guerrier.commandement.3"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "barbare",
+   "nom": "Barbare",
+   "texte": "",
+   "pour": {
+    "classes": [
+     "barbare"
+    ]
+   },
+   "branches": [
+    {
+     "id": "barbare.fureur",
+     "nom": "Fureur",
+     "noeuds": [
+      {
+       "id": "barbare.fureur.1",
+       "nom": "Rage brûlante",
+       "texte": "+1 aux dégâts en rage.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "degats",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "barbare.fureur.2",
+       "nom": "Soif de sang",
+       "texte": "Récupérer 1d6 PV quand vous abattez un ennemi en rage.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "barbare.fureur.1"
+       ]
+      },
+      {
+       "id": "barbare.fureur.3",
+       "nom": "Frappe dévastatrice",
+       "texte": "Une fois par tour en rage, un critique sur 19-20.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "barbare.fureur.2"
+       ]
+      },
+      {
+       "id": "barbare.fureur.4",
+       "nom": "Avatar de la fureur",
+       "texte": "Une rage par long repos dure jusqu'à ce que vous la stoppiez, sans épuisement.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "barbare.fureur.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "barbare.sauvagerie",
+     "nom": "Sauvagerie",
+     "noeuds": [
+      {
+       "id": "barbare.sauvagerie.1",
+       "nom": "Pas du fauve",
+       "texte": "+1 case de vitesse.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "vitesse",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "barbare.sauvagerie.2",
+       "nom": "Instinct du prédateur",
+       "texte": "+2 à l'initiative.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "barbare.sauvagerie.1"
+       ],
+       "effets": [
+        {
+         "cible": "initiative",
+         "valeur": 2
+        }
+       ]
+      },
+      {
+       "id": "barbare.sauvagerie.3",
+       "nom": "Bond",
+       "texte": "Sauter le double de la distance ; frapper à terre après un bond.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "barbare.sauvagerie.2"
+       ]
+      },
+      {
+       "id": "barbare.sauvagerie.4",
+       "nom": "Totem",
+       "texte": "Choisir un esprit (ours : résistance à tout en rage ; aigle : voler ; loup : avantage des alliés).",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "barbare.sauvagerie.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "barbare.endurance",
+     "nom": "Endurance",
+     "noeuds": [
+      {
+       "id": "barbare.endurance.1",
+       "nom": "Peau épaisse",
+       "texte": "+1 PV par niveau.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "pvParNiveau",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "barbare.endurance.2",
+       "nom": "Indomptable",
+       "texte": "+1 aux sauvegardes de CON et de FOR.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "barbare.endurance.1"
+       ],
+       "effets": [
+        {
+         "cible": "sauvegarde.con",
+         "valeur": 1
+        },
+        {
+         "cible": "sauvegarde.for",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "barbare.endurance.3",
+       "nom": "Insensible",
+       "texte": "Ignorer un niveau d'épuisement.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "barbare.endurance.2"
+       ]
+      },
+      {
+       "id": "barbare.endurance.4",
+       "nom": "Increvable",
+       "texte": "Une fois par long repos, revenir à 1 PV et se relever à 0 PV.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "barbare.endurance.3"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "paladin",
+   "nom": "Paladin",
+   "texte": "",
+   "pour": {
+    "classes": [
+     "paladin"
+    ]
+   },
+   "branches": [
+    {
+     "id": "paladin.foi",
+     "nom": "Foi",
+     "noeuds": [
+      {
+       "id": "paladin.foi.1",
+       "nom": "Prière du matin",
+       "texte": "+1 aux sauvegardes de SAG.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "sauvegarde.sag",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "paladin.foi.2",
+       "nom": "Mains apaisantes",
+       "texte": "Imposition des mains : +5 PV à la réserve par niveau de paladin.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "paladin.foi.1"
+       ]
+      },
+      {
+       "id": "paladin.foi.3",
+       "nom": "Aura de lumière",
+       "texte": "Lumière vive de 4 cases ; les morts-vivants y ont le désavantage.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "paladin.foi.2"
+       ]
+      },
+      {
+       "id": "paladin.foi.4",
+       "nom": "Martyr",
+       "texte": "En réaction, subir les dégâts d'une attaque à la place d'un allié adjacent.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "paladin.foi.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "paladin.chatiment",
+     "nom": "Châtiment",
+     "noeuds": [
+      {
+       "id": "paladin.chatiment.1",
+       "nom": "Arme bénie",
+       "texte": "+1 aux jets d'attaque au corps à corps.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "attaque",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "paladin.chatiment.2",
+       "nom": "Châtiment ardent",
+       "texte": "Le châtiment divin ajoute 1d8 de plus contre les fiélons et morts-vivants.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "paladin.chatiment.1"
+       ]
+      },
+      {
+       "id": "paladin.chatiment.3",
+       "nom": "Jugement",
+       "texte": "Marquer un ennemi : +2 aux dégâts contre lui jusqu'à sa chute.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "paladin.chatiment.2"
+       ]
+      },
+      {
+       "id": "paladin.chatiment.4",
+       "nom": "Colère divine",
+       "texte": "Une fois par long repos, châtiment au niveau maximal sans emplacement.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "paladin.chatiment.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "paladin.bouclier",
+     "nom": "Bouclier",
+     "noeuds": [
+      {
+       "id": "paladin.bouclier.1",
+       "nom": "Garde sacrée",
+       "texte": "+1 à la CA avec un bouclier.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "ca",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "paladin.bouclier.2",
+       "nom": "Protecteur",
+       "texte": "Imposer le désavantage à une attaque contre un allié adjacent.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "paladin.bouclier.1"
+       ]
+      },
+      {
+       "id": "paladin.bouclier.3",
+       "nom": "Égide",
+       "texte": "Les alliés à 2 cases gagnent +1 à la CA.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "paladin.bouclier.2"
+       ]
+      },
+      {
+       "id": "paladin.bouclier.4",
+       "nom": "Inviolable",
+       "texte": "Avantage aux sauvegardes contre les sorts.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "paladin.bouclier.3"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rodeur",
+   "nom": "Rôdeur",
+   "texte": "",
+   "pour": {
+    "classes": [
+     "rodeur"
+    ]
+   },
+   "branches": [
+    {
+     "id": "rodeur.archerie",
+     "nom": "Archerie",
+     "noeuds": [
+      {
+       "id": "rodeur.archerie.1",
+       "nom": "Œil de faucon",
+       "texte": "+1 aux jets d'attaque à distance.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "attaque",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "rodeur.archerie.2",
+       "nom": "Tir précis",
+       "texte": "Ignorer les abris partiels ; portée longue sans désavantage.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "rodeur.archerie.1"
+       ]
+      },
+      {
+       "id": "rodeur.archerie.3",
+       "nom": "Volée",
+       "texte": "Une fois par court repos, une attaque à distance contre chaque créature d'une zone de 2 cases.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "rodeur.archerie.2"
+       ]
+      },
+      {
+       "id": "rodeur.archerie.4",
+       "nom": "Flèche fatale",
+       "texte": "Les critiques à distance infligent un dé de dégâts supplémentaire.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "rodeur.archerie.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "rodeur.pistage",
+     "nom": "Pistage",
+     "noeuds": [
+      {
+       "id": "rodeur.pistage.1",
+       "nom": "Pisteur",
+       "texte": "+2 en Survie.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "competence.survie",
+         "valeur": 2
+        }
+       ]
+      },
+      {
+       "id": "rodeur.pistage.2",
+       "nom": "Sens aiguisés",
+       "texte": "+2 en Perception.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "rodeur.pistage.1"
+       ],
+       "effets": [
+        {
+         "cible": "competence.perception",
+         "valeur": 2
+        }
+       ]
+      },
+      {
+       "id": "rodeur.pistage.3",
+       "nom": "Embuscade",
+       "texte": "Avantage aux attaques au premier round contre les créatures surprises.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "rodeur.pistage.2"
+       ]
+      },
+      {
+       "id": "rodeur.pistage.4",
+       "nom": "Proie marquée",
+       "texte": "La marque du chasseur ne demande plus de concentration.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "rodeur.pistage.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "rodeur.nature",
+     "nom": "Compagnon",
+     "noeuds": [
+      {
+       "id": "rodeur.nature.1",
+       "nom": "Ami des bêtes",
+       "texte": "+2 en Dressage ; une bête commune vous suit.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "competence.dressage",
+         "valeur": 2
+        }
+       ]
+      },
+      {
+       "id": "rodeur.nature.2",
+       "nom": "Compagnon fidèle",
+       "texte": "Une bête (loup, faucon, ours brun jeune) combat à vos côtés.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "rodeur.nature.1"
+       ]
+      },
+      {
+       "id": "rodeur.nature.3",
+       "nom": "Lien sauvage",
+       "texte": "Partager les sens de votre compagnon.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "rodeur.nature.2"
+       ]
+      },
+      {
+       "id": "rodeur.nature.4",
+       "nom": "Meute",
+       "texte": "Avantage aux attaques quand votre compagnon est adjacent à la cible.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "rodeur.nature.3"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "roublard",
+   "nom": "Roublard",
+   "texte": "",
+   "pour": {
+    "classes": [
+     "roublard"
+    ]
+   },
+   "branches": [
+    {
+     "id": "roublard.ombre",
+     "nom": "Ombre",
+     "noeuds": [
+      {
+       "id": "roublard.ombre.1",
+       "nom": "Pas feutrés",
+       "texte": "+2 en Discrétion.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "competence.discretion",
+         "valeur": 2
+        }
+       ]
+      },
+      {
+       "id": "roublard.ombre.2",
+       "nom": "Fondu dans l'ombre",
+       "texte": "Se cacher dans la pénombre même observé.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "roublard.ombre.1"
+       ]
+      },
+      {
+       "id": "roublard.ombre.3",
+       "nom": "Fantôme",
+       "texte": "Se déplacer à pleine vitesse en se cachant.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "roublard.ombre.2"
+       ]
+      },
+      {
+       "id": "roublard.ombre.4",
+       "nom": "Disparition",
+       "texte": "Une fois par court repos, devenir invisible jusqu'à la fin du prochain tour.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "roublard.ombre.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "roublard.lames",
+     "nom": "Lames",
+     "noeuds": [
+      {
+       "id": "roublard.lames.1",
+       "nom": "Lame vive",
+       "texte": "+1 aux jets d'attaque avec les armes de finesse.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "attaque",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "roublard.lames.2",
+       "nom": "Point vital",
+       "texte": "+1d6 à l'attaque sournoise.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "roublard.lames.1"
+       ]
+      },
+      {
+       "id": "roublard.lames.3",
+       "nom": "Danse des lames",
+       "texte": "Attaque supplémentaire avec une arme légère en main secondaire, avec le modificateur.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "roublard.lames.2"
+       ]
+      },
+      {
+       "id": "roublard.lames.4",
+       "nom": "Coup de grâce",
+       "texte": "Les attaques sournoises contre une cible à terre ou surprise sont des critiques.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "roublard.lames.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "roublard.ruse",
+     "nom": "Ruse",
+     "noeuds": [
+      {
+       "id": "roublard.ruse.1",
+       "nom": "Langue d'argent",
+       "texte": "+2 en Tromperie.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "competence.tromperie",
+         "valeur": 2
+        }
+       ]
+      },
+      {
+       "id": "roublard.ruse.2",
+       "nom": "Doigts de fée",
+       "texte": "+2 en Escamotage ; ouvrir les serrures en action bonus.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "roublard.ruse.1"
+       ],
+       "effets": [
+        {
+         "cible": "competence.escamotage",
+         "valeur": 2
+        }
+       ]
+      },
+      {
+       "id": "roublard.ruse.3",
+       "nom": "Toujours un plan",
+       "texte": "Une fois par long repos, déclarer avoir préparé un objet ou une ruse sur place.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "roublard.ruse.2"
+       ]
+      },
+      {
+       "id": "roublard.ruse.4",
+       "nom": "Maître des masques",
+       "texte": "Se faire passer pour quelqu'un d'autre avec avantage aux tests.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "roublard.ruse.3"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "moine",
+   "nom": "Moine",
+   "texte": "",
+   "pour": {
+    "classes": [
+     "moine"
+    ]
+   },
+   "branches": [
+    {
+     "id": "moine.poing",
+     "nom": "Poing",
+     "noeuds": [
+      {
+       "id": "moine.poing.1",
+       "nom": "Poings de fer",
+       "texte": "+1 aux dégâts à mains nues.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "degats",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "moine.poing.2",
+       "nom": "Rafale",
+       "texte": "Le déluge de coups porte une troisième frappe.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "moine.poing.1"
+       ]
+      },
+      {
+       "id": "moine.poing.3",
+       "nom": "Brise-garde",
+       "texte": "Une frappe à mains nues par tour réduit la CA de la cible de 2 jusqu'à votre prochain tour.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "moine.poing.2"
+       ]
+      },
+      {
+       "id": "moine.poing.4",
+       "nom": "Cent mains",
+       "texte": "Une fois par court repos, une frappe contre chaque ennemi adjacent.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "moine.poing.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "moine.vent",
+     "nom": "Vent",
+     "noeuds": [
+      {
+       "id": "moine.vent.1",
+       "nom": "Pas léger",
+       "texte": "+1 case de vitesse.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "vitesse",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "moine.vent.2",
+       "nom": "Course sur les murs",
+       "texte": "Courir sur les murs et l'eau pendant votre déplacement.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "moine.vent.1"
+       ]
+      },
+      {
+       "id": "moine.vent.3",
+       "nom": "Esquive parfaite",
+       "texte": "+1 à la CA sans armure.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "moine.vent.2"
+       ],
+       "effets": [
+        {
+         "cible": "ca",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "moine.vent.4",
+       "nom": "Insaisissable",
+       "texte": "Les attaques d'opportunité contre vous ont le désavantage.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "moine.vent.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "moine.esprit",
+     "nom": "Esprit",
+     "noeuds": [
+      {
+       "id": "moine.esprit.1",
+       "nom": "Méditation",
+       "texte": "+2 en Intuition.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "competence.intuition",
+         "valeur": 2
+        }
+       ]
+      },
+      {
+       "id": "moine.esprit.2",
+       "nom": "Esprit clair",
+       "texte": "+1 aux sauvegardes de SAG.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "moine.esprit.1"
+       ],
+       "effets": [
+        {
+         "cible": "sauvegarde.sag",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "moine.esprit.3",
+       "nom": "Souffle vital",
+       "texte": "Récupérer 1 ki lors d'un court repos supplémentaire.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "moine.esprit.2"
+       ]
+      },
+      {
+       "id": "moine.esprit.4",
+       "nom": "Illumination",
+       "texte": "Immunisé contre charmé et effrayé.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "moine.esprit.3"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "magicien",
+   "nom": "Magicien",
+   "texte": "",
+   "pour": {
+    "classes": [
+     "magicien"
+    ]
+   },
+   "branches": [
+    {
+     "id": "magicien.erudition",
+     "nom": "Érudition",
+     "noeuds": [
+      {
+       "id": "magicien.erudition.1",
+       "nom": "Rat de bibliothèque",
+       "texte": "+2 en Arcanes.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "competence.arcanes",
+         "valeur": 2
+        }
+       ]
+      },
+      {
+       "id": "magicien.erudition.2",
+       "nom": "Copiste rapide",
+       "texte": "Copier un sort coûte moitié moins de temps et d'or.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "magicien.erudition.1"
+       ]
+      },
+      {
+       "id": "magicien.erudition.3",
+       "nom": "Mémoire prodigieuse",
+       "texte": "Préparer un sort de plus.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "magicien.erudition.2"
+       ]
+      },
+      {
+       "id": "magicien.erudition.4",
+       "nom": "Archimage",
+       "texte": "Un sort de niveau 1 ou 2 préparé se lance sans emplacement une fois par court repos.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "magicien.erudition.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "magicien.puissance",
+     "nom": "Puissance",
+     "noeuds": [
+      {
+       "id": "magicien.puissance.1",
+       "nom": "Focalisation",
+       "texte": "+1 aux jets d'attaque de sort.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "attaque.sort",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "magicien.puissance.2",
+       "nom": "Sort affûté",
+       "texte": "+1 au DD de vos sorts.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "magicien.puissance.1"
+       ],
+       "effets": [
+        {
+         "cible": "dd",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "magicien.puissance.3",
+       "nom": "Surcharge contrôlée",
+       "texte": "Relancer les 1 aux dés de dégâts des sorts.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "magicien.puissance.2"
+       ]
+      },
+      {
+       "id": "magicien.puissance.4",
+       "nom": "Évocation suprême",
+       "texte": "Une fois par long repos, dégâts maximaux pour un sort.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "magicien.puissance.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "magicien.protection",
+     "nom": "Protection",
+     "noeuds": [
+      {
+       "id": "magicien.protection.1",
+       "nom": "Réflexes arcaniques",
+       "texte": "+2 à l'initiative.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "initiative",
+         "valeur": 2
+        }
+       ]
+      },
+      {
+       "id": "magicien.protection.2",
+       "nom": "Bouclier instinctif",
+       "texte": "Bouclier une fois par long repos sans emplacement.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "magicien.protection.1"
+       ]
+      },
+      {
+       "id": "magicien.protection.3",
+       "nom": "Barrière",
+       "texte": "PV temporaires égaux à votre niveau après un long repos.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "magicien.protection.2"
+       ]
+      },
+      {
+       "id": "magicien.protection.4",
+       "nom": "Contresort aiguisé",
+       "texte": "Avantage aux tests pour contrer un sort.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "magicien.protection.3"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ensorceleur",
+   "nom": "Ensorceleur",
+   "texte": "",
+   "pour": {
+    "classes": [
+     "ensorceleur"
+    ]
+   },
+   "branches": [
+    {
+     "id": "ensorceleur.sang",
+     "nom": "Sang",
+     "noeuds": [
+      {
+       "id": "ensorceleur.sang.1",
+       "nom": "Sang ardent",
+       "texte": "+1 aux dégâts des sorts d'un élément.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "degats.sort",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "ensorceleur.sang.2",
+       "nom": "Écailles",
+       "texte": "+1 à la CA sans armure.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "ensorceleur.sang.1"
+       ],
+       "effets": [
+        {
+         "cible": "ca",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "ensorceleur.sang.3",
+       "nom": "Résistance du sang",
+       "texte": "Résistance à l'élément de votre lignée.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "ensorceleur.sang.2"
+       ]
+      },
+      {
+       "id": "ensorceleur.sang.4",
+       "nom": "Éveil du sang",
+       "texte": "Une fois par long repos, transformation : vol, résistance à tout, +2 aux dégâts des sorts.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "ensorceleur.sang.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "ensorceleur.metamagie",
+     "nom": "Métamagie",
+     "noeuds": [
+      {
+       "id": "ensorceleur.metamagie.1",
+       "nom": "Source vive",
+       "texte": "+1 point de sorcellerie.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": []
+      },
+      {
+       "id": "ensorceleur.metamagie.2",
+       "nom": "Option supplémentaire",
+       "texte": "Une option de métamagie de plus.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "ensorceleur.metamagie.1"
+       ]
+      },
+      {
+       "id": "ensorceleur.metamagie.3",
+       "nom": "Métamagie double",
+       "texte": "Deux options de métamagie sur un même sort.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "ensorceleur.metamagie.2"
+       ]
+      },
+      {
+       "id": "ensorceleur.metamagie.4",
+       "nom": "Torrent",
+       "texte": "Récupérer 1d4 points de sorcellerie à l'initiative.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "ensorceleur.metamagie.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "ensorceleur.chaos",
+     "nom": "Chaos",
+     "noeuds": [
+      {
+       "id": "ensorceleur.chaos.1",
+       "nom": "Charisme magnétique",
+       "texte": "+2 en Persuasion.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "competence.persuasion",
+         "valeur": 2
+        }
+       ]
+      },
+      {
+       "id": "ensorceleur.chaos.2",
+       "nom": "Chance sauvage",
+       "texte": "Relancer un jet une fois par court repos.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "ensorceleur.chaos.1"
+       ]
+      },
+      {
+       "id": "ensorceleur.chaos.3",
+       "nom": "Déferlement",
+       "texte": "Choisir l'effet de la magie sauvage parmi deux.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "ensorceleur.chaos.2"
+       ]
+      },
+      {
+       "id": "ensorceleur.chaos.4",
+       "nom": "Maître du chaos",
+       "texte": "Un sort de niveau 3 au plus, au choix, une fois par long repos.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "ensorceleur.chaos.3"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "occultiste",
+   "nom": "Occultiste",
+   "texte": "",
+   "pour": {
+    "classes": [
+     "occultiste"
+    ]
+   },
+   "branches": [
+    {
+     "id": "occultiste.pacte",
+     "nom": "Pacte",
+     "noeuds": [
+      {
+       "id": "occultiste.pacte.1",
+       "nom": "Murmure du patron",
+       "texte": "+2 en Arcanes.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "competence.arcanes",
+         "valeur": 2
+        }
+       ]
+      },
+      {
+       "id": "occultiste.pacte.2",
+       "nom": "Invocation de plus",
+       "texte": "Une manifestation occulte supplémentaire.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "occultiste.pacte.1"
+       ]
+      },
+      {
+       "id": "occultiste.pacte.3",
+       "nom": "Faveur",
+       "texte": "Un emplacement de pacte de plus par long repos.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "occultiste.pacte.2"
+       ]
+      },
+      {
+       "id": "occultiste.pacte.4",
+       "nom": "Avatar du patron",
+       "texte": "Une fois par long repos, apparence terrifiante : ennemis effrayés à 6 cases.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "occultiste.pacte.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "occultiste.malefice",
+     "nom": "Maléfice",
+     "noeuds": [
+      {
+       "id": "occultiste.malefice.1",
+       "nom": "Décharge mordante",
+       "texte": "+1 aux jets d'attaque de sort.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "attaque.sort",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "occultiste.malefice.2",
+       "nom": "Malédiction tenace",
+       "texte": "Le maléfice dure le double.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "occultiste.malefice.1"
+       ]
+      },
+      {
+       "id": "occultiste.malefice.3",
+       "nom": "Fléau",
+       "texte": "La cible maudite a le désavantage à une sauvegarde de votre choix.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "occultiste.malefice.2"
+       ]
+      },
+      {
+       "id": "occultiste.malefice.4",
+       "nom": "Damnation",
+       "texte": "Les critiques contre une cible maudite la font chuter à terre et l'effraient.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "occultiste.malefice.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "occultiste.ombres",
+     "nom": "Ombres",
+     "noeuds": [
+      {
+       "id": "occultiste.ombres.1",
+       "nom": "Vision du diable",
+       "texte": "Voir dans le noir magique à 24 cases.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": []
+      },
+      {
+       "id": "occultiste.ombres.2",
+       "nom": "Pas d'ombre",
+       "texte": "Se téléporter de 6 cases d'ombre en ombre en action bonus.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "occultiste.ombres.1"
+       ]
+      },
+      {
+       "id": "occultiste.ombres.3",
+       "nom": "Manteau d'ombre",
+       "texte": "+1 à la CA dans la pénombre.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "occultiste.ombres.2"
+       ],
+       "effets": [
+        {
+         "cible": "ca",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "occultiste.ombres.4",
+       "nom": "Prince des ombres",
+       "texte": "Résistance aux dégâts dans la pénombre.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "occultiste.ombres.3"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "clerc",
+   "nom": "Clerc",
+   "texte": "",
+   "pour": {
+    "classes": [
+     "clerc"
+    ]
+   },
+   "branches": [
+    {
+     "id": "clerc.soins",
+     "nom": "Soins",
+     "noeuds": [
+      {
+       "id": "clerc.soins.1",
+       "nom": "Main guérisseuse",
+       "texte": "+2 en Médecine.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "competence.medecine",
+         "valeur": 2
+        }
+       ]
+      },
+      {
+       "id": "clerc.soins.2",
+       "nom": "Prière de soins",
+       "texte": "Les soins rendent +2 PV.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "clerc.soins.1"
+       ]
+      },
+      {
+       "id": "clerc.soins.3",
+       "nom": "Aura de vie",
+       "texte": "Les alliés à 2 cases récupèrent 1d4 PV au début de leur tour en combat, une fois par long repos pendant 1 minute.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "clerc.soins.2"
+       ]
+      },
+      {
+       "id": "clerc.soins.4",
+       "nom": "Résurrection",
+       "texte": "Une fois par long repos, ramener un allié mort depuis moins d'un round à 1 PV.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "clerc.soins.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "clerc.colere",
+     "nom": "Colère divine",
+     "noeuds": [
+      {
+       "id": "clerc.colere.1",
+       "nom": "Arme sacrée",
+       "texte": "+1 aux jets d'attaque.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "attaque",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "clerc.colere.2",
+       "nom": "Feu sacré",
+       "texte": "+1 au DD de vos sorts.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "clerc.colere.1"
+       ],
+       "effets": [
+        {
+         "cible": "dd",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "clerc.colere.3",
+       "nom": "Frappe radieuse",
+       "texte": "+1d8 dégâts radiants une fois par tour.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "clerc.colere.2"
+       ]
+      },
+      {
+       "id": "clerc.colere.4",
+       "nom": "Jugement des dieux",
+       "texte": "Une fois par long repos, un sort de dégâts inflige les dégâts maximaux.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "clerc.colere.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "clerc.foi",
+     "nom": "Foi",
+     "noeuds": [
+      {
+       "id": "clerc.foi.1",
+       "nom": "Dévotion",
+       "texte": "+2 en Religion.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "competence.religion",
+         "valeur": 2
+        }
+       ]
+      },
+      {
+       "id": "clerc.foi.2",
+       "nom": "Armure de foi",
+       "texte": "+1 à la CA.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "clerc.foi.1"
+       ],
+       "effets": [
+        {
+         "cible": "ca",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "clerc.foi.3",
+       "nom": "Conduit renforcé",
+       "texte": "Un conduit divin de plus par repos.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "clerc.foi.2"
+       ]
+      },
+      {
+       "id": "clerc.foi.4",
+       "nom": "Miracle",
+       "texte": "Intervention divine réussie sur 1-20 une fois par semaine.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "clerc.foi.3"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "druide",
+   "nom": "Druide",
+   "texte": "",
+   "pour": {
+    "classes": [
+     "druide"
+    ]
+   },
+   "branches": [
+    {
+     "id": "druide.metamorphe",
+     "nom": "Métamorphe",
+     "noeuds": [
+      {
+       "id": "druide.metamorphe.1",
+       "nom": "Forme robuste",
+       "texte": "En forme sauvage, +1 à la CA.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": []
+      },
+      {
+       "id": "druide.metamorphe.2",
+       "nom": "Crocs et griffes",
+       "texte": "Les attaques en forme sauvage comptent comme magiques.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "druide.metamorphe.1"
+       ]
+      },
+      {
+       "id": "druide.metamorphe.3",
+       "nom": "Forme rapide",
+       "texte": "Forme sauvage en action bonus.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "druide.metamorphe.2"
+       ]
+      },
+      {
+       "id": "druide.metamorphe.4",
+       "nom": "Forme élémentaire",
+       "texte": "Prendre une forme d'élémentaire une fois par long repos.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "druide.metamorphe.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "druide.elements",
+     "nom": "Éléments",
+     "noeuds": [
+      {
+       "id": "druide.elements.1",
+       "nom": "Appel de l'orage",
+       "texte": "+1 aux dégâts des sorts.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "degats.sort",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "druide.elements.2",
+       "nom": "Sort affûté",
+       "texte": "+1 au DD de vos sorts.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "druide.elements.1"
+       ],
+       "effets": [
+        {
+         "cible": "dd",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "druide.elements.3",
+       "nom": "Furie de la nature",
+       "texte": "Les sorts de zone ignorent la résistance d'un élément.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "druide.elements.2"
+       ]
+      },
+      {
+       "id": "druide.elements.4",
+       "nom": "Tempête vivante",
+       "texte": "Une fois par long repos, tempête de 6 cases autour de vous pendant 1 minute.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "druide.elements.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "druide.gardien",
+     "nom": "Gardien",
+     "noeuds": [
+      {
+       "id": "druide.gardien.1",
+       "nom": "Herboriste",
+       "texte": "+2 en Nature.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "competence.nature",
+         "valeur": 2
+        }
+       ]
+      },
+      {
+       "id": "druide.gardien.2",
+       "nom": "Racines",
+       "texte": "Ignorer le terrain difficile végétal ; entraver un ennemi d'une action.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "druide.gardien.1"
+       ]
+      },
+      {
+       "id": "druide.gardien.3",
+       "nom": "Écorce",
+       "texte": "+1 à la CA.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "druide.gardien.2"
+       ],
+       "effets": [
+        {
+         "cible": "ca",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "druide.gardien.4",
+       "nom": "Cœur de la forêt",
+       "texte": "Les plantes à 6 cases sont vos alliées.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "druide.gardien.3"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "barde",
+   "nom": "Barde",
+   "texte": "",
+   "pour": {
+    "classes": [
+     "barde"
+    ]
+   },
+   "branches": [
+    {
+     "id": "barde.chant",
+     "nom": "Chant",
+     "noeuds": [
+      {
+       "id": "barde.chant.1",
+       "nom": "Voix d'or",
+       "texte": "+2 en Représentation.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "competence.representation",
+         "valeur": 2
+        }
+       ]
+      },
+      {
+       "id": "barde.chant.2",
+       "nom": "Inspiration vive",
+       "texte": "Le dé d'inspiration augmente d'une taille.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "barde.chant.1"
+       ]
+      },
+      {
+       "id": "barde.chant.3",
+       "nom": "Hymne",
+       "texte": "Les alliés qui vous entendent ajoutent +1 aux sauvegardes.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "barde.chant.2"
+       ]
+      },
+      {
+       "id": "barde.chant.4",
+       "nom": "Chant épique",
+       "texte": "Une fois par long repos, tous les alliés gagnent une inspiration.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "barde.chant.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "barde.lame",
+     "nom": "Lame",
+     "noeuds": [
+      {
+       "id": "barde.lame.1",
+       "nom": "Bretteur",
+       "texte": "+1 aux jets d'attaque.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "attaque",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "barde.lame.2",
+       "nom": "Botte secrète",
+       "texte": "Dépenser une inspiration pour l'ajouter aux dégâts.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "barde.lame.1"
+       ]
+      },
+      {
+       "id": "barde.lame.3",
+       "nom": "Feinte",
+       "texte": "Avantage à une attaque après une ruse en action bonus.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "barde.lame.2"
+       ]
+      },
+      {
+       "id": "barde.lame.4",
+       "nom": "Ballet mortel",
+       "texte": "Attaque supplémentaire, une fois par tour.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "barde.lame.3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "barde.savoir",
+     "nom": "Savoir",
+     "noeuds": [
+      {
+       "id": "barde.savoir.1",
+       "nom": "Mémoire des légendes",
+       "texte": "+2 en Histoire.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "competence.histoire",
+         "valeur": 2
+        }
+       ]
+      },
+      {
+       "id": "barde.savoir.2",
+       "nom": "Polyglotte",
+       "texte": "Deux langues de plus.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "barde.savoir.1"
+       ]
+      },
+      {
+       "id": "barde.savoir.3",
+       "nom": "Secret dérobé",
+       "texte": "Un sort d'une autre liste.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "barde.savoir.2"
+       ]
+      },
+      {
+       "id": "barde.savoir.4",
+       "nom": "Mot de pouvoir",
+       "texte": "Une fois par long repos, un mot qui charme, effraie ou étourdit.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "barde.savoir.3"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "aventurier",
+   "nom": "Aventurier",
+   "texte": "",
+   "pour": {
+    "tous": true
+   },
+   "branches": [
+    {
+     "id": "aventurier.survie",
+     "nom": "Survie",
+     "noeuds": [
+      {
+       "id": "aventurier.survie.1",
+       "nom": "Marcheur",
+       "texte": "+1 case de vitesse.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "vitesse",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "aventurier.survie.2",
+       "nom": "Robuste",
+       "texte": "+1 PV par niveau.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "aventurier.survie.1"
+       ],
+       "effets": [
+        {
+         "cible": "pvParNiveau",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "aventurier.survie.3",
+       "nom": "Coriace",
+       "texte": "+1 aux sauvegardes de CON.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "aventurier.survie.2"
+       ],
+       "effets": [
+        {
+         "cible": "sauvegarde.con",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "aventurier.survie.4",
+       "nom": "Survivant",
+       "texte": "Une fois par long repos, réussir automatiquement un jet contre la mort.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "aventurier.survie.3"
+       ]
+      }
+     ],
+     "couleur": "#6a8f4a"
+    },
+    {
+     "id": "aventurier.societe",
+     "nom": "Société",
+     "noeuds": [
+      {
+       "id": "aventurier.societe.1",
+       "nom": "Bon contact",
+       "texte": "+1 en Persuasion et en Intuition.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "competence.persuasion",
+         "valeur": 1
+        },
+        {
+         "cible": "competence.intuition",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "aventurier.societe.2",
+       "nom": "Réseau",
+       "texte": "Un contact utile dans chaque ville visitée.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "aventurier.societe.1"
+       ]
+      },
+      {
+       "id": "aventurier.societe.3",
+       "nom": "Réputation",
+       "texte": "Avantage aux tests sociaux avec ceux qui vous connaissent.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "aventurier.societe.2"
+       ]
+      },
+      {
+       "id": "aventurier.societe.4",
+       "nom": "Héros du peuple",
+       "texte": "On vous héberge et on vous protège partout dans votre pays.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "aventurier.societe.3"
+       ]
+      }
+     ],
+     "couleur": "#8a6a3a"
+    },
+    {
+     "id": "aventurier.vigilance",
+     "nom": "Vigilance",
+     "noeuds": [
+      {
+       "id": "aventurier.vigilance.1",
+       "nom": "Aux aguets",
+       "texte": "+2 à l'initiative.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "effets": [
+        {
+         "cible": "initiative",
+         "valeur": 2
+        }
+       ]
+      },
+      {
+       "id": "aventurier.vigilance.2",
+       "nom": "Observateur",
+       "texte": "+1 en Perception et en Investigation.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "aventurier.vigilance.1"
+       ],
+       "effets": [
+        {
+         "cible": "competence.perception",
+         "valeur": 1
+        },
+        {
+         "cible": "competence.investigation",
+         "valeur": 1
+        }
+       ]
+      },
+      {
+       "id": "aventurier.vigilance.3",
+       "nom": "Jamais surpris",
+       "texte": "Impossible à surprendre en étant conscient.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "aventurier.vigilance.2"
+       ]
+      },
+      {
+       "id": "aventurier.vigilance.4",
+       "nom": "Sixième sens",
+       "texte": "Avantage aux sauvegardes de DEX contre les pièges et les attaques invisibles.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "aventurier.vigilance.3"
+       ]
+      }
+     ],
+     "couleur": "#3a6a8a"
+    }
+   ]
+  },
+  {
+   "id": "sceaux",
+   "nom": "Magie des sceaux",
+   "texte": "Relie la progression à l'Atelier de tracé : chaque talent apprend des signes ou fait monter de rang.",
+   "pour": {
+    "tous": true,
+    "magie": true
+   },
+   "branches": [
+    {
+     "id": "sceaux.coeurs",
+     "nom": "Cœurs",
+     "noeuds": [
+      {
+       "id": "sceaux.coeurs.1",
+       "nom": "Éveil des sceaux",
+       "texte": "Le personnage apprend à tracer : Cœurs élémentaires (Braise, Source, Socle, Souffle, Lueur), premiers Rameaux et Nœuds.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [],
+       "magie": {
+        "eveil": true,
+        "signes": [
+         "braise",
+         "source",
+         "socle",
+         "souffle",
+         "lueur",
+         "jet",
+         "gerbe",
+         "plume",
+         "fenetre",
+         "halo"
+        ],
+        "emplacements": 5
+       }
+      },
+      {
+       "id": "sceaux.coeurs.2",
+       "nom": "Cœurs de nature I",
+       "texte": "Apprend Mémoire et Regard.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "sceaux.coeurs.1"
+       ],
+       "magie": {
+        "signes": [
+         "memoire",
+         "regard"
+        ]
+       }
+      },
+      {
+       "id": "sceaux.coeurs.3",
+       "nom": "Cœurs de nature II",
+       "texte": "Apprend Lien et Mouvement.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "sceaux.coeurs.2"
+       ],
+       "magie": {
+        "signes": [
+         "lien",
+         "mouvement"
+        ]
+       }
+      },
+      {
+       "id": "sceaux.coeurs.4",
+       "nom": "Cœurs scellés",
+       "texte": "Apprend Sève, Chair et Esprit (rang de Compagnon requis).",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "sceaux.coeurs.3",
+        "sceaux.maitrise.2"
+       ],
+       "magie": {
+        "signes": [
+         "seve",
+         "chair",
+         "esprit"
+        ]
+       }
+      }
+     ],
+     "couleur": "#b45309"
+    },
+    {
+     "id": "sceaux.rameaux",
+     "nom": "Rameaux",
+     "noeuds": [
+      {
+       "id": "sceaux.rameaux.1",
+       "nom": "Rameaux d'apprenti",
+       "texte": "Apprend Pluie et Appel.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [
+        "sceaux.coeurs.1"
+       ],
+       "magie": {
+        "signes": [
+         "pluie",
+         "appel"
+        ]
+       }
+      },
+      {
+       "id": "sceaux.rameaux.2",
+       "nom": "Rameaux de compagnon I",
+       "texte": "Apprend Dard et Étau.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "sceaux.rameaux.1"
+       ],
+       "magie": {
+        "signes": [
+         "dard",
+         "etau"
+        ]
+       }
+      },
+      {
+       "id": "sceaux.rameaux.3",
+       "nom": "Rameaux de compagnon II",
+       "texte": "Apprend Rempart et Tourbillon.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "sceaux.rameaux.2"
+       ],
+       "magie": {
+        "signes": [
+         "rempart",
+         "tourbillon"
+        ]
+       }
+      },
+      {
+       "id": "sceaux.rameaux.4",
+       "nom": "Rameaux de maître",
+       "texte": "Apprend Ampleur, Figure et Tisse.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "sceaux.rameaux.3"
+       ],
+       "magie": {
+        "signes": [
+         "ampleur",
+         "figure",
+         "tisse"
+        ]
+       }
+      }
+     ],
+     "couleur": "#1d4ed8"
+    },
+    {
+     "id": "sceaux.maitrise",
+     "nom": "Nœuds et maîtrise",
+     "noeuds": [
+      {
+       "id": "sceaux.maitrise.1",
+       "nom": "Nœud du sablier",
+       "texte": "Apprend Sablier ; +1 emplacement de grimoire.",
+       "rang": 1,
+       "niveau": 1,
+       "cout": 1,
+       "requis": [
+        "sceaux.coeurs.1"
+       ],
+       "magie": {
+        "signes": [
+         "sablier"
+        ],
+        "emplacements": 1
+       }
+      },
+      {
+       "id": "sceaux.maitrise.2",
+       "nom": "Rang de Compagnon",
+       "texte": "Rang 2 ; apprend Visée, Braise-douce et Écho ; +2 emplacements.",
+       "rang": 2,
+       "niveau": 3,
+       "cout": 1,
+       "requis": [
+        "sceaux.maitrise.1"
+       ],
+       "magie": {
+        "rang": 2,
+        "signes": [
+         "visee",
+         "douce",
+         "echo"
+        ],
+        "emplacements": 2
+       }
+      },
+      {
+       "id": "sceaux.maitrise.3",
+       "nom": "Sceaux stables",
+       "texte": "+2 à la stabilité perçue : le MJ réduit la difficulté des sceaux complexes.",
+       "rang": 3,
+       "niveau": 6,
+       "cout": 2,
+       "requis": [
+        "sceaux.maitrise.2"
+       ]
+      },
+      {
+       "id": "sceaux.maitrise.4",
+       "nom": "Rang de Maître",
+       "texte": "Rang 3 ; apprend Guet et Mot ; +3 emplacements.",
+       "rang": 4,
+       "niveau": 10,
+       "cout": 3,
+       "requis": [
+        "sceaux.maitrise.3"
+       ],
+       "magie": {
+        "rang": 3,
+        "signes": [
+         "guet",
+         "mot"
+        ],
+        "emplacements": 3
+       }
+      }
+     ],
+     "couleur": "#7e22ce"
+    }
+   ]
+  }
+ ]
+}

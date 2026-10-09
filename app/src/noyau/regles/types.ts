@@ -202,6 +202,8 @@ export interface SystemeAvecFiche extends SystemeRegles {
   calculer(p: Personnage): FicheCalculee;
   creation: CreationRegles;
   progression: ProgressionRegles;
+  /** Arbres de talents fournis par le système (le moteur est dans noyau/talents). */
+  talents: { pointsParNiveau: number; arbres: import('../talents').ArbreTalents[] };
 }
 
 export const aUneFiche = (R: SystemeRegles): R is SystemeAvecFiche =>

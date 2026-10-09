@@ -13,6 +13,7 @@ import { Progression } from './fiche/Progression';
 import { Magie } from './fiche/Magie';
 import { Inventaire } from './fiche/Inventaire';
 import { Histoire } from './fiche/Histoire';
+import { Talents } from './fiche/Talents';
 
 interface Props {
   perso: Personnage;
@@ -79,6 +80,7 @@ export function Fiche({ perso: p, R, role, lectureSeule, urlPortrait, maj: majBr
       {actif === 'caracs' && calcul && aUneFiche(R) && <Caracteristiques {...props} R={R} calcul={calcul} />}
       {actif === 'combat' && <Combat {...props} calcul={calcul} />}
       {actif === 'progression' && <Progression {...props} calcul={calcul} />}
+      {actif === 'talents' && aUneFiche(R) && <Talents {...props} R={R} />}
       {actif === 'magie' && <Magie {...props} />}
       {actif === 'inventaire' && <Inventaire {...props} calcul={calcul} />}
       {actif === 'histoire' && <Histoire {...props} />}
