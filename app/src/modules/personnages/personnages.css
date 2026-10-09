@@ -66,3 +66,11 @@
 /* Création */
 .perso-creation progress { width: 100%; }
 .perso-erreur { color: var(--danger, #b42318); font-size: 0.9rem; }
+
+/* Progression */
+.perso-xp { position: relative; flex: 1; min-width: 200px; height: 22px; border: 1px solid var(--trait); border-radius: 999px; overflow: hidden; background: var(--fond-2); }
+.perso-xp > div { height: 100%; background: var(--accent); opacity: 0.35; }
+.perso-xp > span { position: absolute; inset: 0; display: grid; place-items: center; font-size: 0.8rem; }
+.perso-aptitudes { margin: 4px 0 8px; padding-left: 18px; display: grid; gap: 3px; font-size: 0.92rem; }
+.perso-montee { border: 1px solid var(--accent); border-radius: var(--rayon); padding: 12px; }
+.perso-liste-defilante { max-height: 260px; overflow: auto; }

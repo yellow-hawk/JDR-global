@@ -175,11 +175,33 @@ export interface CreationRegles {
   creer(choix: ChoixCreation): { nom: string; stats: Record<string, unknown>; fiche: import('../contrat').FichePersonnage };
 }
 
+/** Ce qu'apporte un nouveau niveau dans une classe. */
+export interface NouveautesNiveau {
+  classe: string; niveau: number;
+  aptitudes: AptitudeRegles[];
+  /** Amélioration de caractéristiques (ou don) à ce niveau. */
+  amelioration: boolean;
+  /** Choix de sous-classe à ce niveau. */
+  sousClasse: { id: string; nom: string }[] | null;
+  deVie: number;
+}
+
+export interface ProgressionRegles {
+  xpNiveaux: number[];
+  niveauPourXp(xp: number): number;
+  /** XP rapportée par un adversaire vaincu de ce niveau (ou facteur de puissance). */
+  xpAdversaire(niveau: number): number;
+  /** PV gagnés : moyenne (arrondie au-dessus) ou jet du dé de vie, + modificateur de CON (minimum 1). */
+  gainPv(classe: string, modCon: number, jet?: number): number;
+  nouveautes(classe: string, niveau: number): NouveautesNiveau | null;
+}
+
 /** Extension facultative d'un système : fiche détaillée calculée et création de personnage. */
 export interface SystemeAvecFiche extends SystemeRegles {
   catalogue: CatalogueRegles;
   calculer(p: Personnage): FicheCalculee;
   creation: CreationRegles;
+  progression: ProgressionRegles;
 }
 
 export const aUneFiche = (R: SystemeRegles): R is SystemeAvecFiche =>

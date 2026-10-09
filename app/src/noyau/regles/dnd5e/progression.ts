@@ -1,7 +1,7 @@
 // Progression D&D 5e (pur) : XP par niveau, aptitudes actives des classes et du peuple, PV suggérés,
 // incantation et emplacements de sorts (tables du SRD 5.1).
 import type { Effet, Personnage } from '../../contrat';
-import type { AptitudeRegles, ClasseRegles, IncantationCalculee, PeupleRegles } from '../types';
+import type { AptitudeRegles, ClasseRegles, IncantationCalculee, NouveautesNiveau, PeupleRegles } from '../types';
 import DONNEES from './classes.json';
 
 export const CLASSES = (DONNEES as unknown as { classes: ClasseRegles[] }).classes;
@@ -66,4 +66,24 @@ export function incantation(p: Personnage, modDe: (c: string) => number, pb: num
     else { const [nombre, niveau] = PACTE[Math.min(20, c.niveau) - 1]; pacte = { nombre, niveau }; }
   }
   return { incantation: inc, emplacements: niveauLanceur ? EMPLACEMENTS[Math.min(20, niveauLanceur) - 1] : [], pacte };
+}
+
+/** XP d'un adversaire selon son facteur de puissance (FP 0 à 20 ; on prend le niveau du PNJ). */
+const XP_FP = [10, 200, 450, 700, 1100, 1800, 2300, 2900, 3900, 5000, 5900, 7200, 8400, 10000, 11500, 13000, 15000, 18000, 20000, 22000, 25000];
+export const xpAdversaire = (niveau: number): number => XP_FP[Math.max(0, Math.min(20, Math.round(niveau)))];
+
+export function gainPv(classe: string, modCon: number, jet?: number): number {
+  const dv = classeDe(classe)?.deVie ?? 8;
+  return Math.max(1, (jet ?? dv / 2 + 1) + modCon);
+}
+
+export function nouveautes(classe: string, niveau: number): NouveautesNiveau | null {
+  const cl = classeDe(classe);
+  if (!cl || niveau < 1 || niveau > 20) return null;
+  return {
+    classe: cl.id, niveau, deVie: cl.deVie,
+    aptitudes: cl.aptitudes.filter((a) => a.niveau === niveau && !a.amelioration),
+    amelioration: cl.aptitudes.some((a) => a.niveau === niveau && a.amelioration),
+    sousClasse: niveau === cl.niveauSousClasse ? cl.sousClasses.map((s) => ({ id: s.id, nom: s.nom })) : null,
+  };
 }

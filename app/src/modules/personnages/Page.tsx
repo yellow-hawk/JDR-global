@@ -9,6 +9,8 @@ import { useUrlFichier } from '../../interface/composants';
 import { ouvrirAvatarPour } from '../avatar';
 import { Fiche } from './Fiche';
 import { Creation } from './creation/Creation';
+import { Recompense } from './progression/Recompense';
+import { aUneFiche } from '../../noyau/regles';
 import { ajouter, grouper, modifierPerso, sceneJoueurs, supprimer } from './logique';
 import './personnages.css';
 
@@ -27,6 +29,7 @@ export function Page() {
   const { campagne, vue, role, lectureSeule, modifier } = useCampagne();
   const [selection, setSelection] = useState<string | null>(() => prendreCible('personnages') ?? null);
   const [creation, setCreation] = useState<Personnage['sorte'] | null>(null);
+  const [recompense, setRecompense] = useState(false);
   const c = vue!;
   const idCampagne = c.campagne.id;
   const R = regles(c.campagne.regles);
@@ -89,6 +92,7 @@ export function Page() {
             <button className="btn btn-petit" onClick={() => setCreation('pnj')}>+ PNJ</button>
             <button className="btn btn-petit" onClick={() => setCreation('ennemi')}>+ Ennemi</button>
             <button className="btn btn-petit" title="Fiche vierge, sans assistant" onClick={() => nouveau('pj')}>Fiche vierge</button>
+            {role === 'mj' && aUneFiche(R) && <button className="btn btn-petit" title="Donner de l’expérience aux PJ" onClick={() => { setCreation(null); setRecompense(true); }}>★ Récompenser</button>}
           </div>
         )}
         {groupes.length === 0 && <p className="discret">Aucun personnage pour l'instant.</p>}
@@ -102,7 +106,9 @@ export function Page() {
         ))}
       </aside>
       <section className="perso-detail">
-        {creation && !lectureSeule ? (
+        {recompense && !lectureSeule && aUneFiche(R) ? (
+          <Recompense c={campagne!} R={R} modifier={modifier} onFermer={() => setRecompense(false)} />
+        ) : creation && !lectureSeule ? (
           <Creation key={creation} R={R} sorte={creation} onCree={(id) => window.setTimeout(() => setSelection(id), 0)} onFermer={() => setCreation(null)} />
         ) : perso ? (
           <Fiche

@@ -18,6 +18,10 @@ Fiche : champ « Rôle ou métier » (`personnage.role`), bouton « Stats selon 
 
 `+ PJ / + PNJ / + Ennemi` ouvrent le panneau `Creation.tsx` : **Aléatoire** (`Aleatoire.tsx` : sorte, nombre, rôle, niveau, classe, peuple, genre, méthode ; lot jusqu'à 20), **Assistant pas à pas** (`Assistant.tsx` : origine, caractéristiques standard / achat de points / 4d6, compétences, personnalité, résumé), **Fiche vierge**. `logique.ts` (pur, testé) : `genererLot` (PJ : `R.creation.aleatoire` ; PNJ : + générateur de PNJ pour rôle, manières, motivation, secret), `personnageDepuisChoix`, `apparencePour` (tenue selon la classe ou le rôle via `apparenceAuto`, puis arme et armure de l'inventaire), `assetsDeLInventaire`. Portraits (jetons) rendus ensuite par `FabriqueDePortraits`.
 
+## Progression (`progression/`)
+
+`logique.ts` (pur, testé) : `etatProgression` (niveau, XP, seuil suivant, prêt), `appliquerNiveau` (classe ou multiclasse, sous-classe, PV, amélioration ou don, dés de vie, entrée de journal), `donnerXp` (partage, `journalXp`), `xpRencontre` (XP des adversaires selon leur niveau). `MonteeNiveau.tsx` : assistant (PV moyenne ou jet + CON + bonus d'aptitudes, nouvelles aptitudes, sous-classe, +2 / +1+1 / don). `Recompense.tsx` (bouton « ★ Récompenser » de la liste, MJ) : bénéficiaires, adversaires vaincus, XP libre, raison, partage. Onglet Progression : classes du catalogue, barre d'XP, aptitudes actives par source, incantation, dons, historique d'XP.
+
 API publique : `definition`, `SORTES`, `libelleSorte`, `campJoueurs`, `sceneJoueurs`.
 
 ## Relations
