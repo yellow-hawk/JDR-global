@@ -2,6 +2,7 @@
 
 Une ligne par étape terminée ou décision prise. Le plus récent en haut.
 
+- 2026-10-09 : **Liens de la fiche (étape 5/5).** L'avatar 3D suit l'arme et l'armure équipées, bouton « Refaire le portrait » (jeton) ; fiche imprimable / PDF ; écran joueurs enrichi (peuple, classe, CA, PV) ; valeurs calculées lues par la Table de combat.
 - 2026-10-09 : **Arbres de talents (étape 4/5).** Moteur `noyau/talents` (points, prérequis, effets, retrait, magie), 14 arbres et 168 talents maison (12 classes × 3 branches, Aventurier, Magie des sceaux qui apprend les signes de l'Atelier et fait monter de rang), onglet Talents interactif, éditeur MJ (copie, création, import / export, arbres de campagne).
 - 2026-10-09 : **Progression (étape 3/5).** XP et seuils 5e, assistant de montée de niveau (multiclasse, PV moyenne ou jet, sous-classe, amélioration ou don), récompense du groupe (XP libre ou des adversaires vaincus, partagée), onglet Progression enrichi (aptitudes actives, incantation, historique d'XP).
 - 2026-10-09 : **Création de personnages (étape 2/5).** 12 classes et 9 peuples du SRD (aptitudes, sous-classe, incantation, effets automatiques) ; création aléatoire reproductible (lot de PJ ou PNJ, rôle → classe, générateur de PNJ pour les secrets) et assistant pas à pas (origine, caractéristiques standard / achat / 4d6, compétences, personnalité, résumé) ; avatar 3D assorti (tenue selon la classe, arme et armure équipées) et portraits.

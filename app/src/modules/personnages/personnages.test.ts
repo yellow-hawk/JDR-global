@@ -81,3 +81,29 @@ describe('fiche détaillée', () => {
     expect(ongletsVisibles(nouveauPersonnage('Lys', 'pj', 'dnd5e', {}), R, 'joueurs')).toHaveLength(8);
   });
 });
+
+describe('impression et écran joueurs', () => {
+  it('fiche imprimable : identité, caractéristiques, attaques, échappement HTML', async () => {
+    const { ficheHtml } = await import('./impression');
+    const { regles } = await import('../../noyau/regles');
+    const { personnageDepuisChoix } = await import('./creation/logique');
+    const R = regles('dnd5e') as import('../../noyau/regles').SystemeAvecFiche;
+    const p = { ...personnageDepuisChoix(R, R.creation.aleatoire('z', { classe: 'guerrier', espece: 'humain', nom: 'Brann <le Fort>' }), 'pj', {}, false), joueur: 'Paul' };
+    const html = ficheHtml(p, R, R.calculer(p), null);
+    expect(html).toContain('Brann &lt;le Fort&gt;');
+    expect(html).toContain('Guerrier 1');
+    expect(html).toContain('Épée longue');
+    expect(html).toContain('Jets de sauvegarde');
+  });
+
+  it('écran joueurs : classe, peuple, CA et PV pour un PJ', async () => {
+    const { sceneJoueurs } = await import('./logique');
+    const { regles } = await import('../../noyau/regles');
+    const { personnageDepuisChoix } = await import('./creation/logique');
+    const R = regles('dnd5e') as import('../../noyau/regles').SystemeAvecFiche;
+    const p = personnageDepuisChoix(R, R.creation.aleatoire('w', { classe: 'magicien', espece: 'haut-elfe', niveau: 3 }), 'pj', {}, false);
+    const s = sceneJoueurs(p, R, null) as { sousTitre: string; texte: string };
+    expect(s.sousTitre).toContain('Elfe (haut-elfe) Magicien 3');
+    expect(s.texte).toMatch(/CA \d+ · PV \d+\/\d+/);
+  });
+});

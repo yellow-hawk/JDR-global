@@ -6,7 +6,7 @@ import { emettre, montrerAuxJoueurs, prendreCible } from '../../noyau/bus';
 import { ajouterFichier, choisirFichier, lireFichier, supprimerFichier } from '../../noyau/stockage';
 import { useCampagne } from '../../interface/etat';
 import { useUrlFichier } from '../../interface/composants';
-import { ouvrirAvatarPour } from '../avatar';
+import { FabriqueDePortraits, ouvrirAvatarPour, type ResultatPortrait, type TachePortrait } from '../avatar';
 import { Fiche } from './Fiche';
 import { Creation } from './creation/Creation';
 import { Recompense } from './progression/Recompense';
@@ -33,6 +33,7 @@ export function Page() {
   const [creation, setCreation] = useState<Personnage['sorte'] | null>(null);
   const [recompense, setRecompense] = useState(false);
   const [editeur, setEditeur] = useState(false);
+  const [photo, setPhoto] = useState<TachePortrait[] | null>(null);
   const c = vue!;
   const idCampagne = c.campagne.id;
   const R = regles(c.campagne.regles);
@@ -67,6 +68,19 @@ export function Page() {
       fichiers: [...x.fichiers.filter((y) => y.id !== ancien), f],
     }));
     if (ancien) void supprimerFichier(idCampagne, ancien);
+  };
+
+  // Nouveau portrait (jeton) photographié depuis l'avatar 3D actuel : remplace l'ancien.
+  const portraitRefait = async ({ id, apparence, vignette }: ResultatPortrait) => {
+    if (!vignette) { emettre('message', { texte: 'Portrait impossible : le modèle 3D n’a pas pu se charger.', sorte: 'erreur' }); return; }
+    const f = await ajouterFichier(idCampagne, await (await fetch(vignette)).blob(), `${id} - portrait.jpg`);
+    const ancien = c.personnages.find((x) => x.id === id)?.portrait;
+    modifier((x) => ({
+      ...modifierPerso(x, id, (q) => ({ ...q, apparence, portrait: f.id })),
+      fichiers: [...x.fichiers.filter((y) => y.id !== ancien), f],
+    }));
+    if (ancien) void supprimerFichier(idCampagne, ancien);
+    emettre('message', { texte: 'Portrait refait.', sorte: 'succes' });
   };
 
   const montrer = async () => {
@@ -125,10 +139,12 @@ export function Page() {
             urlPortrait={urlPortrait} maj={maj}
             onPortrait={changerPortrait} onMontrer={montrer} onSupprimer={effacer}
             onAvatar={() => { ouvrirAvatarPour(perso.id); emettre('naviguer', { page: 'avatar' }); }}
+            onRefairePortrait={photo ? undefined : () => setPhoto([{ id: perso.id, nom: perso.nom, apparence: perso.apparence! }])}
           />
         ) : (
           <div className="vide">Choisis un personnage dans la liste{lectureSeule ? '' : ', ou crées-en un'}.</div>
         )}
+        {photo && <FabriqueDePortraits taches={photo} onPortrait={(r) => void portraitRefait(r)} onFini={() => setPhoto(null)} />}
       </section>
     </div>
   );

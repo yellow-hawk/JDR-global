@@ -14,6 +14,8 @@ import { Magie } from './fiche/Magie';
 import { Inventaire } from './fiche/Inventaire';
 import { Histoire } from './fiche/Histoire';
 import { Talents } from './fiche/Talents';
+import { avecAvatarEquipe } from './creation/logique';
+import { ficheHtml } from './impression';
 
 interface Props {
   perso: Personnage;
@@ -26,18 +28,23 @@ interface Props {
   onMontrer(): void;
   onSupprimer(): void;
   onAvatar(): void;
+  onRefairePortrait?(): void;
 }
 
 const CLE_ONGLET = 'jdr.perso.onglet';
 const lireOnglet = (): Onglet => { try { return (localStorage.getItem(CLE_ONGLET) as Onglet) || 'identite'; } catch { return 'identite'; } };
 
-export function Fiche({ perso: p, R, role, lectureSeule, urlPortrait, maj: majBrut, onPortrait, onMontrer, onSupprimer, onAvatar }: Props) {
+export function Fiche({ perso: p, R, role, lectureSeule, urlPortrait, maj: majBrut, onPortrait, onMontrer, onSupprimer, onAvatar, onRefairePortrait }: Props) {
   const [onglet, setOnglet] = useState<Onglet>(lireOnglet);
   const visibles = ongletsVisibles(p, R, role);
   const actif = visibles.includes(onglet) ? onglet : visibles[0];
   const choisir = (o: Onglet) => { setOnglet(o); try { localStorage.setItem(CLE_ONGLET, o); } catch { /* navigation privée */ } };
   // Toute modification repasse par le calcul : CA, attaque et niveau suivent l'équipement et les classes.
-  const maj = (f: (x: Personnage) => Personnage) => majBrut((x) => avecStatsCalculees(f(x), R));
+  // L'avatar 3D suit aussi l'arme et l'armure équipées.
+  const maj = (f: (x: Personnage) => Personnage) => majBrut((x) => {
+    const y = avecStatsCalculees(f(x), R);
+    return aUneFiche(R) ? avecAvatarEquipe(x, y, R) : y;
+  });
   const calcul = useMemo(() => (aUneFiche(R) ? R.calculer(p) : null), [p, R]);
   const mj = (p.mj ?? {}) as { cache?: boolean };
   const props = { p, R, role, lectureSeule, maj };
@@ -97,6 +104,15 @@ export function Fiche({ perso: p, R, role, lectureSeule, urlPortrait, maj: majBr
         <div className="ligne">
           <button className="btn btn-mj" onClick={onMontrer} disabled={!!mj.cache}>Montrer aux joueurs</button>
           <button className="btn" onClick={onAvatar}>{p.apparence ? 'Modifier l’avatar 3D' : 'Créer l’avatar 3D'}</button>
+          {p.apparence && onRefairePortrait && <button className="btn" title="Photographier l’avatar actuel (tenue, arme) pour le portrait et le jeton" onClick={onRefairePortrait}>Refaire le portrait</button>}
+          {calcul && aUneFiche(R) && (
+            <button className="btn" title="Fiche à imprimer ou à enregistrer en PDF" onClick={() => {
+              const w = window.open('', '_blank');
+              if (!w) return;
+              w.document.write(ficheHtml(p, R, calcul, urlPortrait));
+              w.document.close();
+            }}>Imprimer / PDF</button>
+          )}
           <span style={{ flex: 1 }} />
           <button className="btn btn-danger" onClick={onSupprimer}>Supprimer</button>
         </div>

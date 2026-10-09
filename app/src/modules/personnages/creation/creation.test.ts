@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { nouvelleCampagne } from '../../../noyau/contrat';
 import { regles, aUneFiche, type SystemeAvecFiche } from '../../../noyau/regles';
-import { assetsDeLInventaire, genererLot, personnageDepuisChoix } from './logique';
+import { assetsDeLInventaire, avecAvatarEquipe, genererLot, personnageDepuisChoix } from './logique';
 
 const R = regles('dnd5e') as SystemeAvecFiche;
 
@@ -38,5 +38,17 @@ describe('création de personnages', () => {
     const assets = (p.apparence as { data: { assets: Record<string, string | null> } }).data.assets;
     expect(assets.arme).toBe('epee');
     expect(assets.armure).toBe('cotte');
+  });
+});
+
+describe('équipement et avatar', () => {
+  it('déséquiper l’arme la retire de l’avatar, équiper une dague la met en main', () => {
+    const p = personnageDepuisChoix(R, R.creation.aleatoire('y', { classe: 'guerrier', espece: 'humain' }), 'pj');
+    const sansArme = { ...p, fiche: { ...p.fiche, inventaire: { ...p.fiche!.inventaire!, objets: p.fiche!.inventaire!.objets.map((o) => (o.ref === 'arme:epee-longue' ? { ...o, equipe: false } : o)) } } };
+    const q = avecAvatarEquipe(p, sansArme, R);
+    expect((q.apparence as { data: { assets: Record<string, string | null> } }).data.assets.arme).toBeNull();
+    const dague = { ...q, fiche: { ...q.fiche, inventaire: { ...q.fiche!.inventaire!, objets: [...q.fiche!.inventaire!.objets, { id: 'd', nom: 'Dague', ref: 'arme:dague', quantite: 1, equipe: true }] } } };
+    expect((avecAvatarEquipe(q, dague, R).apparence as { data: { assets: Record<string, string | null> } }).data.assets.arme).toBe('dague');
+    expect(avecAvatarEquipe(dague, dague, R)).toBe(dague);
   });
 });

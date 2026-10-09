@@ -26,6 +26,13 @@ Fiche : champ « Rôle ou métier » (`personnage.role`), bouton « Stats selon 
 
 Onglet **Talents** (`fiche/Talents.tsx`) : arbres applicables, points (1 par niveau), grille branches × rangs (acquis / disponible / verrouillé), détail, acquérir, retirer, « Rendre tous les points » (MJ). **Éditeur MJ** (`talents/EditeurTalents.tsx` + `EditeurNoeud.tsx`, bouton « Arbres de talents ») : copier un arbre des règles pour le modifier, créer un arbre, branches (nom, couleur), talents (rang, niveau, coût, prérequis, effets, magie), import / export JSON ; rangés dans `campagne.modules.personnages.arbres` et enregistrés à l'ouverture (`definition.preparerCampagne`).
 
+## Liens (étape 5)
+
+- Équipement ↔ avatar : `avecAvatarEquipe` (creation/logique) dans le `maj` de la fiche : équiper / déséquiper une arme ou une armure du catalogue met à jour `apparence.data.assets` ; « Refaire le portrait » photographie l'avatar (FabriqueDePortraits) et remplace le portrait (jeton).
+- Combat : CA, bonus d'attaque, dégâts et niveau calculés sont reportés dans `combat.stats` (lus par la Table de combat via `R.versTable`).
+- `impression.ts` (pur, testé) : `ficheHtml` → page A4 autonome (bouton « Imprimer / PDF »).
+- Écran joueurs : `sceneJoueurs` ajoute peuple, classes, CA, PV, initiative, perception passive pour les PJ et alliés.
+
 API publique : `definition`, `SORTES`, `libelleSorte`, `campJoueurs`, `sceneJoueurs`.
 
 ## Relations

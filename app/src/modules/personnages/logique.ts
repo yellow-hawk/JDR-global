@@ -86,11 +86,20 @@ export function sceneJoueurs(p: Personnage, R: SystemeRegles, portrait: Blob | n
     })
     .filter(Boolean)
     .join(' · ');
-  const sousTitre = [libelleSorte(p.sorte), p.sorte === 'pj' && p.joueur ? `joué par ${p.joueur}` : '']
+  // Pour leur camp : classe, peuple, niveau, CA et PV calculés par les règles.
+  const calc = aUneFiche(R) && campJoueurs(p.sorte) && p.fiche ? R.calculer(p) : null;
+  const classes = (p.fiche?.progression?.classes ?? []).map((c) => `${aUneFiche(R) ? R.catalogue.classes.find((x) => x.id === c.id)?.nom ?? c.id : c.id} ${c.niveau}`).join(' / ');
+  const espece = aUneFiche(R) ? R.catalogue.peuples.find((x) => x.id === p.fiche?.identite?.espece)?.nom : undefined;
+  const sousTitre = [libelleSorte(p.sorte), calc ? [espece, classes].filter(Boolean).join(' ') : '', p.sorte === 'pj' && p.joueur ? `joué par ${p.joueur}` : '']
     .filter(Boolean).join(', ');
   return {
     sorte: 'personnage', nom: p.nom, sousTitre,
-    texte: [p.notes?.trim(), stats].filter(Boolean).join('\n\n'),
+    texte: [
+      p.notes?.trim(),
+      calc
+        ? `CA ${calc.derives.find((d) => d.cle === 'ca')?.texte} · PV ${String(p.combat.stats.pv ?? '?')}/${String(p.combat.stats.pvMax ?? '?')} · Initiative ${calc.derives.find((d) => d.cle === 'initiative')?.texte} · Perception passive ${calc.derives.find((d) => d.cle === 'perceptionPassive')?.texte}`
+        : stats,
+    ].filter(Boolean).join('\n\n'),
     portrait,
   };
 }

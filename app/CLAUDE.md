@@ -40,7 +40,8 @@ npm run build                    # dist/ (types vérifiés avant)
 | `src/noyau/stockage` | IndexedDB (campagnes, fichiers, réglages, instantanés), archive .zip, dossier de sauvegarde, téléchargement | idem |
 | `src/noyau/bus` | Événements entre modules + scènes, jets de dés et bandeau vers l'écran joueurs | idem |
 | `src/noyau/hasard` | Hasard déterministe (identique à l'Atlas) | idem |
-| `src/noyau/regles` | Interface « système de règles », dés, `dnd5e/` (dont stats selon le rôle) | idem |
+| `src/noyau/regles` | Interface « système de règles », dés, `dnd5e/` (stats selon le rôle, fiche calculée, classes et peuples SRD, création, progression, talents) | idem |
+| `src/noyau/talents` | Moteur des arbres de talents (pur) : points, prérequis, effets, magie des sceaux | idem |
 | `src/noyau/graphe` | Graphes et arbres : forces, centralité, communautés, disposition (pur) ; vues dans `src/interface/graphe` | idem |
 | `src/interface` | Coquille : menu, rôle MJ / aperçu joueurs, thème, écran joueurs, composants communs ; `des/` plateau de dés + dés 3D | `src/interface/MODULE.md` |
 | `src/modules/campagne` | Liste, création, import / export d'archives, tableau de bord | `MODULE.md` du dossier |
@@ -49,7 +50,7 @@ npm run build                    # dist/ (types vérifiés avant)
 | `src/modules/documents` | Lettres, affiches, indices, images à montrer aux joueurs | idem |
 | `src/modules/pays` | Fiches des peuples / pays : gouvernement, histoire, relations, calendrier, réputation ; liens campagne | idem |
 | `src/modules/genealogie` | Familles et dynasties : générateur, arbre interactif, membres promus en personnages | idem |
-| `src/modules/personnages` | Fiches de personnages, portrait, stats générées par les règles, relations, lien vers l'avatar | idem |
+| `src/modules/personnages` | Fiche complète en 8 onglets (calcul 5e), création aléatoire / assistant, progression et XP, arbres de talents (+ éditeur MJ), impression | idem |
 | `src/modules/cartes` | Cartes importées (images, PDF), versions MJ / joueurs, échelle, repères, emboîtement, brouillard ; `generateur/` cartes de bataille | idem |
 | `src/modules/monde` | Atlas en cadre + pont, univers générés ou faits main, globe 3D ; `installation/` d'un monde complet | idem |
 | `src/modules/avatar` | Créateur 3D (code d'origine dans `createur/`), apparence + portrait des personnages | idem |
@@ -102,4 +103,5 @@ repère de carte → rencontre (« Lancer le combat »), Atlas masqué en aperç
 **Installation complète d'un monde** (Monde → « Ajouter le ciel affiché ») : toutes les cartes de l'Atlas, PNJ avec avatar et portrait, cartes de bataille générées (`cartes/generateur/`) + rencontres prêtes. Ajouts suivants : combat diffusé automatiquement, stats des PNJ selon leur rôle, sorts réels de campagne (auto dans le combat, PNJ lanceurs), packs d'univers (rien de l'Épée de vérité dans le code), modules **Pays**, **Généalogie**, **Organigrammes**, **Réseau**.
 Puis : plateau de dés partagé et **dés 3D** sur l'écran joueurs, modules **Chronologie** (horloge du temps de jeu), **Documents**, **Générateurs**, brouillard des cartes, réputation des peuples, relations entre personnages, préparation de séance, **sauvegardes automatiques** (instantanés + dossier).
 Avatar refait le 08/10 : chaîne Blender scriptée (`../blender/`), genre H/F et 41 réglages, coiffures et 11 tenues attachées au squelette, PNJ habillés selon leur rôle.
-Suite possible : barbes et accessoires, poses, monde fait main dans les vues de l'Atlas.
+Personnages refaits le 09/10 : fiche complète, création aléatoire et assistée (avatar + portrait), progression, arbres de talents (168 talents, magie des sceaux), impression.
+Suite possible : poses de l'avatar, monde fait main dans les vues de l'Atlas.

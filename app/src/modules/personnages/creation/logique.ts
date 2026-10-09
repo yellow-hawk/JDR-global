@@ -22,6 +22,18 @@ export function assetsDeLInventaire(p: Personnage, R: SystemeAvecFiche): Record<
   return res;
 }
 
+/** Reporte sur l'avatar 3D l'arme et l'armure équipées quand l'équipement a changé (le reste de l'apparence est gardé). */
+export function avecAvatarEquipe(avant: Personnage, apres: Personnage, R: SystemeAvecFiche): Personnage {
+  if (!apres.apparence) return apres;
+  const a = assetsDeLInventaire(avant, R), b = assetsDeLInventaire(apres, R);
+  if (JSON.stringify(a) === JSON.stringify(b)) return apres;
+  const preset = apres.apparence as { data?: { assets?: Record<string, string | null> } };
+  const assets = { ...(preset.data?.assets ?? {}) };
+  for (const [slot, option] of Object.entries(b)) if (option || slot in a) assets[slot] = option;
+  for (const slot of Object.keys(a)) if (!(slot in b)) assets[slot] = null;
+  return { ...apres, apparence: { ...preset, data: { ...(preset.data ?? {}), assets } } as Record<string, unknown> };
+}
+
 /** Apparence automatique : tenue selon la classe ou le rôle, puis arme et armure de l'inventaire. */
 export function apparencePour(p: Personnage, R: SystemeAvecFiche, description = ''): Record<string, unknown> {
   const espece = R.catalogue.peuples.find((x) => x.id === p.fiche?.identite?.espece);
