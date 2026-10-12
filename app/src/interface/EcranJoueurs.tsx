@@ -6,6 +6,7 @@ import type { Scene } from '../noyau/bus';
 import { envoyerAuMj, recevoirEcran } from '../noyau/bus';
 import { moduleParId } from './registre';
 import { Zoomable } from './Zoomable';
+import { SvgZoomable } from './SvgZoomable';
 import { texteJet, type JetDes } from '../noyau/regles';
 import './des/des.css';
 
@@ -87,7 +88,7 @@ export function EcranJoueurs() {
       {scene.sorte === 'svg' && (
         <div className="ecran-image">
           <div className="ecran-titre">{scene.titre}</div>
-          <Zoomable cle={scene.titre}><div className="ecran-svg" dangerouslySetInnerHTML={{ __html: scene.svg }} /></Zoomable>
+          <SvgZoomable svg={scene.svg} />
           {scene.texte && <div className="ecran-sous" style={{ textAlign: 'center' }}>{scene.texte}</div>}
         </div>
       )}

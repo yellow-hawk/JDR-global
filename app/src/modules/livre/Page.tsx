@@ -4,7 +4,10 @@ import { useState } from 'react';
 import { emettre } from '../../noyau/bus';
 import { useCampagne } from '../../interface/etat';
 import { assemblerLivre, type Progres } from './assembler';
-import { choixParDefaut, elementsDe, SECTIONS, type ChoixLivre, type SectionId } from './selection';
+import { choixParDefaut, elementsDe, retenus, SECTIONS, type ChoixLivre, type SectionId } from './selection';
+import type { Campagne, Famille } from '../../noyau/contrat';
+import { anneeActuelle } from '../chronologie';
+import { ajouterFamille, dynastieDepuisCivilisation } from '../genealogie';
 import './livre.css';
 
 export function Page() {
@@ -20,13 +23,31 @@ export function Page() {
     ecrire((x) => ({ ...x, exclus: garder ? x.exclus.filter((y) => !ids.includes(y)) : [...new Set([...x.exclus, ...ids])] }));
   };
 
+  // Dynasties des pays du livre : générées avant si elles manquent, et gardées dans la campagne (module Généalogie).
+  const avecDynasties = (): Campagne => {
+    if (!choix.sections.peuples || !choix.sections.dynasties) return c;
+    const ids = new Set(retenus(c, choix, 'peuples').map((x) => x.id));
+    const neuves: Famille[] = c.univers.flatMap((u) => (u.civilisations?.peuples ?? [])
+      .filter((p) => ids.has(`peuple:${u.id}:${String(p.cle)}`) && !(c.familles ?? []).some((f) => f.sorte === 'dynastie' && String(f.peuple) === String(p.cle) && (!f.univers || f.univers.id === u.id)))
+      .map((p) => {
+        const d = dynastieDepuisCivilisation(p, { an: anneeActuelle(c, p) });
+        // Le souverain actuel est relié à sa fiche s'il existe un personnage du même nom.
+        const membres = d.membres.map((m) => { const q = m.role === 'souverain actuel' ? c.personnages.find((y) => y.nom === m.nom) : undefined; return q ? { ...m, persoId: q.id } : m; });
+        return { ...d, membres, univers: { type: 'univers' as const, id: u.id } };
+      }));
+    if (!neuves.length) return c;
+    modifier((x) => neuves.reduce((y, f) => ajouterFamille(y, f), x));
+    emettre('message', { texte: `${neuves.length} dynastie(s) générée(s) pour le livre (gardées dans Généalogie).`, sorte: 'succes' });
+    return neuves.reduce((y, f) => ajouterFamille(y, f), c);
+  };
+
   const creer = async (imprimer: boolean) => {
     // La fenêtre s'ouvre tout de suite (sinon le navigateur la bloque), le livre s'y écrit quand il est prêt.
     const w = window.open('', '_blank');
     if (!w) { emettre('message', { texte: 'Le navigateur a bloqué la fenêtre du livre : autorise les fenêtres surgissantes.', sorte: 'erreur' }); return; }
     w.document.write('<p style="font-family:Georgia;padding:2em">Préparation du livre de campagne…</p>');
     try {
-      const html = await assemblerLivre(c, choix, { imprimer, progres: setProgres });
+      const html = await assemblerLivre(avecDynasties(), choix, { imprimer, progres: setProgres });
       w.document.open(); w.document.write(html); w.document.close();
     } catch (err) {
       w.close();
@@ -77,7 +98,7 @@ export function Page() {
                   ))}
                 </details>
               )}
-              {els.length === 0 && !['couverture', 'chronologie'].includes(s.id) && <p className="discret">Rien dans la campagne pour l’instant.</p>}
+              {els.length === 0 && !['couverture', 'chronologie', 'dynasties', 'calendrier'].includes(s.id) && <p className="discret">Rien dans la campagne pour l’instant.</p>}
             </section>
           );
         })}

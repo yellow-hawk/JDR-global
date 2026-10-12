@@ -205,7 +205,7 @@ a { color: var(--accent); }
 
 /* Écran joueurs : zoom, dessins, fiches, vues interactives */
 .ecran-zoom { position: relative; width: 100%; height: 100%; min-height: 0; overflow: hidden; touch-action: none; cursor: grab; display: grid; place-items: center; }
-.ecran-zoom-contenu { width: 100%; height: 100%; display: grid; place-items: center; transform-origin: 0 0; will-change: transform; }
+.ecran-zoom-contenu { width: 100%; height: 100%; display: grid; place-items: center; transform-origin: 0 0; }
 .ecran-zoom-contenu img { max-width: 100%; max-height: 100%; object-fit: contain; user-select: none; -webkit-user-drag: none; }
 .ecran-zoom-retour { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); opacity: 0.85; }
 .ecran-svg { width: 100%; height: 100%; display: grid; place-items: center; background: #f4ecdc; border-radius: 8px; }
@@ -216,3 +216,7 @@ a { color: var(--accent); }
 .ecran-fiche-sections h3 { margin: 0 0 0.3em; font-family: var(--titre); font-size: clamp(1.1rem, 1.8vw, 1.6rem); border-bottom: 1px solid rgb(0 0 0 / 0.2); }
 .ecran-fiche-sections p { margin: 0; white-space: pre-wrap; font-size: clamp(1rem, 1.6vw, 1.45rem); line-height: 1.45; }
 .ecran-interactif { touch-action: none; }
+
+.ecran-svg-zoom { position: relative; width: 100%; height: 100%; min-height: 0; background: #f4ecdc; border-radius: 8px; overflow: hidden; touch-action: none; cursor: grab; }
+.ecran-svg-dessin { position: absolute; inset: 8px; }
+.ecran-svg-dessin svg { display: block; }
