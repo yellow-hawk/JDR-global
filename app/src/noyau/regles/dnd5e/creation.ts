@@ -64,7 +64,15 @@ export function choixAleatoires(graine: string, o: OptionsAleatoire = {}): Choix
     alignement: pick(r('alignement'), CATALOGUE.alignements),
     personnalite: { traits: pick(r('traits'), P.traits), ideaux: pick(r('ideaux'), P.ideaux), liens: pick(r('liens'), P.liens), defauts: pick(r('defauts'), P.defauts) },
     equipement: true,
+    age: ageAleatoire(pe?.vie, o.niveau ?? 1, r('age')),
   };
+}
+
+/** Âge plausible : adulte, plus âgé avec l'expérience, rarement au-delà de la moitié de la longévité. */
+export function ageAleatoire(vie: [number, number] = [18, 80], niveau: number, rng: Rng): number {
+  const [adulte, max] = vie;
+  const marge = (max - adulte) * (0.12 + 0.3 * Math.min(1, (niveau - 1) / 12));
+  return adulte + Math.round(rng() * marge);
 }
 
 /** Stats (`combat.stats`) et fiche détaillée à partir des choix. */
@@ -97,6 +105,7 @@ export function creer(c: ChoixCreation): { nom: string; stats: Record<string, un
   const fiche: FichePersonnage = {
     identite: {
       espece: c.espece, historique: c.historique, alignement: c.alignement, genre: c.feminin ? 'femme' : 'homme',
+      ...(c.age ? { age: String(c.age) } : {}),
       langues: [...(pe?.langues ?? ['Commun'])],
     },
     personnalite: c.personnalite,

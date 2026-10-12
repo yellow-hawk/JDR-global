@@ -1,0 +1,148 @@
+{
+ "_doc": "Générateur de rencontres de la Table de combat. 'xp' : XP de chaque créature de la bibliothèque de base (facteur de puissance du SRD 5.1). 'humanoides' : créatures qui reçoivent un nom et une description (PNJ nommés). 'milieux' : créatures possibles et rôles du chef.",
+ "xp": {
+  "Gobelin": 50,
+  "Bandit": 25,
+  "Garde": 25,
+  "Cultiste": 25,
+  "Loup": 50,
+  "Squelette": 50,
+  "Zombie": 50,
+  "Orc": 100,
+  "Araignée géante": 200,
+  "Ours brun": 200,
+  "Capitaine bandit": 450,
+  "Mage": 2300,
+  "Prêtre": 450,
+  "Ogre": 450,
+  "Jeune dragon rouge": 5900
+ },
+ "humanoides": [
+  "Bandit",
+  "Garde",
+  "Cultiste",
+  "Capitaine bandit",
+  "Mage",
+  "Prêtre",
+  "Orc",
+  "Gobelin"
+ ],
+ "difficultes": [
+  [
+   "facile",
+   "Facile"
+  ],
+  [
+   "moyenne",
+   "Moyenne"
+  ],
+  [
+   "difficile",
+   "Difficile"
+  ],
+  [
+   "mortelle",
+   "Mortelle"
+  ]
+ ],
+ "milieux": [
+  {
+   "id": "route",
+   "nom": "Route, brigands",
+   "creatures": [
+    "Bandit",
+    "Bandit",
+    "Capitaine bandit",
+    "Loup"
+   ],
+   "chefs": [
+    "chef de brigands",
+    "capitaine des coupe-jarrets",
+    "contrebandier"
+   ]
+  },
+  {
+   "id": "crypte",
+   "nom": "Crypte, nécropole",
+   "creatures": [
+    "Squelette",
+    "Zombie"
+   ],
+   "chefs": [
+    "nécromancien",
+    "prêtre déchu"
+   ]
+  },
+  {
+   "id": "grotte",
+   "nom": "Grotte, mine",
+   "creatures": [
+    "Gobelin",
+    "Gobelin",
+    "Araignée géante",
+    "Ours brun",
+    "Loup"
+   ],
+   "chefs": [
+    "chef gobelin",
+    "dresseur de bêtes"
+   ]
+  },
+  {
+   "id": "temple",
+   "nom": "Temple, culte",
+   "creatures": [
+    "Cultiste",
+    "Cultiste",
+    "Prêtre"
+   ],
+   "chefs": [
+    "grand prêtre du culte",
+    "fanatique illuminé"
+   ]
+  },
+  {
+   "id": "ville",
+   "nom": "Ville, château",
+   "creatures": [
+    "Garde",
+    "Garde",
+    "Mage"
+   ],
+   "chefs": [
+    "capitaine de la garde",
+    "noble corrompu",
+    "maître espion"
+   ]
+  },
+  {
+   "id": "foret",
+   "nom": "Forêt, nature sauvage",
+   "creatures": [
+    "Loup",
+    "Ours brun",
+    "Orc",
+    "Bandit"
+   ],
+   "chefs": [
+    "chef de guerre orc",
+    "druide renégat",
+    "chasseur de primes"
+   ]
+  },
+  {
+   "id": "ruines",
+   "nom": "Ruines",
+   "creatures": [
+    "Gobelin",
+    "Orc",
+    "Squelette",
+    "Ogre"
+   ],
+   "chefs": [
+    "pilleur de tombes",
+    "chef de guerre orc"
+   ]
+  }
+ ]
+}

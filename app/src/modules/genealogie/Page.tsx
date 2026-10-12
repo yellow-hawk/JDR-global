@@ -1,9 +1,12 @@
 // Page Généalogie : familles et dynasties de la campagne, arbres interactifs, membres promus en personnages.
 import { useEffect, useMemo, useState } from 'react';
 import type { Campagne, Famille } from '../../noyau/contrat';
-import { prendreCible } from '../../noyau/bus';
+import { emettre, prendreCible } from '../../noyau/bus';
 import { lireFichier } from '../../noyau/stockage';
 import { useCampagne } from '../../interface/etat';
+import { aUneFiche, regles } from '../../noyau/regles';
+import { anneeActuelle } from '../chronologie';
+import { harmoniserDates, vieDepuis } from './dates';
 import { ArbreFamille } from './ArbreFamille';
 import { dynastieDepuisCivilisation, familleDepuisPersonnage } from './generateur';
 import { ajouterFamille, civilisationDe, familleDuPersonnage, modifierFamille, supprimerFamille } from './logique';
@@ -46,6 +49,9 @@ export function Page() {
   const defaut = c.univers.find((u) => u.id === c.campagne.univers?.id) ?? c.univers.find((u) => u.civilisations);
   const peuples = defaut?.civilisations?.peuples ?? [];
   const m = f?.membres.find((x) => x.id === choisi);
+  // Année en cours : l'horloge du temps de jeu, dans le calendrier du peuple de l'arbre.
+  const an = anneeActuelle(c, f ? civilisationDe(c, f.peuple) : null);
+  const R = regles(c.campagne.regles);
 
   const creer = (nouvelle: Famille) => { modifier((x) => ajouterFamille(x, { ...nouvelle, univers: defaut ? { type: 'univers', id: defaut.id } : null })); setCourante(nouvelle.id); setChoisi(nouvelle.racine ?? null); };
   const depuisPerso = (id: string) => {
@@ -53,13 +59,15 @@ export function Page() {
     const existe = familleDuPersonnage(c, id);
     if (existe) { setCourante(existe.id); return; }
     const k = p.peuple && 'atlas' in p.peuple ? p.peuple.atlas : null;
-    creer(familleDepuisPersonnage(p, civilisationDe(c, k)));
+    const civ = civilisationDe(c, k);
+    const vie = aUneFiche(R) ? R.catalogue.peuples.find((x) => x.id === p.fiche?.identite?.espece)?.vie : undefined;
+    creer(familleDepuisPersonnage(p, civ, { an: anneeActuelle(c, civ), vie }));
   };
   const dynastie = (cle: string) => {
     const civ = peuples.find((p) => String(p.cle) === cle)!;
     const existe = familles.find((x) => x.sorte === 'dynastie' && String(x.peuple) === cle);
     if (existe) { setCourante(existe.id); return; }
-    let d = dynastieDepuisCivilisation(civ);
+    let d = dynastieDepuisCivilisation(civ, { an: anneeActuelle(c, civ) });
     // Le souverain actuel est relié à sa fiche s'il existe un personnage du même nom.
     d = { ...d, membres: d.membres.map((x) => { const p = x.role === 'souverain actuel' ? c.personnages.find((y) => y.nom === x.nom) : undefined; return p ? { ...x, persoId: p.id } : x; }) };
     creer(d);
@@ -111,14 +119,21 @@ export function Page() {
           <div className="gen-creer">
             <h3>Cet arbre</h3>
             <input value={f.nom} onChange={(e) => modifier((x) => modifierFamille(x, f.id, (y) => ({ ...y, nom: e.target.value })))} />
+            <span className="discret">Année en cours : {an} (horloge du temps de jeu)</span>
+            <button className="btn btn-petit" title="Naissances manquantes, morts selon l’âge, parents assez âgés, rien après l’année en cours"
+              onClick={() => {
+                const { corrections } = harmoniserDates(f, an, vieDepuis(f.vie));
+                if (corrections) modifier((x) => modifierFamille(x, f.id, (y) => harmoniserDates(y, an, vieDepuis(y.vie)).famille));
+                emettre('message', { texte: corrections ? `${corrections} date(s) corrigée(s).` : 'Les dates de cet arbre sont déjà cohérentes.', sorte: 'succes' });
+              }}>Corriger les dates</button>
             <button className="btn btn-petit btn-danger" onClick={() => { if (window.confirm(`Supprimer l’arbre « ${f.nom} » ? (les fiches de personnages restent)`)) { modifier((x) => supprimerFamille(x, f.id)); setCourante(null); } }}>Supprimer l’arbre</button>
           </div>
         )}
       </aside>
       <section className="gen-centre">
-        {f ? <ArbreFamille famille={f} choisi={choisi} onChoisir={setChoisi} portraits={portraits} /> : <div className="vide">Choisis ou crée un arbre.</div>}
-        {f && m && <Membre c={c} f={f} m={m} ro={lectureSeule} modifier={modifier} choisir={setChoisi} />}
-        {f && <p className="gen-aide discret">Clic : choisir un membre (sa lignée s’éclaire) · molette : zoom · glisser : déplacer · ♛ règne · ● fiche de personnage</p>}
+        {f ? <ArbreFamille famille={f} choisi={choisi} onChoisir={setChoisi} portraits={portraits} an={an} /> : <div className="vide">Choisis ou crée un arbre.</div>}
+        {f && m && <Membre c={c} f={f} m={m} ro={lectureSeule} modifier={modifier} choisir={setChoisi} an={an} />}
+        {f && <p className="gen-aide discret">Clic : choisir un membre (sa lignée s’éclaire) · molette : zoom · glisser : déplacer · ♛ années de règne (sous les dates de vie) · ● fiche de personnage · pointillés : succession sans lien de sang</p>}
       </section>
     </div>
   );

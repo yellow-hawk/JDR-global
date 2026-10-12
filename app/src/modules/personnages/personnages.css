@@ -93,3 +93,7 @@
 .perso-editeur { display: grid; grid-template-columns: minmax(170px, 220px) 1fr; gap: 16px; align-items: start; }
 .perso-editeur-noeud { border: 1px solid var(--accent); border-radius: var(--rayon); padding: 10px; }
 @media (max-width: 760px) { .perso-editeur { grid-template-columns: 1fr; } }
+.perso-alerte { margin: 0; font-size: 0.9rem; background: var(--fond-2); border-left: 3px solid var(--accent); padding: 6px 10px; border-radius: 4px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.perso-montrer { display: inline-flex; align-items: center; gap: 6px; }
+.perso-montrer select { font: inherit; padding: 4px 6px; border: 1px solid var(--trait); border-radius: 6px; background: var(--fond); color: var(--encre); }
+.perso-direct { color: #c0392b; font-weight: 600; font-size: 0.85rem; }

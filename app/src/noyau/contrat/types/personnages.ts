@@ -104,5 +104,7 @@ export interface Famille {
   membres: MembreFamille[];
   /** Membre de départ (le personnage dont on a généré la famille, ou le fondateur). */
   racine?: string | null;
+  /** Longévité du peuple de la famille : [âge adulte, âge maximal] (absent : humaine, [18, 80]). */
+  vie?: [number, number];
   mj?: Secret;
 }

@@ -50,6 +50,18 @@ export function tempsDe(c: Campagne): TempsMonde {
   return { date: { an: r.civ?.anActuel ?? 1, mois: 1, jour: 1 }, heure: 8, reference: t?.reference ?? null };
 }
 
+/**
+ * Année en cours pour un peuple : l'horloge du temps de jeu, traduite dans le calendrier de ce peuple
+ * (son « année actuelle » avance au même rythme que celle du calendrier de référence). Sans peuple : l'année de l'horloge.
+ */
+export function anneeActuelle(c: Campagne, civ?: Civilisation | null): number {
+  const t = tempsDe(c);
+  if (!civ || civ.anActuel === undefined) return t.date.an;
+  const r = reference(c);
+  if (r.civ && String(r.civ.cle) === String(civ.cle) && r.civ.nom === civ.nom) return t.date.an;
+  return civ.anActuel + (r.civ?.anActuel !== undefined ? t.date.an - r.civ.anActuel : 0);
+}
+
 export const changerTemps = (c: Campagne, f: (t: TempsMonde) => TempsMonde): Campagne =>
   ({ ...c, campagne: { ...c.campagne, temps: f(tempsDe(c)) } });
 

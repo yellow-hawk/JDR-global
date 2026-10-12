@@ -1,9 +1,10 @@
 // Coquille : en-tête (campagne, rôle, écran joueurs, thème), menu des modules, page courante.
 import { Suspense, useEffect, useState } from 'react';
-import { ecouter, ouvrirEcranJoueurs, preparerDiffusion } from '../noyau/bus';
+import { ecouter, ecranActuel, ouvrirEcranJoueurs, preparerDiffusion } from '../noyau/bus';
 import { useCampagne } from './etat';
 import { Icone, Toasts } from './composants';
 import { BoutonDes } from './des';
+import { CommandeEcran, montrerAttente } from './EcranAttente';
 import { MODULES, moduleParId } from './registre';
 
 type Theme = 'auto' | 'clair' | 'sombre';
@@ -33,7 +34,12 @@ export function Coquille() {
     try { localStorage.setItem('jdr-theme', theme); } catch { /* stockage indisponible : sans importance */ }
   }, [theme]);
 
-  useEffect(() => { preparerDiffusion(campagne?.campagne.nom); }, [campagne?.campagne.nom]);
+  useEffect(() => {
+    preparerDiffusion(campagne?.campagne.nom);
+    // À l'ouverture d'une campagne, l'écran joueurs montre son écran d'attente (message, image).
+    if (campagne && role === 'mj' && ecranActuel().source === 'attente') void montrerAttente(campagne);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [campagne?.campagne.nom]);
 
   // À l'ouverture d'une campagne : chaque module peut la mettre à niveau (ex. Magie : grimoire de base, PNJ lanceurs).
   useEffect(() => {
@@ -70,6 +76,7 @@ export function Coquille() {
           <button className="btn btn-petit btn-mj" onClick={() => ouvrirEcranJoueurs()} title="Ouvre une fenêtre à placer sur la télé ou le second écran">
             Écran joueurs
           </button>
+          {campagne && role === 'mj' && <CommandeEcran />}
           <button className="btn btn-petit" onClick={() => setTheme(suivant)} title={`Passer en ${THEMES[suivant].toLowerCase()}`}>
             {THEMES[theme]}
           </button>

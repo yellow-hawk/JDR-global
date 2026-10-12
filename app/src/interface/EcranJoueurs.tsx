@@ -32,7 +32,7 @@ export function EcranJoueurs() {
     bandeau: setBandeau,
   }), []);
   useEffect(() => { document.title = 'Écran joueurs · JDR Global'; }, []);
-  const blob = scene.sorte === 'image' ? scene.image : scene.sorte === 'personnage' ? scene.portrait : scene.sorte === 'document' ? scene.image : null;
+  const blob = scene.sorte === 'image' || scene.sorte === 'document' || scene.sorte === 'vide' ? scene.image : scene.sorte === 'personnage' ? scene.portrait : null;
   const image = useUrlBlob(blob);
 
   const pleinEcran = () => {
@@ -43,9 +43,10 @@ export function EcranJoueurs() {
   return (
     <div className="ecran" onDoubleClick={pleinEcran}>
       {scene.sorte === 'vide' && (
-        <div>
+        <div className="ecran-attente">
           <div className="ecran-titre">{scene.campagne ?? 'JDR Global'}</div>
-          <div className="ecran-sous" style={{ textAlign: 'center' }}>En attente du maître du jeu…</div>
+          {image && <img src={image} alt="" />}
+          {scene.message ? <div className="ecran-texte">{scene.message}</div> : <div className="ecran-sous" style={{ textAlign: 'center' }}>En attente du maître du jeu…</div>}
         </div>
       )}
       {scene.sorte === 'texte' && (
@@ -57,10 +58,19 @@ export function EcranJoueurs() {
       {scene.sorte === 'personnage' && (
         <div className="ecran-perso">
           {image && <img src={image} alt="" />}
-          <div>
-            <div className="ecran-titre" style={{ textAlign: 'left' }}>{scene.nom}</div>
+          <div className="ecran-perso-info">
+            <div className="ecran-titre" style={{ textAlign: 'left', margin: 0 }}>{scene.nom}</div>
             <div className="ecran-sous">{scene.sousTitre}</div>
-            {scene.texte && <div className="ecran-texte" style={{ marginTop: '1em' }}>{scene.texte}</div>}
+            {scene.details?.length ? (
+              <div className="ecran-etiquettes">{scene.details.map((d) => <span key={d.libelle}><small>{d.libelle}</small>{d.valeur}</span>)}</div>
+            ) : null}
+            {scene.caracs?.length ? (
+              <div className="ecran-caracs">{scene.caracs.map((c) => <div key={c.libelle}><small>{c.libelle}</small><b>{c.mod}</b> <small>{c.valeur}</small></div>)}</div>
+            ) : null}
+            {scene.texte && <div className="ecran-texte">{scene.texte}</div>}
+            {scene.blocs?.length ? (
+              <div className="ecran-blocs">{scene.blocs.map((b) => <div key={b.titre}><h4>{b.titre}</h4><p>{b.texte}</p></div>)}</div>
+            ) : null}
           </div>
         </div>
       )}

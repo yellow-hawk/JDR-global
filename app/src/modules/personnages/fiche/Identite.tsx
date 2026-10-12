@@ -1,6 +1,9 @@
 // Onglet Identité : état civil, historique, langues, personnalité, description visible des joueurs.
 import { Champ } from '../../../interface/composants';
 import { aUneFiche } from '../../../noyau/regles';
+import { useCampagne } from '../../../interface/etat';
+import { anneeActuelle } from '../../chronologie';
+import { ageDeLaFiche, civilisationDe, familleDuPersonnage, modifierFamille, modifierMembre } from '../../genealogie';
 import { majFiche, type PropsOnglet } from './types';
 
 const CHAMPS: [string, string, string?][] = [
@@ -21,6 +24,15 @@ export function Identite({ p, R, lectureSeule, maj }: PropsOnglet) {
   const ecrire = (cle: string, v: unknown) => majFiche(maj, 'identite', (x) => ({ ...(x ?? {}), [cle]: v }));
   const ecrirePerso = (cle: string, v: string) => majFiche(maj, 'personnalite', (x) => ({ ...(x ?? {}), [cle]: v }));
   const historique = cat?.historiques.find((h) => h.id === id.historique);
+  // Âge, année de naissance et arbre généalogique : tous comptés depuis l'année en cours (horloge du temps de jeu).
+  const { vue, modifier } = useCampagne();
+  const famille = vue ? familleDuPersonnage(vue, p.id) : undefined;
+  const membre = famille?.membres.find((m) => m.persoId === p.id);
+  const cle = famille ? famille.peuple : p.peuple && 'atlas' in p.peuple ? p.peuple.atlas : null;
+  const an = vue ? anneeActuelle(vue, civilisationDe(vue, cle ?? null)) : null;
+  const age = ageDeLaFiche(p);
+  const nArbre = membre?.naissance ?? null;
+  const ecart = an !== null && age !== null && nArbre !== null && Math.abs(an - age - nArbre) > 1;
 
   return (
     <fieldset disabled={lectureSeule} className="perso-groupe pile">
@@ -47,6 +59,21 @@ export function Identite({ p, R, lectureSeule, maj }: PropsOnglet) {
           ) : <input value={id.historique ?? ''} onChange={(e) => ecrire('historique', e.target.value)} />}
         </Champ>
       </div>
+      {an !== null && (age !== null || nArbre !== null) && (
+        <p className="discret" style={{ margin: 0 }}>
+          {age !== null ? `Né${id.genre === 'femme' ? 'e' : ''} vers l’an ${an - age} (${age} ans en ${an}).` : `D’après l’arbre généalogique : né${id.genre === 'femme' ? 'e' : ''} en ${nArbre}, ${an - nArbre!} ans en ${an}.`}
+          {age === null && !lectureSeule && <button type="button" className="btn btn-petit" style={{ marginLeft: 8 }} onClick={() => ecrire('age', String(an - nArbre!))}>Reporter cet âge</button>}
+        </p>
+      )}
+      {ecart && famille && membre && (
+        <p className="perso-alerte">
+          ⚠ L’arbre généalogique le fait naître en {nArbre} ({an! - nArbre!} ans en {an}), la fiche dit {age} ans.
+          {!lectureSeule && (<>
+            <button type="button" className="btn btn-petit" onClick={() => ecrire('age', String(an! - nArbre!))}>Prendre l’âge de l’arbre</button>
+            <button type="button" className="btn btn-petit" onClick={() => modifier((x) => modifierFamille(x, famille.id, (f) => modifierMembre(f, membre.id, (m) => ({ ...m, naissance: an! - age! }))))}>Corriger l’arbre</button>
+          </>)}
+        </p>
+      )}
       {historique?.competences?.length ? (
         <p className="discret">
           Compétences de l’historique : {historique.competences.map((c) => cat?.competences.find((x) => x.id === c)?.libelle ?? c).join(', ')}

@@ -27,3 +27,6 @@
 .gen-couple { stroke: var(--accent); stroke-width: 2.5; vector-effect: non-scaling-stroke; }
 .gen-lien { fill: none; stroke: var(--encre-2); stroke-width: 1.6; vector-effect: non-scaling-stroke; }
 @media (max-width: 860px) { .gen-page { grid-template-columns: 1fr; grid-template-rows: auto 75vh; height: auto; } .coq-page:has(.gen-page) { overflow-y: auto; } .gen-panneau { position: static; width: auto; } }
+.gen-regne { fill: var(--accent); font-weight: 600; }
+.gen-succession { fill: none; stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 6 5; vector-effect: non-scaling-stroke; opacity: 0.8; }
+.gen-alerte { font-size: 0.85rem; background: var(--fond-2); border-left: 3px solid var(--accent); padding: 4px 8px; border-radius: 4px; }

@@ -88,6 +88,8 @@ export interface PeupleRegles {
   traits: { nom: string; texte: string; effets?: import('../contrat').Effet[] }[];
   /** Nom de peuple donné à l'avatar automatique (oreilles d'elfe, stature des nains…). */
   avatar?: string;
+  /** Longévité : âge adulte et âge maximal (généalogies, âge tiré au hasard). */
+  vie?: [number, number];
 }
 
 export interface IncantationCalculee { classe: string; carac: string; dd: number; attaque: number }
@@ -157,6 +159,8 @@ export interface ChoixCreation {
   personnalite?: { traits?: string; ideaux?: string; liens?: string; defauts?: string };
   /** Équipement de départ de la classe. */
   equipement?: boolean;
+  /** Âge en années. */
+  age?: number;
 }
 
 export interface OptionsAleatoire {
@@ -194,6 +198,8 @@ export interface ProgressionRegles {
   /** PV gagnés : moyenne (arrondie au-dessus) ou jet du dé de vie, + modificateur de CON (minimum 1). */
   gainPv(classe: string, modCon: number, jet?: number): number;
   nouveautes(classe: string, niveau: number): NouveautesNiveau | null;
+  /** Difficulté d'une rencontre : budget d'XP par personnage (facile, moyenne, difficile, mortelle) et multiplicateur selon le nombre d'adversaires. */
+  difficulte?: { seuils(niveau: number): [number, number, number, number]; multiplicateur(nombre: number): number };
 }
 
 /** Extension facultative d'un système : fiche détaillée calculée et création de personnage. */

@@ -9,6 +9,18 @@ export const CONDITIONS_BONUS = new Set<string>(donnees.conditionsBonus);
 export const SORTS_DE_BASE = donnees.sorts as Gabarit[];
 export const BIBLIOTHEQUE_DE_BASE = donnees.bibliotheque as unknown as Modele[];
 
+/** Icônes proposées et motifs de reconnaissance par nom (données). */
+export const ICONES = (donnees.icones as [string, string][]).map(([motif, emoji]) => ({ motif: new RegExp(motif, 'i'), emoji }));
+
+/** Icône d'un jeton sans portrait : la sienne, sinon celle de son nom (« Gobelin 3 » → 👺), sinon aucune. */
+export function iconeDe(j: { nom: string; icone?: string | null }): string | null {
+  if (j.icone !== undefined) return j.icone;
+  return ICONES.find((i) => i.motif.test(j.nom))?.emoji ?? null;
+}
+
+/** Nom sans numéro d'exemplaire (« Gobelin 3 » → « Gobelin »), pour traiter tous les exemplaires d'une créature. */
+export const nomDeBase = (nom: string): string => nom.replace(/\s*(\(\d+\)|\d+)$/, '').trim();
+
 export const modCarac = (v: number): number => Math.floor((v - 10) / 2);
 export const signe = (n: number): string => (n >= 0 ? `+${n}` : `${n}`);
 
@@ -48,7 +60,7 @@ export function jetonDepuisModele(m: Partial<Modele> & { nom?: string }, id: num
     carac, x, y, taille: m.taille ?? 1, conditions: [], notes: m.notes ?? '', couleur: m.couleur ?? null, visible: true,
     auras: m.auras ? m.auras.map((a) => ({ ...a })) : [], drapeaux: { ...DRAPEAUX_VIDES }, concentration: null,
     mouvementUtilise: 0, vision: m.vision ?? 12, degats: m.degats ?? '1d8', bonusAttaque: m.bonusAttaque ?? null,
-    initiative: 0, persoId: m.persoId ?? null, portrait: m.portrait ?? null,
+    initiative: 0, persoId: m.persoId ?? null, portrait: m.portrait ?? null, ...(m.icone !== undefined ? { icone: m.icone } : {}),
   };
 }
 

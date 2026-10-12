@@ -38,3 +38,7 @@ API publique : `definition`, `SORTES`, `libelleSorte`, `campJoueurs`, `sceneJoue
 ## Relations
 
 `relations.ts` + `relations.json` (pur, testé) : `ajouterRelation`, `retirerRelation`, `relationsDe` (dans les deux sens, libellé inverse), `RELATIONS`, `sorteRelation`. `PanneauRelations.tsx` sur la fiche (ajout, suppression, relation secrète). Données : `personnage.relations`.
+
+## Écran joueurs en direct
+
+« Montrer aux joueurs » + niveau de détail (`NiveauEcran` : portrait seul, présentation = identité visible, fiche complète = combat, caractéristiques, personnalité, langues ; par défaut la fiche pour le camp des joueurs). La fiche montrée est **en direct** (`perso:<id>` comme source du bus) : chaque modification est renvoyée, jusqu'à ce qu'autre chose prenne l'écran. Onglet Identité : année de naissance d'après l'âge et l'année en cours ; alerte si l'arbre généalogique dit autre chose (« Prendre l'âge de l'arbre » / « Corriger l'arbre »).

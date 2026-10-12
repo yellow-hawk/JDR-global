@@ -11,6 +11,7 @@ import type { EtatTable } from '../moteur';
 import { sortsDeLaCampagne } from '../sorts';
 import { portraitData } from './images';
 import { Packs } from './Packs';
+import { GenererRencontre } from './GenererRencontre';
 import type { Controleur } from './types';
 
 interface Props {
@@ -113,6 +114,8 @@ export function Campagne({ ctl, c, R, modifier, diffusion, setDiffusion, auto }:
           <button className="btn btn-petit" onClick={() => window.confirm('Vider la table (jetons, zones, combat) ? Annulable avec Ctrl+Z.') && ctl.faire((x) => ({ ...nouvelEtat(), grille: x.grille, sorts: x.sorts, bibliotheque: x.bibliotheque, etatsSup: x.etatsSup, fond: x.fond, opacites: x.opacites }))}>Nouvelle table</button>
         </details>
       )}
+
+      {!ro && <GenererRencontre ctl={ctl} c={c} R={R} modifier={modifier} />}
 
       {!ro && <Packs ctl={ctl} c={c} modifier={modifier} />}
 

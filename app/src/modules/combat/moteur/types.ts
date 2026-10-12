@@ -38,6 +38,8 @@ export interface Jeton {
   initiative: number;
   persoId?: string | null;  // lien vers un personnage de la campagne
   portrait?: string | null; // adresse data: de l'image
+  /** Icône (emoji) quand il n'y a pas de portrait : absente = d'après le nom (gobelin → 👺), null = aucune. */
+  icone?: string | null;
 }
 
 export type FormeZone = 'cercle' | 'cone' | 'ligne' | 'carre' | 'rectangle' | 'polygone';

@@ -5,7 +5,7 @@ import type { Personnage, SortePersonnage } from '../../noyau/contrat';
 import type { SystemeRegles } from '../../noyau/regles';
 import { aUneFiche } from '../../noyau/regles';
 import { Champ, Onglets } from '../../interface/composants';
-import { ONGLETS, SORTES, avecStatsCalculees, ongletsVisibles, type Onglet } from './logique';
+import { NIVEAUX_ECRAN, ONGLETS, SORTES, avecStatsCalculees, ongletsVisibles, type NiveauEcran, type Onglet } from './logique';
 import { Identite } from './fiche/Identite';
 import { Caracteristiques } from './fiche/Caracteristiques';
 import { Combat } from './fiche/Combat';
@@ -25,7 +25,10 @@ interface Props {
   urlPortrait: string | null;
   maj(f: (p: Personnage) => Personnage): void;
   onPortrait(): void;
-  onMontrer(): void;
+  onMontrer(niveau: NiveauEcran): void;
+  /** La fiche est affichée en direct sur l'écran joueurs. */
+  enDirect: boolean;
+  niveauEcran: NiveauEcran;
   onSupprimer(): void;
   onAvatar(): void;
   onRefairePortrait?(): void;
@@ -34,7 +37,7 @@ interface Props {
 const CLE_ONGLET = 'jdr.perso.onglet';
 const lireOnglet = (): Onglet => { try { return (localStorage.getItem(CLE_ONGLET) as Onglet) || 'identite'; } catch { return 'identite'; } };
 
-export function Fiche({ perso: p, R, role, lectureSeule, urlPortrait, maj: majBrut, onPortrait, onMontrer, onSupprimer, onAvatar, onRefairePortrait }: Props) {
+export function Fiche({ perso: p, R, role, lectureSeule, urlPortrait, maj: majBrut, onPortrait, onMontrer, enDirect, niveauEcran, onSupprimer, onAvatar, onRefairePortrait }: Props) {
   const [onglet, setOnglet] = useState<Onglet>(lireOnglet);
   const visibles = ongletsVisibles(p, R, role);
   const actif = visibles.includes(onglet) ? onglet : visibles[0];
@@ -102,7 +105,15 @@ export function Fiche({ perso: p, R, role, lectureSeule, urlPortrait, maj: majBr
 
       {!lectureSeule && (
         <div className="ligne">
-          <button className="btn btn-mj" onClick={onMontrer} disabled={!!mj.cache}>Montrer aux joueurs</button>
+          <span className="perso-montrer">
+            <button className="btn btn-mj" onClick={() => onMontrer(niveauEcran)} disabled={!!mj.cache} title={mj.cache ? 'Personnage caché aux joueurs' : 'Affiche ce personnage sur l’écran joueurs, mis à jour en direct'}>
+              {enDirect ? 'Renvoyer' : 'Montrer aux joueurs'}
+            </button>
+            <select value={niveauEcran} disabled={!!mj.cache} title="Ce que voient les joueurs" onChange={(e) => onMontrer(e.target.value as NiveauEcran)}>
+              {NIVEAUX_ECRAN.map(([id, l]) => <option key={id} value={id}>{l}</option>)}
+            </select>
+            {enDirect && <span className="perso-direct" title="Chaque modification de la fiche apparaît sur l’écran joueurs. Alt+A : écran d’attente.">● en direct</span>}
+          </span>
           <button className="btn" onClick={onAvatar}>{p.apparence ? 'Modifier l’avatar 3D' : 'Créer l’avatar 3D'}</button>
           {p.apparence && onRefairePortrait && <button className="btn" title="Photographier l’avatar actuel (tenue, arme) pour le portrait et le jeton" onClick={onRefairePortrait}>Refaire le portrait</button>}
           {calcul && aUneFiche(R) && (

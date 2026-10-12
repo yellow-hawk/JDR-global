@@ -1,6 +1,6 @@
 // Page Combat : la table réécrite (moteur/ + rendu/ + interface/), branchée sur la campagne.
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { montrerAuxJoueurs, prendreCible } from '../../noyau/bus';
+import { montrerAuxJoueurs, prendreCible, suivreEcran } from '../../noyau/bus';
 import { regles } from '../../noyau/regles';
 import { useCampagne } from '../../interface/etat';
 import { avecTableEnCours, etatDeRencontre, gabarit, tableEnCours } from './logique';
@@ -31,6 +31,8 @@ export function Page() {
   const [diffusion, setDiffusion] = useState(() => !!cible && auto);
   const actif = ctl.etat.combat.actif;
   useEffect(() => { if (actif && auto && !lectureSeule) setDiffusion(true); }, [actif, auto, lectureSeule]);
+  // Autre chose prend l'écran joueurs (écran d'attente, fiche, document) : la diffusion de la table s'arrête.
+  useEffect(() => suivreEcran((e) => { if (e.source !== 'combat') setDiffusion(false); }), []);
   const [gauche, setGauche] = useState(true);
   const fond = useFond(c, ctl.etat.fond?.carte);
   const portraits = usePortraits(ctl.etat);
@@ -70,12 +72,13 @@ export function Page() {
   // Diffusion vers l'écran joueurs : image de toute la carte, renvoyée à chaque changement (au plus toutes les 0,5 s).
   useEffect(() => {
     if (!diffusion) return;
+    let annule = false; // diffusion arrêtée pendant le rendu : l'image n'est pas envoyée
     const t = window.setTimeout(() => {
       imageJoueurs(ctl.etat, TERRAINS, fond.joueurs, portraits)
-        .then((image) => montrerAuxJoueurs({ sorte: 'image', titre: 'Combat', image }))
+        .then((image) => { if (!annule) montrerAuxJoueurs({ sorte: 'image', titre: 'Combat', image }, 'combat'); })
         .catch(() => { /* rendu impossible : on réessaiera au prochain changement */ });
     }, 500);
-    return () => window.clearTimeout(t);
+    return () => { annule = true; window.clearTimeout(t); };
   }, [diffusion, ctl.etat, fond.joueurs, portraits]);
 
   return (

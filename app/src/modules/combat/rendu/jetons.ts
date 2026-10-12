@@ -1,5 +1,6 @@
 // Dessin des jetons et de leurs auras : portrait, barre de PV, croix KO, concentration, états, sélection.
 import type { Jeton } from '../moteur/types';
+import { iconeDe } from '../moteur/etat';
 import { avecAlpha, cheminCase, COULEUR_CAMP, ecran, OR, POLICE_TITRE, texteOmbre, type Peintre } from './peintre';
 import { statsVisibles, type Public } from './visibilite';
 
@@ -53,6 +54,15 @@ export function dessinerJeton(p: Peintre, j: Jeton, pub: Public, m: MarquesJeton
     ctx.drawImage(portrait, sx - r + 2, sy - r + 2, (r - 2) * 2, (r - 2) * 2);
     ctx.restore();
   }
+  // Sans portrait : icône de la créature (choisie, ou d'après son nom), le nom passe au-dessus.
+  const icone = portrait ? null : iconeDe(j);
+  if (icone) {
+    ctx.save();
+    ctx.font = `${Math.round(r * 1.15)}px "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(icone, sx, sy + r * 0.06);
+    ctx.restore();
+  }
   if (p.g.type === 'hex' && j.taille === 1) cheminCase(p, sx, sy, 0.92); else { ctx.beginPath(); ctx.arc(sx, sy, r, 0, Math.PI * 2); }
   ctx.strokeStyle = col; ctx.lineWidth = m.choisi ? 3 : 2; ctx.stroke();
 
@@ -74,10 +84,11 @@ export function dessinerJeton(p: Peintre, j: Jeton, pub: Public, m: MarquesJeton
     ctx.beginPath(); ctx.moveTo(sx - r * 0.45, sy - r * 0.45); ctx.lineTo(sx + r * 0.45, sy + r * 0.45);
     ctx.moveTo(sx + r * 0.45, sy - r * 0.45); ctx.lineTo(sx - r * 0.45, sy + r * 0.45); ctx.stroke(); ctx.restore();
   }
-  if (!portrait || p.uc * j.taille > 70) {
+  const image = !!portrait || !!icone;
+  if (!image || p.uc * j.taille > 70) {
     const fs = Math.max(7, Math.min(13, p.uc * 0.22));
     const nom = j.nom.length > 9 ? `${j.nom.slice(0, 8)}…` : j.nom;
-    texteOmbre(p, nom, sx, portrait ? sy - r - fs * 0.7 : sy - 1, '#f2ede2', `600 ${fs}px ${POLICE_TITRE}`);
+    texteOmbre(p, nom, sx, image ? sy - r - fs * 0.7 : sy - 1, '#f2ede2', `600 ${fs}px ${POLICE_TITRE}`);
   }
   if (j.conditions.length) {
     ctx.beginPath(); ctx.arc(sx + r * 0.72, sy - r * 0.72, Math.max(3, p.uc * 0.08), 0, Math.PI * 2);

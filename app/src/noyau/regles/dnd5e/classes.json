@@ -1838,6 +1838,7 @@
   {
    "id": "humain",
    "nom": "Humain",
+   "vie": [18, 80],
    "bonus": {
     "for": 1,
     "dex": 1,
@@ -1859,6 +1860,7 @@
   {
    "id": "haut-elfe",
    "nom": "Elfe (haut-elfe)",
+   "vie": [100, 750],
    "bonus": {
     "dex": 2,
     "int": 1
@@ -1897,6 +1899,7 @@
   {
    "id": "nain-des-collines",
    "nom": "Nain (des collines)",
+   "vie": [50, 350],
    "bonus": {
     "con": 2,
     "sag": 1
@@ -1937,6 +1940,7 @@
   {
    "id": "halfelin-pied-leger",
    "nom": "Halfelin (pied-léger)",
+   "vie": [20, 150],
    "bonus": {
     "dex": 2,
     "cha": 1
@@ -1971,6 +1975,7 @@
   {
    "id": "drakeide",
    "nom": "Drakéide",
+   "vie": [15, 80],
    "bonus": {
     "for": 2,
     "cha": 1
@@ -2001,6 +2006,7 @@
   {
    "id": "gnome-des-roches",
    "nom": "Gnome (des roches)",
+   "vie": [40, 425],
    "bonus": {
     "int": 2,
     "con": 1
@@ -2031,6 +2037,7 @@
   {
    "id": "demi-elfe",
    "nom": "Demi-elfe",
+   "vie": [20, 180],
    "bonus": {
     "cha": 2
    },
@@ -2059,6 +2066,7 @@
   {
    "id": "demi-orc",
    "nom": "Demi-orc",
+   "vie": [14, 75],
    "bonus": {
     "for": 2,
     "con": 1
@@ -2092,6 +2100,7 @@
   {
    "id": "tieffelin",
    "nom": "Tieffelin",
+   "vie": [18, 100],
    "bonus": {
     "cha": 2,
     "int": 1

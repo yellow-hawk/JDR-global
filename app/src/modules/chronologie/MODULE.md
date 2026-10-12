@@ -12,4 +12,5 @@
 | `Page.tsx` | Horloge + détail (édition des événements, secret MJ) + frise. |
 
 Données : `campagne.temps` (date, heure, référence), collection `evenements`, réglage `modules.chronologie.bandeau`.
-API publique : `definition`, `tempsDe`, `reference`, `dateLisible`, `fetesAVenir`, `absolu`, `ajouterEvenement`.
+`anneeActuelle(c, civ?)` : année en cours d'un peuple (horloge traduite dans son calendrier), utilisée par la Généalogie et les fiches.
+API publique : `definition`, `tempsDe`, `anneeActuelle`, `reference`, `dateLisible`, `fetesAVenir`, `absolu`, `ajouterEvenement`.

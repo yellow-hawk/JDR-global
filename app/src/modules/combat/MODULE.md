@@ -56,3 +56,10 @@ Aperçu joueurs : même table en lecture seule, vue joueurs (stats ennemies, jet
 ## Dés
 
 L'onglet Dés utilise le plateau partagé (`interface/des`) : le jeton choisi est le lanceur, le jet va au journal de la table et roule en 3D sur l'écran joueurs.
+
+## Rencontres générées et images des jetons
+
+- `rencontres.ts` + `rencontres.json` (pur, testé) : `composerRencontre` (milieu, difficulté, niveaux des PJ → budget d'XP `R.progression.difficulte`, chef dont la puissance laisse la moitié du budget aux troupes, créatures fortes plus probables), `nommer` (humanoïdes → « Garn, bandit » + description du générateur de PNJ, créatures numérotées), `difficulteAtteinte`. Exporté : `composerRencontre`, `nommerAdversaires` (batailles de l'Atlas).
+- `interface/GenererRencontre.tsx` (colonne campagne) : chef = vrai PNJ « ennemi » (fiche, avatar, portrait posé sur son jeton), PJ placés, table vidée (annulable).
+- Icônes : `Jeton.icone` (emoji) ; absente = d'après le nom (`iconeDe`, motifs `donnees.json` → `icones`). `interface/ImageJeton.tsx` : image importée (recadrée), icône, retrait, « même image pour tous les … » (`nomDeBase`) ; aussi sur les modèles de la bibliothèque (🖼).
+- Écran joueurs : la diffusion de la table a la source `combat` et s'arrête dès qu'une autre source prend l'écran.

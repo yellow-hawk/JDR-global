@@ -102,8 +102,21 @@ describe('impression et écran joueurs', () => {
     const { personnageDepuisChoix } = await import('./creation/logique');
     const R = regles('dnd5e') as import('../../noyau/regles').SystemeAvecFiche;
     const p = personnageDepuisChoix(R, R.creation.aleatoire('w', { classe: 'magicien', espece: 'haut-elfe', niveau: 3 }), 'pj', {}, false);
-    const s = sceneJoueurs(p, R, null) as { sousTitre: string; texte: string };
+    type S = { sousTitre: string; texte: string; details?: { libelle: string; valeur: string }[]; caracs?: unknown[]; blocs?: { titre: string }[] };
+    const s = sceneJoueurs(p, R, null) as S;
     expect(s.sousTitre).toContain('Elfe (haut-elfe) Magicien 3');
-    expect(s.texte).toMatch(/CA \d+ · PV \d+\/\d+/);
+    const lib = (x: S) => (x.details ?? []).map((d) => d.libelle);
+    expect(lib(s)).toEqual(expect.arrayContaining(['CA', 'PV', 'Initiative', 'Âge']));
+    expect(s.details!.find((d) => d.libelle === 'PV')!.valeur).toMatch(/\d+ \/ \d+/);
+    expect(s.caracs).toHaveLength(6);
+    expect(s.blocs!.map((b) => b.titre)).toContain('Traits');
+    // Présentation : identité seulement ; portrait : le nom seul. Jamais de secrets du MJ.
+    const ennemi = { ...p, sorte: 'ennemi' as const, notes: 'Une cicatrice.', mj: { notes: 'Traître' } };
+    const pres = sceneJoueurs(ennemi, R, null) as S;
+    expect(lib(pres)).not.toContain('CA');
+    expect(pres.caracs).toBeUndefined();
+    expect(pres.texte).toBe('Une cicatrice.');
+    expect(JSON.stringify(pres)).not.toContain('Traître');
+    expect(sceneJoueurs(ennemi, R, null, 'portrait')).toMatchObject({ texte: '' });
   });
 });

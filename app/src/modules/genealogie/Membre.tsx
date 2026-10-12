@@ -3,11 +3,13 @@ import type { Campagne, Famille, MembreFamille } from '../../noyau/contrat';
 import { emettre } from '../../noyau/bus';
 import { regles } from '../../noyau/regles';
 import { Champ } from '../../interface/composants';
+import { texteVie } from './ArbreFamille';
+import { incoherences } from './dates';
 import { ajouterProche, civilisationDe, etendre, modifierFamille, modifierMembre, promouvoir, supprimerMembre } from './logique';
 
-interface Props { c: Campagne; f: Famille; m: MembreFamille; ro: boolean; modifier: (g: (c: Campagne) => Campagne) => void; choisir: (id: string | null) => void }
+interface Props { c: Campagne; f: Famille; m: MembreFamille; ro: boolean; modifier: (g: (c: Campagne) => Campagne) => void; choisir: (id: string | null) => void; an: number }
 
-export function Membre({ c, f, m, ro, modifier, choisir }: Props) {
+export function Membre({ c, f, m, ro, modifier, choisir, an }: Props) {
   const civ = civilisationDe(c, f.peuple);
   const majF = (g: (x: Famille) => Famille) => modifier((x) => modifierFamille(x, f.id, g));
   const majM = (g: (x: MembreFamille) => MembreFamille) => majF((x) => modifierMembre(x, m.id, g));
@@ -16,11 +18,14 @@ export function Membre({ c, f, m, ro, modifier, choisir }: Props) {
   const fratrie = m.parents.length ? f.membres.filter((x) => x.id !== m.id && x.parents.some((p) => m.parents.includes(p))) : [];
   const ajouter = (lien: 'parent' | 'enfant' | 'conjoint' | 'fratrie') => {
     let nouvel = '';
-    majF((x) => { const r = ajouterProche(x, m.id, lien, civ, `${f.id}|${Date.now()}`); nouvel = r.id; return r.famille; });
+    majF((x) => { const r = ajouterProche(x, m.id, lien, civ, `${f.id}|${Date.now()}`, an); nouvel = r.id; return r.famille; });
     window.setTimeout(() => nouvel && choisir(nouvel), 0);
   };
   const Lien = ({ id }: { id: string }) => <button className="gen-lien-nom" onClick={() => choisir(id)}>{nomDe(id)}</button>;
   const num = (v: string) => (v.trim() === '' ? null : Number(v));
+  const regne = (a: number | null, b: number | null): MembreFamille['regne'] => (a === null && b === null ? null : [a ?? b!, b ?? a!]);
+  const vie = texteVie(m, an);
+  const alertes = incoherences(f, m, an);
 
   return (
     <aside className="gen-panneau carte-ui">
@@ -30,7 +35,13 @@ export function Membre({ c, f, m, ro, modifier, choisir }: Props) {
           <Champ libelle="Sexe"><select value={m.sexe} onChange={(e) => majM((x) => ({ ...x, sexe: e.target.value as MembreFamille['sexe'] }))}>
             <option value="f">Femme</option><option value="m">Homme</option><option value="?">?</option></select></Champ>
           <Champ libelle="Naissance"><input type="number" value={m.naissance ?? ''} onChange={(e) => majM((x) => ({ ...x, naissance: num(e.target.value) }))} /></Champ>
-          <Champ libelle="Mort"><input type="number" value={m.mort ?? ''} onChange={(e) => majM((x) => ({ ...x, mort: num(e.target.value) }))} /></Champ>
+          <Champ libelle="Mort"><input type="number" value={m.mort ?? ''} placeholder="vivant" onChange={(e) => majM((x) => ({ ...x, mort: num(e.target.value) }))} /></Champ>
+        </div>
+        {vie && <p className="discret" style={{ margin: 0 }}>{vie}{m.mort === null || m.mort === undefined ? ` en ${an}` : ''}</p>}
+        {alertes.map((a) => <p key={a} className="gen-alerte" style={{ margin: 0 }}>⚠ {a}</p>)}
+        <div className="gen-ligne">
+          <Champ libelle="Règne : début"><input type="number" value={m.regne?.[0] ?? ''} placeholder="—" onChange={(e) => majM((x) => ({ ...x, regne: regne(num(e.target.value), x.regne?.[1] ?? null) }))} /></Champ>
+          <Champ libelle="Règne : fin"><input type="number" value={m.regne?.[1] ?? ''} placeholder="—" onChange={(e) => majM((x) => ({ ...x, regne: regne(x.regne?.[0] ?? null, num(e.target.value)) }))} /></Champ>
         </div>
         <div className="gen-ligne">
           <Champ libelle="Titre"><input value={m.titre ?? ''} onChange={(e) => majM((x) => ({ ...x, titre: e.target.value }))} /></Champ>
@@ -52,14 +63,14 @@ export function Membre({ c, f, m, ro, modifier, choisir }: Props) {
             <button className="btn btn-petit" onClick={() => ajouter('conjoint')}>+ Conjoint</button>
             <button className="btn btn-petit" onClick={() => ajouter('enfant')}>+ Enfant</button>
             <button className="btn btn-petit" onClick={() => ajouter('fratrie')}>+ Frère / sœur</button>
-            <button className="btn btn-petit" title="Ajoute ce qui manque : parents, conjoint, enfants" onClick={() => majF((x) => etendre(x, m.id, civ, `${f.id}|${m.id}|${x.membres.length}`))}>Étendre</button>
+            <button className="btn btn-petit" title="Ajoute ce qui manque : parents, conjoint, enfants" onClick={() => majF((x) => etendre(x, m.id, civ, `${f.id}|${m.id}|${x.membres.length}`, an))}>Étendre</button>
           </div>
           <div className="gen-boutons">
             {m.persoId
               ? <button className="btn btn-petit btn-principal" onClick={() => emettre('naviguer', { page: 'personnages', cible: m.persoId! })}>Ouvrir la fiche</button>
               : <button className="btn btn-petit btn-principal" onClick={() => {
                 let id = '';
-                modifier((x) => { const r = promouvoir(x, f.id, m.id, regles(x.campagne.regles)); id = r.persoId; return r.campagne; });
+                modifier((x) => { const r = promouvoir(x, f.id, m.id, regles(x.campagne.regles), an); id = r.persoId; return r.campagne; });
                 window.setTimeout(() => emettre('message', { texte: `${m.nom} a maintenant une fiche de personnage.`, sorte: 'succes' }), 0);
                 void id;
               }}>Créer la fiche personnage</button>}

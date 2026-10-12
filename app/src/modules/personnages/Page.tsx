@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import type { Personnage } from '../../noyau/contrat';
 import { regles } from '../../noyau/regles';
-import { emettre, montrerAuxJoueurs, prendreCible } from '../../noyau/bus';
+import { ecranActuel, emettre, montrerAuxJoueurs, prendreCible, suivreEcran } from '../../noyau/bus';
 import { ajouterFichier, choisirFichier, lireFichier, supprimerFichier } from '../../noyau/stockage';
 import { useCampagne } from '../../interface/etat';
 import { useUrlFichier } from '../../interface/composants';
@@ -13,7 +13,7 @@ import { Recompense } from './progression/Recompense';
 import { EditeurTalents, arbresDeCampagne } from './talents/EditeurTalents';
 import { enregistrerArbresDeCampagne } from '../../noyau/talents';
 import { aUneFiche } from '../../noyau/regles';
-import { ajouter, grouper, modifierPerso, sceneJoueurs, supprimer } from './logique';
+import { ajouter, grouper, modifierPerso, niveauParDefaut, sceneJoueurs, supprimer, type NiveauEcran } from './logique';
 import './personnages.css';
 
 function Vignette({ p, idCampagne, actif, onClick }: { p: Personnage; idCampagne: string; actif: boolean; onClick(): void }) {
@@ -39,6 +39,12 @@ export function Page() {
   const R = regles(c.campagne.regles);
   const perso = c.personnages.find((p) => p.id === selection) ?? null;
   const urlPortrait = useUrlFichier(idCampagne, perso?.portrait);
+  // Fiche montrée en direct sur l'écran joueurs : chaque modification y est renvoyée, jusqu'à ce qu'autre chose prenne l'écran.
+  const enDirect = (s: string) => (s.startsWith('perso:') ? s.slice(6) : null);
+  const [direct, setDirect] = useState<string | null>(() => enDirect(ecranActuel().source));
+  const [niveaux, setNiveaux] = useState<Record<string, NiveauEcran>>({});
+  useEffect(() => suivreEcran((e) => setDirect(enDirect(e.source))), []);
+  const montre = direct ? campagne?.personnages.find((p) => p.id === direct) : undefined;
 
   // Arbres de talents du MJ (campagne) : remplacent ou complètent ceux des règles.
   useEffect(() => { if (campagne) enregistrerArbresDeCampagne(arbresDeCampagne(campagne)); }, [campagne]);
@@ -83,13 +89,27 @@ export function Page() {
     emettre('message', { texte: 'Portrait refait.', sorte: 'succes' });
   };
 
-  const montrer = async () => {
-    if (!perso || !campagne) return;
-    const complet = campagne.personnages.find((p) => p.id === perso.id)!;
+  const diffuser = async (id: string, niveau: NiveauEcran, miseAJour = false) => {
+    const complet = campagne?.personnages.find((p) => p.id === id);
+    if (!complet) return;
     const portrait = complet.portrait ? (await lireFichier(idCampagne, complet.portrait)) ?? null : null;
-    montrerAuxJoueurs(sceneJoueurs(complet, R, portrait));
-    emettre('message', { texte: `${complet.nom} est affiché sur l'écran joueurs.`, sorte: 'succes' });
+    if (miseAJour && ecranActuel().source !== `perso:${id}`) return; // l'écran a changé entre-temps
+    montrerAuxJoueurs(sceneJoueurs(complet, R, portrait, niveau), `perso:${id}`);
   };
+  const niveauDe = (p: Personnage) => niveaux[p.id] ?? niveauParDefaut(p);
+  const montrer = async (niveau: NiveauEcran) => {
+    if (!perso) return;
+    setNiveaux((n) => ({ ...n, [perso.id]: niveau }));
+    await diffuser(perso.id, niveau);
+    emettre('message', { texte: `${perso.nom} est affiché sur l'écran joueurs, en direct : tes modifications y apparaissent.`, sorte: 'succes' });
+  };
+  // Direct : la fiche montrée change → l'écran joueurs suit (regroupé toutes les 0,4 s).
+  useEffect(() => {
+    if (!montre) return;
+    const t = window.setTimeout(() => void diffuser(montre.id, niveauDe(montre), true), 400);
+    return () => window.clearTimeout(t);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [montre, R]);
 
   const effacer = () => {
     if (!perso || !window.confirm(`Supprimer « ${perso.nom} » ?`)) return;
@@ -137,7 +157,8 @@ export function Page() {
           <Fiche
             key={perso.id} perso={perso} R={R} role={role} lectureSeule={lectureSeule}
             urlPortrait={urlPortrait} maj={maj}
-            onPortrait={changerPortrait} onMontrer={montrer} onSupprimer={effacer}
+            onPortrait={changerPortrait} onMontrer={(n) => void montrer(n)} onSupprimer={effacer}
+            enDirect={direct === perso.id} niveauEcran={niveauDe(perso)}
             onAvatar={() => { ouvrirAvatarPour(perso.id); emettre('naviguer', { page: 'avatar' }); }}
             onRefairePortrait={photo ? undefined : () => setPhoto([{ id: perso.id, nom: perso.nom, apparence: perso.apparence! }])}
           />

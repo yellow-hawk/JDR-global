@@ -48,9 +48,16 @@ export type StyleDocument = 'parchemin' | 'lettre' | 'affiche' | 'note';
 
 /** Ce que l'écran joueurs affiche. Toujours passé par sansSecrets() avant envoi. */
 export type Scene =
-  | { sorte: 'vide'; campagne?: string }
+  /** Écran d'attente : nom de la campagne, message et image choisis par le MJ. */
+  | { sorte: 'vide'; campagne?: string; message?: string; image?: Blob | null }
   | { sorte: 'texte'; titre: string; texte: string }
-  | { sorte: 'personnage'; nom: string; sousTitre: string; texte: string; portrait?: Blob | null }
+  | {
+    sorte: 'personnage'; nom: string; sousTitre: string; texte: string; portrait?: Blob | null;
+    /** Étiquettes (âge, peuple, CA…), caractéristiques et paragraphes (personnalité…), selon ce que le MJ montre. */
+    details?: { libelle: string; valeur: string }[];
+    caracs?: { libelle: string; valeur: number; mod: string }[];
+    blocs?: { titre: string; texte: string }[];
+  }
   | { sorte: 'image'; titre: string; image: Blob }
   | { sorte: 'document'; titre: string; texte?: string; image?: Blob | null; style: StyleDocument };
 
@@ -68,6 +75,8 @@ const canal = (): BroadcastChannel | null =>
 
 let canalMj: BroadcastChannel | null = null;
 let sceneCourante: Scene = { sorte: 'vide' };
+let sourceCourante = 'attente';
+const ecouteursEcran = new Set<(e: EcranActuel) => void>();
 let bandeauCourant: string | null = null;
 const historique: JetDes[] = [];
 const ecouteursJets = new Set<(h: JetDes[]) => void>();
@@ -86,10 +95,33 @@ function canalDuMj(): BroadcastChannel | null {
   return canalMj;
 }
 
-/** Côté MJ : montre une scène sur l'écran joueurs (et la retient pour les écrans ouverts plus tard). */
-export function montrerAuxJoueurs(scene: Scene): void {
+/** Ce qui est affiché sur l'écran joueurs, et qui l'a envoyé (`perso:<id>`, `combat`, `attente`…). */
+export interface EcranActuel { scene: Scene; source: string }
+
+/**
+ * Côté MJ : montre une scène sur l'écran joueurs (et la retient pour les écrans ouverts plus tard).
+ * `source` identifie l'envoyeur : une page qui diffuse en continu (combat, fiche en direct) s'arrête dès qu'une
+ * autre source prend l'écran.
+ */
+export function montrerAuxJoueurs(scene: Scene, source: string = scene.sorte): void {
   sceneCourante = sansSecrets(scene); // sécurité : aucune clé mj ne part vers l'écran joueurs
+  sourceCourante = source;
   canalDuMj()?.postMessage({ type: 'scene', scene: sceneCourante } satisfies MessageEcran);
+  ecouteursEcran.forEach((f) => f({ scene: sceneCourante, source }));
+}
+
+/** Côté MJ : ce qui est à l'écran maintenant, et abonnement à ses changements. */
+export const ecranActuel = (): EcranActuel => ({ scene: sceneCourante, source: sourceCourante });
+export function suivreEcran(f: (e: EcranActuel) => void): () => void {
+  ecouteursEcran.add(f);
+  return () => { ecouteursEcran.delete(f); };
+}
+
+/** Libellé court de ce qui est à l'écran (en-tête du MJ). */
+export function libelleScene(s: Scene): string {
+  if (s.sorte === 'vide') return 'Écran d’attente';
+  if (s.sorte === 'personnage') return s.nom;
+  return s.titre;
 }
 
 /** Côté MJ : petit bandeau permanent sur l'écran joueurs (ex. date du monde). null = le retirer. */
@@ -119,8 +151,8 @@ export function suivreJets(f: (h: JetDes[]) => void): () => void {
 
 /** Côté MJ : à appeler au démarrage pour répondre aux écrans joueurs qui s'ouvrent. */
 export function preparerDiffusion(campagne?: string): void {
-  if (sceneCourante.sorte === 'vide') sceneCourante = { sorte: 'vide', campagne };
-  montrerAuxJoueurs(sceneCourante);
+  if (sceneCourante.sorte === 'vide') sceneCourante = { ...sceneCourante, campagne };
+  montrerAuxJoueurs(sceneCourante, sourceCourante);
 }
 
 export interface RecepteurEcran {

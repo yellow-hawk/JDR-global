@@ -72,6 +72,19 @@ export function incantation(p: Personnage, modDe: (c: string) => number, pb: num
 const XP_FP = [10, 200, 450, 700, 1100, 1800, 2300, 2900, 3900, 5000, 5900, 7200, 8400, 10000, 11500, 13000, 15000, 18000, 20000, 22000, 25000];
 export const xpAdversaire = (niveau: number): number => XP_FP[Math.max(0, Math.min(20, Math.round(niveau)))];
 
+/** Seuils d'XP d'une rencontre par personnage, du niveau 1 à 20 : facile, moyenne, difficile, mortelle. */
+const SEUILS: [number, number, number, number][] = [
+  [25, 50, 75, 100], [50, 100, 150, 200], [75, 150, 225, 400], [125, 250, 375, 500], [250, 500, 750, 1100],
+  [300, 600, 900, 1400], [350, 750, 1100, 1700], [450, 900, 1400, 2100], [550, 1100, 1600, 2400], [600, 1200, 1900, 2800],
+  [800, 1600, 2400, 3600], [1000, 2000, 3000, 4500], [1100, 2200, 3400, 5100], [1250, 2500, 3800, 5700], [1400, 2800, 4300, 6400],
+  [1600, 3200, 4800, 7200], [2000, 3900, 5900, 8800], [2100, 4200, 6300, 9500], [2400, 4900, 7300, 10900], [2800, 5700, 8500, 12700],
+];
+export const difficulte = {
+  seuils: (niveau: number) => SEUILS[Math.max(1, Math.min(20, Math.round(niveau))) - 1],
+  /** Plus les adversaires sont nombreux, plus la rencontre est dure. */
+  multiplicateur: (n: number) => (n <= 1 ? 1 : n === 2 ? 1.5 : n <= 6 ? 2 : n <= 10 ? 2.5 : n <= 14 ? 3 : 4),
+};
+
 export function gainPv(classe: string, modCon: number, jet?: number): number {
   const dv = classeDe(classe)?.deVie ?? 8;
   return Math.max(1, (jet ?? dv / 2 + 1) + modCon);

@@ -310,6 +310,8 @@ Une quête de l'Atlas réimportée (même univers, même clé) est mise à jour 
 ```
 
 Un membre est une fiche légère ; `persoId` le relie à un vrai personnage. Années dans le calendrier du peuple.
+`regne` (années de règne) est distinct de `naissance` / `mort` (années de vie). `famille.vie` : longévité du peuple `[âge adulte, âge maximal]` (absent : `[18, 80]`).
+L'année en cours d'une famille est l'horloge du temps de jeu (`campagne.temps`) traduite dans le calendrier de son peuple : personne n'y naît après, un membre trop âgé pour être encore en vie a une date de mort.
 
 ## 13. Peuples, calendriers, rôles
 
@@ -334,6 +336,9 @@ Un membre est une fiche légère ; `persoId` le relie à un vrai personnage. Ann
 - `civilisation.reputation` (−100..100) et `reputationJournal` `[{ quand, delta, raison }]`.
 - `quete.reputation` : `[{ univers, peuple, delta }]`, appliqués une fois au passage à « terminée » (`quete.mj.reputationAppliquee`).
 - `modules.journal.preparation` : `{ coches: string[], notes: [{ id, texte }] }` (préparation de séance).
+- `modules.ecran.attente` : `{ message?, image?: "fichier-…" }` (écran d'attente des joueurs, Alt+A).
+- Jeton de la table : `icone` (emoji) ; absente = d'après le nom de la créature, `null` = aucune.
+- `personnage.fiche.identite.age` : âge en années (texte) ; un PJ ou PNJ tiré au hasard en reçoit un selon la longévité de son peuple (`PeupleRegles.vie`).
 - Hors du contrat de campagne : instantanés automatiques (magasin IndexedDB `sauvegardes`) et dossier de sauvegarde (réglage `dossier-sauvegarde`).
 
 ## 11. À trancher plus tard

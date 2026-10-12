@@ -20,3 +20,4 @@ Règle : une page de module lit `vue` pour afficher et appelle `modifier()` pour
 - `EcranJoueurs` : scène `document`, jets 3D, historique des jets, bandeau (date du monde).
 - `DefinitionModule.enTete` : petit composant d'un module affiché dans l'en-tête (Chronologie : horloge ; Campagne : sauvegarde dans le dossier).
 - `etat.tsx` : instantané à l'ouverture et toutes les 10 minutes de travail ; `restaurer(idInstantane)`.
+- `EcranAttente.tsx` : `CommandeEcran` (en-tête, MJ) : ce qui est à l'écran joueurs (● direct), bouton « ⏸ Attente » et Alt+A depuis n'importe quelle page, réglage du message et de l'image (`modules.ecran.attente`) ; `montrerAttente(c)`, `useEcranActuel()`.

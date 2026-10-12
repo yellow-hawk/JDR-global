@@ -4,7 +4,7 @@ import type { Campagne, Carte, Fichier, Rencontre, Repere } from '../../../noyau
 import { nouvelId, nouvelleCarte } from '../../../noyau/contrat';
 import type { SystemeRegles } from '../../../noyau/regles';
 import type { LieuQuete } from '../../cartes';
-import { BIBLIOTHEQUE_DE_BASE, jetonDepuisPersonnage } from '../../combat';
+import { BIBLIOTHEQUE_DE_BASE, jetonDepuisPersonnage, nommerAdversaires } from '../../combat';
 import type { QueteAtlas } from '../../journal';
 import { carteAtlas } from './cartes';
 
@@ -46,10 +46,9 @@ export function adversairesPour(c: Campagne, b: LieuDeBataille, R: SystemeRegles
   const res = [];
   const chef = b.dernier && b.quete.adversaire ? c.personnages.find((p) => p.nom.toLowerCase() === b.quete.adversaire!.toLowerCase()) : undefined;
   if (chef) res.push({ ...jetonDepuisPersonnage(chef, R, null), camp: 'ennemi' as const });
-  for (let i = 0; i < n - (chef ? 1 : 0); i++) {
-    const m = sbires.length ? sbires[i % sbires.length] : BIBLIOTHEQUE_DE_BASE[0];
-    res.push({ ...m, carac: { ...m.carac }, camp: 'ennemi' as const, nom: `${m.nom} ${i + 1}` });
-  }
+  // Les humanoïdes (bandits, gardes, cultistes…) sont nommés et décrits, les créatures numérotées.
+  const modeles = Array.from({ length: n - (chef ? 1 : 0) }, (_, i) => (sbires.length ? sbires[i % sbires.length] : BIBLIOTHEQUE_DE_BASE[0]));
+  res.push(...nommerAdversaires(c, modeles, b.cle));
   return res;
 }
 

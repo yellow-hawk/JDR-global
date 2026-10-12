@@ -4,6 +4,9 @@ import { regles } from '../../noyau/regles';
 import { disposer, generations } from './disposition';
 import { dynastieDepuisCivilisation, familleDepuisPersonnage, separerTitre } from './generateur';
 import { ajouterFamille, ajouterProche, etendre, promouvoir, supprimerMembre } from './logique';
+import { harmoniserDates, incoherences, vieDepuis } from './dates';
+import { HAUTEUR, LARGEUR } from './disposition';
+import type { Famille } from '../../noyau/contrat';
 
 const civ: Civilisation = {
   cle: 2, nom: 'les Glófar', villes: [], traits: [], coutumes: [], relations: [], histoire: [], anActuel: 640,
@@ -64,5 +67,54 @@ describe('généalogie', () => {
     const ys = new Set(f.membres.map((m) => d.positions[m.id].y));
     expect(ys.size).toBeGreaterThan(3);
     for (const [a, b] of d.couples) expect(d.positions[a].y).toBe(d.positions[b].y);
+  });
+
+  it('dates : aucune incohérence dans les arbres générés, morts posées selon l’âge', () => {
+    for (const an of [120, 640, 1480, 3000]) {
+      for (const g of ['a', 'b', 'c', 'd', 'e']) {
+        const d = dynastieDepuisCivilisation({ ...civ, anActuel: an }, { graine: g, an });
+        for (const m of d.membres) expect(incoherences(d, m, an), `${an} ${g} ${m.nom}`).toEqual([]);
+        expect(harmoniserDates(d, an).corrections).toBe(0);
+        // Les anciens sont morts : personne n'est vivant au-delà de la longévité.
+        for (const m of d.membres) if (m.mort === null) expect(an - (m.naissance ?? an)).toBeLessThanOrEqual(80);
+        const regnants = d.membres.filter((m) => m.regne).sort((a, b) => a.regne![0] - b.regne![0]);
+        expect(regnants[regnants.length - 1].regne![1]).toBe(an);
+        expect(regnants[regnants.length - 1].mort).toBeNull();
+      }
+      const p = { ...nouveauPersonnage('Vorn Daskel', 'pnj', 'dnd5e', {}), fiche: { identite: { age: '52 ans' } } };
+      const f = familleDepuisPersonnage(p, civ, { an });
+      expect(f.membres.find((m) => m.persoId === p.id)!.naissance).toBe(an - 52);
+      for (const m of f.membres) expect(incoherences(f, m, an)).toEqual([]);
+      expect(f.membres.every((m) => (m.naissance ?? 0) <= an)).toBe(true);
+    }
+    // Elfes : longévité respectée (pas de mort à 80 ans).
+    const elfe = familleDepuisPersonnage({ ...nouveauPersonnage('Ilyan', 'pj', 'dnd5e', {}), fiche: { identite: { age: '140' } } }, civ, { an: 900, vie: [100, 750] });
+    expect(elfe.membres.filter((m) => m.mort !== null).every((m) => (m.mort ?? 0) - (m.naissance ?? 0) > 300)).toBe(true);
+  });
+
+  it('dates : un arbre incohérent est corrigé', () => {
+    const f: Famille = { id: 'f', nom: 'F', sorte: 'famille', racine: 'a', membres: [
+      { id: 'a', nom: 'Aïeul', sexe: 'm', parents: [], conjoints: [], naissance: 800, mort: null },
+      { id: 'b', nom: 'Fils', sexe: 'm', parents: ['a'], conjoints: [], naissance: 805, mort: 1200 },
+      { id: 'c', nom: 'Petit', sexe: 'f', parents: ['b'], conjoints: [], naissance: null, mort: null },
+      { id: 'd', nom: 'Futur', sexe: 'f', parents: ['b'], conjoints: [], naissance: 1300, mort: null },
+    ] };
+    const r = harmoniserDates(f, 1000, vieDepuis());
+    expect(r.corrections).toBeGreaterThan(0);
+    for (const m of r.famille.membres) expect(incoherences(r.famille, m, 1000), m.nom).toEqual([]);
+    expect(r.famille.membres.find((m) => m.id === 'a')!.mort).not.toBeNull();
+    expect(harmoniserDates(r.famille, 1000).corrections).toBe(0);
+  });
+
+  it('disposition : aucune carte ne se chevauche, même avec un usurpateur', () => {
+    for (const g of ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']) {
+      const d = dynastieDepuisCivilisation({ ...civ, anActuel: 700 }, { graine: g, an: 700 });
+      const pos = disposer(d).positions;
+      const l = Object.values(pos);
+      for (let i = 0; i < l.length; i++) for (let j = i + 1; j < l.length; j++) {
+        const chevauche = Math.abs(l[i].x - l[j].x) < LARGEUR && Math.abs(l[i].y - l[j].y) < HAUTEUR;
+        expect(chevauche, `graine ${g}`).toBe(false);
+      }
+    }
   });
 });

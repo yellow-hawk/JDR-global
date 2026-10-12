@@ -109,3 +109,12 @@
   .coq-page:has(.combat-page) { overflow-y: auto; }
   .combat-gauche, .combat-droite { border: 0; }
 }
+.combat-pastille { display: inline-grid; place-items: center; font-size: 0.72rem; line-height: 1; overflow: hidden; }
+.combat-pastille img { width: 100%; height: 100%; object-fit: cover; }
+.combat-image { display: flex; gap: 8px; align-items: center; margin-top: 6px; }
+.combat-image-apercu { width: 44px; height: 44px; flex: none; border-radius: 50%; border: 2px solid var(--trait); display: grid; place-items: center; font-size: 26px; overflow: hidden; background: var(--fond-2); }
+.combat-image-apercu img { width: 100%; height: 100%; object-fit: cover; }
+.combat-image-choix { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.combat-image-choix select { max-width: 100%; font: inherit; font-size: 0.85rem; }
+.combat-generer { display: flex; flex-direction: column; gap: 6px; }
+.combat-generer p { margin: 0; }

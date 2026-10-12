@@ -2,12 +2,13 @@
 import { useState } from 'react';
 import {
   ajouterCondition, CARACS, CONDITIONS, CONDITIONS_BONUS, dupliquerJeton, modCarac, modeleDepuisJeton, modifierJeton, modifierPV, modifierZone,
-  retirerCondition, signe, supprimerJeton, supprimerZone, TERRAINS,
+  nomDeBase, retirerCondition, signe, supprimerJeton, supprimerZone, TERRAINS,
 } from '../moteur';
 import type { Camp, Jeton, Zone } from '../moteur';
 import { campLibelle } from '../moteur';
 import { statsVisibles } from '../rendu';
 import type { Controleur } from './types';
+import { ImageJeton } from './ImageJeton';
 
 const LIB_CARAC: Record<string, string> = { for: 'FOR', dex: 'DEX', con: 'CON', int: 'INT', sag: 'SAG', cha: 'CHA' };
 
@@ -68,6 +69,15 @@ function DetailJeton({ ctl, j, mj }: { ctl: Controleur; j: Jeton; mj: boolean })
         )}
       </div>
       {!ro && <textarea className="combat-notes" rows={2} placeholder="Notes" value={j.notes} onChange={(ev) => maj((x) => ({ ...x, notes: ev.target.value }), true)} />}
+      {!ro && (() => {
+        // Autres exemplaires de la même créature (même nom sans numéro, sans fiche liée).
+        const base = nomDeBase(j.nom);
+        const memes = ctl.etat.jetons.filter((x) => x.id !== j.id && !x.persoId && nomDeBase(x.nom) === base);
+        return (
+          <ImageJeton nom={j.nom} portrait={j.portrait} icone={j.icone} onChange={(p) => maj((x) => ({ ...x, ...p }))}
+            tous={j.persoId ? undefined : { nombre: memes.length, nom: base, appliquer: () => ctl.faire((e) => ({ ...e, jetons: e.jetons.map((x) => (memes.some((m) => m.id === x.id) ? { ...x, portrait: j.portrait, icone: j.icone } : x)) })) }} />
+        );
+      })()}
       {!ro && (
         <div className="ligne combat-actions">
           <button className="btn btn-petit" onClick={() => ctl.regler({ outil: 'attaque', attaque: 'melee' })}>⚔ Attaquer</button>

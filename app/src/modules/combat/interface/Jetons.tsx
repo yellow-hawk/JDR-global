@@ -1,10 +1,11 @@
 // Liste des jetons par camp, bibliothèque de créatures (avec import d'un bloc SRD), ajout rapide.
 import { useState } from 'react';
-import { ajouterJeton, caseLibre, lireBlocStats, modifierJeton } from '../moteur';
+import { ajouterJeton, caseLibre, iconeDe, lireBlocStats, modifierJeton } from '../moteur';
 import type { Camp, Modele } from '../moteur';
 import { campLibelle } from '../moteur';
 import { COULEUR_CAMP, statsVisibles } from '../rendu';
 import type { Controleur } from './types';
+import { ImageJeton } from './ImageJeton';
 
 const CAMPS: Camp[] = ['pj', 'allie', 'ennemi', 'neutre'];
 
@@ -12,6 +13,7 @@ export function Jetons({ ctl, mj }: { ctl: Controleur; mj: boolean }) {
   const { etat: e, ui } = ctl;
   const [srd, setSrd] = useState('');
   const [nombre, setNombre] = useState(1);
+  const [image, setImage] = useState<number | null>(null);
   const ro = ctl.lectureSeule || !mj;
 
   const poser = (m: Partial<Modele>) => {
@@ -39,7 +41,7 @@ export function Jetons({ ctl, mj }: { ctl: Controleur; mj: boolean }) {
             {liste.map((j) => (
               <div key={j.id} className={`combat-jeton-ligne ${ui.selection === j.id ? 'choisi' : ''} ${j.pv <= 0 ? 'ko' : ''}`}
                 onClick={() => ctl.regler({ selection: j.id, zoneChoisie: null })}>
-                <span className="combat-pastille" style={{ background: j.couleur || COULEUR_CAMP[j.camp] }} />
+                <span className="combat-pastille" style={{ background: j.couleur || COULEUR_CAMP[j.camp] }}>{j.portrait ? '' : iconeDe(j)}</span>
                 <span className="combat-nom">{j.nom}{!j.visible && ' (caché)'}</span>
                 {j.conditions.length > 0 && <span className="combat-point-etat" title={j.conditions.join(', ')} />}
                 {statsVisibles(j, mj ? 'mj' : 'joueurs') && <span className="combat-pv">{j.pv}/{j.pvMax}</span>}
@@ -56,12 +58,19 @@ export function Jetons({ ctl, mj }: { ctl: Controleur; mj: boolean }) {
           <h3>Bibliothèque</h3>
           <label className="combat-mini">Nombre<input type="number" min={1} max={20} value={nombre} onChange={(ev) => setNombre(Math.max(1, Math.min(20, +ev.target.value || 1)))} /></label>
           {e.bibliotheque.map((m, i) => (
-            <div key={i} className="combat-jeton-ligne">
-              <span className="combat-pastille" style={{ background: m.couleur || COULEUR_CAMP[m.camp] }} />
-              <span className="combat-nom" title={m.notes}>{m.nom}</span>
-              <span className="combat-pv">CA {m.ca} · {m.pvMax} PV</span>
-              <button className="btn btn-petit" onClick={() => poser(m)}>Poser</button>
-              <button className="combat-oeil" title="Retirer de la bibliothèque" onClick={() => ctl.faire((x) => ({ ...x, bibliotheque: x.bibliotheque.filter((_, k) => k !== i) }))}>×</button>
+            <div key={i}>
+              <div className="combat-jeton-ligne">
+                <span className="combat-pastille" style={{ background: m.couleur || COULEUR_CAMP[m.camp] }}>{m.portrait ? <img src={m.portrait} alt="" /> : iconeDe(m)}</span>
+                <span className="combat-nom" title={m.notes}>{m.nom}</span>
+                <span className="combat-pv">CA {m.ca} · {m.pvMax} PV</span>
+                <button className="btn btn-petit" onClick={() => poser(m)}>Poser</button>
+                <button className="combat-oeil" title="Image du modèle" aria-expanded={image === i} onClick={() => setImage(image === i ? null : i)}>🖼</button>
+                <button className="combat-oeil" title="Retirer de la bibliothèque" onClick={() => ctl.faire((x) => ({ ...x, bibliotheque: x.bibliotheque.filter((_, k) => k !== i) }))}>×</button>
+              </div>
+              {image === i && (
+                <ImageJeton nom={m.nom} portrait={m.portrait} icone={m.icone}
+                  onChange={(p) => ctl.faire((x) => ({ ...x, bibliotheque: x.bibliotheque.map((y, k) => (k === i ? { ...y, ...p } : y)) }))} />
+              )}
             </div>
           ))}
           <div className="ligne">
