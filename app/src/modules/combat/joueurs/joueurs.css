@@ -1,0 +1,7 @@
+/* Vue « action » de la Table de combat sur l'écran joueurs */
+.action-joueurs { position: fixed; inset: 0; display: flex; flex-direction: column; background: #0b0c10; color: #ece3d2; touch-action: none; }
+.action-barre { display: flex; gap: 10px; align-items: center; padding: 10px 16px; flex-wrap: wrap; font-size: clamp(1rem, 1.6vw, 1.4rem); }
+.action-aide { color: #d4c4a0; }
+.action-carte { position: relative; flex: 1; min-height: 0; }
+.action-carte img, .action-carte svg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.action-carte svg { touch-action: none; cursor: crosshair; }

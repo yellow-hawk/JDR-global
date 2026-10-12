@@ -69,3 +69,7 @@ L'onglet Dés utilise le plateau partagé (`interface/des`) : le jeton choisi es
 - `moteur/vision.ts` : `porteeVue(jeton, lumiere)` (vive 40 cases ; pénombre 12 ou vision dans le noir ; obscurité : vision dans le noir, sinon torche 8), `casesVisibles` (rayons projetés, arrêtés par le premier mur, qui est vu), `vueDesPj` (mémorisé), `revelerParLaVue` (ce qui est révélé le reste).
 - Vue joueurs (`rendu/visibilite.ts`, `dessin.ts`) : noir sur l'inexploré, ombre sur l'exploré hors de vue, bords adoucis ; les adversaires ne sont montrés qu'en vue directe des PJ ; le camp des joueurs toujours visible.
 - `logique.preparerLancement` + `interface/lancement.ts` : PJ absents posés à l'entrée (`EtatTable.entree`, cases de départ des cartes générées), brouillard et vue des PJ activés sur une carte ; lumière déduite du lieu (souterrain : obscurité). Réglage « Lumière du lieu » dans l'onglet Affichage.
+
+## Actions des joueurs (écran joueurs)
+
+`actions.ts` (pur, testé) : `DemandeAction` (image + caméra + grille + action `sort` | `deplacement`), `ReponseAction`, `caseVisee`, `zoneVisee`, `casesDeZone`, `versImage`. `joueurs/Action.tsx` (vue `action` : toucher ou survoler la carte, aperçu, Valider / Annuler). `interface/ActionsJoueurs.tsx` (détail du jeton, MJ : viser un sort, se déplacer, tracer un sceau via `PanneauTrace` de la Magie), `interface/useActionsJoueurs.ts` (envoie l'image et la caméra `imageEtCamera`, aperçu en direct `ui.viseeJoueurs`, joue l'action à la validation puis rediffuse la table).

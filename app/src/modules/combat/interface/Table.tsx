@@ -63,6 +63,15 @@ export function Table({ ctl, public: pub, fond }: Props) {
       apercu.sort = { gabarit: sp, lanceur: l, zone: zoneDeSort(sp, l, souris.survol, angle) };
     }
   }
+  // Ce que visent les joueurs sur leur écran (tablette) : montré au MJ en direct.
+  const vj = ui.viseeJoueurs;
+  if (vj?.sorte === 'sort') {
+    const sp = e.sorts.find((x) => x.id === vj.sortId), l = e.jetons.find((x) => x.id === vj.lanceur);
+    if (sp && l) apercu.sort = { gabarit: sp, lanceur: l, zone: zoneDeSort(sp, l, vj.cellule, vj.angle) };
+  } else if (vj?.sorte === 'deplacement') {
+    const j = e.jetons.find((x) => x.id === vj.jeton);
+    if (j) { apercu.mesure = [[j.x, j.y], vj.cellule]; apercu.survol = vj.cellule; }
+  }
   if (g?.sorte === 'pose') {
     apercu.zone = { categorie: 'sort', forme: ui.zone.forme, x: g.origine[0], y: g.origine[1], rayon: ui.zone.rayon, largeur: ui.zone.largeur,
       angle: formeOrientable(ui.zone.forme) ? g.angle : 0, couleur: ui.zone.couleur, nom: NOMS_FORMES[ui.zone.forme] };

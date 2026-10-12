@@ -1,6 +1,7 @@
 // Page Magie : l'Atelier de tracé branché sur la campagne.
 // Remplace App.tsx de l'Atelier : plus de mot de passe (rôle MJ de la suite), plus de localStorage.
 import { useEffect, useMemo, useState } from 'react';
+import { PanneauTrace } from './PanneauTrace';
 import { useCampagne } from '../../interface/etat';
 import { Composer } from './atelier/components/Composer';
 import { Freehand } from './atelier/components/Freehand';
@@ -86,6 +87,16 @@ export function Page() {
       <main>
         {profils.length === 0 && vueMode === 'libre' && (
           <p className="muted magie-astuce">Astuce : crée des personnages joueurs dans « Personnages » pour leur donner des signes connus et un grimoire.</p>
+        )}
+        {vueMode === 'libre' && mj && (
+          <details className="magie-joueurs">
+            <summary>Écran joueurs : faire tracer {profil ? profil.nom : 'les joueurs'} sur la tablette ou l’écran tactile</summary>
+            <PanneauTrace profil={profil} libelleSort={profil ? `Inscrire dans le grimoire de ${profil.nom}` : 'Ajouter au grimoire du MJ'}
+              onSort={(s) => {
+                if (profil) majProfil((p) => ({ ...p, grimoire: [...p.grimoire, { id: Math.random().toString(36).slice(2, 10), nom: s.nom, notes: 'Tracé sur l’écran joueurs', sceau: { ...s.sceau, trace: undefined, sansCerne: undefined }, cree: Date.now() }] }));
+                else enregistrer(s.nom, 'Tracé sur l’écran joueurs', s.sceau);
+              }} />
+          </details>
         )}
         {vueMode === 'libre' && <Freehand mj={mj} profil={profil} majProfil={majProfil} onOuvrir={(s) => ouvrir(s)} onSave={enregistrer} />}
         {vueMode === 'composeur' && <Composer sceau={sceau} setSceau={setSceau} mj={mj} nom={nom} setNom={setNom} onSave={(n, notes) => enregistrer(n, notes, sceau)} />}

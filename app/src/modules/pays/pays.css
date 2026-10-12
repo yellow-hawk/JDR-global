@@ -43,3 +43,6 @@
 .pays-jauge-valeur { position: absolute; top: 0; bottom: 0; border-radius: 5px; }
 .pays-raison { flex: 1; min-width: 8em; }
 .pays-badge { margin-left: auto; font-size: 0.75rem; padding: 0 6px; border-radius: 8px; color: #fff; }
+
+.pays-montrer { gap: 6px; margin: 8px 0; border-left: 3px solid var(--mj); }
+.pays-montrer-liste { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 2px 12px; }

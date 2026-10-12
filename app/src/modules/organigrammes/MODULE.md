@@ -9,3 +9,5 @@
 | `Page.tsx` | Choix de l'organigramme, fiche du nœud (« Ouvrir », « Créer ce personnage » pour un poste vacant). Cible `naviguer` : `institutions:<univers>:<clé>`, `dynastie:<famille>`… |
 
 Vue : `src/interface/graphe/VueArbre.tsx`. API publique : `definition`, `organigrammeInstitutions`, `organigrammeMonde`, `organigrammeQuetes`.
+
+« Montrer aux joueurs » : l'organigramme choisi, calculé sur la vue joueurs, en SVG (`svgArbre`), zoomable sur l'écran joueurs.

@@ -6,6 +6,7 @@ import { emettre } from '../../noyau/bus';
 import { BlocMj, Champ } from '../../interface/composants';
 import { VueCalendrier } from '../../interface/calendrier';
 import { JaugeReputation } from './JaugeReputation';
+import { MontrerPays } from './MontrerPays';
 import { cartesDuPeuple, dynastieDuPeuple, modifierCivilisation, pnjDuPeuple, quetesDuPeuple, type PeupleDeCampagne } from './logique';
 
 const COULEUR_REL: Record<string, string> = { alliés: 'var(--succes)', rivaux: 'var(--danger)', 'partenaires commerciaux': '#4a78b0' };
@@ -15,6 +16,7 @@ interface Props { c: Campagne; p: PeupleDeCampagne; mj: boolean; ro: boolean; mo
 
 export function FichePays({ c, p, mj, ro, modifier, choisir }: Props) {
   const [edition, setEdition] = useState(false);
+  const [montrer, setMontrer] = useState(false);
   const v = p.civ;
   const maj = (f: (x: Civilisation) => Civilisation) => modifier((x) => modifierCivilisation(x, p.univers.id, v.cle, f));
   const dyn = dynastieDuPeuple(c, p);
@@ -59,8 +61,10 @@ export function FichePays({ c, p, mj, ro, modifier, choisir }: Props) {
           <h2 style={{ margin: 0 }}>{v.nom.replace(/^les /, 'Les ')}</h2>
           <p className="discret" style={{ margin: 0 }}>{[v.regimeTexte ?? v.regime, v.capitale && `capitale ${v.capitale}`, v.population].filter(Boolean).join(' · ')}</p>
         </div>
+        {mj && !ro && <button className="btn btn-petit btn-mj" onClick={() => setMontrer(!montrer)}>Montrer aux joueurs…</button>}
         {!ro && <button className="btn btn-petit" onClick={() => setEdition(true)}>Modifier</button>}
       </div>
+      {montrer && <MontrerPays civ={v} onFermer={() => setMontrer(false)} />}
       <div className="pays-grille">
         <section>
           <h3>Réputation du groupe</h3>

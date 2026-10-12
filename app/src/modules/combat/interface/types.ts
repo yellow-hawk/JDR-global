@@ -17,6 +17,8 @@ export interface Ui {
   attaque: 'melee' | 'distance';
   sort: { id: number; lanceur: number; angle: number } | null;
   sons: boolean;
+  /** Visée faite par les joueurs sur l'écran joueurs (aperçu sur la table du MJ). */
+  viseeJoueurs?: { sorte: 'sort'; sortId: number; lanceur: number; cellule: [number, number]; angle: number } | { sorte: 'deplacement'; jeton: number; cellule: [number, number] } | null;
 }
 
 export const UI_INITIALE: Ui = {

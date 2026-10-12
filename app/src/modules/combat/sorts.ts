@@ -6,7 +6,8 @@ import type { Gabarit } from './moteur';
 
 export interface SortListe { id: string; nom: string; proprietaire: string; persoId: string | null; analyse: SortAnalyse }
 
-function lire(nom: string, sceauBrut: unknown): SortAnalyse | null {
+/** Résumé d'un sceau de l'Atelier pour la table (null : pas de Cœur, pas de sort). */
+export function analyseDeSceau(nom: string, sceauBrut: unknown): SortAnalyse | null {
   const s = sceauBrut as Sceau;
   if (!s || !s.coeur) return null;
   const a = analyser(s);
@@ -23,13 +24,13 @@ function lire(nom: string, sceauBrut: unknown): SortAnalyse | null {
 export function sortsDeLaCampagne(c: Campagne): SortListe[] {
   const res: SortListe[] = [];
   for (const s of grimoireMjComplet(c)) {
-    const a = lire(s.nom, s.sceau);
+    const a = analyseDeSceau(s.nom, s.sceau);
     if (a) res.push({ id: s.id, nom: s.nom, proprietaire: 'Grimoire du MJ', persoId: null, analyse: a });
   }
   for (const p of c.personnages) {
     const g = ((p.magie as { grimoire?: { id: string; nom: string; sceau: unknown }[] } | null)?.grimoire) ?? [];
     for (const s of g) {
-      const a = lire(s.nom, s.sceau);
+      const a = analyseDeSceau(s.nom, s.sceau);
       if (a) res.push({ id: `${p.id}/${s.id}`, nom: s.nom, proprietaire: p.nom, persoId: p.id, analyse: a });
     }
   }

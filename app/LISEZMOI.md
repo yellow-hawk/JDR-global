@@ -4,6 +4,8 @@
 
 **Sans rien installer** : double-clic sur `lancer.bat`. Une fenêtre noire s'ouvre (c'est le petit serveur, la laisser ouverte) et le navigateur affiche l'application sur `http://localhost:8417`. Fermer la fenêtre noire arrête l'application.
 
+**Avec Node.js installé** (https://nodejs.org), `lancer.bat` démarre un serveur qui relaie aussi l'écran joueurs vers **les tablettes et autres appareils du même Wi-Fi**. La première fois, Windows demande d'autoriser Node.js dans le pare-feu : accepter pour les réseaux privés.
+
 **En ligne** : la même application sera publiée sur GitHub Pages (étape à venir).
 
 > Tes campagnes sont enregistrées **dans le navigateur, pour une adresse donnée**. La version locale (`localhost:8417`), la version de développement (`localhost:5173`) et la version en ligne ont chacune leurs propres campagnes. Pour passer de l'une à l'autre : **Campagne → Exporter l'archive complète**, puis **Importer une archive** de l'autre côté.
@@ -15,6 +17,10 @@
 3. **Aperçu joueurs** (en haut) te montre l'application comme la verraient les joueurs, sans rien pouvoir modifier.
 4. **Dés** (en haut) : choisis d'abord Désavantage, Neutre ou Avantage, puis clique le dé. Le jet roule en 3D sur l'écran joueurs et le mode revient tout seul sur Neutre. « Jet caché » : le résultat reste chez toi.
 5. La **date du monde** est en haut (clic : Chronologie, « +1 h » pour avancer). Elle peut aussi s'afficher sur l'écran joueurs.
+6. **Tablette** : bouton 📱 en haut → « Ouvrir le salon » → scanner le QR code avec la tablette (même Wi-Fi), puis « Plein écran ». La tablette devient un écran joueurs tactile : zoom au doigt sur les cartes et les arbres, tracé des sceaux de l'Atelier, visée des sorts et déplacements en combat. Le salon se rouvre tout seul au prochain lancement.
+7. **Faire agir les joueurs** : en combat, choisis le jeton puis, dans son détail, « Faire agir … » : viser un sort de la table, se déplacer, ou tracer un sceau (chrono choisi par le MJ, qui part au premier trait ; l'effet 3D s'affiche, puis le sort se vise sur la table). Les joueurs touchent la carte, l'aperçu s'affiche chez toi en direct, « Valider » joue l'action (Ctrl+Z pour annuler).
+8. **Montrer aux joueurs** existe aussi pour les arbres généalogiques et dynasties (Généalogie → « Cet arbre »), les organigrammes, et la fiche d'un pays (Pays → « Montrer aux joueurs… » : coche ce que les joueurs savent).
+9. **Écran d'attente** : « ⏸ Attente » ou Alt+A ; « ↩ Reprendre » ou Alt+A à nouveau pour revenir.
 
 ## Les modules
 

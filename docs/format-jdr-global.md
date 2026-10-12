@@ -340,6 +340,7 @@ L'année en cours d'une famille est l'horloge du temps de jeu (`campagne.temps`)
 - `calendrier.semaine` : noms des jours de la semaine (absent : 7 jours) ; la semaine court sans interruption d'une année à l'autre.
 - Table de combat : `lumiere` (`vive` | `faible` | `obscurite`), `entree` (cases d'entrée des PJ) ; `jeton.vision` = vision dans le noir en cases (0 : aucune). `modules.combat.brouillardAuto` (défaut : vrai) : au lancement d'une rencontre, PJ à l'entrée, brouillard levé par leur vue.
 - `modules.livre.choix` : derniers choix du livre de campagne (`version`, `sections`, `exclus`, `cartesMj`).
+- Hors du contrat : messages de l'écran joueurs (`noyau/bus`) — scènes `svg`, `fiche`, `module` (vue interactive d'un module : `{ module, vue, donnees }`), réponses `joueur` (`{ module, donnees }`) ; relais réseau `relais/infos`, `relais/ecoute?salon&qui` (flux SSE), `relais/envoi?salon&qui` (POST JSON, Blob en `{ __blob: data: }`).
 - Jeton de la table : `icone` (emoji) ; absente = d'après le nom de la créature, `null` = aucune.
 - `personnage.fiche.identite.age` : âge en années (texte) ; un PJ ou PNJ tiré au hasard en reçoit un selon la longévité de son peuple (`PeupleRegles.vie`).
 - Hors du contrat de campagne : instantanés automatiques (magasin IndexedDB `sauvegardes`) et dossier de sauvegarde (réglage `dossier-sauvegarde`).

@@ -15,3 +15,5 @@ API publique : `definition`, `peuplesDeCampagne`, `civilisationsDe`.
 ## Réputation
 
 `reputation.ts` + `reputation.json` (pur, testé) : `niveauReputation` (Haï … Vénéré), `changerReputation` (bornée −100..100, historique), `appliquerReputationQuete` (une seule fois). `JaugeReputation.tsx` sur la fiche (±5, ±10, raison) ; pastille dans la liste. Exportés : `niveauReputation`, `changerReputation`, `appliquerReputationQuete`, `NIVEAUX`.
+
+`MontrerPays.tsx` : « Montrer aux joueurs… » de la fiche : rubriques à cocher (`RUBRIQUES`, `sectionsPays`, choix retenu sur l'ordinateur) → scène `fiche`. Notes MJ jamais montrées.

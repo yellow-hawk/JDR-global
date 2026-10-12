@@ -41,3 +41,13 @@ describe('réputation', () => {
     expect(civ().reputationJournal).toHaveLength(3);
   });
 });
+
+describe('fiche pays pour les joueurs', () => {
+  it('seulement les rubriques cochées et non vides, jamais les notes MJ', async () => {
+    const { sectionsPays } = await import('./MontrerPays');
+    const civ = { cle: 1, nom: 'les Valdrins', villes: [{ nom: 'Valdor', capitale: true }], traits: ['fiers'], coutumes: [], relations: [], histoire: [], noms: [], capitale: 'Valdor', croyance: '', mj: { notes: 'secret' } };
+    const s = sectionsPays(civ, ['capitale', 'villes', 'croyance', 'coutumes']);
+    expect(s.map((x) => x.titre)).toEqual(['Capitale', 'Villes']);
+    expect(JSON.stringify(s)).not.toContain('secret');
+  });
+});

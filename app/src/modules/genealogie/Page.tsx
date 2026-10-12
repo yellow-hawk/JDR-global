@@ -1,7 +1,9 @@
 // Page Généalogie : familles et dynasties de la campagne, arbres interactifs, membres promus en personnages.
 import { useEffect, useMemo, useState } from 'react';
 import type { Campagne, Famille } from '../../noyau/contrat';
-import { emettre, prendreCible } from '../../noyau/bus';
+import { emettre, montrerAuxJoueurs, prendreCible } from '../../noyau/bus';
+import { vueJoueurs } from '../../noyau/contrat';
+import { arbreSvg } from './impression';
 import { lireFichier } from '../../noyau/stockage';
 import { useCampagne } from '../../interface/etat';
 import { aUneFiche, regles } from '../../noyau/regles';
@@ -126,6 +128,13 @@ export function Page() {
                 if (corrections) modifier((x) => modifierFamille(x, f.id, (y) => harmoniserDates(y, an, vieDepuis(y.vie)).famille));
                 emettre('message', { texte: corrections ? `${corrections} date(s) corrigée(s).` : 'Les dates de cet arbre sont déjà cohérentes.', sorte: 'succes' });
               }}>Corriger les dates</button>
+            <button className="btn btn-petit btn-mj" title="L'arbre tel que les joueurs peuvent le voir (membres cachés et secrets retirés), zoomable"
+              onClick={() => {
+                const fj = (vueJoueurs({ ...c, familles: [f] }).familles ?? [])[0];
+                if (!fj) { emettre('message', { texte: 'Cet arbre est caché aux joueurs.', sorte: 'erreur' }); return; }
+                montrerAuxJoueurs({ sorte: 'svg', titre: f.nom, svg: arbreSvg(fj, an), texte: f.sorte === 'dynastie' ? '♛ années de règne · pincer ou molette : zoomer' : 'Pincer ou molette : zoomer · glisser : se déplacer' });
+                emettre('message', { texte: `« ${f.nom} » est affiché sur l’écran joueurs.`, sorte: 'succes' });
+              }}>Montrer aux joueurs</button>
             <button className="btn btn-petit btn-danger" onClick={() => { if (window.confirm(`Supprimer l’arbre « ${f.nom} » ? (les fiches de personnages restent)`)) { modifier((x) => supprimerFamille(x, f.id)); setCourante(null); } }}>Supprimer l’arbre</button>
           </div>
         )}

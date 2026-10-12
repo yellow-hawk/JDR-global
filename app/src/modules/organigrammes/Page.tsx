@@ -1,18 +1,33 @@
 // Page Organigrammes : monde et peuples, institutions de chaque peuple, successions dynastiques, quêtes, cartes, personnages.
 import { useMemo, useState } from 'react';
-import { emettre, prendreCible } from '../../noyau/bus';
-import { nouveauPersonnage } from '../../noyau/contrat';
+import { emettre, montrerAuxJoueurs, prendreCible } from '../../noyau/bus';
+import { nouveauPersonnage, vueJoueurs, type Campagne } from '../../noyau/contrat';
 import type { NoeudArbre } from '../../noyau/graphe';
 import { regles } from '../../noyau/regles';
 import { useCampagne } from '../../interface/etat';
-import { VueArbre } from '../../interface/graphe';
+import { svgArbre, VueArbre } from '../../interface/graphe';
 import {
   organigrammeCartes, organigrammeDynastie, organigrammeInstitutions, organigrammeMonde, organigrammePersonnages, organigrammeQuetes, type InfoNoeud,
 } from './logique';
 import './organigrammes.css';
 
+/** Organigramme choisi (monde, quêtes, cartes, personnages, institutions d'un peuple, dynastie). */
+function organigrammeDe(c: Campagne, choix: string): NoeudArbre | null {
+  if (choix === 'monde') return organigrammeMonde(c);
+  if (choix === 'quetes') return organigrammeQuetes(c);
+  if (choix === 'cartes') return organigrammeCartes(c);
+  if (choix === 'personnages') return organigrammePersonnages(c);
+  if (choix.startsWith('institutions:')) {
+    const [, u, k] = choix.split(':');
+    const civ = c.univers.find((x) => x.id === u)?.civilisations?.peuples.find((p) => String(p.cle) === k);
+    return civ ? organigrammeInstitutions(c, u, civ) : null;
+  }
+  if (choix.startsWith('dynastie:')) return organigrammeDynastie(c, choix.slice(9));
+  return null;
+}
+
 export function Page() {
-  const { vue, role, lectureSeule, modifier } = useCampagne();
+  const { campagne, vue, role, lectureSeule, modifier } = useCampagne();
   const c = vue!;
   const [choix, setChoix] = useState<string>(() => prendreCible('organigrammes') ?? 'monde');
   const [horizontal, setHorizontal] = useState(false);
@@ -31,19 +46,14 @@ export function Page() {
     return l;
   }, [c]);
 
-  const racine = useMemo((): NoeudArbre | null => {
-    if (choix === 'monde') return organigrammeMonde(c);
-    if (choix === 'quetes') return organigrammeQuetes(c);
-    if (choix === 'cartes') return organigrammeCartes(c);
-    if (choix === 'personnages') return organigrammePersonnages(c);
-    if (choix.startsWith('institutions:')) {
-      const [, u, k] = choix.split(':');
-      const civ = c.univers.find((x) => x.id === u)?.civilisations?.peuples.find((p) => String(p.cle) === k);
-      return civ ? organigrammeInstitutions(c, u, civ) : null;
-    }
-    if (choix.startsWith('dynastie:')) return organigrammeDynastie(c, choix.slice(9));
-    return null;
-  }, [choix, c]);
+  const racine = useMemo(() => organigrammeDe(c, choix), [choix, c]);
+  // Écran joueurs : le même organigramme calculé sur la vue joueurs (rien de caché ni de secret).
+  const montrer = () => {
+    const r = organigrammeDe(vueJoueurs(campagne!), choix);
+    if (!r) return;
+    montrerAuxJoueurs({ sorte: 'svg', titre: liste.find((x) => x.id === choix)?.libelle ?? r.libelle, svg: svgArbre(r, horizontal), texte: 'Pincer ou molette : zoomer · glisser : se déplacer' });
+    emettre('message', { texte: 'Organigramme affiché sur l’écran joueurs.', sorte: 'succes' });
+  };
 
   const info = noeud?.donnees as InfoNoeud | undefined;
   const creerVacant = () => {
@@ -71,6 +81,7 @@ export function Page() {
         ))}
         {!liste.some((x) => x.groupe === 'Institutions') && <p className="discret">Les institutions apparaissent quand un monde de l’Atlas est installé (Monde → « Ajouter le ciel affiché »).</p>}
         <label className="orga-coche"><input type="checkbox" checked={horizontal} onChange={(e) => setHorizontal(e.target.checked)} /> De gauche à droite</label>
+        {role === 'mj' && racine && <button className="btn btn-petit btn-mj" onClick={montrer}>Montrer aux joueurs</button>}
       </aside>
       <section className="orga-centre">
         {racine ? <VueArbre racine={racine} choisi={noeud?.id ?? null} onChoisir={(x) => { setNoeud(x); setNomVacant((x?.donnees as InfoNoeud | undefined)?.vacant?.nom ?? ''); }} horizontal={horizontal} />

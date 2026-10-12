@@ -18,3 +18,7 @@ Stockage : profil de l'Atelier = `personnage.magie` (sans id/nom/joueur) ; grimo
 API publique (`index.ts`) : `definition`, `analyser`, `decrire`, `valeurs`, `svgSceau`, `GRIMOIRE_DE_BASE`, `profilDe`, `aUneMagie`, `grimoireMjComplet`, `integrerGrimoireDeBase`, `donnerSortsAuxPnj`, `sortsPourRole`, `preparerCampagne`, types `Sceau`, `SortEnregistre`.
 
 Limites : supprimer un PJ dans « Magie des PJ » efface seulement sa magie (le personnage se supprime dans Personnages) ; Nœuds reconnus à ≈ 94 %.
+
+## Écran joueurs
+
+`partage.ts` (pur) : `DemandeTrace` (id, titre, durée, guide), `ReponseTrace` (traits, fini, temps), `lireTracePartage(traits, profil)` (signes connus et calibrage du personnage), `effetDe`. `joueurs/Trace.tsx` (vue `trace` : feuille tactile, chrono au premier trait, fin du temps = envoi), `joueurs/Effet.tsx` (vue `effet` : Vue3D de l'Atelier). `PanneauTrace.tsx` (MJ, exporté) : temps, guides, tracé en direct, lecture, effet montré automatiquement ; `onSort` (page Magie : inscrire au grimoire ; Combat : sort de la table à viser).

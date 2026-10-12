@@ -16,3 +16,5 @@ Année en cours : `anneeActuelle` du module Chronologie (horloge du temps de jeu
 
 Données : collection `familles` du contrat (membres légers ; `persoId` relie à une fiche).
 API publique : `definition`, `familleDepuisPersonnage`, `dynastieDepuisCivilisation`, `separerTitre`, `ajouterFamille`, `familleDuPersonnage`, `civilisationDe`, `disposerFamille`.
+
+« Montrer aux joueurs » (Cet arbre) : `arbreSvg` de l'arbre vu par les joueurs (membres cachés et secrets retirés), scène `svg` zoomable.

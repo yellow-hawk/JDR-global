@@ -1,5 +1,5 @@
 // Page Combat : la table réécrite (moteur/ + rendu/ + interface/), branchée sur la campagne.
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ecranActuel, montrerAuxJoueurs, prendreCible, suivreEcran } from '../../noyau/bus';
 import { regles } from '../../noyau/regles';
 import { useCampagne } from '../../interface/etat';
@@ -14,6 +14,7 @@ import { Panneaux } from './interface/Panneaux';
 import { Table } from './interface/Table';
 import { useTable } from './interface/useTable';
 import { etatDeLancement } from './interface/lancement';
+import { useActionsJoueurs } from './interface/useActionsJoueurs';
 import './combat.css';
 
 export function Page() {
@@ -45,6 +46,9 @@ export function Page() {
   const [gauche, setGauche] = useState(true);
   const fond = useFond(c, ctl.etat.fond?.carte);
   const portraits = usePortraits(ctl.etat);
+  // Actions des joueurs (visée d'un sort, déplacement) : après l'action, la table revient sur l'écran joueurs.
+  const rediffuser = useCallback(() => setDiffusion(true), []);
+  useActionsJoueurs(ctl, fond.joueurs, portraits, rediffuser);
 
   // Grimoire de la table = sorts de la campagne (MJ + personnages), tenu à jour automatiquement.
   const sortsAuto = useMemo(() => gabaritsDeLaCampagne(c, (a) => gabarit(a, R)), [c.sorts, c.personnages, R]); // eslint-disable-line react-hooks/exhaustive-deps

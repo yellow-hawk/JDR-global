@@ -196,3 +196,23 @@ a { color: var(--accent); }
 .ecran-blocs { display: grid; grid-template-columns: repeat(auto-fit, minmax(22ch, 1fr)); gap: 1vh 2vw; font-size: clamp(0.95rem, 1.4vw, 1.35rem); }
 .ecran-blocs h4 { margin: 0; color: #d4a050; font-family: var(--titre); font-weight: normal; }
 .ecran-blocs p { margin: 0; white-space: pre-wrap; }
+
+/* Tablettes (écran joueurs en réseau) */
+.coq-qr { display: block; width: 180px; height: 180px; margin: 4px auto; background: #fff; border-radius: 6px; padding: 4px; }
+.coq-qr svg { width: 100%; height: 100%; }
+.coq-adresse { font-size: 0.75rem; word-break: break-all; background: var(--fond-2); padding: 4px 6px; border-radius: 4px; }
+.coq-salon { font-family: monospace; font-size: 1.1rem; letter-spacing: 0.15em; }
+
+/* Écran joueurs : zoom, dessins, fiches, vues interactives */
+.ecran-zoom { position: relative; width: 100%; height: 100%; min-height: 0; overflow: hidden; touch-action: none; cursor: grab; display: grid; place-items: center; }
+.ecran-zoom-contenu { width: 100%; height: 100%; display: grid; place-items: center; transform-origin: 0 0; will-change: transform; }
+.ecran-zoom-contenu img { max-width: 100%; max-height: 100%; object-fit: contain; user-select: none; -webkit-user-drag: none; }
+.ecran-zoom-retour { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); opacity: 0.85; }
+.ecran-svg { width: 100%; height: 100%; display: grid; place-items: center; background: #f4ecdc; border-radius: 8px; }
+.ecran-svg svg { max-width: 100%; max-height: 100%; }
+.ecran-fiche-sous { text-align: center; font-style: italic; margin-bottom: 2vh; }
+.ecran-fiche-sections { columns: 2 28ch; column-gap: 4vw; }
+.ecran-fiche-sections section { break-inside: avoid; margin-bottom: 1.6vh; }
+.ecran-fiche-sections h3 { margin: 0 0 0.3em; font-family: var(--titre); font-size: clamp(1.1rem, 1.8vw, 1.6rem); border-bottom: 1px solid rgb(0 0 0 / 0.2); }
+.ecran-fiche-sections p { margin: 0; white-space: pre-wrap; font-size: clamp(1rem, 1.6vw, 1.45rem); line-height: 1.45; }
+.ecran-interactif { touch-action: none; }

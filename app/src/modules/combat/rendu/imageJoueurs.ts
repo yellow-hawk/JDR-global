@@ -9,15 +9,20 @@ export const TAILLE_IMAGE_JOUEURS = { largeur: 1920, hauteur: 1080 };
 export function dessinerImageJoueurs(
   e: EtatTable, types: TypeTerrain[], fond: Fond | null, portraits: Map<number, CanvasImageSource>,
   largeur = TAILLE_IMAGE_JOUEURS.largeur, hauteur = TAILLE_IMAGE_JOUEURS.hauteur,
-): HTMLCanvasElement {
+): HTMLCanvasElement & { camera?: ReturnType<typeof cadrer> } {
   const k = echelleFond(e);
   const b = bornes(e, 'joueurs', fond ? { largeur: fond.largeur * k, hauteur: fond.hauteur * k } : null) ?? [0, 0, e.grille.taille * 20, e.grille.taille * 12];
   const camera = cadrer(b, largeur, hauteur, 16);
   const c = document.createElement('canvas');
   c.width = largeur; c.height = hauteur;
   dessinerScene(c.getContext('2d')!, { etat: e, types, camera, largeur, hauteur, public: 'joueurs', fond, portraits });
-  return c;
+  return Object.assign(c, { camera });
 }
 
-export const imageJoueurs = (...args: Parameters<typeof dessinerImageJoueurs>): Promise<Blob> =>
-  new Promise((ok, ko) => dessinerImageJoueurs(...args).toBlob((b) => (b ? ok(b) : ko(new Error('Image impossible'))), 'image/jpeg', 0.88));
+export const imageJoueurs = (...args: Parameters<typeof dessinerImageJoueurs>): Promise<Blob> => imageEtCamera(...args).then((x) => x.image);
+
+/** Image de l'écran joueurs et la caméra qui l'a cadrée (pour retrouver la case touchée sur la tablette). */
+export function imageEtCamera(...args: Parameters<typeof dessinerImageJoueurs>): Promise<{ image: Blob; camera: ReturnType<typeof cadrer>; largeur: number; hauteur: number }> {
+  const c = dessinerImageJoueurs(...args);
+  return new Promise((ok, ko) => c.toBlob((b) => (b ? ok({ image: b, camera: c.camera!, largeur: c.width, hauteur: c.height }) : ko(new Error('Image impossible'))), 'image/jpeg', 0.88));
+}

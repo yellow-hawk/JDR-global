@@ -2,3 +2,6 @@
 .coq-page:has(.magie-page) { padding: 0; }
 .magie-page { min-height: 100%; }
 .magie-astuce { margin: 0 0 12px; }
+.magie-joueurs { margin: 0 0 12px; padding: 8px 12px; border: 1px solid var(--trait, #ccc); border-left: 3px solid var(--mj, #7e22ce); border-radius: 8px; background: var(--panneau, transparent); }
+.magie-joueurs summary { cursor: pointer; font-weight: 600; }
+.magie-joueurs .panneau-trace { margin-top: 8px; }

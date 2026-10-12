@@ -3,3 +3,4 @@ export { VueGraphe } from './VueGraphe';
 export { VueArbre } from './VueArbre';
 export { usePanZoom, useTaille, type Vue } from './panZoom';
 export { couleurCentralite, PALETTE_COMMUNAUTES } from './couleurs';
+export { svgArbre } from './svg';

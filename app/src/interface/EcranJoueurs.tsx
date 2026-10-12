@@ -3,7 +3,9 @@
 // Par-dessus la scène : les jets de dés en 3D, l'historique des jets et un bandeau (date du monde).
 import { lazy, Suspense, useEffect, useState } from 'react';
 import type { Scene } from '../noyau/bus';
-import { recevoirEcran } from '../noyau/bus';
+import { envoyerAuMj, recevoirEcran } from '../noyau/bus';
+import { moduleParId } from './registre';
+import { Zoomable } from './Zoomable';
 import { texteJet, type JetDes } from '../noyau/regles';
 import './des/des.css';
 
@@ -32,7 +34,9 @@ export function EcranJoueurs() {
     bandeau: setBandeau,
   }), []);
   useEffect(() => { document.title = 'Écran joueurs · JDR Global'; }, []);
-  const blob = scene.sorte === 'image' || scene.sorte === 'document' || scene.sorte === 'vide' ? scene.image : scene.sorte === 'personnage' ? scene.portrait : null;
+  const blob = scene.sorte === 'image' || scene.sorte === 'document' || scene.sorte === 'vide' || scene.sorte === 'fiche' ? scene.image : scene.sorte === 'personnage' ? scene.portrait : null;
+  // Vue interactive d'un module (tracé de l'Atelier, visée en combat…).
+  const VueModule = scene.sorte === 'module' ? moduleParId(scene.module)?.ecranJoueurs?.[scene.vue] : undefined;
   const image = useUrlBlob(blob);
 
   const pleinEcran = () => {
@@ -41,7 +45,7 @@ export function EcranJoueurs() {
   };
 
   return (
-    <div className="ecran" onDoubleClick={pleinEcran}>
+    <div className={`ecran ${scene.sorte === 'module' ? 'ecran-interactif' : ''}`}>
       {scene.sorte === 'vide' && (
         <div className="ecran-attente">
           <div className="ecran-titre">{scene.campagne ?? 'JDR Global'}</div>
@@ -77,8 +81,32 @@ export function EcranJoueurs() {
       {scene.sorte === 'image' && (
         <div className="ecran-image">
           <div className="ecran-titre">{scene.titre}</div>
-          <div>{image && <img src={image} alt={scene.titre} />}</div>
+          <Zoomable cle={image}>{image && <img src={image} alt={scene.titre} draggable={false} />}</Zoomable>
         </div>
+      )}
+      {scene.sorte === 'svg' && (
+        <div className="ecran-image">
+          <div className="ecran-titre">{scene.titre}</div>
+          <Zoomable cle={scene.titre}><div className="ecran-svg" dangerouslySetInnerHTML={{ __html: scene.svg }} /></Zoomable>
+          {scene.texte && <div className="ecran-sous" style={{ textAlign: 'center' }}>{scene.texte}</div>}
+        </div>
+      )}
+      {scene.sorte === 'fiche' && (
+        <div className="ecran-doc ecran-doc-parchemin">
+          <div className="ecran-doc-feuille ecran-fiche">
+            <div className="ecran-doc-titre">{scene.titre}</div>
+            {scene.sousTitre && <div className="ecran-fiche-sous">{scene.sousTitre}</div>}
+            {image && <img src={image} alt="" />}
+            <div className="ecran-fiche-sections">
+              {scene.sections.map((x) => <section key={x.titre}><h3>{x.titre}</h3><p>{x.texte}</p></section>)}
+            </div>
+          </div>
+        </div>
+      )}
+      {scene.sorte === 'module' && (
+        VueModule
+          ? <Suspense fallback={<div className="ecran-sous">Chargement…</div>}><VueModule donnees={scene.donnees} titre={scene.titre} envoyer={(d) => envoyerAuMj(scene.module, d)} /></Suspense>
+          : <div className="ecran-sous">{scene.titre ?? ''}</div>
       )}
       {scene.sorte === 'document' && (
         <div className={`ecran-doc ecran-doc-${scene.style}`}>
