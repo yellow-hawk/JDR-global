@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ecouter, emettre, montrerAuxJoueurs, recevoirScenes } from './index';
+import { avantLAttente, ecouter, ecranActuel, emettre, montrerAuxJoueurs, recevoirScenes, reprendreApresAttente } from './index';
 import type { Scene } from './index';
 
 describe('bus interne', () => {
@@ -39,5 +39,15 @@ describe('jets de dés partagés', () => {
     expect(recus).toEqual([pub.id]);
     expect(historiqueJets()[0].id).toBe(pub.id);
     expect(historiqueJets()[1].qui).toContain('caché');
+  });
+
+  it('écran d’attente puis reprise de ce qui était montré', () => {
+    montrerAuxJoueurs({ sorte: 'texte', titre: 'Combat', texte: '' }, 'combat');
+    montrerAuxJoueurs({ sorte: 'vide', campagne: 'T' }, 'attente');
+    expect(avantLAttente()?.source).toBe('combat');
+    expect(reprendreApresAttente()).toBe(true);
+    expect(ecranActuel()).toMatchObject({ source: 'combat', scene: { titre: 'Combat' } });
+    expect(avantLAttente()).toBeNull();
+    expect(reprendreApresAttente()).toBe(false);
   });
 });

@@ -117,5 +117,5 @@ export function creer(c: ChoixCreation): { nom: string; stats: Record<string, un
   const stats: Record<string, unknown> = { carac, vitesse: pe?.vitesse ?? 6, vision: pe?.vision ?? 0, ca: 10, niveau, degats: '1d4' };
   const calcul = calculer({ id: 'creation', nom: c.nom, sorte: 'pj', combat: { regles: 'dnd5e', stats }, fiche });
   const pv = calcul.pvMaxSuggere ?? 8;
-  return { nom: c.nom, stats: { ...stats, ...calcul.stats, pv, pvMax: pv, vision: Math.max(pe?.vision ?? 0, 12) }, fiche };
+  return { nom: c.nom, stats: { ...stats, ...calcul.stats, pv, pvMax: pv, vision: pe?.vision ?? 0 }, fiche };
 }

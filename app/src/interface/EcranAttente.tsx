@@ -2,7 +2,7 @@
 // (bouton ou Alt+A, depuis n'importe quelle page) et réglage de l'écran d'attente (message, image).
 import { useEffect, useRef, useState } from 'react';
 import type { Campagne } from '../noyau/contrat';
-import { ecranActuel, libelleScene, montrerAuxJoueurs, suivreEcran, type EcranActuel } from '../noyau/bus';
+import { avantLAttente, ecranActuel, libelleScene, montrerAuxJoueurs, reprendreApresAttente, suivreEcran, type EcranActuel } from '../noyau/bus';
 import { ajouterFichier, choisirFichier, lireFichier, supprimerFichier } from '../noyau/stockage';
 import { useCampagne } from './etat';
 
@@ -44,7 +44,8 @@ export function CommandeEcran() {
   // Alt+A : écran d'attente, où que l'on soit dans l'outil.
   useEffect(() => {
     const touche = (ev: KeyboardEvent) => {
-      if (ev.altKey && !ev.ctrlKey && !ev.metaKey && ev.key.toLowerCase() === 'a') { ev.preventDefault(); void montrerAttente(campagne); }
+      // Alt+A bascule : attente, puis retour à ce qui était montré.
+      if (ev.altKey && !ev.ctrlKey && !ev.metaKey && ev.key.toLowerCase() === 'a') { ev.preventDefault(); if (!reprendreApresAttente()) void montrerAttente(campagne); }
     };
     window.addEventListener('keydown', touche);
     return () => window.removeEventListener('keydown', touche);
@@ -85,9 +86,15 @@ export function CommandeEcran() {
         {direct && <span className="coq-direct">● direct</span>}
         {libelleScene(ecran.scene)}
       </span>
-      <button className="btn btn-petit btn-mj" disabled={attente && !reglage} title="Remettre l’écran d’attente sur l’écran joueurs (Alt+A)" onClick={() => void montrerAttente(campagne)}>
-        ⏸ Attente
-      </button>
+      {attente && avantLAttente() ? (
+        <button className="btn btn-petit btn-mj" title={`Remettre « ${libelleScene(avantLAttente()!.scene)} » sur l’écran joueurs (Alt+A)`} onClick={() => reprendreApresAttente()}>
+          ↩ Reprendre
+        </button>
+      ) : (
+        <button className="btn btn-petit btn-mj" disabled={attente} title="Remettre l’écran d’attente sur l’écran joueurs (Alt+A)" onClick={() => void montrerAttente(campagne)}>
+          ⏸ Attente
+        </button>
+      )}
       <button className="btn btn-petit" title="Régler l’écran d’attente (message, image)" aria-expanded={reglage} onClick={() => setReglage(!reglage)}>⚙</button>
       {reglage && campagne && (
         <span className="coq-ecran-reglage carte-ui">
@@ -99,7 +106,7 @@ export function CommandeEcran() {
             <span style={{ flex: 1 }} />
             <button className="btn btn-petit btn-mj" onClick={() => { void montrerAttente(campagne); setReglage(false); }}>Afficher</button>
           </span>
-          <span className="discret">Raccourci : Alt+A, depuis n’importe quelle page.</span>
+          <span className="discret">Raccourci : Alt+A depuis n’importe quelle page (une fois pour l’attente, une fois pour reprendre).</span>
         </span>
       )}
     </span>

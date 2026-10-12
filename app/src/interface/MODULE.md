@@ -21,3 +21,5 @@ Règle : une page de module lit `vue` pour afficher et appelle `modifier()` pour
 - `DefinitionModule.enTete` : petit composant d'un module affiché dans l'en-tête (Chronologie : horloge ; Campagne : sauvegarde dans le dossier).
 - `etat.tsx` : instantané à l'ouverture et toutes les 10 minutes de travail ; `restaurer(idInstantane)`.
 - `EcranAttente.tsx` : `CommandeEcran` (en-tête, MJ) : ce qui est à l'écran joueurs (● direct), bouton « ⏸ Attente » et Alt+A depuis n'importe quelle page, réglage du message et de l'image (`modules.ecran.attente`) ; `montrerAttente(c)`, `useEcranActuel()`.
+- `calendrier/` : `VueCalendrier` (année en grilles, mois en semaines, semaine en colonnes, jour en détail ; navigation, aujourd'hui, fêtes, marques, lunes) et `logique.ts` (pur, testé : `grilleMois`, `semaineDe`, `jourDeLaSemaine`, `anneeHtml` pour l'impression). Utilisé par Chronologie, Pays et le Livre.
+- `EcranAttente.tsx` : « ↩ Reprendre » remet ce qui était montré avant l'attente (`reprendreApresAttente` du bus) ; Alt+A bascule.

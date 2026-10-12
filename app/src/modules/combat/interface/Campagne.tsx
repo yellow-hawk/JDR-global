@@ -5,11 +5,12 @@ import type { SystemeRegles } from '../../../noyau/regles';
 import { lireFichier } from '../../../noyau/stockage';
 import { pixelsParCase } from '../../cartes';
 import { libelleSorte } from '../../personnages';
-import { enregistrerRencontre, etatDeRencontre, jetonDepuisPersonnage, reporterDansFiches } from '../logique';
+import { enregistrerRencontre, jetonDepuisPersonnage, reporterDansFiches } from '../logique';
 import { ajouterJeton, caseLibre, nouvelEtat } from '../moteur';
 import type { EtatTable } from '../moteur';
 import { sortsDeLaCampagne } from '../sorts';
 import { portraitData } from './images';
+import { brouillardAuto, etatDeLancement } from './lancement';
 import { Packs } from './Packs';
 import { GenererRencontre } from './GenererRencontre';
 import type { Controleur } from './types';
@@ -63,16 +64,16 @@ export function Campagne({ ctl, c, R, modifier, diffusion, setDiffusion, auto }:
     ctl.dire(n ? `${n} fiche(s) mise(s) à jour (PV, états).` : 'Les fiches sont déjà à jour.', 'succes');
   };
 
-  const charger = (id: string) => {
+  // Lancement : PJ à l'entrée, brouillard et vue des PJ (voir lancement.ts).
+  const charger = (id: string) => tache(async () => {
     const r = c.rencontres.find((x) => x.id === id);
     if (!r) return;
-    const t: EtatTable = etatDeRencontre(r);
-    const k = r.carte && c.cartes.find((x) => x.id === r.carte!.id);
-    ctl.remplacer(!t.fond && k ? { ...t, fond: { carte: k.id, pxCase: pixelsParCase(k) } } : t);
+    const t: EtatTable = await etatDeLancement(c, R, r);
+    ctl.remplacer(t);
     ctl.regler({ selection: null, zoneChoisie: null, outil: 'choisir', sort: null });
     if (auto) setDiffusion(true);
-    ctl.dire(`Rencontre « ${r.nom} » chargée${auto ? ' et montrée sur l’écran joueurs' : ''}.`, 'succes');
-  };
+    ctl.dire(`Rencontre « ${r.nom} » lancée${t.brouillard.actif ? ', PJ à l’entrée, brouillard levé par leur vue' : ''}${auto ? ', montrée sur l’écran joueurs' : ''}.`, 'succes');
+  });
 
   return (
     <aside className="combat-gauche">
@@ -130,7 +131,11 @@ export function Campagne({ ctl, c, R, modifier, diffusion, setDiffusion, auto }:
             <input type="checkbox" checked={auto} onChange={(ev) => modifier((x) => ({ ...x, modules: { ...x.modules, combat: { ...x.modules?.combat, diffusionAuto: ev.target.checked } } }))} />
             <span>Diffuser automatiquement au lancement d’un combat</span>
           </label>
-          <p className="discret">Toute la carte, vue joueurs : stats ennemies, jetons cachés et ennemis invisibles masqués, brouillard opaque.</p>
+          <label className="combat-choix">
+            <input type="checkbox" checked={brouillardAuto(c)} onChange={(ev) => modifier((x) => ({ ...x, modules: { ...x.modules, combat: { ...x.modules?.combat, brouillardAuto: ev.target.checked } } }))} />
+            <span>Au lancement d’une rencontre : PJ à l’entrée, brouillard levé par leur vue</span>
+          </label>
+          <p className="discret">Vue joueurs : noir hors de ce qu’ont vu les PJ ; ce qu’ils ne voient plus reste visible mais assombri, sans les adversaires qui s’y trouvent. Stats ennemies, jetons cachés et ennemis invisibles masqués.</p>
         </details>
       )}
     </aside>

@@ -6,7 +6,28 @@ import { arbresPour, noeudParId } from '../../noyau/talents';
 const e = (s: unknown): string => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
 const signe = (n: number) => (n >= 0 ? `+${n}` : `${n}`);
 
-export function ficheHtml(p: Personnage, R: SystemeAvecFiche, calcul: FicheCalculee, portrait: string | null): string {
+/** Styles de la fiche imprimée (préfixés .fiche, utilisables dans un document plus grand). */
+export const FICHE_CSS = `  @page { size: A4; margin: 12mm; }
+  * { box-sizing: border-box; }
+  .fiche { font: 10.5pt/1.35 Georgia, 'Times New Roman', serif; color: #1f1a14; margin: 0; }
+  .fiche h1 { font-size: 20pt; margin: 0; }  .fiche h2 { font-size: 11pt; text-transform: uppercase; letter-spacing: .08em; border-bottom: 1px solid #8a6a4a; margin: 10px 0 4px; }
+  .fiche .entete { display: flex; gap: 12px; align-items: center; border-bottom: 2px solid #8a6a4a; padding-bottom: 8px; }
+  .fiche .entete img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid #8a6a4a; }
+  .fiche .sous { color: #5a4a3a; }
+  .fiche .grille { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .fiche .caracs { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 8px; }
+  .fiche .carac { border: 1px solid #8a6a4a; border-radius: 6px; text-align: center; padding: 4px; }
+  .fiche .carac b { display: block; font-size: 16pt; }  .fiche .carac small { color: #5a4a3a; }
+  .fiche .derives { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 6px; }
+  .fiche .derives div { border-left: 3px solid #8a6a4a; padding: 2px 6px; }  .fiche .derives small { display: block; color: #5a4a3a; font-size: 8pt; }
+  .fiche ul { margin: 0; padding-left: 14px; }  .fiche li { margin: 1px 0; }
+  .fiche table { width: 100%; border-collapse: collapse; }  .fiche td, .fiche th { text-align: left; border-bottom: 1px solid #d8c8b0; padding: 2px 4px; font-size: 9.5pt; }
+  .fiche .colonnes { columns: 2; column-gap: 14px; }  .fiche .ligne-comp { display: flex; justify-content: space-between; }
+  .fiche .pied { margin-top: 10px; font-size: 7.5pt; color: #7a6a5a; }
+`;
+
+/** Corps HTML d'une fiche (à placer dans un document qui contient FICHE_CSS). */
+export function ficheCorpsHtml(p: Personnage, R: SystemeAvecFiche, calcul: FicheCalculee, portrait: string | null): string {
   const f = p.fiche ?? {};
   const id = f.identite ?? {};
   const classes = (f.progression?.classes ?? []).map((c) => {
@@ -24,27 +45,7 @@ export function ficheHtml(p: Personnage, R: SystemeAvecFiche, calcul: FicheCalcu
   const monnaie = Object.entries(f.inventaire?.monnaie ?? {}).filter(([, v]) => v).map(([k, v]) => `${v} ${k}`).join(', ');
   const perso = f.personnalite ?? {};
 
-  return `<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>${e(p.nom)} — fiche de personnage</title>
-<style>
-  @page { size: A4; margin: 12mm; }
-  * { box-sizing: border-box; }
-  body { font: 10.5pt/1.35 Georgia, 'Times New Roman', serif; color: #1f1a14; margin: 0; }
-  h1 { font-size: 20pt; margin: 0; } h2 { font-size: 11pt; text-transform: uppercase; letter-spacing: .08em; border-bottom: 1px solid #8a6a4a; margin: 10px 0 4px; }
-  .entete { display: flex; gap: 12px; align-items: center; border-bottom: 2px solid #8a6a4a; padding-bottom: 8px; }
-  .entete img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid #8a6a4a; }
-  .sous { color: #5a4a3a; }
-  .grille { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-  .caracs { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 8px; }
-  .carac { border: 1px solid #8a6a4a; border-radius: 6px; text-align: center; padding: 4px; }
-  .carac b { display: block; font-size: 16pt; } .carac small { color: #5a4a3a; }
-  .derives { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 6px; }
-  .derives div { border-left: 3px solid #8a6a4a; padding: 2px 6px; } .derives small { display: block; color: #5a4a3a; font-size: 8pt; }
-  ul { margin: 0; padding-left: 14px; } li { margin: 1px 0; }
-  table { width: 100%; border-collapse: collapse; } td, th { text-align: left; border-bottom: 1px solid #d8c8b0; padding: 2px 4px; font-size: 9.5pt; }
-  .colonnes { columns: 2; column-gap: 14px; } .ligne-comp { display: flex; justify-content: space-between; }
-  .pied { margin-top: 10px; font-size: 7.5pt; color: #7a6a5a; }
-</style></head><body>
-<div class="entete">
+  return `<section class="fiche"><div class="entete">
   ${portrait ? `<img src="${e(portrait)}" alt="">` : ''}
   <div><h1>${e(p.nom)}</h1>
   <div class="sous">${[classes, espece, historique, id.alignement].filter(Boolean).join(' · ')}</div>
@@ -72,6 +73,14 @@ ${calcul.incantation?.length ? `<h2>Incantation</h2><p>${calcul.incantation.map(
 <p>${[['Traits', perso.traits], ['Idéaux', perso.ideaux], ['Liens', perso.liens], ['Défauts', perso.defauts]].filter(([, v]) => v).map(([k, v]) => `<b>${k} :</b> ${e(v)}`).join('<br>') || '—'}</p>
 ${p.notes ? `<h2>Description</h2><p>${e(p.notes)}</p>` : ''}
 <p class="pied">JDR Global · arbres : ${e(arbres)} · ${e(R.catalogue.source ?? '')}</p>
+</section>`;
+}
+
+export function ficheHtml(p: Personnage, R: SystemeAvecFiche, calcul: FicheCalculee, portrait: string | null): string {
+  return `<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>${e(p.nom)} — fiche de personnage</title>
+<style>body { margin: 0; }
+${FICHE_CSS}</style></head><body>
+${ficheCorpsHtml(p, R, calcul, portrait)}
 <script>window.onload = () => setTimeout(() => window.print(), 300);</script>
 </body></html>`;
 }

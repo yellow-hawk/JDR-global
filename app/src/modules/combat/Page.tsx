@@ -1,6 +1,6 @@
 // Page Combat : la table réécrite (moteur/ + rendu/ + interface/), branchée sur la campagne.
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { montrerAuxJoueurs, prendreCible, suivreEcran } from '../../noyau/bus';
+import { ecranActuel, montrerAuxJoueurs, prendreCible, suivreEcran } from '../../noyau/bus';
 import { regles } from '../../noyau/regles';
 import { useCampagne } from '../../interface/etat';
 import { avecTableEnCours, etatDeRencontre, gabarit, tableEnCours } from './logique';
@@ -13,6 +13,7 @@ import { useFond, usePortraits } from './interface/images';
 import { Panneaux } from './interface/Panneaux';
 import { Table } from './interface/Table';
 import { useTable } from './interface/useTable';
+import { etatDeLancement } from './interface/lancement';
 import './combat.css';
 
 export function Page() {
@@ -26,13 +27,21 @@ export function Page() {
     const r = cible && campagne?.rencontres.find((x) => x.id === cible);
     return r ? etatDeRencontre(r) : tableEnCours(campagne!);
   }, lectureSeule);
+  // Rencontre lancée depuis une carte : PJ à l'entrée, brouillard et vue des PJ.
+  useEffect(() => {
+    const r = cible && campagne?.rencontres.find((x) => x.id === cible);
+    if (!r || lectureSeule) return;
+    void etatDeLancement(campagne!, R, r).then((e) => ctl.remplacer(e)).catch(() => undefined);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   // Diffusion vers l'écran joueurs : automatique quand un combat est lancé (rencontre chargée ou initiative).
   const auto = (campagne?.modules?.combat as { diffusionAuto?: boolean } | undefined)?.diffusionAuto !== false;
-  const [diffusion, setDiffusion] = useState(() => !!cible && auto);
+  const [diffusion, setDiffusion] = useState(() => (!!cible && auto) || ecranActuel().source === 'combat');
   const actif = ctl.etat.combat.actif;
   useEffect(() => { if (actif && auto && !lectureSeule) setDiffusion(true); }, [actif, auto, lectureSeule]);
   // Autre chose prend l'écran joueurs (écran d'attente, fiche, document) : la diffusion de la table s'arrête.
-  useEffect(() => suivreEcran((e) => { if (e.source !== 'combat') setDiffusion(false); }), []);
+  // Retour de la table sur l'écran (« Reprendre » après l'attente) : la diffusion repart.
+  useEffect(() => suivreEcran((e) => setDiffusion(e.source === 'combat')), []);
   const [gauche, setGauche] = useState(true);
   const fond = useFond(c, ctl.etat.fond?.carte);
   const portraits = usePortraits(ctl.etat);

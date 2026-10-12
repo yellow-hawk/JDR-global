@@ -1,0 +1,11 @@
+/* Module Livre de campagne : classes .livre- */
+.livre-page { display: flex; flex-direction: column; gap: 14px; }
+.livre-sections { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; align-items: start; }
+.livre-section { display: flex; flex-direction: column; gap: 4px; }
+.livre-section p { margin: 0; }
+.livre-section h4 { margin: 6px 0 2px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--encre-2); }
+.livre-titre { display: flex; gap: 8px; align-items: center; }
+.livre-titre .discret { margin-left: auto; }
+.livre-off { opacity: 0.55; }
+.livre-element { display: flex; gap: 6px; align-items: center; font-size: 0.9rem; padding: 1px 0; }
+.livre-section details { max-height: 320px; overflow-y: auto; }

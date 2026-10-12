@@ -76,6 +76,8 @@ const canal = (): BroadcastChannel | null =>
 let canalMj: BroadcastChannel | null = null;
 let sceneCourante: Scene = { sorte: 'vide' };
 let sourceCourante = 'attente';
+/** Dernière chose montrée avant l'écran d'attente, pour la reprendre. */
+let avantAttente: EcranActuel | null = null;
 const ecouteursEcran = new Set<(e: EcranActuel) => void>();
 let bandeauCourant: string | null = null;
 const historique: JetDes[] = [];
@@ -104,6 +106,7 @@ export interface EcranActuel { scene: Scene; source: string }
  * autre source prend l'écran.
  */
 export function montrerAuxJoueurs(scene: Scene, source: string = scene.sorte): void {
+  if (source === 'attente' && sourceCourante !== 'attente') avantAttente = { scene: sceneCourante, source: sourceCourante };
   sceneCourante = sansSecrets(scene); // sécurité : aucune clé mj ne part vers l'écran joueurs
   sourceCourante = source;
   canalDuMj()?.postMessage({ type: 'scene', scene: sceneCourante } satisfies MessageEcran);
@@ -112,6 +115,19 @@ export function montrerAuxJoueurs(scene: Scene, source: string = scene.sorte): v
 
 /** Côté MJ : ce qui est à l'écran maintenant, et abonnement à ses changements. */
 export const ecranActuel = (): EcranActuel => ({ scene: sceneCourante, source: sourceCourante });
+
+/** Ce que l'écran montrait avant l'écran d'attente (null : rien à reprendre). */
+export const avantLAttente = (): EcranActuel | null => (sourceCourante === 'attente' ? avantAttente : null);
+/**
+ * Remet sur l'écran joueurs ce qui y était avant l'attente. La page d'origine (combat, fiche en direct) voit
+ * revenir sa source et reprend sa diffusion.
+ */
+export function reprendreApresAttente(): boolean {
+  const a = avantLAttente();
+  if (!a) return false;
+  montrerAuxJoueurs(a.scene, a.source);
+  return true;
+}
 export function suivreEcran(f: (e: EcranActuel) => void): () => void {
   ecouteursEcran.add(f);
   return () => { ecouteursEcran.delete(f); };

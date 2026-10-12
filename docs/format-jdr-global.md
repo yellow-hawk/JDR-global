@@ -180,7 +180,7 @@ Une carte Inkarnate n'est pas dessinée en projection géographique : l'enrouler
 
 - Compétences : 1 = maîtrise, 2 = expertise. `ref` d'un objet : entrée du catalogue du système (`noyau/regles/dnd5e/catalogue.json`, données SRD 5.1 CC-BY 4.0).
 - `effets` : `{ cible, valeur }`, cibles comprises par le système (5e : `ca`, `carac.for`, `competence.perception`, `sauvegarde.dex`, `vitesse`, `pvMax`, `initiative`, `attaque`, `degats`). Comptent pour les objets **équipés** et les aptitudes.
-- `progression.talents` : ids des talents acquis (arbres des règles ou de la campagne, `modules.personnages.arbres` : `ArbreTalents[]`, voir `noyau/talents`).
+- `progression.talents` : ids des talents acquis (arbres des règles ou de la campagne, `modules.personnages.arbres` : `ArbreTalents[]`, voir `noyau/talents`). Un talent : `requis` (tous), `requisUn` (au moins un), `icone`, `sorte` (`jonction` | `sommet`). Les talents d'arbres disparus sont retirés à l'ouverture de la campagne (points rendus).
 - Valeurs dérivées (modificateurs, compétences, CA de l'armure portée, attaques des armes équipées, charge) : calculées par `R.calculer(p)` ; CA, bonus d'attaque, dégâts et niveau sont reportés dans `combat.stats` (la Table de combat les lit).
 
 ---
@@ -336,7 +336,10 @@ L'année en cours d'une famille est l'horloge du temps de jeu (`campagne.temps`)
 - `civilisation.reputation` (−100..100) et `reputationJournal` `[{ quand, delta, raison }]`.
 - `quete.reputation` : `[{ univers, peuple, delta }]`, appliqués une fois au passage à « terminée » (`quete.mj.reputationAppliquee`).
 - `modules.journal.preparation` : `{ coches: string[], notes: [{ id, texte }] }` (préparation de séance).
-- `modules.ecran.attente` : `{ message?, image?: "fichier-…" }` (écran d'attente des joueurs, Alt+A).
+- `modules.ecran.attente` : `{ message?, image?: "fichier-…" }` (écran d'attente des joueurs, Alt+A ; Alt+A à nouveau reprend ce qui était montré).
+- `calendrier.semaine` : noms des jours de la semaine (absent : 7 jours) ; la semaine court sans interruption d'une année à l'autre.
+- Table de combat : `lumiere` (`vive` | `faible` | `obscurite`), `entree` (cases d'entrée des PJ) ; `jeton.vision` = vision dans le noir en cases (0 : aucune). `modules.combat.brouillardAuto` (défaut : vrai) : au lancement d'une rencontre, PJ à l'entrée, brouillard levé par leur vue.
+- `modules.livre.choix` : derniers choix du livre de campagne (`version`, `sections`, `exclus`, `cartesMj`).
 - Jeton de la table : `icone` (emoji) ; absente = d'après le nom de la créature, `null` = aucune.
 - `personnage.fiche.identite.age` : âge en années (texte) ; un PJ ou PNJ tiré au hasard en reçoit un selon la longévité de son peuple (`PeupleRegles.vie`).
 - Hors du contrat de campagne : instantanés automatiques (magasin IndexedDB `sauvegardes`) et dossier de sauvegarde (réglage `dossier-sauvegarde`).

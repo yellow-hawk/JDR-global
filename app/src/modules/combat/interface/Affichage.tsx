@@ -1,5 +1,5 @@
 // Réglages d'affichage : grille, opacités, vision, portée de déplacement, sons, nettoyage des zones.
-import { supprimerZones } from '../moteur';
+import { LUMIERES, revelerParLaVue, supprimerZones, type Lumiere } from '../moteur';
 import type { EtatTable } from '../moteur';
 import type { Controleur } from './types';
 
@@ -34,7 +34,11 @@ export function Affichage({ ctl }: { ctl: Controleur }) {
       <section className="combat-bloc">
         <h3>Règles d’affichage</h3>
         <label className="combat-coche"><input type="checkbox" checked={e.porteeDeplacement} onChange={(ev) => ctl.faire((x) => ({ ...x, porteeDeplacement: ev.target.checked }))} />Portée de déplacement en combat (et contrôle des déplacements)</label>
-        <label className="combat-coche"><input type="checkbox" checked={e.vision} onChange={(ev) => ctl.faire((x) => ({ ...x, vision: ev.target.checked }))} />La vue des PJ révèle le brouillard en se déplaçant</label>
+        <label className="combat-coche"><input type="checkbox" checked={e.vision} onChange={(ev) => ctl.faire((x) => (ev.target.checked ? revelerParLaVue({ ...x, vision: true }) : { ...x, vision: false }))} />La vue des PJ révèle le brouillard en se déplaçant</label>
+        <label className="combat-champ">Lumière du lieu<select value={e.lumiere ?? 'vive'} onChange={(ev) => ctl.faire((x) => { const y = { ...x, lumiere: ev.target.value as Lumiere }; return y.vision && y.brouillard.actif ? revelerParLaVue(y) : y; })}>
+          {LUMIERES.map(([id, l]) => <option key={id} value={id}>{l}</option>)}
+        </select></label>
+        <p className="discret">Portée de vue des PJ : lumière vive 40 cases ; pénombre 12 (ou leur vision dans le noir) ; obscurité : vision dans le noir, sinon une torche (8 cases). Les murs arrêtent la vue.</p>
         <label className="combat-coche"><input type="checkbox" checked={ctl.ui.sons} onChange={(ev) => ctl.regler({ sons: ev.target.checked })} />Sons</label>
       </section>
       <section className="combat-bloc">

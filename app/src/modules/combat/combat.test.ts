@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { nouvelleCampagne, nouveauPersonnage } from '../../noyau/contrat';
 import { regles } from '../../noyau/regles';
 import { GRIMOIRE_DE_BASE } from '../magie';
-import { avecTableEnCours, enregistrerRencontre, etatDeRencontre, gabarit, jetonDepuisPersonnage, reporterDansFiches, tableEnCours } from './logique';
-import { ajouterJeton, nouvelEtat, ajouterZone, zoneDeTerrain, TERRAINS, modifierJeton } from './moteur';
+import { avecTableEnCours, enregistrerRencontre, etatDeRencontre, gabarit, jetonDepuisPersonnage, preparerLancement, reporterDansFiches, tableEnCours } from './logique';
+import { ajouterJeton, nouvelEtat, ajouterZone, zoneDeTerrain, TERRAINS, modifierJeton, porteeVue, revelerParLaVue } from './moteur';
 import { bornes, cadrer, jetonVisible, versEcran, versMonde, zoomer } from './rendu';
 import { casesDuPinceau, jetonSous, zoneSous } from './interface/interactions';
 import { sortsDeLaCampagne } from './sorts';
@@ -96,9 +96,40 @@ describe('rendu et interactions (pur)', () => {
     expect(e.jetons.map((j) => jetonVisible(e, j, 'mj'))).toEqual([true, true, true]);
     const f = { ...e, brouillard: { actif: true, cases: { '0,0': true as const } } };
     expect(jetonVisible(f, f.jetons[0], 'joueurs')).toBe(true);
+    // Le camp des joueurs reste visible partout ; un ennemi sous le brouillard, non.
     e = ajouterJeton(f, { nom: 'D', camp: 'allie' }, 9, 9).etat;
-    expect(jetonVisible(e, e.jetons[3], 'joueurs')).toBe(false);
-    expect(bornes(e, 'joueurs')).toEqual([-40, -40, 80, 80]);
+    e = ajouterJeton(e, { nom: 'E', camp: 'ennemi' }, 7, 7).etat;
+    expect(jetonVisible(e, e.jetons[3], 'joueurs')).toBe(true);
+    expect(jetonVisible(e, e.jetons[4], 'joueurs')).toBe(false);
+    expect(bornes({ ...e, jetons: e.jetons.slice(0, 3) }, 'joueurs')).toEqual([-40, -40, 80, 80]);
+  });
+
+  it('vue des PJ : ennemis vus seulement à portée et hors des murs, exploré mémorisé', () => {
+    let e = ajouterJeton(nouvelEtat(), { nom: 'A', camp: 'pj', vision: 0 }, 0, 0).etat;
+    e = ajouterJeton(e, { nom: 'Proche', camp: 'ennemi' }, 5, 0).etat;
+    e = ajouterJeton(e, { nom: 'Loin', camp: 'ennemi' }, 20, 0).etat;
+    e = revelerParLaVue({ ...e, brouillard: { actif: true, cases: {} }, vision: true, lumiere: 'obscurite' });
+    // Obscurité, sans vision dans le noir : la torche (8 cases).
+    expect(jetonVisible(e, e.jetons[1], 'joueurs')).toBe(true);
+    expect(jetonVisible(e, e.jetons[2], 'joueurs')).toBe(false);
+    expect(e.brouillard.cases['8,0']).toBe(true);
+    expect(e.brouillard.cases['12,0']).toBeUndefined();
+    // Le PJ s'éloigne : la zone reste révélée, mais l'ennemi qui y est n'est plus vu.
+    e = revelerParLaVue({ ...e, jetons: e.jetons.map((j) => (j.nom === 'A' ? { ...j, x: -20 } : j)) });
+    expect(e.brouillard.cases['5,0']).toBe(true);
+    expect(jetonVisible(e, e.jetons[1], 'joueurs')).toBe(false);
+    expect(porteeVue({ vision: 12 }, 'obscurite')).toBe(12);
+    expect(porteeVue({ vision: 0 }, 'vive')).toBeGreaterThan(30);
+  });
+
+  it('lancement : PJ à l’entrée, brouillard levé par leur vue', () => {
+    const t = { ...nouvelEtat(), fond: { carte: 'k', pxCase: 50 }, entree: [[2, 3], [3, 3]] as [number, number][] };
+    const e = preparerLancement(t, [{ nom: 'A', camp: 'pj', persoId: 'p1' }, { nom: 'B', camp: 'pj', persoId: 'p2' }], { brouillard: true });
+    expect(e.jetons.map((j) => [j.x, j.y])).toEqual([[2, 3], [3, 3]]);
+    expect(e.brouillard.actif && e.vision).toBe(true);
+    expect(e.brouillard.cases['2,3']).toBe(true);
+    // Relancer n'ajoute pas les PJ déjà là.
+    expect(preparerLancement(e, [{ nom: 'A', camp: 'pj', persoId: 'p1' }], { brouillard: true }).jetons).toHaveLength(2);
   });
 
   it('sélection à la souris et pinceau', () => {

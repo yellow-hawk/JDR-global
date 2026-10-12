@@ -3,6 +3,7 @@
 import type { Calendrier, Campagne, Civilisation, DateMonde, Evenement, TempsMonde, Univers } from '../../noyau/contrat';
 import { nouvelId } from '../../noyau/contrat';
 import { civilisationsDe } from '../pays';
+import type { Marque } from '../../interface/calendrier';
 import donnees from './temps.json';
 
 export const AVANCES = donnees.avances as { libelle: string; heures?: number; jours?: number; mois?: number }[];
@@ -133,6 +134,22 @@ export function lunes(t: TempsMonde, r: Reference): { nom: string; phase: number
     const pleineDans = Math.round((((0.5 - phase) % 1 + 1) % 1) * l.periode);
     return { nom: l.nom, phase, libelle, pleineDans };
   });
+}
+
+/** Phase notable d'une lune un jour donné (jour absolu) : « 🌕 Séléné pleine », « 🌑 Séléné nouvelle », sinon null. */
+export function luneDuJour(r: Reference, n: number): string | null {
+  const l = r.lunes.filter((x) => x.periode > 0).map((x) => {
+    const phase = (((n + 0.5) / x.periode) % 1 + 1) % 1, demi = 0.5 / x.periode;
+    return Math.abs(phase - 0.5) < demi ? `🌕 ${x.nom} pleine` : phase < demi || phase > 1 - demi ? `🌑 ${x.nom} nouvelle` : null;
+  }).filter(Boolean);
+  return l.length ? l.join(' · ') : null;
+}
+
+/** Ce qui s'est passé ou se passera, pour le calendrier : événements, séances datées, histoire des peuples. */
+export function marquesCalendrier(c: Campagne): Marque[] {
+  const evts: Marque[] = (c.evenements ?? []).map((e) => ({ date: e.date, titre: e.titre, texte: e.texte, sorte: 'evenement', cible: { page: 'chronologie', cible: e.id } }));
+  const seances: Marque[] = c.seances.filter((s) => s.dateMonde).map((s) => ({ date: s.dateMonde!, titre: `Séance ${s.numero}`, texte: s.resume, sorte: 'seance', cible: { page: 'journal', cible: s.id } }));
+  return [...evts, ...seances];
 }
 
 /* ---------- événements ---------- */

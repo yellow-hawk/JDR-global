@@ -42,3 +42,7 @@ API publique : `definition`, `SORTES`, `libelleSorte`, `campJoueurs`, `sceneJoue
 ## Écran joueurs en direct
 
 « Montrer aux joueurs » + niveau de détail (`NiveauEcran` : portrait seul, présentation = identité visible, fiche complète = combat, caractéristiques, personnalité, langues ; par défaut la fiche pour le camp des joueurs). La fiche montrée est **en direct** (`perso:<id>` comme source du bus) : chaque modification est renvoyée, jusqu'à ce qu'autre chose prenne l'écran. Onglet Identité : année de naissance d'après l'âge et l'année en cours ; alerte si l'arbre généalogique dit autre chose (« Prendre l'âge de l'arbre » / « Corriger l'arbre »).
+
+## Arbres de talents en étoile
+
+`talents/disposition.ts` (pur, testé) : tronc au centre, une branche par secteur, un anneau par rang, jonctions entre les branches qu'elles relient, aucun chevauchement. `talents/VueArbreTalents.tsx` : dessin (acquis en couleur, disponibles qui brillent, verrouillés estompés ; losange = jonction, couronne = sommet ; pointillés = « au moins un »), utilisé par l'onglet Talents et l'éditeur MJ. `talents/impression.ts` : même arbre en SVG pour le livre. Les données viennent de `app/scripts/generer-talents.py`. `impression.ts` : `FICHE_CSS` + `ficheCorpsHtml` (fiche réutilisée par le livre).

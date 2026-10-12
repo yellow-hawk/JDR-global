@@ -3,15 +3,26 @@
 import { centre, largeurCase } from '../moteur/grille';
 import type { EtatTable, Jeton } from '../moteur/types';
 import { cle } from '../moteur/types';
+import { vueDesPj } from '../moteur/vision';
 
 export type Public = 'mj' | 'joueurs';
 
 export const sousBrouillard = (e: EtatTable, x: number, y: number): boolean => e.brouillard.actif && !e.brouillard.cases[cle([x, y])];
 
+/** La vue des PJ commande ce que voient les joueurs (brouillard actif et « la vue des PJ révèle »). */
+export const vueActive = (e: EtatTable): boolean => e.brouillard.actif && e.vision;
+
+/**
+ * Les joueurs voient leurs PJ et alliés partout ; les autres jetons seulement là où le brouillard est levé et,
+ * quand la vue des PJ est active, seulement s'ils sont vus en ce moment (une zone déjà explorée ne montre pas
+ * qui s'y trouve maintenant).
+ */
 export function jetonVisible(e: EtatTable, j: Jeton, p: Public): boolean {
   if (!j.visible) return p === 'mj';
   if (p === 'mj') return true;
   if (j.camp === 'ennemi' && j.conditions.includes('Invisible')) return false;
+  if (j.camp === 'pj' || j.camp === 'allie') return true;
+  if (vueActive(e)) return vueDesPj(e).has(cle([j.x, j.y]));
   return !sousBrouillard(e, j.x, j.y);
 }
 

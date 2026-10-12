@@ -109,6 +109,8 @@ export async function installerMonde(d: Dependances): Promise<{ univ: string; po
   // 5. Cartes de bataille + rencontres prêtes
   const lieux = lieuxDeBataille(quetes);
   const graine = String((etat.entry.params as { seed?: string } | undefined)?.seed ?? etat.entry.name);
+  // Souterrains dans le noir, intérieurs dans la pénombre, extérieurs en plein jour.
+  const lumiereDe = (p: { theme: string; ambiance: string }) => (['crypte', 'grotte', 'mine'].includes(p.ambiance) || p.theme === 'donjon' ? 'obscurite' as const : p.theme === 'interieur' ? 'faible' as const : 'vive' as const);
   for (const [i, b] of lieux.entries()) {
     if (d.annule()) break;
     progres({ etape: 'batailles', fait: i, total: lieux.length, texte: b.lieu.nom });
@@ -120,7 +122,7 @@ export async function installerMonde(d: Dependances): Promise<{ univ: string; po
     const idCarte = nouvelId('carte');
     modifier((x) => {
       const R = regles(x.campagne.regles);
-      const table = tableDepuisPlan({ carte: idCarte, pxCase: PX_CASE, rects: rectanglesTerrain(p), depart: p.depart, ennemis: p.ennemis, pj: pjDeLaCampagne(x, R), adversaires: adversairesPour(x, b, R), packs: packsDeLaCampagne(x) });
+      const table = tableDepuisPlan({ carte: idCarte, pxCase: PX_CASE, rects: rectanglesTerrain(p), depart: p.depart, ennemis: p.ennemis, pj: pjDeLaCampagne(x, R), adversaires: adversairesPour(x, b, R), packs: packsDeLaCampagne(x), lumiere: lumiereDe(p) });
       return integrerBataille(x, { univ, idCarte, b, libelle: libelleChoix(choix), theme: choix.theme, joueurs: j.fichier, mj: m.fichier, taille: j.taille, pxCase: PX_CASE, table: table as unknown as Record<string, unknown> });
     });
     await pause();

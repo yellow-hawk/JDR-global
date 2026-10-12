@@ -8,6 +8,8 @@ export interface Calendrier {
   mois: { nom: string; jours: number }[];
   /** mois : index dans `mois` ; jour : 1..jours du mois. */
   fetes: { nom: string; mois: number; jour: number; texte?: string }[];
+  /** Noms des jours de la semaine (absent : semaine de 7 jours). La semaine court sans interruption d'une année à l'autre. */
+  semaine?: string[];
 }
 
 /** Fiche d'un peuple / pays (tirée de l'Atlas, ou saisie à la main). */

@@ -7,6 +7,7 @@ import {
 } from '../../../noyau/talents';
 import { emettre } from '../../../noyau/bus';
 import type { PropsOnglet } from './types';
+import { VueArbreTalents } from '../talents/VueArbreTalents';
 
 const CIBLES: Record<string, string> = {
   ca: 'CA', attaque: 'attaque', degats: 'dégâts', initiative: 'initiative', vitesse: 'vitesse (cases)', pvParNiveau: 'PV par niveau',
@@ -22,7 +23,6 @@ export function Talents({ p, R, role, lectureSeule, maj }: PropsOnglet & { R: Sy
   const pts = pointsTalent(p, parNiveau);
   const arbre: ArbreTalents | undefined = arbres.find((a) => a.id === actif) ?? arbres[0];
   const peutModifier = !lectureSeule && (role === 'mj' || p.sorte === 'pj');
-  const rangs = arbre ? Math.max(...arbre.branches.flatMap((b) => b.noeuds.map((n) => n.rang)), 1) : 0;
 
   if (!arbres.length) return <p className="discret">Aucun arbre de talents pour ce personnage : choisissez une classe dans l’onglet Progression.</p>;
 
@@ -48,29 +48,18 @@ export function Talents({ p, R, role, lectureSeule, maj }: PropsOnglet & { R: Sy
       </div>
       {arbre?.texte && <p className="discret">{arbre.texte}</p>}
 
-      {arbre && (
-        <div className="perso-arbre" style={{ gridTemplateColumns: `repeat(${arbre.branches.length}, minmax(150px, 1fr))` }}>
-          {arbre.branches.map((b) => <div key={b.id} className="perso-branche-titre" style={{ borderColor: b.couleur }}>{b.nom}</div>)}
-          {Array.from({ length: rangs }, (_, r) => arbre.branches.map((b) => {
-            const n = b.noeuds.find((x) => x.rang === r + 1);
-            if (!n) return <div key={`${b.id}-${r}`} />;
-            const e = etatTalent(p, n, parNiveau);
-            return (
-              <button key={n.id} className={`perso-talent perso-talent-${e.etat} ${n.rang === 1 ? 'perso-talent-racine' : ''} ${choisi?.id === n.id ? 'perso-talent-choisi' : ''}`}
-                style={{ borderColor: e.etat === 'acquis' ? b.couleur : undefined }} title={e.raison ?? n.texte} onClick={() => setChoisi(n)}>
-                <strong>{n.nom}</strong>
-                <small>{e.etat === 'acquis' ? '✓ acquis' : e.raison ?? `${n.cout} pt · niv. ${n.niveau}`}</small>
-              </button>
-            );
-          }))}
-        </div>
-      )}
-
+      <div className="talents-disposition">
+        {arbre && (
+          <VueArbreTalents arbre={arbre} choisi={choisi?.id} onChoisir={setChoisi}
+            etat={(n) => etatTalent(p, n, parNiveau).etat} />
+        )}
+        <div className="pile">
       {choisi && etatChoisi && (
         <div className="carte-ui pile perso-talent-detail" style={{ gap: 6 }}>
-          <div className="ligne"><strong>{choisi.nom}</strong><span className="discret">coût {choisi.cout} · niveau {choisi.niveau}</span></div>
+          <div className="ligne"><span style={{ fontSize: '1.6rem' }}>{choisi.icone}</span><strong>{choisi.nom}</strong><span className="discret">coût {choisi.cout} · niveau {choisi.niveau}</span></div>
           <p style={{ margin: 0 }}>{choisi.texte}</p>
           {choisi.effets?.length ? <p className="discret" style={{ margin: 0 }}>Effets sur la fiche : {choisi.effets.map((x) => texteEffet(x.cible, x.valeur)).join(', ')}</p> : null}
+          {choisi.requisUn?.length ? <p className="discret" style={{ margin: 0 }}>Il suffit d’un de : {choisi.requisUn.map((r) => arbre?.branches.flatMap((b) => b.noeuds).find((x) => x.id === r)?.nom ?? r).join(', ')}</p> : null}
           {choisi.magie?.signes?.length ? <p className="discret" style={{ margin: 0 }}>Signes appris : {choisi.magie.signes.join(', ')}{choisi.magie.rang ? ` · rang ${choisi.magie.rang}` : ''}</p> : null}
           {etatChoisi.raison && <p className="perso-erreur" style={{ margin: 0 }}>Verrouillé : {etatChoisi.raison}</p>}
           {peutModifier && (
@@ -89,6 +78,9 @@ export function Talents({ p, R, role, lectureSeule, maj }: PropsOnglet & { R: Sy
           )}
         </div>
       )}
+          {!choisi && <p className="discret">Clique un talent pour le détail. Au centre, le tronc ; chaque branche se divise, et les losanges (jonctions) relient deux branches. Pointillés : il suffit d’un des talents. Molette : zoom · glisser : déplacer.</p>}
+        </div>
+      </div>
     </div>
   );
 }

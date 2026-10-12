@@ -4,7 +4,7 @@ import { useState } from 'react';
 import type { Campagne, Civilisation } from '../../noyau/contrat';
 import { emettre } from '../../noyau/bus';
 import { BlocMj, Champ } from '../../interface/composants';
-import { Calendrier } from './Calendrier';
+import { VueCalendrier } from '../../interface/calendrier';
 import { JaugeReputation } from './JaugeReputation';
 import { cartesDuPeuple, dynastieDuPeuple, modifierCivilisation, pnjDuPeuple, quetesDuPeuple, type PeupleDeCampagne } from './logique';
 
@@ -44,7 +44,9 @@ export function FichePays({ c, p, mj, ro, modifier, choisir }: Props) {
           onChange={(e) => maj((x) => ({ ...x, histoire: lignes(e.target.value).map((l) => { const m = l.match(/^(-?\d+)\s*:\s*(.*)$/); return m ? { an: Number(m[1]), texte: m[2] } : { an: 0, texte: l }; }) }))} /></Champ>
         <Champ libelle="Mois du calendrier (« nom : jours »)"><textarea rows={4} value={(v.calendrier?.mois ?? []).map((m) => `${m.nom} : ${m.jours}`).join('\n')}
           onChange={(e) => maj((x) => { const mois = lignes(e.target.value).map((l) => { const m = l.match(/^(.*?)\s*:\s*(\d+)$/); return m ? { nom: m[1], jours: Number(m[2]) } : { nom: l, jours: 30 }; });
-            return { ...x, calendrier: { joursParAn: mois.reduce((s, m) => s + m.jours, 0), mois, fetes: x.calendrier?.fetes ?? [] } }; })} /></Champ>
+            return { ...x, calendrier: { ...(x.calendrier ?? { fetes: [] }), joursParAn: mois.reduce((s, m) => s + m.jours, 0), mois } }; })} /></Champ>
+        <Champ libelle="Jours de la semaine (un par ligne ; vide : semaine de 7 jours)"><textarea rows={3} value={(v.calendrier?.semaine ?? []).join('\n')} disabled={!v.calendrier}
+          onChange={(e) => maj((x) => (x.calendrier ? { ...x, calendrier: { ...x.calendrier, semaine: lignes(e.target.value) } } : x))} /></Champ>
         <Champ libelle="Notes MJ"><textarea rows={3} value={(v.mj as { notes?: string } | undefined)?.notes ?? ''} onChange={(e) => maj((x) => ({ ...x, mj: { ...(x.mj ?? {}), notes: e.target.value } }))} /></Champ>
       </fieldset>
     </div>
@@ -93,7 +95,7 @@ export function FichePays({ c, p, mj, ro, modifier, choisir }: Props) {
             <h3>Histoire</h3>
             <ol className="pays-frise">{v.histoire.map((h, i) => <li key={i}><span className="pays-an">An {h.an}</span><span>{h.texte}</span></li>)}</ol>
           </>}
-          {v.calendrier && <><h3>Calendrier</h3><Calendrier cal={v.calendrier} an={v.anActuel} /></>}
+          {v.calendrier && <><h3>Calendrier</h3><VueCalendrier cal={v.calendrier} an={v.anActuel} vueInitiale="annee" /></>}
           {mj && (pnj.length > 0 || quetes.length > 0 || cartes.length > 0) && <>
             <h3>Dans la campagne</h3>
             {cartes.length > 0 && <p>Cartes : {cartes.map((k) => <button key={k.id} className="pays-lien" onClick={() => aller('cartes', k.id)}>{k.nom}</button>)}</p>}

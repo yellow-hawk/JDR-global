@@ -1,0 +1,42 @@
+/* Calendrier mis en forme : classes .cal- */
+.cal { display: flex; flex-direction: column; gap: 8px; }
+.cal-barre { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.cal-titre { font-family: var(--titre); font-size: 1.15rem; min-width: 12ch; text-align: center; }
+.cal-vues { display: inline-flex; gap: 2px; }
+.cal-vues .btn[aria-pressed='true'] { background: var(--accent); color: var(--fond); border-color: var(--accent); }
+.cal-grille { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.cal-grille th { font-size: 0.75rem; font-weight: 600; color: var(--encre-2); padding: 4px 2px; text-transform: uppercase; letter-spacing: 0.04em; }
+.cal-case { vertical-align: top; height: 84px; border: 1px solid var(--trait); padding: 3px 4px; cursor: pointer; overflow: hidden; background: var(--panneau); }
+.cal-case:hover { background: var(--fond-2); }
+.cal-vide { border: 1px solid var(--trait); background: repeating-linear-gradient(45deg, transparent 0 6px, var(--fond-2) 6px 7px); }
+.cal-num { display: flex; justify-content: space-between; font-weight: 600; font-size: 0.9rem; }
+.cal-lune { font-style: normal; font-size: 0.85rem; }
+.cal-auj { box-shadow: inset 0 0 0 2px var(--accent); }
+.cal-auj .cal-num, .cal-col.cal-auj .cal-col-titre b { color: var(--accent); }
+.cal-fete { background: color-mix(in srgb, var(--accent) 9%, var(--panneau)); }
+.cal-marque { display: block; font-size: 0.75rem; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-left: 3px solid var(--trait); padding-left: 4px; margin-top: 2px; }
+.cal-fete.cal-marque, .cal-marque.cal-fete { border-color: var(--accent); background: none; }
+.cal-marque.cal-evenement { border-color: #3f73b8; }
+.cal-marque.cal-seance { border-color: var(--succes); }
+.cal-marque.cal-histoire { border-color: #8a6a4a; }
+.cal-plus { font-size: 0.72rem; color: var(--encre-2); }
+.cal-petite .cal-case { height: 26px; padding: 1px 2px; text-align: center; }
+.cal-petite .cal-num { justify-content: center; font-weight: normal; font-size: 0.78rem; }
+.cal-petite .cal-lune { display: none; }
+.cal-point { display: block; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); margin: 0 auto; }
+.cal-annee-vue { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; }
+.cal-mini-titre { border: 0; background: none; font: 600 0.95rem var(--titre); color: var(--encre); cursor: pointer; padding: 0 0 2px; }
+.cal-semaine { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(110px, 1fr); gap: 6px; overflow-x: auto; }
+.cal-col { border: 1px solid var(--trait); border-radius: var(--rayon); padding: 6px; min-height: 160px; background: var(--panneau); cursor: pointer; display: flex; flex-direction: column; gap: 4px; }
+.cal-col .cal-marque { white-space: normal; }
+.cal-col-titre { font-size: 0.85rem; color: var(--encre-2); }
+.cal-col-titre b { font-size: 1.2rem; color: var(--encre); }
+.cal-lune-texte { font-size: 0.8rem; color: var(--encre-2); margin: 0; }
+.cal-jour { display: flex; flex-direction: column; gap: 8px; }
+.cal-detail { border-left: 3px solid var(--trait); padding: 4px 10px; background: var(--panneau); border-radius: 4px; }
+.cal-detail.cal-fete { border-color: var(--accent); }
+.cal-detail.cal-evenement { border-color: #3f73b8; }
+.cal-detail.cal-seance { border-color: var(--succes); }
+.cal-detail p { margin: 4px 0; white-space: pre-wrap; }
+.cal-legende { margin: 0; font-size: 0.8rem; }
+@media (max-width: 700px) { .cal-case { height: 56px; } .cal-marque { display: none; } }

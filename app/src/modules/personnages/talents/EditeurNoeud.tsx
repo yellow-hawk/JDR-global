@@ -1,4 +1,4 @@
-// Édition d'un talent : nom, texte, rang, niveau, coût, prérequis, effets chiffrés, magie des sceaux.
+// Édition d'un talent : icône, nom, texte, rang, niveau, coût, forme, prérequis (tous / au moins un), effets chiffrés, magie des sceaux.
 import type { NoeudTalent } from '../../../noyau/talents';
 import { Champ } from '../../../interface/composants';
 
@@ -18,6 +18,7 @@ export function EditeurNoeud({ n, autres, competences, onChange, onSupprimer }: 
   return (
     <div className="pile perso-editeur-noeud" style={{ gap: 6 }}>
       <div className="ligne">
+        <input value={n.icone ?? ''} placeholder="✦" title="Icône (emoji)" style={{ width: 48, textAlign: 'center', fontSize: '1.2rem' }} onChange={(e) => set({ icone: e.target.value || undefined })} />
         <input value={n.nom} placeholder="Nom du talent" style={{ flex: 1, fontWeight: 600 }} onChange={(e) => set({ nom: e.target.value })} />
         <button className="btn btn-petit btn-danger" onClick={onSupprimer}>Supprimer</button>
       </div>
@@ -26,6 +27,9 @@ export function EditeurNoeud({ n, autres, competences, onChange, onSupprimer }: 
         <Champ libelle="Rang (ligne)"><input type="number" min={1} max={8} value={n.rang} onChange={(e) => set({ rang: Number(e.target.value) })} /></Champ>
         <Champ libelle="Niveau requis"><input type="number" min={1} max={20} value={n.niveau} onChange={(e) => set({ niveau: Number(e.target.value) })} /></Champ>
         <Champ libelle="Coût (points)"><input type="number" min={0} max={10} value={n.cout} onChange={(e) => set({ cout: Number(e.target.value) })} /></Champ>
+        <Champ libelle="Forme"><select value={n.sorte ?? ''} onChange={(e) => set({ sorte: (e.target.value || undefined) as NoeudTalent['sorte'] })}>
+          <option value="">Talent</option><option value="jonction">Jonction (losange)</option><option value="sommet">Sommet (couronne)</option>
+        </select></Champ>
       </div>
       <Champ libelle="Prérequis (Ctrl + clic pour plusieurs)">
         <select multiple size={Math.min(5, Math.max(2, autres.length))} value={n.requis}
@@ -33,6 +37,13 @@ export function EditeurNoeud({ n, autres, competences, onChange, onSupprimer }: 
           {autres.map((a) => <option key={a.id} value={a.id}>{a.nom} (rang {a.rang})</option>)}
         </select>
       </Champ>
+      <Champ libelle="Au moins un de (branches qui se rejoignent ; Ctrl + clic)">
+        <select multiple size={Math.min(5, Math.max(2, autres.length))} value={n.requisUn ?? []}
+          onChange={(e) => { const l = [...e.target.selectedOptions].map((o) => o.value); set({ requisUn: l.length ? l : undefined }); }}>
+          {autres.map((a) => <option key={a.id} value={a.id}>{a.nom} (rang {a.rang})</option>)}
+        </select>
+      </Champ>
+      <p className="discret" style={{ margin: 0 }}>La place dans l’arbre se calcule toute seule d’après les prérequis (le rang est recalculé à l’affichage).</p>
       <div className="ligne">
         <span className="discret">Effets :</span>
         {(n.effets ?? []).map((x, i) => (

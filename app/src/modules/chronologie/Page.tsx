@@ -7,7 +7,8 @@ import { BlocMj, Champ } from '../../interface/composants';
 import { Frise } from './Frise';
 import { Horloge } from './Horloge';
 import { useBandeau } from './EnTete';
-import { SORTES_EVENEMENT, ajouterEvenement, elementsFrise, modifierEvenement, reference, supprimerEvenement, tempsDe } from './logique';
+import { SORTES_EVENEMENT, ajouterEvenement, elementsFrise, luneDuJour, marquesCalendrier, modifierEvenement, reference, supprimerEvenement, tempsDe } from './logique';
+import { VueCalendrier } from '../../interface/calendrier';
 import './chronologie.css';
 
 export function Page() {
@@ -74,6 +75,11 @@ export function Page() {
           )}
         </aside>
       </div>
+      <section className="carte-ui">
+        <h2 style={{ marginTop: 0 }}>Calendrier{r.civ ? ` ${r.civ.nom.replace(/^les /, 'des ')}` : ''}</h2>
+        <VueCalendrier key={`${r.civ?.cle ?? ''}`} cal={r.cal} aujourdhui={tempsDe(c).date} marques={marquesCalendrier(c)} lune={(n) => luneDuJour(r, n)}
+          onOuvrir={(m) => { if (m.sorte === 'evenement' && m.cible?.cible) setChoisi(m.cible.cible); else if (m.cible) emettre('naviguer', m.cible); }} />
+      </section>
       <Frise elements={elements} lignes={lignes} maintenant={maintenant} choisi={choisi} onChoisir={setChoisi} />
     </div>
   );

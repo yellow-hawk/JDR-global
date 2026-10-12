@@ -32,7 +32,7 @@ export interface Jeton {
   drapeaux: DrapeauxTour;
   concentration: string | null;
   mouvementUtilise: number;
-  vision: number;           // portée de vue en cases
+  vision: number;           // vision dans le noir, en cases (0 : aucune ; la portée réelle dépend de la lumière)
   degats: string;           // formule, ex. "1d8+2"
   bonusAttaque?: number | null;
   initiative: number;
@@ -114,6 +114,10 @@ export interface EtatTable {
   opacites: { carte: number; jetons: number; sorts: number; terrains: number };
   /** États supplémentaires apportés par des packs (en plus de la liste de base). */
   etatsSup?: string[];
+  /** Lumière du lieu : fixe la portée de vue des PJ (voir moteur/vision). Absente = vive. */
+  lumiere?: 'vive' | 'faible' | 'obscurite';
+  /** Cases d'entrée de la carte : les PJ y sont placés au lancement d'une rencontre. */
+  entree?: Cellule[];
 }
 
 export const cle = (c: Cellule | { x: number; y: number }): string =>

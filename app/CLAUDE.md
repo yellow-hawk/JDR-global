@@ -59,6 +59,9 @@ npm run build                    # dist/ (types vérifiés avant)
 | `src/modules/generateurs` | PNJ, taverne, boutique, butin à la volée | idem |
 | `src/modules/reseau` | Graphe de la campagne (centralité, communautés, réputation, relations entre personnages) | idem |
 | `src/modules/organigrammes` | Institutions par régime, successions, quêtes, cartes, personnages | idem |
+| `src/modules/livre` | Livre de campagne imprimable (PDF) : sections et éléments au choix, version MJ ou joueurs | idem |
+| `src/interface/calendrier` | Calendrier mis en forme (année, mois, semaine, jour), commun aux modules | `src/interface/MODULE.md` |
+| `app/scripts/generer-talents.py` | Source des arbres de talents maison → `noyau/regles/dnd5e/talents.json` | en-tête du script |
 | `public/atlas/` | Atlas d'origine (scripts classiques) + `23-pont.js` | `src/modules/monde/MODULE.md` |
 | `../blender/` | Chaîne Blender scriptée de l'avatar (MPFB) : corps, morphs, coiffures, tenues → `public/avatar/` | `../blender/LISEZMOI.md` |
 

@@ -8,7 +8,9 @@ import { versEcran, type Camera } from './camera';
 import { dessinerAuras, dessinerJeton, type MarquesJeton } from './jetons';
 import { dessinerParticules, type Particule } from './particules';
 import { casesVisiblesEcran, cheminCase, ecran, peintre, type Peintre } from './peintre';
-import { jetonVisible, type Public } from './visibilite';
+import { jetonVisible, vueActive, type Public } from './visibilite';
+import { vueDesPj } from '../moteur/vision';
+import { largeurCase } from '../moteur/grille';
 import { dessinerZones } from './zones';
 
 export interface Fond { image: CanvasImageSource; largeur: number; hauteur: number }
@@ -52,18 +54,42 @@ function dessinerGrille(p: Peintre, couleur: string): void {
   ctx.restore();
 }
 
+let calqueBrouillard: HTMLCanvasElement | null = null;
+
+/**
+ * Brouillard. MJ : voile léger sur ce qui n'est pas révélé. Joueurs : noir complet sur l'inexploré, ombre sur ce
+ * qui a été vu mais ne l'est plus (quand la vue des PJ est active) ; bords adoucis.
+ */
 function dessinerBrouillard(p: Peintre, e: EtatTable, pub: Public): void {
   if (!e.brouillard.actif) return;
   const { ctx } = p;
-  ctx.save();
-  ctx.fillStyle = pub === 'mj' ? 'rgba(0,0,0,.55)' : 'rgba(0,0,0,1)';
-  for (const c of casesVisiblesEcran(p)) {
-    if (e.brouillard.cases[cle(c)]) continue;
-    const [sx, sy] = ecran(p, c);
-    cheminCase(p, sx, sy, p.g.type === 'hex' ? 1.02 : 1.03);
-    ctx.fill();
+  const vues = pub === 'joueurs' && vueActive(e) ? vueDesPj(e) : null;
+  // Le voile est peint sur un calque, puis posé flouté pour adoucir les bords des rayons.
+  calqueBrouillard ??= typeof document !== 'undefined' ? document.createElement('canvas') : null;
+  const calque = calqueBrouillard;
+  if (calque) { calque.width = p.largeur; calque.height = p.hauteur; } // remet aussi le calque à zéro
+  const cible = calque?.getContext('2d') ?? ctx;
+  const peindre = (couleur: string, garder: (k: string) => boolean) => {
+    cible.fillStyle = couleur;
+    cible.beginPath();
+    for (const c of casesVisiblesEcran(p)) {
+      if (garder(cle(c))) continue;
+      const [sx, sy] = ecran(p, c);
+      cheminCase({ ...p, ctx: cible }, sx, sy, p.g.type === 'hex' ? 1.02 : 1.03, false);
+    }
+    cible.fill();
+  };
+  if (pub === 'mj') peindre('rgba(0,0,0,.55)', (k) => !!e.brouillard.cases[k]);
+  else {
+    peindre('rgba(0,0,0,1)', (k) => !!e.brouillard.cases[k]);
+    if (vues) peindre('rgba(4,5,9,.62)', (k) => !e.brouillard.cases[k] || vues.has(k));
   }
-  ctx.restore();
+  if (calque) {
+    ctx.save();
+    if (pub === 'joueurs') ctx.filter = `blur(${Math.max(1, Math.round(largeurCase(e.grille) * p.cam.zoom * 0.18))}px)`;
+    ctx.drawImage(calque, 0, 0);
+    ctx.restore();
+  }
 }
 
 export function dessinerScene(ctx: CanvasRenderingContext2D, s: Scene): void {

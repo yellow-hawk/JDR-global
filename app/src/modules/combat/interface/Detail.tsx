@@ -42,7 +42,7 @@ function DetailJeton({ ctl, j, mj }: { ctl: Controleur; j: Jeton; mj: boolean })
             {[1, 2, 3, 4].map((t) => <option key={t} value={t}>{t}×{t}</option>)}
           </select></label>
           <label className="combat-champ">Dégâts<input value={j.degats} onChange={(ev) => maj((x) => ({ ...x, degats: ev.target.value }), true)} /></label>
-          <Num libelle="Vue" v={j.vision} onChange={(n) => maj((x) => ({ ...x, vision: n }), true)} />
+          <Num libelle="Vision noir" v={j.vision} onChange={(n) => maj((x) => ({ ...x, vision: n }), true)} />
           <label className="combat-champ">Bonus att.<input type="number" value={j.bonusAttaque ?? ''} placeholder="auto"
             onChange={(ev) => maj((x) => ({ ...x, bonusAttaque: ev.target.value === '' ? null : +ev.target.value }), true)} /></label>
           <label className="combat-champ combat-coche"><input type="checkbox" checked={!j.visible} onChange={(ev) => maj((x) => ({ ...x, visible: !ev.target.checked }))} />Caché</label>

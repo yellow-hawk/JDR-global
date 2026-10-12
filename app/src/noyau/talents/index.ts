@@ -14,8 +14,14 @@ export interface NoeudTalent {
   cout: number;
   /** Talents à posséder (tous). */
   requis: string[];
+  /** Talents dont il faut posséder au moins un (branches qui se rejoignent). */
+  requisUn?: string[];
   effets?: Effet[];
   magie?: MagieTalent;
+  /** Icône (emoji) du talent dans l'arbre. */
+  icone?: string;
+  /** Jonction (relie deux branches) ou sommet (fin de branche). */
+  sorte?: 'jonction' | 'sommet';
 }
 
 export interface BrancheTalents { id: string; nom: string; couleur?: string; noeuds: NoeudTalent[] }
@@ -67,6 +73,8 @@ export function etatTalent(p: Personnage, n: NoeudTalent, parNiveau = 1, arbres 
   if (niveauTotal(p) < n.niveau) return { etat: 'verrouille', raison: `niveau ${n.niveau} requis` };
   const manque = n.requis.filter((r) => !a.includes(r));
   if (manque.length) return { etat: 'verrouille', raison: `requiert ${manque.map((r) => noeudParId(r, arbres)?.nom ?? r).join(', ')}` };
+  if (n.requisUn?.length && !n.requisUn.some((r) => a.includes(r)))
+    return { etat: 'verrouille', raison: `requiert ${n.requisUn.map((r) => noeudParId(r, arbres)?.nom ?? r).join(' ou ')}` };
   if (pointsTalent(p, parNiveau, arbres).restants < n.cout) return { etat: 'verrouille', raison: `${n.cout} point${n.cout > 1 ? 's' : ''} requis` };
   return { etat: 'disponible' };
 }
@@ -103,8 +111,19 @@ export function acquerir(p: Personnage, id: string, parNiveau = 1, arbres = tous
 }
 
 /** Talents qui dépendent de `id` parmi les acquis (on ne peut pas retirer un talent dont d'autres dépendent). */
-export const dependants = (p: Personnage, id: string, arbres = tousLesArbres()): NoeudTalent[] =>
-  acquis(p).map((x) => noeudParId(x, arbres)).filter((n): n is NoeudTalent => !!n && n.requis.includes(id));
+export const dependants = (p: Personnage, id: string, arbres = tousLesArbres()): NoeudTalent[] => {
+  const a = acquis(p);
+  return a.map((x) => noeudParId(x, arbres)).filter((n): n is NoeudTalent => !!n && (n.requis.includes(id)
+    // « au moins un » : dépend de `id` seulement si aucun autre talent de la liste n'est acquis.
+    || (!!n.requisUn?.includes(id) && !n.requisUn.some((r) => r !== id && a.includes(r)))));
+};
+
+/** Talents acquis qui n'existent plus dans aucun arbre (arbres refondus ou supprimés) : leurs points sont rendus. */
+export const talentsDisparus = (p: Personnage, arbres = tousLesArbres()): string[] => acquis(p).filter((id) => !noeudParId(id, arbres));
+export const sansTalentsDisparus = (p: Personnage, arbres = tousLesArbres()): Personnage => {
+  const d = talentsDisparus(p, arbres);
+  return d.length ? avecTalents(p, acquis(p).filter((x) => !d.includes(x))) : p;
+};
 
 export function retirer(p: Personnage, id: string, arbres = tousLesArbres()): Personnage {
   const n = noeudParId(id, arbres);

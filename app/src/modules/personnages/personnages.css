@@ -97,3 +97,22 @@
 .perso-montrer { display: inline-flex; align-items: center; gap: 6px; }
 .perso-montrer select { font: inherit; padding: 4px 6px; border: 1px solid var(--trait); border-radius: 6px; background: var(--fond); color: var(--encre); }
 .perso-direct { color: #c0392b; font-weight: 600; font-size: 0.85rem; }
+/* Arbre de talents en étoile */
+.talents-disposition { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 320px); gap: 12px; align-items: start; }
+.talents-boite { position: relative; border: 1px solid var(--trait); border-radius: var(--rayon); background: var(--panneau); overflow: hidden; }
+.talents-lien { fill: none; stroke: var(--trait); stroke-width: 2; vector-effect: non-scaling-stroke; opacity: 0.7; }
+.talents-lien-acquis { fill: none; stroke-width: 4; vector-effect: non-scaling-stroke; }
+.talents-lien-ouvert { fill: none; stroke-width: 2.5; stroke-dasharray: 4 4; vector-effect: non-scaling-stroke; opacity: 0.9; }
+.talents-branche { font: 600 18px var(--titre); text-anchor: middle; dominant-baseline: middle; opacity: 0.85; }
+.talents-noeud { cursor: pointer; }
+.talents-noeud circle, .talents-noeud rect { fill: var(--fond); stroke-width: 3; vector-effect: non-scaling-stroke; }
+.talents-noeud .talents-couronne { fill: none; stroke-width: 1.5; stroke-dasharray: 3 3; }
+.talents-icone { font-size: 22px; text-anchor: middle; dominant-baseline: middle; pointer-events: none; font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif; }
+.talents-nom { font: 11px var(--texte); fill: var(--encre); text-anchor: middle; pointer-events: none; paint-order: stroke; stroke: var(--panneau); stroke-width: 3px; }
+.talents-verrouille { opacity: 0.38; }
+.talents-verrouille .talents-icone { filter: grayscale(1); }
+.talents-disponible circle, .talents-disponible rect { animation: talents-lueur 1.8s ease-in-out infinite; }
+.talents-acquis .talents-nom { font-weight: 700; }
+.talents-choisi circle, .talents-choisi rect { stroke: var(--encre) !important; stroke-width: 4; }
+@keyframes talents-lueur { 50% { filter: drop-shadow(0 0 6px var(--accent)); } }
+@media (max-width: 900px) { .talents-disposition { grid-template-columns: 1fr; } }

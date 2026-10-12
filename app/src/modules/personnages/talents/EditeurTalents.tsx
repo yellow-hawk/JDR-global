@@ -9,6 +9,7 @@ import { choisirFichier, telecharger } from '../../../noyau/stockage';
 import { emettre } from '../../../noyau/bus';
 import { Champ } from '../../../interface/composants';
 import { EditeurNoeud } from './EditeurNoeud';
+import { VueArbreTalents } from './VueArbreTalents';
 
 export const arbresDeCampagne = (c: Campagne): ArbreTalents[] =>
   ((c.modules?.personnages as { arbres?: ArbreTalents[] } | undefined)?.arbres) ?? [];
@@ -84,7 +85,8 @@ export function EditeurTalents({ c, R, modifier, onFermer }: { c: Campagne; R: S
               </div>
             )}
             {modifiable && <Champ libelle="Description"><input value={arbre.texte ?? ''} onChange={(e) => majArbre((a) => ({ ...a, texte: e.target.value }))} /></Champ>}
-            <div className="perso-arbre" style={{ gridTemplateColumns: `repeat(${arbre.branches.length}, minmax(160px, 1fr))` }}>
+            <VueArbreTalents arbre={arbre} choisi={noeud} onChoisir={(n) => setNoeud(n?.id ?? null)} hauteur={480} />
+            <div className="perso-arbre" style={{ gridTemplateColumns: `repeat(${arbre.branches.length}, minmax(140px, 1fr))` }}>
               {arbre.branches.map((b) => (
                 <div key={b.id} className="pile" style={{ gap: 6 }}>
                   {modifiable ? (
@@ -94,16 +96,14 @@ export function EditeurTalents({ c, R, modifier, onFermer }: { c: Campagne; R: S
                       <button className="btn btn-petit" title="Supprimer la branche" onClick={() => window.confirm(`Supprimer la branche « ${b.nom} » ?`) && majArbre((a) => ({ ...a, branches: a.branches.filter((x) => x.id !== b.id) }))}>✕</button>
                     </div>
                   ) : <div className="perso-branche-titre" style={{ borderColor: b.couleur }}>{b.nom}</div>}
-                  {[...b.noeuds].sort((x, y) => x.rang - y.rang).map((n) => (
-                    <button key={n.id} className={`perso-talent ${n.rang === 1 ? 'perso-talent-racine' : ''} ${noeud === n.id ? 'perso-talent-choisi' : ''}`} onClick={() => setNoeud(n.id)}>
-                      <strong>{n.nom || 'sans nom'}</strong><small>rang {n.rang} · niv. {n.niveau} · {n.cout} pt</small>
-                    </button>
-                  ))}
+                  <small className="discret">{b.noeuds.length} talent{b.noeuds.length > 1 ? 's' : ''}</small>
                   {modifiable && (
                     <button className="btn btn-petit" onClick={() => {
-                      const rang = Math.max(0, ...b.noeuds.map((x) => x.rang)) + 1;
-                      const prec = b.noeuds.find((x) => x.rang === rang - 1);
-                      const n: NoeudTalent = { id: nouvelId('talent'), nom: 'Nouveau talent', texte: '', rang, niveau: [1, 3, 6, 10, 14, 17][rang - 1] ?? 17, cout: rang > 2 ? rang - 1 : 1, requis: prec ? [prec.id] : [] };
+                      // Accroché au talent choisi s'il est dans cette branche, sinon au plus profond de la branche, sinon au tronc.
+                      const sel = b.noeuds.find((x) => x.id === noeud);
+                      const prec = sel ?? [...b.noeuds].sort((x, y) => y.rang - x.rang)[0] ?? tousNoeuds.find((x) => !x.requis.length && !x.requisUn?.length);
+                      const rang = (prec?.rang ?? 0) + 1;
+                      const n: NoeudTalent = { id: nouvelId('talent'), nom: 'Nouveau talent', texte: '', icone: '✦', rang, niveau: [1, 1, 3, 5, 7, 9, 11, 13][rang - 1] ?? 15, cout: 1, requis: prec ? [prec.id] : [] };
                       majArbre((a) => ({ ...a, branches: a.branches.map((x) => (x.id === b.id ? { ...x, noeuds: [...x.noeuds, n] } : x)) }));
                       setNoeud(n.id);
                     }}>+ Talent</button>
@@ -115,7 +115,7 @@ export function EditeurTalents({ c, R, modifier, onFermer }: { c: Campagne; R: S
             {noeud && (() => {
               const n = tousNoeuds.find((x) => x.id === noeud);
               if (!n) return null;
-              if (!modifiable) return <div className="carte-ui"><strong>{n.nom}</strong><p>{n.texte}</p><p className="discret">Prérequis : {n.requis.map((r) => tousNoeuds.find((x) => x.id === r)?.nom ?? r).join(', ') || 'aucun'}</p></div>;
+              if (!modifiable) return <div className="carte-ui"><strong>{n.nom}</strong><p>{n.texte}</p><p className="discret">Prérequis : {n.requis.map((r) => tousNoeuds.find((x) => x.id === r)?.nom ?? r).join(', ') || 'aucun'}{n.requisUn?.length ? ` · au moins un de : ${n.requisUn.map((r) => tousNoeuds.find((x) => x.id === r)?.nom ?? r).join(', ')}` : ''}</p></div>;
               return (
                 <EditeurNoeud n={n} autres={tousNoeuds.filter((x) => x.id !== n.id)} competences={R.catalogue.competences}
                   onChange={(nv) => majArbre((a) => ({ ...a, branches: a.branches.map((b) => ({ ...b, noeuds: b.noeuds.map((x) => (x.id === nv.id ? nv : x)) })) }))}

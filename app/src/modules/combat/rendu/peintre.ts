@@ -22,9 +22,9 @@ export function peintre(ctx: CanvasRenderingContext2D, cam: Camera, g: Grille, l
 export const ecran = (p: Peintre, c: Cellule): [number, number] => { const [wx, wy] = centre(p.g, c); return versEcran(p.cam, wx, wy); };
 
 /** Trace le contour d'une case (carré ou hexagone) centré sur (sx, sy), réduit d'un facteur. */
-export function cheminCase(p: Peintre, sx: number, sy: number, facteur = 1): void {
+export function cheminCase(p: Peintre, sx: number, sy: number, facteur = 1, nouveauChemin = true): void {
   const { ctx } = p;
-  ctx.beginPath();
+  if (nouveauChemin) ctx.beginPath();
   if (p.g.type === 'hex') {
     const pts = coinsHex(sx, sy, tailleHex(p.g) * p.cam.zoom * facteur);
     pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));

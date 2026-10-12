@@ -16,7 +16,8 @@ import { definition as reseau } from '../modules/reseau';
 import { definition as documents } from '../modules/documents';
 import { definition as chronologie } from '../modules/chronologie';
 import { definition as generateurs } from '../modules/generateurs';
+import { definition as livre } from '../modules/livre';
 
-export const MODULES: DefinitionModule[] = [campagne, journal, chronologie, documents, monde, pays, cartes, personnages, genealogie, avatar, magie, combat, generateurs, reseau, organigrammes];
+export const MODULES: DefinitionModule[] = [campagne, journal, chronologie, documents, monde, pays, cartes, personnages, genealogie, avatar, magie, combat, generateurs, reseau, organigrammes, livre];
 
 export const moduleParId = (id: string): DefinitionModule | undefined => MODULES.find((m) => m.id === id);

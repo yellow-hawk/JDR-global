@@ -2,7 +2,7 @@
 import type { Campagne, Personnage, Rencontre, SortePersonnage } from '../../noyau/contrat';
 import { nouvelId } from '../../noyau/contrat';
 import type { SystemeRegles } from '../../noyau/regles';
-import { ajouterJeton, ajouterZone, appliquerPacks, caseLibre, estPack, jetonV7, lireEtat, nouvelEtat, TERRAINS, zoneDeTerrain } from './moteur';
+import { ajouterJeton, ajouterZone, appliquerPacks, caseLibre, estPack, jetonV7, lireEtat, nouvelEtat, revelerParLaVue, TERRAINS, zoneDeTerrain } from './moteur';
 import type { Camp, Cellule, EtatTable, Effet, Gabarit, Jeton, Modele, Pack } from './moteur';
 
 /** Taille d'une case de combat en mètres. */
@@ -129,6 +129,24 @@ export function retirerPack(c: Campagne, id: string): Campagne {
 export const avecTableEnCours = (c: Campagne, e: EtatTable): Campagne =>
   ({ ...c, modules: { ...c.modules, combat: { ...c.modules?.combat, table: e as unknown as Record<string, unknown> } } });
 
+/* ---------- lancement d'une rencontre ---------- */
+
+/**
+ * Table prête à jouer : les PJ absents sont placés à l'entrée (cases d'entrée de la carte, sinon près des PJ déjà
+ * posés) ; sur une carte, le brouillard et la vue des PJ s'activent et ce qu'ils voient est révélé.
+ */
+export function preparerLancement(e0: EtatTable, pjs: (Partial<Modele> & { persoId?: string | null })[], o: { brouillard: boolean; lumiere?: EtatTable['lumiere'] }): EtatTable {
+  let e: EtatTable = { ...e0, lumiere: e0.lumiere ?? o.lumiere ?? 'vive' };
+  const deja = e.jetons.filter((j) => j.camp === 'pj').map((j): Cellule => [j.x, j.y]);
+  const entree: Cellule[] = e.entree?.length ? e.entree : deja.length ? deja : [[1, 1]];
+  pjs.filter((m) => !e.jetons.some((j) => j.persoId && j.persoId === m.persoId)).forEach((m, i) => {
+    const [x, y] = caseLibre(e, entree[i % entree.length]);
+    e = ajouterJeton(e, m, x, y).etat;
+  });
+  if (o.brouillard && e.fond) e = revelerParLaVue({ ...e, brouillard: { ...e.brouillard, actif: true }, vision: true }, TERRAINS);
+  return e;
+}
+
 /* ---------- table préparée depuis une carte de bataille générée ---------- */
 
 export interface PreparationTable {
@@ -140,11 +158,16 @@ export interface PreparationTable {
   pj: Partial<Modele>[];
   adversaires: Partial<Modele>[];
   packs?: Pack[];
+  /** Lumière du lieu (souterrain : obscurité). */
+  lumiere?: EtatTable['lumiere'];
 }
 
 /** Table prête à jouer : carte en fond calée sur la grille, murs et obstacles en terrains, PJ et adversaires placés. */
 export function tableDepuisPlan(p: PreparationTable): EtatTable {
-  let e: EtatTable = { ...appliquerPacks(nouvelEtat(), p.packs ?? []), fond: { carte: p.carte, pxCase: p.pxCase }, opacites: { carte: 1, jetons: 0.95, sorts: 0.35, terrains: 0.12 } };
+  let e: EtatTable = {
+    ...appliquerPacks(nouvelEtat(), p.packs ?? []), fond: { carte: p.carte, pxCase: p.pxCase }, opacites: { carte: 1, jetons: 0.95, sorts: 0.35, terrains: 0.12 },
+    entree: p.depart, lumiere: p.lumiere ?? 'vive', brouillard: { actif: true, cases: {} }, vision: true,
+  };
   for (const r of p.rects) {
     const t = TERRAINS.find((x) => x.id === r.terrain);
     if (!t) continue;

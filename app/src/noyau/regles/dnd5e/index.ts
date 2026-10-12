@@ -31,7 +31,7 @@ export const dnd5e: SystemeAvecFiche = {
       cle: `carac.${cle}`, libelle, sorte: 'nombre' as const, groupe: 'Caractéristiques', min: 1, max: 30,
     })),
     { cle: 'degats', libelle: 'Dégâts', sorte: 'formule', groupe: 'Attaque' },
-    { cle: 'vision', libelle: 'Vision (cases)', sorte: 'nombre', groupe: 'Attaque', min: 0 },
+    { cle: 'vision', libelle: 'Vision dans le noir (cases)', sorte: 'nombre', groupe: 'Attaque', min: 0 },
     { cle: 'bonusAttaque', libelle: 'Bonus d’attaque', sorte: 'nombre', groupe: 'Attaque' },
     { cle: 'niveau', libelle: 'Niveau', sorte: 'nombre', groupe: 'Profil', min: 1, max: 20 },
   ],

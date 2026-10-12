@@ -63,3 +63,9 @@ L'onglet Dés utilise le plateau partagé (`interface/des`) : le jeton choisi es
 - `interface/GenererRencontre.tsx` (colonne campagne) : chef = vrai PNJ « ennemi » (fiche, avatar, portrait posé sur son jeton), PJ placés, table vidée (annulable).
 - Icônes : `Jeton.icone` (emoji) ; absente = d'après le nom (`iconeDe`, motifs `donnees.json` → `icones`). `interface/ImageJeton.tsx` : image importée (recadrée), icône, retrait, « même image pour tous les … » (`nomDeBase`) ; aussi sur les modèles de la bibliothèque (🖼).
 - Écran joueurs : la diffusion de la table a la source `combat` et s'arrête dès qu'une autre source prend l'écran.
+
+## Vision et lancement
+
+- `moteur/vision.ts` : `porteeVue(jeton, lumiere)` (vive 40 cases ; pénombre 12 ou vision dans le noir ; obscurité : vision dans le noir, sinon torche 8), `casesVisibles` (rayons projetés, arrêtés par le premier mur, qui est vu), `vueDesPj` (mémorisé), `revelerParLaVue` (ce qui est révélé le reste).
+- Vue joueurs (`rendu/visibilite.ts`, `dessin.ts`) : noir sur l'inexploré, ombre sur l'exploré hors de vue, bords adoucis ; les adversaires ne sont montrés qu'en vue directe des PJ ; le camp des joueurs toujours visible.
+- `logique.preparerLancement` + `interface/lancement.ts` : PJ absents posés à l'entrée (`EtatTable.entree`, cases de départ des cartes générées), brouillard et vue des PJ activés sur une carte ; lumière déduite du lieu (souterrain : obscurité). Réglage « Lumière du lieu » dans l'onglet Affichage.
