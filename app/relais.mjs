@@ -10,6 +10,7 @@ export function adressesLocales() {
   return Object.values(os.networkInterfaces()).flat().filter((x) => x && x.family === 'IPv4' && !x.internal && !x.address.startsWith('169.254.')).map((x) => x.address);
 }
 
+/** `port` : nombre, ou fonction qui le donne (connu seulement une fois le serveur à l'écoute). */
 export function creerRelais(port) {
   /** salon → Map(qui → réponse en flux) */
   const salons = new Map();
@@ -24,7 +25,7 @@ export function creerRelais(port) {
 
     if (chemin === '/relais/infos') {
       res.setHeader('Content-Type', 'application/json; charset=utf-8');
-      res.end(JSON.stringify({ adresses: adressesLocales(), port }));
+      res.end(JSON.stringify({ adresses: adressesLocales(), port: typeof port === 'function' ? port() : port }));
       return true;
     }
     if (!salon || !qui) { res.statusCode = 400; res.end('salon et qui requis'); return true; }

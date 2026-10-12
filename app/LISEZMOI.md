@@ -6,6 +6,8 @@
 
 **Avec Node.js installé** (https://nodejs.org), `lancer.bat` démarre un serveur qui relaie aussi l'écran joueurs vers **les tablettes et autres appareils du même Wi-Fi**. La première fois, Windows demande d'autoriser Node.js dans le pare-feu : accepter pour les réseaux privés.
 
+Si le port 8417 est déjà pris par un autre programme (Steam en prend parfois un), le serveur en choisit un autre (8427, 8437…), le dit dans la fenêtre noire et **le garde** aux lancements suivants (fichier `port-local.txt`). Les campagnes étant rangées par adresse, celles de l'ancienne adresse se récupèrent par **Exporter l'archive complète** puis **Importer**. En cas d'erreur, la fenêtre noire reste ouverte pour qu'on puisse lire le message.
+
 **En ligne** : la même application sera publiée sur GitHub Pages (étape à venir).
 
 > Tes campagnes sont enregistrées **dans le navigateur, pour une adresse donnée**. La version locale (`localhost:8417`), la version de développement (`localhost:5173`) et la version en ligne ont chacune leurs propres campagnes. Pour passer de l'une à l'autre : **Campagne → Exporter l'archive complète**, puis **Importer une archive** de l'autre côté.
