@@ -41,10 +41,26 @@ function creerTunnel(port) {
       t.etat = 'demarrage'; t.adresse = null; t.erreur = null;
       const p = spawn(exe, ['tunnel', '--no-autoupdate', '--url', `http://localhost:${typeof port === 'function' ? port() : port}`], { windowsHide: true });
       t.processus = p;
+      // L'adresse arrive d'abord ; l'accès n'est ouvert qu'une fois le tunnel vraiment relié (« Registered tunnel
+      // connection »). Il passe par le port 7844 : certains réseaux (partage de connexion d'un téléphone, réseaux
+      // d'entreprise) le bloquent, et l'adresse répond alors « erreur 1033 ».
+      let adresse = null;
       const lire = (d) => {
-        const m = /https:\/\/[a-z0-9-]+\.trycloudflare\.com/.exec(String(d));
-        if (m && !t.adresse) { t.adresse = m[0]; t.etat = 'actif'; console.log(`Accès à distance ouvert : ${t.adresse}`); }
+        const texte = String(d);
+        const m = /https:\/\/[a-z0-9-]+\.trycloudflare\.com/.exec(texte);
+        if (m && !adresse) adresse = m[0];
+        if (/Registered tunnel connection/i.test(texte) && adresse && t.etat !== 'actif') {
+          t.adresse = adresse; t.etat = 'actif'; clearTimeout(delai);
+          console.log(`Accès à distance ouvert : ${t.adresse}`);
+        }
       };
+      const delai = setTimeout(() => {
+        if (t.processus !== p || t.etat === 'actif') return;
+        t.processus = null; p.kill();
+        t.etat = 'erreur'; t.adresse = null;
+        t.erreur = 'le tunnel n’arrive pas à se relier à Cloudflare : ce réseau bloque le port 7844 (fréquent avec le partage de connexion d’un téléphone). Essaie depuis le Wi-Fi de ta box';
+        console.log(`Accès à distance impossible : ${t.erreur}.`);
+      }, 30000);
       p.stdout.on('data', lire); p.stderr.on('data', lire);
       p.on('exit', (code) => { if (t.processus === p) { t.processus = null; t.adresse = null; t.etat = code ? 'erreur' : 'arrete'; if (code) t.erreur = `cloudflared s’est arrêté (code ${code})`; } });
       p.on('error', (e) => { t.processus = null; t.etat = 'erreur'; t.erreur = String(e.message ?? e); });
