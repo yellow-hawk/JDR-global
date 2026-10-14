@@ -143,7 +143,7 @@ a { color: var(--accent); }
 .a-venir ul { padding-left: 20px; }
 
 /* ---------- écran joueurs ---------- */
-.ecran { position: fixed; inset: 0; display: grid; place-items: center; background: #0d0b08; color: #ece3d2; padding: 4vh 4vw; }
+.ecran { position: fixed; inset: 0; display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: center; background: #0d0b08; color: #ece3d2; padding: 4vh 4vw; }
 .ecran img { max-width: 100%; max-height: 100%; object-fit: contain; }
 .ecran-titre { font-family: var(--titre); font-size: clamp(1.6rem, 4vw, 3.4rem); text-align: center; margin-bottom: 0.4em; }
 .ecran-texte { font-size: clamp(1.1rem, 2vw, 1.8rem); max-width: 60ch; text-align: center; white-space: pre-wrap; }
@@ -208,6 +208,8 @@ a { color: var(--accent); }
 .ecran-zoom-contenu { width: 100%; height: 100%; display: grid; place-items: center; transform-origin: 0 0; }
 .ecran-zoom-contenu img { max-width: 100%; max-height: 100%; object-fit: contain; user-select: none; -webkit-user-drag: none; }
 .ecran-zoom-retour { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); opacity: 0.85; }
+.ecran-zoom-commandes { position: absolute; bottom: 12px; right: 12px; display: flex; gap: 6px; opacity: 0.85; z-index: 2; }
+.ecran-zoom-commandes .btn { min-width: 2.4em; font-size: 1.1rem; }
 .ecran-svg { width: 100%; height: 100%; display: grid; place-items: center; background: #f4ecdc; border-radius: 8px; }
 .ecran-svg svg { max-width: 100%; max-height: 100%; }
 .ecran-fiche-sous { text-align: center; font-style: italic; margin-bottom: 2vh; }
@@ -257,3 +259,7 @@ a { color: var(--accent); }
   .distant-feuille .fiche .colonnes { columns: 1; }
   .distant-feuille .fiche table { display: block; overflow-x: auto; white-space: nowrap; }
 }
+.distant-ecrire { width: min(70ch, 100%); display: flex; flex-direction: column; gap: 6px; }
+.distant-ecrire textarea { font: 1rem/1.4 Georgia, serif; padding: 8px; border: 1px solid #b9a586; border-radius: 6px; background: #fffdf8; color: #1f1a14; }
+.distant-ecrire .btn { align-self: flex-end; }
+.distant-messages article.de-moi { border-left-color: #3d6b8e; background: #f3f6f8; align-self: flex-end; }

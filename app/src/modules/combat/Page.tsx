@@ -1,12 +1,11 @@
 // Page Combat : la table réécrite (moteur/ + rendu/ + interface/), branchée sur la campagne.
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ecranActuel, montrerAuxJoueurs, prendreCible, suivreEcran } from '../../noyau/bus';
+import { ecranActuel, prendreCible, suivreEcran } from '../../noyau/bus';
 import { regles } from '../../noyau/regles';
 import { useCampagne } from '../../interface/etat';
 import { avecTableEnCours, etatDeRencontre, gabarit, tableEnCours } from './logique';
 import { gabaritsDeLaCampagne } from './sorts';
-import { remplacerSortsAtelier, TERRAINS } from './moteur';
-import { imageJoueurs } from './rendu';
+import { remplacerSortsAtelier } from './moteur';
 import { BarreOutils } from './interface/BarreOutils';
 import { Campagne } from './interface/Campagne';
 import { useFond, usePortraits } from './interface/images';
@@ -15,6 +14,8 @@ import { Table } from './interface/Table';
 import { useTable } from './interface/useTable';
 import { etatDeLancement } from './interface/lancement';
 import { useActionsJoueurs } from './interface/useActionsJoueurs';
+import { useTourJoueurs } from './interface/useTourJoueurs';
+import { SuiviTrace } from './interface/SuiviTrace';
 import './combat.css';
 
 export function Page() {
@@ -82,17 +83,8 @@ export function Page() {
     return () => window.removeEventListener('keydown', touche);
   }, [ctl, lectureSeule]);
 
-  // Diffusion vers l'écran joueurs : image de toute la carte, renvoyée à chaque changement (au plus toutes les 0,5 s).
-  useEffect(() => {
-    if (!diffusion) return;
-    let annule = false; // diffusion arrêtée pendant le rendu : l'image n'est pas envoyée
-    const t = window.setTimeout(() => {
-      imageJoueurs(ctl.etat, TERRAINS, fond.joueurs, portraits)
-        .then((image) => { if (!annule) montrerAuxJoueurs({ sorte: 'image', titre: 'Combat', image }, 'combat'); })
-        .catch(() => { /* rendu impossible : on réessaiera au prochain changement */ });
-    }, 500);
-    return () => { annule = true; window.clearTimeout(t); };
-  }, [diffusion, ctl.etat, fond.joueurs, portraits]);
+  // Diffusion vers l'écran joueurs : table zoomable, et tour du PJ actif joué depuis l'écran de son joueur.
+  const tour = useTourJoueurs(ctl, c, R, fond.joueurs, portraits, diffusion && !lectureSeule);
 
   return (
     <div className={`combat-page ${gauche && mj ? '' : 'sans-gauche'}`}>
@@ -104,6 +96,7 @@ export function Page() {
         </div>
         <div className="combat-zone-toile">
           <Table ctl={ctl} public={mj ? 'mj' : 'joueurs'} fond={mj ? fond.mj : fond.joueurs} />
+          {mj && tour.trace && <SuiviTrace trace={tour.trace} fermer={tour.annulerTrace} />}
         </div>
       </div>
       <Panneaux ctl={ctl} mj={mj} />

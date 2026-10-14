@@ -121,3 +121,7 @@
 .combat-actions-joueurs { margin-top: 8px; border-top: 1px solid var(--trait); padding-top: 6px; display: flex; flex-direction: column; gap: 6px; }
 .combat-actions-joueurs summary { cursor: pointer; font-weight: 600; }
 .combat-actions-joueurs select { max-width: 100%; }
+
+/* Sceau tracé par un joueur pendant son tour (vu en direct par le MJ) */
+.combat-suivi-trace { position: absolute; right: 10px; bottom: 10px; z-index: 5; width: 220px; display: flex; flex-direction: column; gap: 4px; background: var(--fond); border: 1px solid var(--trait); border-radius: 8px; padding: 8px; box-shadow: 0 6px 20px rgb(0 0 0 / 0.35); }
+.combat-suivi-trace svg { width: 100%; aspect-ratio: 1; background: #efe3c6; border-radius: 6px; }

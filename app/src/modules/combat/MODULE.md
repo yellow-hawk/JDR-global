@@ -70,6 +70,13 @@ L'onglet Dés utilise le plateau partagé (`interface/des`) : le jeton choisi es
 - Vue joueurs (`rendu/visibilite.ts`, `dessin.ts`) : noir sur l'inexploré, ombre sur l'exploré hors de vue, bords adoucis ; les adversaires ne sont montrés qu'en vue directe des PJ ; le camp des joueurs toujours visible.
 - `logique.preparerLancement` + `interface/lancement.ts` : PJ absents posés à l'entrée (`EtatTable.entree`, cases de départ des cartes générées), brouillard et vue des PJ activés sur une carte ; lumière déduite du lieu (souterrain : obscurité). Réglage « Lumière du lieu » dans l'onglet Affichage.
 
-## Actions des joueurs (écran joueurs)
+## Tour des joueurs (écran joueurs)
+
+La diffusion envoie la vue `table` (scène `module`, source `combat`) : image de la table + caméra + grille, round, PJ actif, dernier évènement, effet 3D d'un sceau, `options` du tour.
+- `tour.ts` (pur, testé) : `VueTable`, `OptionsTour` (cases atteignables, armes de la fiche `attaquesDuJeton` / `porteeArme`, cibles visibles, sorts connus, tracé), `DemandeTour`, `idTour`, `optionsTour`, `refus` (bon joueur : lien du PJ actif, ou tablette s'il n'a pas de lien ; une action par tour ; portée ; sort connu), `attaqueAvecArme`.
+- `joueurs/Tour.tsx` : carte zoomable (`interface/Zoomable` : un appui vise, un glissé déplace la vue), actions du PJ actif (se déplacer, attaquer, sort, tracer un sceau avec `VueTrace` de la Magie, finir le tour), effet 3D pour tous (`VueEffet`).
+- `interface/useTourJoueurs.ts` (MJ) : construit la vue, reçoit les demandes (`ecouterJoueurs` + jeton → personnage par `joueurs.persoDuJeton`), joue l'action (Ctrl+Z), lit le sceau (`magie.lireTracePartage`) → sort de la table (`lanceurs` = le PJ) à viser. `interface/SuiviTrace.tsx` : le tracé en direct chez le MJ. Réglages dans la colonne campagne (`modules.combat.tourJoueurs`, `dureeTrace`).
+
+## Actions des joueurs demandées par le MJ (écran joueurs)
 
 `actions.ts` (pur, testé) : `DemandeAction` (image + caméra + grille + action `sort` | `deplacement`), `ReponseAction`, `caseVisee`, `zoneVisee`, `casesDeZone`, `versImage`. `joueurs/Action.tsx` (vue `action` : toucher ou survoler la carte, aperçu, Valider / Annuler). `interface/ActionsJoueurs.tsx` (détail du jeton, MJ : viser un sort, se déplacer, tracer un sceau via `PanneauTrace` de la Magie), `interface/useActionsJoueurs.ts` (envoie l'image et la caméra `imageEtCamera`, aperçu en direct `ui.viseeJoueurs`, joue l'action à la validation puis rediffuse la table).

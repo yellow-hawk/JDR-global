@@ -13,6 +13,7 @@ import { portraitData } from './images';
 import { brouillardAuto, etatDeLancement } from './lancement';
 import { Packs } from './Packs';
 import { GenererRencontre } from './GenererRencontre';
+import { reglagesTour } from './useTourJoueurs';
 import type { Controleur } from './types';
 
 interface Props {
@@ -32,6 +33,7 @@ export function Campagne({ ctl, c, R, modifier, diffusion, setDiffusion, auto }:
   const sorts = useMemo(() => sortsDeLaCampagne(c), [c]);
   const e = ctl.etat;
   const ro = ctl.lectureSeule;
+  const regler = (r: Record<string, unknown>) => modifier((x) => ({ ...x, modules: { ...x.modules, combat: { ...x.modules?.combat, ...r } } }));
   const tache = async (f: () => Promise<void>) => { try { await f(); } catch (err) { ctl.dire((err as Error).message, 'erreur'); } };
 
   const placer = () => tache(async () => {
@@ -135,6 +137,17 @@ export function Campagne({ ctl, c, R, modifier, diffusion, setDiffusion, auto }:
             <input type="checkbox" checked={brouillardAuto(c)} onChange={(ev) => modifier((x) => ({ ...x, modules: { ...x.modules, combat: { ...x.modules?.combat, brouillardAuto: ev.target.checked } } }))} />
             <span>Au lancement d’une rencontre : PJ à l’entrée, brouillard levé par leur vue</span>
           </label>
+          <label className="combat-choix">
+            <input type="checkbox" checked={reglagesTour(c).actif} onChange={(ev) => regler({ tourJoueurs: ev.target.checked })} />
+            <span>Les joueurs jouent leur tour sur leur écran (déplacement, attaques, sorts, sceau)</span>
+          </label>
+          <label className="combat-choix">
+            <span>Temps pour tracer un sceau</span>
+            <select value={reglagesTour(c).dureeTrace} onChange={(ev) => regler({ dureeTrace: Number(ev.target.value) })}>
+              {[[0, 'Sans limite'], [15, '15 s'], [30, '30 s'], [45, '45 s'], [60, '1 min'], [90, '1 min 30']].map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+            </select>
+          </label>
+          <p className="discret">Chaque joueur agit depuis son lien personnel ; un PJ sans lien se joue depuis la tablette. Tu vois la visée en direct, tout passe par toi (Ctrl+Z pour annuler).</p>
           <p className="discret">Vue joueurs : noir hors de ce qu’ont vu les PJ ; ce qu’ils ne voient plus reste visible mais assombri, sans les adversaires qui s’y trouvent. Stats ennemies, jetons cachés et ennemis invisibles masqués.</p>
         </details>
       )}

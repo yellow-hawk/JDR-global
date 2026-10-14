@@ -28,4 +28,6 @@ export interface PropsVueJoueurs {
   donnees: Record<string, unknown>;
   titre?: string;
   envoyer(donnees: Record<string, unknown>): void;
+  /** Qui regarde : joueur à distance (son personnage) ou écran commun (tablette, télé : persoId null). */
+  moi?: { distant: boolean; persoId: string | null };
 }

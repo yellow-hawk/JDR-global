@@ -1,7 +1,30 @@
 /* Vue « action » de la Table de combat sur l'écran joueurs */
-.action-joueurs { position: fixed; inset: 0; display: flex; flex-direction: column; background: #0b0c10; color: #ece3d2; touch-action: none; }
+.action-joueurs { position: absolute; inset: 0; display: flex; flex-direction: column; background: #0b0c10; color: #ece3d2; touch-action: none; }
 .action-barre { display: flex; gap: 10px; align-items: center; padding: 10px 16px; flex-wrap: wrap; font-size: clamp(1rem, 1.6vw, 1.4rem); }
 .action-aide { color: #d4c4a0; }
 .action-carte { position: relative; flex: 1; min-height: 0; }
 .action-carte img, .action-carte svg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 .action-carte svg { touch-action: none; cursor: crosshair; }
+
+/* Vue « table » : combat sur l'écran joueurs, zoomable, avec le tour du PJ actif */
+.tour-joueurs { position: absolute; inset: 0; display: flex; flex-direction: column; background: #0b0c10; color: #ece3d2; }
+.tour-bandeau { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; padding: 8px 16px; font-size: clamp(1rem, 1.6vw, 1.4rem); padding-right: 140px; }
+.tour-bandeau b { font-family: var(--titre); color: #d4a050; font-weight: normal; font-size: 1.15em; }
+.tour-evenement { color: #e8d8b0; background: rgb(255 255 255 / 0.06); padding: 2px 10px; border-radius: 6px; }
+.tour-trace-encours { color: #c9a6ff; }
+.tour-carte { position: relative; flex: 1; min-height: 0; }
+.tour-carte svg { width: 100%; height: 100%; display: block; touch-action: none; }
+.tour-carte svg.tour-viser { cursor: crosshair; }
+.tour-actif { animation: tour-pulse 1.6s ease-in-out infinite; }
+@keyframes tour-pulse { 50% { opacity: 0.35; } }
+.tour-actions { display: flex; flex-direction: column; gap: 6px; padding: 8px 12px 10px; background: #15130f; border-top: 1px solid #3a3020; font-size: clamp(0.95rem, 1.4vw, 1.2rem); }
+.tour-etat { display: flex; gap: 14px; flex-wrap: wrap; align-items: baseline; }
+.tour-aide { color: #d4c4a0; }
+.tour-boutons, .tour-choix { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.tour-boutons .btn, .tour-choix .btn { font-size: inherit; }
+.tour-boutons .btn[aria-pressed='true'], .tour-choix .btn[aria-pressed='true'] { background: #d4a050; color: #17130e; border-color: #d4a050; }
+.tour-choix small { opacity: 0.75; margin-left: 4px; }
+.tour-calque { position: absolute; inset: 0; z-index: 5; background: #0d0b08; }
+.tour-fermer { position: absolute; top: 10px; right: 10px; z-index: 6; }
+@media (max-width: 640px) { .tour-bandeau { padding-right: 16px; } .tour-actions { padding: 6px 8px; } }
+.tour-reponse { color: #f2b8a0; }

@@ -9,3 +9,7 @@ export { profilDe, aUneMagie, grimoireMjComplet, integrerGrimoireDeBase, donnerS
 export { GRIMOIRE_DE_BASE } from './atelier/data/grimoire';
 export { PanneauTrace, type SortTrace } from './PanneauTrace';
 export type { ProfilPJ } from './atelier/engine/profils';
+/* Pour la Table de combat : sceau tracé par un joueur pendant son tour (lecture, effet 3D) et vues à réutiliser. */
+export { lireTracePartage, effetDe, estReponseTrace, type DemandeTrace, type ReponseTrace, type EffetTrace } from './partage';
+export { VueTrace, VueEffet } from './vues';
+export { STAGE } from './atelier/components/SceauSVG';

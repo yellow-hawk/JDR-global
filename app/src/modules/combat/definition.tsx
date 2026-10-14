@@ -2,12 +2,14 @@ import { lazy } from 'react';
 import type { DefinitionModule } from '../../interface/types';
 const Page = lazy(() => import('./Page').then((x) => ({ default: x.Page })));
 
-// Vue de l'écran joueurs : action à viser au doigt ou à la souris (sort, déplacement).
+// Vues de l'écran joueurs : action à viser demandée par le MJ (sort, déplacement), et la table interactive
+// (zoom, tour du PJ actif : déplacement, attaques, sorts, sceau à tracer).
 const Action = lazy(() => import('./joueurs/Action'));
+const Tour = lazy(() => import('./joueurs/Tour'));
 
 export const definition: DefinitionModule = {
   id: 'combat', nom: 'Combat', etat: 'pret', besoinCampagne: true, dansMenu: true,
   icone: 'M14.5 17.5 3 6V3h3l11.5 11.5M13 19l6-6M16 16l4 4M9.5 17.5 21 6V3h-3L6.5 14.5M11 19l-6-6M8 16l-4 4',
   Page,
-  ecranJoueurs: { action: Action },
+  ecranJoueurs: { action: Action, table: Tour },
 };

@@ -6,8 +6,10 @@ import type { SystemeRegles } from '../../noyau/regles';
 import { aUneFiche, lireStat } from '../../noyau/regles';
 import { FICHE_CSS, ficheCorpsHtml } from '../personnages';
 
-export interface MessagePrive { id: string; quand: string; texte: string; image?: string | null }
-export interface Distant { jeton: string; messages: MessagePrive[] }
+/** `de` : 'joueur' pour un message écrit par le joueur au MJ (sinon, du MJ au joueur). */
+export interface MessagePrive { id: string; quand: string; texte: string; image?: string | null; de?: 'joueur' }
+/** `luMj` : nombre de messages du joueur déjà vus par le MJ. */
+export interface Distant { jeton: string; messages: MessagePrive[]; luMj?: number }
 
 export const distantsDe = (c: Campagne): Record<string, Distant> =>
   ((c.modules?.joueurs as { distants?: Record<string, Distant> } | undefined)?.distants) ?? {};
@@ -28,9 +30,18 @@ export function avecJeton(c: Campagne, persoId: string, nouveau = false): Campag
   return avecDistants(c, { ...d, [persoId]: { jeton: jetonNeuf(), messages: x?.messages ?? [] } });
 }
 
-export function ajouterMessage(c: Campagne, persoId: string, texte: string, image: string | null = null, quand = new Date().toISOString()): Campagne {
+export function ajouterMessage(c: Campagne, persoId: string, texte: string, image: string | null = null, quand = new Date().toISOString(), de?: 'joueur'): Campagne {
   const d = distantsDe(c), x = d[persoId] ?? { jeton: jetonNeuf(), messages: [] };
-  return avecDistants(c, { ...d, [persoId]: { ...x, messages: [...x.messages, { id: nouvelId('msg'), quand, texte, image }] } });
+  const m: MessagePrive = { id: nouvelId('msg'), quand, texte, image, ...(de ? { de } : {}) };
+  return avecDistants(c, { ...d, [persoId]: { ...x, messages: [...x.messages, m] } });
+}
+
+/** Messages du joueur que le MJ n'a pas encore vus. */
+export const nonLusMj = (d?: Distant): number => (d ? Math.max(0, d.messages.filter((m) => m.de === 'joueur').length - (d.luMj ?? 0)) : 0);
+export function marquerLusMj(c: Campagne, persoId: string): Campagne {
+  const d = distantsDe(c), x = d[persoId];
+  if (!x || !nonLusMj(x)) return c;
+  return avecDistants(c, { ...d, [persoId]: { ...x, luMj: x.messages.filter((m) => m.de === 'joueur').length } });
 }
 export function retirerMessage(c: Campagne, persoId: string, id: string): Campagne {
   const d = distantsDe(c), x = d[persoId];

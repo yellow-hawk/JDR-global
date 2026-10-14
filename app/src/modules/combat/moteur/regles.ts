@@ -94,12 +94,14 @@ export const PORTEE_ATTAQUE = { melee: 2, distance: 8 } as const;
 
 export interface ResultatAttaque { touche: boolean; critique: boolean; echec: boolean; jet: number; total: number; degats: number }
 
-export function attaquer(e: EtatTable, idA: number, idC: number, sorte: 'melee' | 'distance', rng: Rng): { etat: EtatTable; resultat?: ResultatAttaque; erreur?: string } {
+/** `porteeMax` : portée de l'arme en cases (sinon la portée par défaut de la sorte d'attaque). */
+export function attaquer(e: EtatTable, idA: number, idC: number, sorte: 'melee' | 'distance', rng: Rng, porteeMax?: number): { etat: EtatTable; resultat?: ResultatAttaque; erreur?: string } {
   const a = e.jetons.find((j) => j.id === idA), c = e.jetons.find((j) => j.id === idC);
   if (!a || !c) return { etat: e, erreur: 'Jeton introuvable' };
   if (a.id === c.id) return { etat: e, erreur: 'Un jeton ne peut pas s’attaquer lui-même' };
   const d = distance(e.grille, [a.x, a.y], [c.x, c.y]);
-  if (d > PORTEE_ATTAQUE[sorte]) return { etat: e, erreur: `Hors de portée (${d} cases, max ${PORTEE_ATTAQUE[sorte]})` };
+  const max = porteeMax ?? PORTEE_ATTAQUE[sorte];
+  if (d > max) return { etat: e, erreur: `Hors de portée (${d} cases, max ${max})` };
   const jet = d20(rng);
   const bonus = a.bonusAttaque ?? modCarac(sorte === 'distance' ? a.carac.dex : a.carac.for);
   const total = jet + bonus;

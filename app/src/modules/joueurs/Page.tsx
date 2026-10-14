@@ -6,7 +6,7 @@ import { ajouterFichier, choisirFichier } from '../../noyau/stockage';
 import { useCampagne } from '../../interface/etat';
 import { useUrlFichier } from '../../interface/composants';
 import { assurerSalon } from '../../interface/Tablettes';
-import { ajouterMessage, avecJeton, distantsDe, lienJoueur, notesJoueur, retirerMessage, type MessagePrive } from './logique';
+import { ajouterMessage, avecJeton, distantsDe, lienJoueur, marquerLusMj, nonLusMj, notesJoueur, retirerMessage, type MessagePrive } from './logique';
 import './joueurs.css';
 
 function Vignette({ idCampagne, image }: { idCampagne: string; image?: string | null }) {
@@ -33,6 +33,9 @@ export function Page() {
     return () => { fini = true; window.clearInterval(t); };
   }, []);
   useEffect(() => suivreJoueursConnectes(setConnectes), []);
+  // Messages des joueurs : vus dès qu'ils s'affichent ici.
+  const aLire = c.personnages.filter((p) => nonLusMj(distantsDe(c)[p.id])).map((p) => p.id).join(',');
+  useEffect(() => { if (aLire && role === 'mj') modifier((x) => aLire.split(',').reduce(marquerLusMj, x)); }, [aLire, role, modifier]);
 
   if (role !== 'mj') return <div className="vide">Cette page est réservée au MJ.</div>;
   const distants = distantsDe(c);
@@ -96,6 +99,7 @@ export function Page() {
           const d = distants[p.id];
           const lien = d && salon && base ? lienJoueur(base, salon, d.jeton) : '';
           const en = d ? connectes.has(d.jeton) : false;
+          const recus = d ? d.messages.filter((m) => m.de === 'joueur').length : 0;
           return (
             <section key={p.id} className="carte-ui pile joueurs-carte">
               <div className="ligne">
@@ -111,12 +115,12 @@ export function Page() {
                     <button className="btn btn-petit" disabled={!lien} onClick={() => copier(lien)}>Copier le lien</button>
                     <button className="btn btn-petit" title="L’ancien lien ne marchera plus" onClick={() => window.confirm(`Changer le lien de ${p.nom} ? L’ancien ne marchera plus.`) && modifier((x) => avecJeton(x, p.id, true))}>Nouveau lien</button>
                   </div>
-                  <details>
-                    <summary>Messages privés ({d.messages.length})</summary>
+                  <details open={recus > 0}>
+                    <summary>Messages privés ({d.messages.length}{recus ? `, dont ${recus} de ${p.joueur || p.nom}` : ''})</summary>
                     <div className="joueurs-messages">
                       {[...d.messages].reverse().map((m: MessagePrive) => (
-                        <div key={m.id} className="joueurs-message">
-                          <span className="discret">{new Date(m.quand).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })}</span>
+                        <div key={m.id} className={`joueurs-message ${m.de === 'joueur' ? 'du-joueur' : ''}`}>
+                          <span className="discret">{m.de === 'joueur' ? `${p.joueur || p.nom} → toi` : `Toi → ${p.nom}`} · {new Date(m.quand).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })}</span>
                           {m.texte && <p>{m.texte}</p>}
                           <Vignette idCampagne={c.campagne.id} image={m.image} />
                           <button className="combat-oeil" title="Retirer ce message" onClick={() => modifier((x) => retirerMessage(x, p.id, m.id))}>×</button>

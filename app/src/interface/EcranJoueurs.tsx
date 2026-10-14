@@ -113,7 +113,7 @@ export function EcranJoueurs() {
       )}
       {scene.sorte === 'module' && (
         VueModule
-          ? <Suspense fallback={<div className="ecran-sous">Chargement…</div>}><VueModule donnees={scene.donnees} titre={scene.titre} envoyer={(d) => envoyerAuMj(scene.module, d)} /></Suspense>
+          ? <Suspense fallback={<div className="ecran-sous">Chargement…</div>}><VueModule donnees={scene.donnees} titre={scene.titre} envoyer={(d) => envoyerAuMj(scene.module, d)} moi={{ distant, persoId: prive.persoId ?? null }} /></Suspense>
           : <div className="ecran-sous">{scene.titre ?? ''}</div>
       )}
       {scene.sorte === 'document' && (

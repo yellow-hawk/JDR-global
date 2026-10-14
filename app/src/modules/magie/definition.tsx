@@ -1,12 +1,11 @@
 import { lazy } from 'react';
 import type { DefinitionModule } from '../../interface/types';
 import { preparerCampagne } from './lien';
+// Vues de l'écran joueurs : zone de tracé (tablette, écran tactile) et effet 3D du sort tracé.
+import { VueEffet as Effet, VueTrace as Trace } from './vues';
 
 // Chargée à la demande (three.js et le module ne pèsent rien tant qu'on n'ouvre pas la page).
 const Page = lazy(() => import('./Page').then((x) => ({ default: x.Page })));
-// Vues de l'écran joueurs : zone de tracé (tablette, écran tactile) et effet 3D du sort tracé.
-const Trace = lazy(() => import('./joueurs/Trace'));
-const Effet = lazy(() => import('./joueurs/Effet'));
 
 export const definition: DefinitionModule = {
   id: 'magie', nom: 'Magie', etat: 'pret', besoinCampagne: true, dansMenu: true,

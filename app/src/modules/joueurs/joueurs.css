@@ -12,3 +12,5 @@
 .joueurs-message .combat-oeil { position: absolute; top: 0; right: 0; }
 .joueurs-vignette { max-width: 120px; max-height: 90px; border-radius: 4px; display: block; }
 .joueurs-notes { white-space: pre-wrap; margin: 4px 0 0; font-size: 0.9rem; }
+.joueurs-message.du-joueur { border-left-color: var(--accent); background: var(--fond-2); }
+.joueurs-badge { margin-left: 6px; padding: 0 6px; border-radius: 999px; background: #c0392b; color: #fff; font-size: 0.8em; }

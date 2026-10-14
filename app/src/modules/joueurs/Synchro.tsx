@@ -6,7 +6,7 @@ import { regles } from '../../noyau/regles';
 import { lireFichier } from '../../noyau/stockage';
 import { useCampagne } from '../../interface/etat';
 import { assurerSalon } from '../../interface/Tablettes';
-import { avecNotesJoueur, distantsDe, ficheDuJoueur, notesJoueur, persoDuJeton } from './logique';
+import { ajouterMessage, avecNotesJoueur, distantsDe, ficheDuJoueur, nonLusMj, notesJoueur, persoDuJeton } from './logique';
 
 export function Synchro() {
   const { campagne, modifier } = useCampagne();
@@ -32,7 +32,7 @@ export function Synchro() {
     const lire = async (id?: string | null) => (id ? (await lireFichier(x.campagne.id, id)) ?? null : null);
     const fiche = { ...ficheDuJoueur(p, regles(x.campagne.regles)), notes: notesJoueur(p), portrait: await lire(p.portrait) };
     const messages = await Promise.all((distantsDe(x)[p.id]?.messages ?? []).map(async (m) => ({ ...m, image: await lire(m.image) })));
-    envoyerPrive(jeton, { fiche, messages });
+    envoyerPrive(jeton, { persoId: p.id, fiche, messages });
   };
 
   useEffect(() => surArriveeJoueur((j, nouveau) => {
@@ -48,18 +48,25 @@ export function Synchro() {
     return () => window.clearTimeout(t);
   }, [signature]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Notes écrites par un joueur : rangées dans sa fiche.
+  // Notes écrites par un joueur : rangées dans sa fiche. Message d'un joueur : rangé avec les siens, et signalé.
   useEffect(() => ecouterJoueurs((module, d, jeton) => {
-    if (module !== 'joueurs' || !jeton || typeof d.notes !== 'string') return;
+    if (module !== 'joueurs' || !jeton) return;
     const x = c.current, p = x && persoDuJeton(x, jeton);
-    if (p && notesJoueur(p) !== d.notes) modifier((y) => avecNotesJoueur(y, p.id, d.notes as string));
+    if (!p) return;
+    if (typeof d.notes === 'string' && notesJoueur(p) !== d.notes) modifier((y) => avecNotesJoueur(y, p.id, d.notes as string));
+    if (typeof d.message === 'string' && d.message.trim()) {
+      const texte = d.message.trim().slice(0, 4000);
+      modifier((y) => ajouterMessage(y, p.id, texte, null, undefined, 'joueur'));
+      emettre('message', { texte: `✉ ${p.joueur || p.nom} : ${texte.length > 90 ? `${texte.slice(0, 90)}…` : texte}`, sorte: 'info' });
+    }
   }), [modifier]);
 
   if (!pjs.length) return null;
   const n = jetons.filter((j) => connectes.has(j)).length;
+  const nonLus = pjs.reduce((s, p) => s + nonLusMj(distants[p.id]), 0);
   return (
-    <button className="btn btn-petit" title="Joueurs à distance connectés" onClick={() => emettre('naviguer', { page: 'joueurs' })}>
-      🌐 {n}/{pjs.length}
+    <button className="btn btn-petit" title={nonLus ? `${nonLus} message(s) de joueurs à lire` : 'Joueurs à distance connectés'} onClick={() => emettre('naviguer', { page: 'joueurs' })}>
+      🌐 {n}/{pjs.length}{nonLus ? <b className="joueurs-badge">✉ {nonLus}</b> : null}
     </button>
   );
 }

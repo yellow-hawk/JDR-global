@@ -4,9 +4,10 @@
 
 | Fichier | Rôle |
 |---|---|
-| `logique.ts` | Pur, testé : `distantsDe` (`modules.joueurs.distants[persoId] = { jeton, messages }`), `avecJeton` (jeton secret de 16 caractères, nouveau lien), `ajouterMessage` / `retirerMessage`, `lienJoueur`, `persoDuJeton`, `notesJoueur` / `avecNotesJoueur` (`fiche.notesJoueur`), `ficheDuJoueur` (fiche d'impression, rien du MJ). |
+| `logique.ts` | Pur, testé : `distantsDe` (`modules.joueurs.distants[persoId] = { jeton, messages }`), `avecJeton` (jeton secret de 16 caractères, nouveau lien), `ajouterMessage` (`de: 'joueur'` pour un message du joueur) / `retirerMessage`, `nonLusMj` / `marquerLusMj`, `lienJoueur`, `persoDuJeton`, `notesJoueur` / `avecNotesJoueur` (`fiche.notesJoueur`), `ficheDuJoueur` (fiche d'impression, rien du MJ). |
 | `Synchro.tsx` | En-tête (MJ, toujours actif) : salons privés (`definirJoueursPrives`), envoi de la fiche et des messages à l'arrivée d'un joueur et à chaque changement, notes reçues rangées dans la fiche ; indicateur 🌐 connectés / liens. |
 | `Page.tsx` | Accès Internet (tunnel : ouvrir, fermer, adresse, installation de cloudflared), message à tous, par PJ : lien, connecté ou non, nouveau lien, messages privés (texte, image), ses notes. |
 
-Écran du joueur : `interface/EcranDistant.tsx` (onglets Table, Ma fiche, Messages), choisi par `?joueur=<jeton>` dans l'adresse.
+Écran du joueur : `interface/EcranDistant.tsx` (onglets Table, Ma fiche, Messages : il peut écrire au MJ), choisi par `?joueur=<jeton>` dans l'adresse. Le MJ envoie aussi `persoId` : la Table de combat sait quel PJ ce joueur peut jouer.
+API (`index.ts`) : `definition`, `distantsDe`, `persoDuJeton` (pour la Table de combat).
 Confidentialité : un salon privé par joueur (`<salon>.<jeton>`) ; un joueur ne reçoit que ce qui lui est destiné.

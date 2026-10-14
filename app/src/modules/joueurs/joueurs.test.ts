@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { nouvelleCampagne, nouveauPersonnage, type Campagne } from '../../noyau/contrat';
 import { regles } from '../../noyau/regles';
-import { ajouterMessage, avecJeton, avecNotesJoueur, distantsDe, ficheDuJoueur, lienJoueur, notesJoueur, persoDuJeton, retirerMessage } from './logique';
+import { ajouterMessage, avecJeton, avecNotesJoueur, distantsDe, ficheDuJoueur, lienJoueur, marquerLusMj, nonLusMj, notesJoueur, persoDuJeton, retirerMessage } from './logique';
 
 const R = regles('dnd5e');
 
@@ -20,6 +20,13 @@ describe('joueurs à distance', () => {
     expect(distantsDe(c)[p.id].messages.map((m) => m.texte)).toEqual(['Tu reconnais le blason.']);
     c = retirerMessage(c, p.id, distantsDe(c)[p.id].messages[0].id);
     expect(distantsDe(c)[p.id].messages).toEqual([]);
+    // Message du joueur au MJ : non lu jusqu'à ce que le MJ l'ait vu.
+    c = ajouterMessage(c, p.id, 'Je fouille le coffre en douce.', null, undefined, 'joueur');
+    expect(distantsDe(c)[p.id].messages[0].de).toBe('joueur');
+    expect(nonLusMj(distantsDe(c)[p.id])).toBe(1);
+    c = marquerLusMj(c, p.id);
+    expect(nonLusMj(distantsDe(c)[p.id])).toBe(0);
+    c = retirerMessage(c, p.id, distantsDe(c)[p.id].messages[0].id);
     c = avecNotesJoueur(c, p.id, 'Ne pas faire confiance à Sylas');
     expect(notesJoueur(c.personnages[0])).toBe('Ne pas faire confiance à Sylas');
   });
