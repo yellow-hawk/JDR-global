@@ -58,7 +58,7 @@ function creerTunnel(port) {
         if (t.processus !== p || t.etat === 'actif') return;
         t.processus = null; p.kill();
         t.etat = 'erreur'; t.adresse = null;
-        t.erreur = 'le tunnel n’arrive pas à se relier à Cloudflare : ce réseau bloque le port 7844 (fréquent avec le partage de connexion d’un téléphone). Essaie depuis le Wi-Fi de ta box';
+        t.erreur = 'le tunnel n’arrive pas à se relier à Cloudflare : ce réseau bloque le port 7844 (fréquent sur les réseaux d’école, d’entreprise ou le partage de connexion d’un téléphone). Ouvre l’accès depuis un autre réseau, par exemple le Wi-Fi d’une box personnelle';
         console.log(`Accès à distance impossible : ${t.erreur}.`);
       }, 30000);
       p.stdout.on('data', lire); p.stderr.on('data', lire);
