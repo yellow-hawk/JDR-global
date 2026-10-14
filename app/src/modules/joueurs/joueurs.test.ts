@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { nouvelleCampagne, nouveauPersonnage } from '../../noyau/contrat';
+import { nouvelleCampagne, nouveauPersonnage, type Campagne } from '../../noyau/contrat';
 import { regles } from '../../noyau/regles';
 import { ajouterMessage, avecJeton, avecNotesJoueur, distantsDe, ficheDuJoueur, lienJoueur, notesJoueur, persoDuJeton, retirerMessage } from './logique';
 
@@ -8,7 +8,7 @@ const R = regles('dnd5e');
 describe('joueurs à distance', () => {
   it('jeton personnel, lien, messages, notes', () => {
     const p = { ...nouveauPersonnage('Morgran', 'pj', 'dnd5e', R.statsParDefaut()), mj: { notes: 'Fils caché du roi' } };
-    let c = { ...nouvelleCampagne('T'), personnages: [p] };
+    let c: Campagne = { ...nouvelleCampagne('T'), personnages: [p] };
     c = avecJeton(c, p.id);
     const j = distantsDe(c)[p.id].jeton;
     expect(j).toMatch(/^[a-z2-9]{16}$/);
