@@ -233,9 +233,27 @@ a { color: var(--accent); }
 .distant-feuille .pied { display: none; }
 .distant-notes { display: flex; flex-direction: column; gap: 4px; max-width: 210mm; margin: 14px auto 0; }
 .distant-notes span { color: #6a5a4a; font-size: 0.85rem; }
-.distant-notes textarea { font: 1rem/1.4 Georgia, serif; padding: 8px; border: 1px solid #b9a586; border-radius: 6px; background: #fffdf8; }
+.distant-notes textarea { font: 1rem/1.4 Georgia, serif; padding: 8px; border: 1px solid #b9a586; border-radius: 6px; background: #fffdf8; color: #1f1a14; caret-color: #1f1a14; }
 .distant-messages { display: flex; flex-direction: column; gap: 12px; align-items: center; }
 .distant-messages article { width: min(70ch, 100%); background: #fffdf8; border-left: 4px solid #8e2b2b; border-radius: 6px; padding: 10px 14px; box-shadow: 0 2px 8px rgb(0 0 0 / .12); }
 .distant-messages small { color: #6a5a4a; }
 .distant-messages p { white-space: pre-wrap; margin: 4px 0; font-size: 1.1rem; }
 .distant-messages img { max-width: 100%; border-radius: 4px; margin-top: 6px; }
+.ecran.ecran-refuse { display: grid; place-items: center; padding: 24px; text-align: center; font-size: 1.2rem; }
+/* Fiche du joueur sur téléphone : une colonne, caractéristiques sur 3, tableaux défilants. */
+@media (max-width: 640px) {
+  .distant-panneau { padding: 8px; }
+  .distant-onglets { overflow-x: auto; }
+  .distant-onglets button { white-space: nowrap; padding: 4px 8px; }
+  .distant-feuille { padding: 12px; }
+  .distant-feuille .fiche { font-size: 10pt; }
+  .distant-feuille .fiche .entete { flex-wrap: wrap; }
+  .distant-feuille .fiche .entete img { width: 64px; height: 64px; }
+  .distant-feuille .fiche h1 { font-size: 16pt; overflow-wrap: anywhere; }
+  .distant-feuille .fiche .grille { grid-template-columns: 1fr; }
+  .distant-feuille .fiche .grille > div { grid-column: auto !important; }
+  .distant-feuille .fiche .caracs { grid-template-columns: repeat(3, 1fr); }
+  .distant-feuille .fiche .derives { grid-template-columns: repeat(2, 1fr); }
+  .distant-feuille .fiche .colonnes { columns: 1; }
+  .distant-feuille .fiche table { display: block; overflow-x: auto; white-space: nowrap; }
+}

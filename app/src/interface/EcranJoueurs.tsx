@@ -32,12 +32,14 @@ export function EcranJoueurs() {
   // Joueur à distance (?joueur=…) : sa fiche et ses messages, reçus sur son salon privé.
   const distant = useMemo(() => new URLSearchParams(window.location.search).has('joueur'), []);
   const [prive, setPrive] = useState<DonneesPrivees>({});
+  const [refuse, setRefuse] = useState(false);
   useEffect(() => recevoirEcran({
     scene: setScene,
     jet: (j) => { setJet(j); setJets((l) => [j, ...l].slice(0, 6)); },
     historique: (h) => setJets(h.filter((j) => !j.qui?.endsWith('caché')).slice(0, 6)),
     bandeau: setBandeau,
     prive: (d) => setPrive((x) => ({ ...x, ...(d as DonneesPrivees) })),
+    refuse: () => setRefuse(true),
   }), []);
   useEffect(() => { document.title = 'Écran joueurs · JDR Global'; }, []);
   const blob = scene.sorte === 'image' || scene.sorte === 'document' || scene.sorte === 'vide' || scene.sorte === 'fiche' ? scene.image : scene.sorte === 'personnage' ? scene.portrait : null;
@@ -137,5 +139,6 @@ export function EcranJoueurs() {
       <button className="btn btn-petit ecran-plein" onClick={pleinEcran}>Plein écran</button>
     </div>
   );
+  if (refuse) return <div className="ecran ecran-refuse"><p>Ce lien n’est plus valide : le maître du jeu en a créé un nouveau. Demande-lui ton nouveau lien.</p></div>;
   return distant ? <EcranDistant prive={prive}>{ecran}</EcranDistant> : ecran;
 }

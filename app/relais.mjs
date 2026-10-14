@@ -82,6 +82,10 @@ export function creerRelais(port) {
   /** salon → Map(qui → réponse en flux) */
   const salons = new Map();
   const tunnel = creerTunnel(port);
+  /** salon commun → jetons valides de ses joueurs à distance (donnés par le MJ). Un ancien lien est refusé. */
+  const autorises = new Map();
+  const REFUS = (s) => `data: {"salon":${JSON.stringify(s)},"m":{"type":"refuse"}}\n\n`;
+  const refuse = (s) => { const i = s.lastIndexOf('.'); if (i < 0) return false; const a = autorises.get(s.slice(0, i)); return !!a && !a.has(s.slice(i + 1)); };
   setInterval(() => { const vus = new Set(); for (const s of salons.values()) for (const r of s.values()) if (!vus.has(r)) { vus.add(r); r.write(': ping\n\n'); } }, 20000).unref?.();
   const fermer = () => tunnel.arreter();
   process.once('exit', fermer);
@@ -108,11 +112,28 @@ export function creerRelais(port) {
       res.end(JSON.stringify(tunnel.infos()));
       return true;
     }
+    if (chemin === '/relais/autoriser' && req.method === 'POST') {
+      if (!estLocale(req) || !liste.length) { res.statusCode = 403; res.end(); return true; }
+      const morceaux = [];
+      req.on('data', (m) => morceaux.push(m));
+      req.on('end', () => {
+        let jetons;
+        try { jetons = JSON.parse(Buffer.concat(morceaux).toString('utf8')); } catch { jetons = null; }
+        if (!Array.isArray(jetons)) { res.statusCode = 400; res.end(); return; }
+        autorises.set(liste[0], new Set(jetons.map(String)));
+        // Liens changés : les écrans encore ouverts avec un ancien jeton sont coupés.
+        for (const [s, m] of salons) if (refuse(s)) for (const r of m.values()) { r.write(REFUS(s)); r.end(); }
+        res.statusCode = 204; res.end();
+      });
+      return true;
+    }
     if (!liste.length || !qui) { res.statusCode = 400; res.end('salon et qui requis'); return true; }
 
     if (chemin === '/relais/ecoute') {
       res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache, no-transform', Connection: 'keep-alive', 'X-Accel-Buffering': 'no' });
       res.write(`: bienvenue${' '.repeat(2048)}\n\n`); // un peu de remplissage : certains relais n'envoient qu'à partir de 2 Ko
+      const refuseIci = liste.find(refuse);
+      if (refuseIci) { res.write(REFUS(refuseIci)); res.end(); return true; }
       for (const s of liste) { if (!salons.has(s)) salons.set(s, new Map()); salons.get(s).set(qui, res); }
       req.on('close', () => { for (const s of liste) { const m = salons.get(s); if (m?.get(qui) === res) m.delete(qui); if (m?.size === 0) salons.delete(s); } });
       return true;

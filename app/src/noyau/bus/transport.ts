@@ -9,6 +9,8 @@ export interface Liaison {
   /** `salon` : le salon d'où vient le message (réseau seulement). */
   ecouter(f: (m: Record<string, unknown>, salon?: string) => void): () => void;
   fermer(): void;
+  /** Réseau : résolue quand le flux est ouvert (avant, un message du MJ pourrait être perdu). */
+  pret?: Promise<void>;
 }
 
 const NOM_CANAL = 'jdr-global/ecran-joueurs';
@@ -96,6 +98,9 @@ export function liaisonReseau(salons: string | string[], qui: string, base = '')
   const liste = Array.isArray(salons) ? salons : [salons];
   const ecouteurs = new Set<(m: Record<string, unknown>, salon?: string) => void>();
   const flux = new EventSource(`${base}relais/ecoute?salon=${encodeURIComponent(liste.join(','))}&qui=${encodeURIComponent(qui)}`);
+  let ouvert = () => {};
+  const pret = new Promise<void>((r) => { ouvert = r; });
+  flux.onopen = () => ouvert();
   flux.onmessage = (e) => {
     try {
       const { salon, m } = JSON.parse(e.data) as { salon: string; m: unknown };
@@ -114,7 +119,13 @@ export function liaisonReseau(salons: string | string[], qui: string, base = '')
     },
     ecouter: (f) => { ecouteurs.add(f); return () => { ecouteurs.delete(f); }; },
     fermer: () => flux.close(),
+    pret,
   };
+}
+
+/** Côté MJ : jetons valides des joueurs à distance du salon ; le relais coupe et refuse les anciens liens. */
+export async function autoriserJoueurs(salon: string, jetons: string[]): Promise<void> {
+  await fetch(`relais/autoriser?salon=${encodeURIComponent(salon)}`, { method: 'POST', body: JSON.stringify(jetons), headers: { 'Content-Type': 'application/json' } }).catch(() => undefined);
 }
 
 /** Écarte les messages déjà reçus (le même message peut arriver par deux liaisons). */

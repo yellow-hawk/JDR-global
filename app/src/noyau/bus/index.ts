@@ -1,7 +1,7 @@
 // Bus d'événements entre modules (même fenêtre) et canal vers l'écran joueurs (autre fenêtre).
 // Un module n'appelle jamais l'intérieur d'un autre : il émet ou écoute un événement.
 import { sansSecrets } from '../contrat';
-import { liaisonLocale, liaisonReseau, sansDoublons, type Liaison } from './transport';
+import { liaisonLocale, liaisonReseau, sansDoublons, type Liaison, autoriserJoueurs } from './transport';
 export { commanderTunnel, infosRelais, type InfosRelais, type InfosTunnel } from './transport';
 import type { JetDes } from '../regles';
 
@@ -75,7 +75,10 @@ type MessageEcran = (
   | { type: 'jet'; jet: JetDes }
   | { type: 'historique'; jets: JetDes[] }
   | { type: 'bandeau'; texte: string | null }
-  | { type: 'bonjour'; qui?: string }
+  /** `attend` : joueur à distance qui n'a pas encore reçu sa fiche (le MJ la renvoie). */
+  | { type: 'bonjour'; qui?: string; attend?: boolean }
+  /** Du relais vers un ancien lien : le MJ a changé le lien de ce joueur. */
+  | { type: 'refuse' }
   /** De l'écran joueurs vers le MJ : réponse d'une vue interactive (traits tracés, visée…). */
   | { type: 'joueur'; module: string; donnees: Record<string, unknown> }
   /** Du MJ vers un seul joueur à distance (salon privé) : sa fiche, ses messages. */
@@ -108,7 +111,7 @@ let veilleAppareils: ReturnType<typeof setInterval> | undefined;
 /** Joueurs à distance : dernier « bonjour » sur leur salon privé, par jeton. */
 const presents = new Map<string, number>();
 const ecouteursPresents = new Set<(connectes: Set<string>) => void>();
-const ecouteursBonjourPrive = new Set<(jeton: string) => void>();
+const ecouteursBonjourPrive = new Set<(jeton: string, nouveau: boolean) => void>();
 const connectes = () => new Set([...presents].filter(([, t]) => Date.now() - t < 20000).map(([j]) => j));
 const signalerPresents = () => { const c = connectes(); ecouteursPresents.forEach((f) => f(c)); };
 
@@ -118,7 +121,8 @@ const recuParMj = sansDoublons((m, salonSource) => {
     if (jeton) {
       const nouveau = !connectes().has(jeton);
       presents.set(jeton, Date.now());
-      if (nouveau) { signalerPresents(); ecouteursBonjourPrive.forEach((f) => f(jeton)); }
+      if (nouveau) signalerPresents();
+      if (nouveau || m.attend) ecouteursBonjourPrive.forEach((f) => f(jeton, nouveau));
       return;
     }
     if (typeof m.qui === 'string' && m.qui.startsWith('reseau-')) { appareils.set(m.qui, Date.now()); ecouteursAppareils.forEach((f) => f(nbAppareils())); }
@@ -151,6 +155,7 @@ function brancherReseau(salon: string): void {
   l.ecouter(recuParMj);
   // Sur la liaison réseau, un message « diffusé » part dans le salon commun.
   reseauMj = { salon, liaison: l, jetons };
+  void autoriserJoueurs(salon, jetons);
   liaisonsDuMj().push(l);
 }
 
@@ -194,7 +199,7 @@ export function envoyerPrive(jeton: string, donnees: Record<string, unknown>): v
 /** Côté MJ : joueurs à distance connectés (jetons), et abonnement. */
 export function suivreJoueursConnectes(f: (connectes: Set<string>) => void): () => void { ecouteursPresents.add(f); f(connectes()); return () => { ecouteursPresents.delete(f); }; }
 /** Côté MJ : un joueur à distance vient d'ouvrir son écran (il faut lui envoyer sa fiche et ses messages). */
-export function surArriveeJoueur(f: (jeton: string) => void): () => void { ecouteursBonjourPrive.add(f); return () => { ecouteursBonjourPrive.delete(f); }; }
+export function surArriveeJoueur(f: (jeton: string, nouveau: boolean) => void): () => void { ecouteursBonjourPrive.add(f); return () => { ecouteursBonjourPrive.delete(f); }; }
 
 /** Côté MJ : réponses des vues interactives de l'écran joueurs (module, données ; jeton du joueur s'il est à distance). */
 export function ecouterJoueurs(f: (module: string, donnees: Record<string, unknown>, jeton?: string) => void): () => void {
@@ -284,6 +289,8 @@ export interface RecepteurEcran {
   bandeau?(t: string | null): void;
   /** Joueur à distance : ce que le MJ lui envoie à lui seul (fiche, messages). */
   prive?(d: Record<string, unknown>): void;
+  /** Joueur à distance : son lien a été remplacé par le MJ (l'écran ne reçoit plus rien). */
+  refuse?(): void;
 }
 
 /* Côté écran joueurs : par le relais si l'adresse a un salon (?salon=…), sinon en local. Un joueur à distance
@@ -300,20 +307,24 @@ export function recevoirEcran(r: RecepteurEcran): () => void {
   const l = salon ? liaisonReseau(salonPrive ? [salon, salonPrive] : [salon], qui) : liaisonLocale();
   if (!l) return () => {};
   liaisonJoueur = l;
+  let recuPrive = false;
+  let relance: ReturnType<typeof setInterval> | undefined;
   l.ecouter(sansDoublons((m) => {
+    if (m.type === 'refuse') { if (relance) clearInterval(relance); l.fermer(); r.refuse?.(); return; }
     if (m.type === 'scene') r.scene(m.scene as Scene);
     else if (m.type === 'jet') r.jet?.(m.jet as JetDes);
     else if (m.type === 'historique') r.historique?.(m.jets as JetDes[]);
     else if (m.type === 'bandeau') r.bandeau?.(m.texte as string | null);
-    else if (m.type === 'prive') r.prive?.((m.donnees ?? {}) as Record<string, unknown>);
+    else if (m.type === 'prive') { recuPrive = true; r.prive?.((m.donnees ?? {}) as Record<string, unknown>); }
   }));
   const bonjour = () => {
     l.envoyer({ type: 'bonjour', qui, mid: mid() });
-    if (salonPrive) l.envoyer({ type: 'bonjour', qui, mid: mid() }, salonPrive);
+    if (salonPrive) l.envoyer({ type: 'bonjour', qui, attend: !recuPrive, mid: mid() }, salonPrive);
   };
-  bonjour();
+  // Bonjour seulement une fois le flux ouvert : sinon la fiche envoyée en réponse arriverait avant qu'on écoute.
+  void (l.pret ?? Promise.resolve()).then(bonjour);
   // Par le réseau, le MJ a pu ouvrir son salon après nous : on redit bonjour de temps en temps.
-  const relance = salon ? setInterval(bonjour, 8000) : undefined;
+  relance = salon ? setInterval(bonjour, 8000) : undefined;
   return () => { if (relance) clearInterval(relance); l.fermer(); if (liaisonJoueur === l) liaisonJoueur = null; };
 }
 

@@ -35,10 +35,10 @@ export function Synchro() {
     envoyerPrive(jeton, { fiche, messages });
   };
 
-  useEffect(() => surArriveeJoueur((j) => {
+  useEffect(() => surArriveeJoueur((j, nouveau) => {
     void envoyer(j);
     const p = c.current && persoDuJeton(c.current, j);
-    if (p) emettre('message', { texte: `${p.joueur || p.nom} a rejoint la partie à distance.`, sorte: 'info' });
+    if (p && nouveau) emettre('message', { texte: `${p.joueur || p.nom} a rejoint la partie à distance.`, sorte: 'info' });
   }), []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Fiche ou messages changés : renvoyés aux joueurs connectés concernés (regroupé toutes les 0,6 s).
