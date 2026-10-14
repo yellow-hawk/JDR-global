@@ -49,6 +49,8 @@ export interface FichePersonnage {
   maitrises?: { competences?: Record<string, number>; sauvegardes?: string[]; armes?: string[]; armures?: string[]; outils?: string[] };
   inventaire?: { objets: ObjetInventaire[]; monnaie?: Record<string, number> };
   defense?: { pvTemp?: number; desVie?: number; resistances?: string; immunites?: string; vulnerabilites?: string; mortSucces?: number; mortEchecs?: number };
+  /** Notes écrites par le joueur depuis son écran à distance (le MJ les lit). */
+  notesJoueur?: string;
   /** Journal du personnage (souvenirs, événements marquants). */
   journal?: { quand: string; texte: string; mj?: Secret }[];
 }

@@ -1,7 +1,8 @@
 // Fenêtre « écran joueurs » (adresse ?ecran=joueurs) : affiche ce que le MJ lui envoie.
 // Ne lit jamais la campagne : elle ne reçoit que des scènes déjà filtrées par le bus.
 // Par-dessus la scène : les jets de dés en 3D, l'historique des jets et un bandeau (date du monde).
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import { EcranDistant, type DonneesPrivees } from './EcranDistant';
 import type { Scene } from '../noyau/bus';
 import { envoyerAuMj, recevoirEcran } from '../noyau/bus';
 import { moduleParId } from './registre';
@@ -28,11 +29,15 @@ export function EcranJoueurs() {
   const [jet, setJet] = useState<JetDes | null>(null);
   const [jets, setJets] = useState<JetDes[]>([]);
   const [bandeau, setBandeau] = useState<string | null>(null);
+  // Joueur à distance (?joueur=…) : sa fiche et ses messages, reçus sur son salon privé.
+  const distant = useMemo(() => new URLSearchParams(window.location.search).has('joueur'), []);
+  const [prive, setPrive] = useState<DonneesPrivees>({});
   useEffect(() => recevoirEcran({
     scene: setScene,
     jet: (j) => { setJet(j); setJets((l) => [j, ...l].slice(0, 6)); },
     historique: (h) => setJets(h.filter((j) => !j.qui?.endsWith('caché')).slice(0, 6)),
     bandeau: setBandeau,
+    prive: (d) => setPrive((x) => ({ ...x, ...(d as DonneesPrivees) })),
   }), []);
   useEffect(() => { document.title = 'Écran joueurs · JDR Global'; }, []);
   const blob = scene.sorte === 'image' || scene.sorte === 'document' || scene.sorte === 'vide' || scene.sorte === 'fiche' ? scene.image : scene.sorte === 'personnage' ? scene.portrait : null;
@@ -45,8 +50,8 @@ export function EcranJoueurs() {
     else void document.documentElement.requestFullscreen().catch(() => undefined);
   };
 
-  return (
-    <div className={`ecran ${scene.sorte === 'module' ? 'ecran-interactif' : ''}`}>
+  const ecran = (
+    <div className={`ecran ${scene.sorte === 'module' ? 'ecran-interactif' : ''} ${distant ? 'ecran-distant' : ''}`}>
       {scene.sorte === 'vide' && (
         <div className="ecran-attente">
           <div className="ecran-titre">{scene.campagne ?? 'JDR Global'}</div>
@@ -132,4 +137,5 @@ export function EcranJoueurs() {
       <button className="btn btn-petit ecran-plein" onClick={pleinEcran}>Plein écran</button>
     </div>
   );
+  return distant ? <EcranDistant prive={prive}>{ecran}</EcranDistant> : ecran;
 }

@@ -1,0 +1,14 @@
+/* Module Joueurs : classes .joueurs- */
+.joueurs-grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; align-items: start; }
+.joueurs-carte textarea, .joueurs-page input { font: inherit; padding: 4px 8px; border: 1px solid var(--trait); border-radius: 6px; background: var(--fond); color: var(--encre); width: 100%; }
+.joueurs-lien { font-size: 0.75rem; word-break: break-all; background: var(--fond-2); padding: 4px 6px; border-radius: 4px; }
+.joueurs-en-ligne { color: var(--succes); font-weight: 600; }
+.joueurs-tunnel { display: flex; flex-direction: column; gap: 6px; border-top: 1px solid var(--trait); padding-top: 8px; }
+.joueurs-tunnel code { word-break: break-all; }
+.joueurs-alerte { background: var(--fond-2); border-left: 3px solid var(--accent); padding: 6px 10px; border-radius: 4px; margin: 0; }
+.joueurs-messages { display: flex; flex-direction: column; gap: 6px; max-height: 260px; overflow-y: auto; margin-top: 6px; }
+.joueurs-message { position: relative; border-left: 3px solid var(--mj); padding: 2px 26px 2px 8px; }
+.joueurs-message p { margin: 2px 0; white-space: pre-wrap; }
+.joueurs-message .combat-oeil { position: absolute; top: 0; right: 0; }
+.joueurs-vignette { max-width: 120px; max-height: 90px; border-radius: 4px; display: block; }
+.joueurs-notes { white-space: pre-wrap; margin: 4px 0 0; font-size: 0.9rem; }

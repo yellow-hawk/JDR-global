@@ -28,3 +28,4 @@ Règle : une page de module lit `vue` pour afficher et appelle `modifier()` pour
 - `EcranJoueurs` : scènes `svg`, `fiche`, `module` (vue d'un module via `moduleParId(...).ecranJoueurs[vue]`, réponse par `envoyerAuMj`).
 - `graphe/svg.ts` : `svgArbre(racine, horizontal)` (organigramme en SVG autonome).
 - `types.ts` : `DefinitionModule.ecranJoueurs`, `PropsVueJoueurs { donnees, titre?, envoyer }`.
+- `EcranDistant.tsx` : écran d'un joueur à distance (`?joueur=`) : onglets Table / Ma fiche (lecture seule, notes envoyées au MJ) / Messages (badge de nouveaux).

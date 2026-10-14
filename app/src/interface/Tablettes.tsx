@@ -9,6 +9,15 @@ const lireSalon = (): string | null => { try { return localStorage.getItem(CLE);
 const ecrireSalon = (s: string | null) => { try { if (s) localStorage.setItem(CLE, s); else localStorage.removeItem(CLE); } catch { /* navigation privée */ } };
 const nouveauSalon = () => Array.from({ length: 5 }, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random() * 32)]).join('');
 
+/** Salon ouvert (ouvert au besoin, si le serveur sait relayer) ; null : pas de relais (version en ligne). */
+export async function assurerSalon(): Promise<string | null> {
+  if (salonReseau()) return salonReseau();
+  if (!(await infosRelais())) return null;
+  const s = lireSalon() ?? nouveauSalon();
+  activerReseau(s); ecrireSalon(s);
+  return s;
+}
+
 /** Au démarrage : rouvre le salon de la dernière fois si le serveur sait relayer. */
 export async function rouvrirSalon(): Promise<void> {
   const s = lireSalon();

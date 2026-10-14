@@ -4,8 +4,10 @@
 //   même réseau. Le relais ne fait que transmettre : les images (Blob) voyagent encodées en base 64.
 
 export interface Liaison {
-  envoyer(m: object): void;
-  ecouter(f: (m: Record<string, unknown>) => void): () => void;
+  /** Envoie un message ; par le réseau, `salon` choisit le salon (sinon le premier suivi). */
+  envoyer(m: object, salon?: string): void;
+  /** `salon` : le salon d'où vient le message (réseau seulement). */
+  ecouter(f: (m: Record<string, unknown>, salon?: string) => void): () => void;
   fermer(): void;
 }
 
@@ -66,29 +68,48 @@ export function depuisReseau(v: unknown): unknown {
 
 /* ---------- relais réseau ---------- */
 
-/** Le serveur qui a servi la page sait-il relayer ? Renvoie ses adresses sur le réseau local. */
-export async function infosRelais(): Promise<{ adresses: string[]; port: number } | null> {
+/** État du tunnel Cloudflare du serveur local (accès des joueurs à distance). */
+export interface InfosTunnel { etat: 'arrete' | 'demarrage' | 'actif' | 'erreur' | 'absent'; adresse: string | null; erreur: string | null }
+export interface InfosRelais { adresses: string[]; port: number; tunnel?: InfosTunnel; local?: boolean }
+
+/** Le serveur qui a servi la page sait-il relayer ? Renvoie ses adresses sur le réseau local et l'état du tunnel. */
+export async function infosRelais(): Promise<InfosRelais | null> {
   try {
     const r = await fetch('relais/infos', { cache: 'no-store' });
     return r.ok ? await r.json() : null;
   } catch { return null; }
 }
 
-/** Liaison par le relais : écoute en flux (EventSource), envoi en POST. `qui` identifie l'envoyeur (pas d'écho). */
-export function liaisonReseau(salon: string, qui: string, base = ''): Liaison {
-  const ecouteurs = new Set<(m: Record<string, unknown>) => void>();
-  const q = `salon=${encodeURIComponent(salon)}&qui=${encodeURIComponent(qui)}`;
-  const flux = new EventSource(`${base}relais/ecoute?${q}`);
+/** Ouvre ou ferme l'accès Internet (tunnel Cloudflare) ; seul l'ordinateur du MJ y a droit. */
+export async function commanderTunnel(action: 'demarrer' | 'arreter'): Promise<InfosTunnel | null> {
+  try {
+    const r = await fetch(`relais/tunnel?action=${action}`, { method: 'POST' });
+    return r.ok ? await r.json() : null;
+  } catch { return null; }
+}
+
+/**
+ * Liaison par le relais : un seul flux (EventSource) pour tous les `salons` suivis, envoi en POST vers un salon.
+ * `qui` identifie l'envoyeur (pas d'écho). Un seul flux par page : les navigateurs limitent les connexions ouvertes.
+ */
+export function liaisonReseau(salons: string | string[], qui: string, base = ''): Liaison {
+  const liste = Array.isArray(salons) ? salons : [salons];
+  const ecouteurs = new Set<(m: Record<string, unknown>, salon?: string) => void>();
+  const flux = new EventSource(`${base}relais/ecoute?salon=${encodeURIComponent(liste.join(','))}&qui=${encodeURIComponent(qui)}`);
   flux.onmessage = (e) => {
-    try { const m = depuisReseau(JSON.parse(e.data)) as Record<string, unknown>; ecouteurs.forEach((f) => f(m)); } catch { /* message illisible */ }
+    try {
+      const { salon, m } = JSON.parse(e.data) as { salon: string; m: unknown };
+      const msg = depuisReseau(m) as Record<string, unknown>;
+      ecouteurs.forEach((f) => f(msg, salon));
+    } catch { /* message illisible */ }
   };
   // Les messages partent dans l'ordre, l'un après l'autre.
   let file: Promise<unknown> = Promise.resolve();
   return {
-    envoyer: (m) => {
+    envoyer: (m, salon = liste[0]) => {
       file = file.then(async () => {
         const corps = JSON.stringify(await versReseau(m));
-        await fetch(`${base}relais/envoi?${q}`, { method: 'POST', body: corps, headers: { 'Content-Type': 'application/json' } }).catch(() => undefined);
+        await fetch(`${base}relais/envoi?salon=${encodeURIComponent(salon)}&qui=${encodeURIComponent(qui)}`, { method: 'POST', body: corps, headers: { 'Content-Type': 'application/json' } }).catch(() => undefined);
       });
     },
     ecouter: (f) => { ecouteurs.add(f); return () => { ecouteurs.delete(f); }; },
@@ -97,11 +118,11 @@ export function liaisonReseau(salon: string, qui: string, base = ''): Liaison {
 }
 
 /** Écarte les messages déjà reçus (le même message peut arriver par deux liaisons). */
-export function sansDoublons(f: (m: Record<string, unknown>) => void): (m: Record<string, unknown>) => void {
+export function sansDoublons(f: (m: Record<string, unknown>, salon?: string) => void): (m: Record<string, unknown>, salon?: string) => void {
   const vus: string[] = [];
-  return (m) => {
+  return (m, salon) => {
     const id = typeof m.mid === 'string' ? m.mid : null;
     if (id) { if (vus.includes(id)) return; vus.push(id); if (vus.length > 300) vus.shift(); }
-    f(m);
+    f(m, salon);
   };
 }
