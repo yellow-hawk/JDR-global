@@ -10,6 +10,7 @@ import { statsVisibles } from '../rendu';
 import type { Controleur } from './types';
 import { ImageJeton } from './ImageJeton';
 import { ActionsJoueurs } from './ActionsJoueurs';
+import { ActionsMj } from './ActionsMj';
 
 const LIB_CARAC: Record<string, string> = { for: 'FOR', dex: 'DEX', con: 'CON', int: 'INT', sag: 'SAG', cha: 'CHA' };
 
@@ -89,6 +90,7 @@ function DetailJeton({ ctl, j, mj }: { ctl: Controleur; j: Jeton; mj: boolean })
         </div>
       )}
       {j.persoId && <p className="discret">Lié à une fiche de personnage.</p>}
+      {!ro && <ActionsMj ctl={ctl} j={j} />}
       {!ro && <ActionsJoueurs ctl={ctl} j={j} />}
     </section>
   );

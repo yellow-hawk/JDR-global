@@ -128,6 +128,18 @@ export interface EntreeCatalogue {
 }
 
 /** Données de référence d'un système : listes proposées par la fiche (tout est facultatif). */
+/** Don : pris à la place d'une amélioration de caractéristiques ; effets sur la fiche, actions de combat, magie. */
+export interface DonRegles {
+  id: string; nom: string; texte: string;
+  /** Minimums de caractéristiques (`un` : une seule suffit), niveau, savoir déjà faire de la magie. */
+  prerequis?: { caracs?: Record<string, number>; un?: boolean; niveau?: number; magie?: boolean };
+  effets?: import('../contrat').Effet[];
+  /** Actions de combat débloquées (ids de combat/moteur/actionsCombat). */
+  actions?: string[];
+  /** Le don éveille la magie (le personnage sait tracer des sceaux). */
+  magie?: boolean;
+}
+
 export interface CatalogueRegles {
   competences: { id: string; libelle: string; carac: string }[];
   caracs: { id: string; libelle: string }[];
@@ -138,6 +150,8 @@ export interface CatalogueRegles {
   monnaies: { id: string; libelle: string }[];
   classes: ClasseRegles[];
   peuples: PeupleRegles[];
+  /** Dons au choix (montée de niveau). */
+  dons?: DonRegles[];
   /** Mention de la source des données (licence). */
   source?: string;
 }

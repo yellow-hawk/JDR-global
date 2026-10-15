@@ -12,6 +12,29 @@ export const CARACS: Carac[] = ['for', 'dex', 'con', 'int', 'sag', 'cha'];
 export interface Aura { nom: string; rayon: number; couleur: string }
 export interface DrapeauxTour { action: boolean; bonus: boolean; reaction: boolean; mouvement: boolean }
 
+/**
+ * Ce que la fiche d'un personnage apporte au combat (rempli à la pose du jeton et à chaque début de tour) :
+ * sauvegardes et compétences calculées, DD des sorts, attaques par action, capacités passives, magie.
+ */
+export interface ProfilCombat {
+  niveau: number;
+  bonusInitiative: number;
+  sauvegardes: Partial<Record<Carac, number>>;
+  /** Bonus de quelques compétences utiles en combat (discretion, perception, medecine, athletisme, acrobaties). */
+  competences: Record<string, number>;
+  /** Maîtrises de compétences (ids) : certaines actions les demandent. */
+  maitrises: string[];
+  ddSorts: number | null;
+  attaqueSort: number | null;
+  /** 2 avec « Attaque supplémentaire ». */
+  attaquesParAction: number;
+  /** Capacités passives : sang-chaud, chasseur-geants, rage… ; `sournoise` : dés d'attaque sournoise. */
+  passifs: string[];
+  sournoise?: number;
+  /** Le personnage sait-il faire de la magie (classe, talent d'éveil, don) ? */
+  magie: boolean;
+}
+
 export interface Jeton {
   id: number;
   nom: string;
@@ -40,6 +63,13 @@ export interface Jeton {
   portrait?: string | null; // adresse data: de l'image
   /** Icône (emoji) quand il n'y a pas de portrait : absente = d'après le nom (gobelin → 👺), null = aucune. */
   icone?: string | null;
+  /** Personnage lié : ce que sa fiche apporte au combat. */
+  profil?: ProfilCombat | null;
+  /** Utilisations des actions limitées (une fois par combat…), par id d'action. */
+  usages?: Record<string, number>;
+  /** Attaques faites ce tour (attaque supplémentaire) ; attaque sournoise déjà portée ce tour. */
+  attaquesFaites?: number;
+  sournoiseFaite?: boolean;
 }
 
 export type FormeZone = 'cercle' | 'cone' | 'ligne' | 'carre' | 'rectangle' | 'polygone';
@@ -88,6 +118,9 @@ export interface Gabarit {
   concentration: boolean;
   desc: string;
   atelier?: boolean;        // venu de l'Atelier de tracé
+  /** Sauvegarde des cibles (moitié des dégâts et pas d'état si réussie) ; `attaque` : jet d'attaque de sort à la place. */
+  sauvegarde?: Carac | null;
+  attaque?: boolean;
   lanceurs?: string[];      // personnages de la campagne qui connaissent ce sort (persoId)
 }
 

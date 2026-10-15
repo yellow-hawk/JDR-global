@@ -5,6 +5,8 @@ import { Champ } from '../../../interface/composants';
 import type { FicheCalculee, SystemeAvecFiche } from '../../../noyau/regles';
 import { aUneFiche } from '../../../noyau/regles';
 import { MonteeNiveau } from '../progression/MonteeNiveau';
+import { donsAuChoix } from '../progression/logique';
+import { texteEffet } from './Talents';
 import { appliquerNiveau, etatProgression } from '../progression/logique';
 import { majFiche, type PropsOnglet } from './types';
 
@@ -106,8 +108,28 @@ export function Progression({ p, R, role, lectureSeule, maj, calcul }: PropsOngl
         </section>
       )}
 
+      {S?.catalogue.dons?.length ? (
+        <section className="pile" style={{ gap: 6 }}>
+          <h3>Dons</h3>
+          {(pr.dons ?? []).length === 0 && <p className="discret" style={{ margin: 0 }}>Aucun don. On en choisit un à la place d’une amélioration de caractéristiques (montée de niveau).</p>}
+          <ul className="perso-aptitudes">
+            {(pr.dons ?? []).map((id) => { const d = S.catalogue.dons!.find((x) => x.id === id); return (
+              <li key={id}><strong>{d?.nom ?? id}</strong> — {d?.texte}{d?.effets?.length ? <span className="discret"> ({d.effets.map((x) => texteEffet(x.cible, x.valeur)).join(', ')})</span> : null}
+                {!lectureSeule && role === 'mj' && <button type="button" className="combat-oeil" title="Retirer ce don" onClick={() => majPr((x) => ({ ...x, dons: (x.dons ?? []).filter((y) => y !== id) }))}>×</button>}
+              </li>
+            ); })}
+          </ul>
+          {!lectureSeule && role === 'mj' && (
+            <select value="" onChange={(e) => e.target.value && majPr((x) => ({ ...x, dons: [...(x.dons ?? []), e.target.value] }))}>
+              <option value="">Accorder un don…</option>
+              {donsAuChoix(p, S).map(({ don, raison }) => <option key={don.id} value={don.id} disabled={raison === 'déjà pris'}>{don.nom}{raison ? ` (${raison})` : ''}</option>)}
+            </select>
+          )}
+        </section>
+      ) : null}
+
       <section>
-        <h3>Dons et aptitudes personnelles</h3>
+        <h3>Aptitudes personnelles</h3>
         {aptitudes.map((a, i) => (
           <div key={i} className="pile" style={{ gap: 4 }}>
             <div className="ligne">

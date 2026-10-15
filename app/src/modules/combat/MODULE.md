@@ -80,3 +80,12 @@ La diffusion envoie la vue `table` (scène `module`, source `combat`) : image de
 ## Actions des joueurs demandées par le MJ (écran joueurs)
 
 `actions.ts` (pur, testé) : `DemandeAction` (image + caméra + grille + action `sort` | `deplacement`), `ReponseAction`, `caseVisee`, `zoneVisee`, `casesDeZone`, `versImage`. `joueurs/Action.tsx` (vue `action` : toucher ou survoler la carte, aperçu, Valider / Annuler). `interface/ActionsJoueurs.tsx` (détail du jeton, MJ : viser un sort, se déplacer, tracer un sceau via `PanneauTrace` de la Magie), `interface/useActionsJoueurs.ts` (envoie l'image et la caméra `imageEtCamera`, aperçu en direct `ui.viseeJoueurs`, joue l'action à la validation puis rediffuse la table).
+
+## Règles liées (fiche → table → jets)
+
+- `moteur/conditions.ts` (pur, testé) : `peutAgir`, `vitesseEffective` / `resteMouvement`, `modeAttaque` (avantage / désavantage et raisons), `d20Mode`, `sauvegarde` (bonus de la fiche, échec automatique), `ddSorts` ; états d'un tour (`EXPIRE_DEBUT_TOUR`) et consommés par l'attaque (`CONSOMME_ATTAQUE`).
+- `moteur/regles.ts` : initiative avec le bonus de la fiche ; attaque en deux d20 si avantage, critique automatique au contact d'une cible paralysée, attaque supplémentaire (`profil.attaquesParAction`), attaque sournoise, rage, passifs (`sang-chaud`, `chasseur-geants`), proie marquée ; sorts avec sauvegarde (moitié, pas d'état) ou attaque de sort.
+- `moteur/actionsCombat.ts` (pur, testé) : catalogue `ACTIONS_COMBAT` (coût action / bonus / gratuit, cible, portée, utilisations par combat, effets) et `jouerAction`, `empechement`.
+- `capacites.ts` (pur, testé) : `capacitesCombat(p, R)` (profil de combat, actions débloquées par la classe, les talents `action` et les dons, valeurs calculées pour le jeton), `synchroniserJeton` (appelé au début du tour d'un PJ).
+- Tour du joueur : bouton « Actions » (cibles alliées / ennemies entourées), état Bonus et attaques restantes, sorts et sceaux seulement si le personnage sait faire de la magie. MJ : `interface/ActionsMj.tsx` dans le détail du jeton.
+- Sorts : `gabarit()` donne `sauvegarde` / `attaque` ; zone = dés × 0,75, 8d6 au plus. `equilibre.test.ts` : bornes des sorts de base, actions et fiche.

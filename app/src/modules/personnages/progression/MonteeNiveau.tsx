@@ -5,7 +5,7 @@ import type { Personnage } from '../../../noyau/contrat';
 import type { SystemeAvecFiche } from '../../../noyau/regles';
 import { lancer } from '../../../noyau/regles';
 import { Champ } from '../../../interface/composants';
-import type { ChoixNiveau } from './logique';
+import { donsAuChoix, type ChoixNiveau } from './logique';
 
 const CARACS = ['for', 'dex', 'con', 'int', 'sag', 'cha'];
 
@@ -69,7 +69,12 @@ export function MonteeNiveau({ p, R, onValider, onAnnuler }: { p: Personnage; R:
               {mode === 'un-un' && <select value={c2} onChange={(e) => setC2(e.target.value)}>{CARACS.map((k) => <option key={k} value={k}>{k.toUpperCase()} ({carac[k] ?? 10})</option>)}</select>}
               <span className="discret">maximum 20</span>
             </div>
-          ) : <input value={don} placeholder="Nom du don (Robuste, Vigilant, Maître d’armes…)" onChange={(e) => setDon(e.target.value)} />}
+          ) : (
+            <select value={don} onChange={(e) => setDon(e.target.value)}>
+              <option value="">Choisir un don…</option>
+              {donsAuChoix(p, R).map(({ don: d, raison }) => <option key={d.id} value={d.id} disabled={!!raison}>{d.nom} — {d.texte}{raison ? ` (il faut : ${raison})` : ''}</option>)}
+            </select>
+          )}
         </div>
       )}
       <div className="ligne">

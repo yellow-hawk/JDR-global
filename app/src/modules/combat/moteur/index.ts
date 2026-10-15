@@ -6,6 +6,8 @@ export * from './deplacement';
 export * from './vision';
 export * from './etat';
 export * from './regles';
+export * from './conditions';
+export * from './actionsCombat';
 export * from './historique';
 export * from './packs';
 export { lireBlocStats } from './srd';

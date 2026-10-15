@@ -1,5 +1,5 @@
 {
- "_doc": "Arbres de talents maison de JDR Global (D&D 5e) : 6 grands arbres ramifiés. Chaque arbre part d'un tronc ; les branches se divisent (fourches) et se rejoignent (jonctions : tous les « requis »). « requisUn » : au moins un de ces talents. Rang = distance au tronc (calculée) ; niveau requis selon le rang ; coût : 1, jonction 2, sommet 3. Effets appliqués automatiquement à la fiche ; « magie » : signes de l'Atelier de tracé, rang, emplacements.",
+ "_doc": "Arbres de talents maison de JDR Global (D&D 5e) : 6 grands arbres ramifiés. Chaque arbre part d'un tronc ; les branches se divisent (fourches) et se rejoignent (jonctions : tous les « requis »). « requisUn » : au moins un de ces talents. Rang = distance au tronc (calculée) ; niveau requis selon le rang ; coût : 1, jonction 2, sommet 3. Effets appliqués automatiquement à la fiche ; « magie » : signes de l'Atelier de tracé, rang, emplacements. action : action de combat débloquée (combat/moteur/actionsCombat) ; passif : capacité appliquée en combat.",
  "pointsParNiveau": 1,
  "arbres": [
   {
@@ -138,7 +138,8 @@
        "requis": [
         "fer.b3b"
        ],
-       "icone": "❤️‍🩹"
+       "icone": "❤️‍🩹",
+       "action": "second-souffle"
       },
       {
        "id": "fer.j6",
@@ -253,7 +254,8 @@
        "requis": [
         "fer.l3"
        ],
-       "icone": "🌪️"
+       "icone": "🌪️",
+       "action": "tempete-acier"
       },
       {
        "id": "fer.j1",
@@ -309,7 +311,8 @@
        "requis": [
         "fer.racine"
        ],
-       "icone": "🔥"
+       "icone": "🔥",
+       "passif": "sang-chaud"
       },
       {
        "id": "fer.f2",
@@ -411,7 +414,8 @@
        "requisUn": [
         "fer.f3b"
        ],
-       "sorte": "sommet"
+       "sorte": "sommet",
+       "action": "avatar"
       }
      ]
     },
@@ -478,7 +482,8 @@
        "requis": [
         "fer.c2"
        ],
-       "icone": "🎯"
+       "icone": "🎯",
+       "action": "proie-marquee"
       },
       {
        "id": "fer.c4",
@@ -504,7 +509,8 @@
         "fer.c3b"
        ],
        "icone": "🐻",
-       "sorte": "jonction"
+       "sorte": "jonction",
+       "passif": "chasseur-geants"
       },
       {
        "id": "fer.c5",
@@ -712,7 +718,8 @@
        "requis": [
         "fer.o3"
        ],
-       "icone": "✨"
+       "icone": "✨",
+       "action": "inspiration-combat"
       },
       {
        "id": "fer.j5",
@@ -857,7 +864,8 @@
        "requis": [
         "ombre.s3"
        ],
-       "icone": "🫥"
+       "icone": "🫥",
+       "action": "disparition"
       },
       {
        "id": "ombre.j6",
@@ -1351,7 +1359,8 @@
        "requisUn": [
         "ombre.x3"
        ],
-       "sorte": "sommet"
+       "sorte": "sommet",
+       "action": "ruse-cacher"
       }
      ]
     },
@@ -1985,7 +1994,8 @@
        "requis": [
         "arcanes.s1"
        ],
-       "icone": "🕯️"
+       "icone": "🕯️",
+       "action": "marque-patron"
       },
       {
        "id": "arcanes.s3",
@@ -2267,7 +2277,8 @@
        "requis": [
         "sacre.g2"
        ],
-       "icone": "🩹"
+       "icone": "🩹",
+       "action": "purification"
       },
       {
        "id": "sacre.g4",
@@ -2364,7 +2375,8 @@
        "requis": [
         "sacre.u2"
        ],
-       "icone": "☀️"
+       "icone": "☀️",
+       "action": "lumiere-aveuglante"
       },
       {
        "id": "sacre.u3b",
@@ -2586,7 +2598,8 @@
        "requis": [
         "sacre.l1"
        ],
-       "icone": "🌩️"
+       "icone": "🌩️",
+       "action": "voix-tonnerre"
       },
       {
        "id": "sacre.l3",
@@ -2625,7 +2638,8 @@
        "icone": "🌪️",
        "requisUn": [
         "sacre.l3b"
-       ]
+       ],
+       "action": "colere-ciel"
       },
       {
        "id": "sacre.j3",
@@ -3344,7 +3358,8 @@
        "requis": [
         "aventurier.h1"
        ],
-       "icone": "🎲"
+       "icone": "🎲",
+       "action": "coup-de-pouce"
       },
       {
        "id": "aventurier.h3",

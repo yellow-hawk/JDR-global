@@ -1,7 +1,7 @@
 // Canevas de la table : caméra, boucle de dessin, aperçus des outils, clavier (Échap, Entrée, Suppr).
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { usePortraits } from './images';
-import { modifierJeton, porteeDeplacement, supprimerJeton, supprimerZone, TERRAINS, zoneDeSort } from '../moteur';
+import { modifierJeton, porteeDeplacement, supprimerJeton, supprimerZone, TERRAINS, zoneDeSort, resteMouvement } from '../moteur';
 import type { Zone } from '../moteur';
 import {
   avancerParticules, cadrer, cameraInitiale, dessinerScene, echelleFond, type Apercu, type Camera, type Fond, type Public,
@@ -50,7 +50,7 @@ export function Table({ ctl, public: pub, fond }: Props) {
     if (!mj || !choisi || !e.combat.actif || !e.porteeDeplacement || !['choisir'].includes(ui.outil)) return null;
     const autres = e.jetons.filter((j) => j.id !== choisi.id);
     const depart = g?.sorte === 'jeton' && g.id === choisi.id ? g.depart : [choisi.x, choisi.y] as [number, number];
-    return { jeton: choisi, cases: porteeDeplacement(e.grille, e.zones, TERRAINS, autres, depart, Math.max(0, choisi.vitesse - choisi.mouvementUtilise)) };
+    return { jeton: choisi, cases: porteeDeplacement(e.grille, e.zones, TERRAINS, autres, depart, resteMouvement(choisi)) };
   }, [mj, choisi, e, ui.outil, g]);
 
   const apercu: Apercu = { survol: g?.sorte === 'jeton' ? g.ici : souris.survol, portee, mesure: souris.mesure, polygone: souris.polygone };

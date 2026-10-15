@@ -4,6 +4,7 @@
 import { useEffect, useMemo, useRef, useState, type PointerEvent } from 'react';
 import type { PropsVueJoueurs } from '../../../interface/types';
 import { Zoomable } from '../../../interface/Zoomable';
+import { pointSvg } from '../../../interface/pointSvg';
 import { cheminTrait, COULEURS_ANNOTATION, type Annotation } from '../annotations';
 import './joueurs.css';
 
@@ -24,10 +25,8 @@ export default function Carte({ donnees, envoyer, moi }: PropsVueJoueurs) {
   useEffect(() => { if (!d.annoter) setOutil('voir'); }, [d.annoter]);
 
   const point = (ev: PointerEvent): [number, number] => {
-    const p = svg.current!.createSVGPoint();
-    p.x = ev.clientX; p.y = ev.clientY;
-    const q = p.matrixTransform(svg.current!.getScreenCTM()!.inverse());
-    return [Math.round(q.x), Math.round(q.y)];
+    const [x, y] = pointSvg(svg.current!, ev.clientX, ev.clientY, d.largeur, d.hauteur);
+    return [Math.round(x), Math.round(y)];
   };
   const envoyerCarte = (x: Record<string, unknown>) => envoyer({ carteId: d.carteId, ...x });
 

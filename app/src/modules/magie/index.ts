@@ -5,7 +5,7 @@ export { analyser } from './atelier/engine/analyse';
 export { decrire, valeurs } from './atelier/engine/effets';
 export { svgSceau } from './atelier/engine/impression';
 export type { Sceau, SortEnregistre } from './atelier/engine/types';
-export { profilDe, aUneMagie, grimoireMjComplet, integrerGrimoireDeBase, donnerSortsAuxPnj, sortsPourRole, preparerCampagne } from './lien';
+export { profilDe, aUneMagie, saitFaireDeLaMagie, grimoireMjComplet, integrerGrimoireDeBase, donnerSortsAuxPnj, sortsPourRole, preparerCampagne } from './lien';
 export { GRIMOIRE_DE_BASE } from './atelier/data/grimoire';
 export { PanneauTrace, type SortTrace } from './PanneauTrace';
 export type { ProfilPJ } from './atelier/engine/profils';

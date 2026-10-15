@@ -61,6 +61,7 @@ export function jetonDepuisModele(m: Partial<Modele> & { nom?: string }, id: num
     auras: m.auras ? m.auras.map((a) => ({ ...a })) : [], drapeaux: { ...DRAPEAUX_VIDES }, concentration: null,
     mouvementUtilise: 0, vision: m.vision ?? 12, degats: m.degats ?? '1d8', bonusAttaque: m.bonusAttaque ?? null,
     initiative: 0, persoId: m.persoId ?? null, portrait: m.portrait ?? null, ...(m.icone !== undefined ? { icone: m.icone } : {}),
+    ...(m.profil ? { profil: m.profil } : {}),
   };
 }
 

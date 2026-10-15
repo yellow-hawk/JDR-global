@@ -1,6 +1,7 @@
 // Progression (pur) : montée de niveau, distribution d'expérience, XP d'une rencontre.
 import type { Campagne, Personnage } from '../../../noyau/contrat';
-import type { SystemeAvecFiche } from '../../../noyau/regles';
+import type { DonRegles, SystemeAvecFiche } from '../../../noyau/regles';
+import { saitFaireDeLaMagie } from '../../magie';
 import { avecStatsCalculees } from '../logique';
 
 export interface ChoixNiveau {
@@ -13,6 +14,25 @@ export interface ChoixNiveau {
   /** Don choisi à la place d'une amélioration (texte libre). */
   don?: string;
 }
+
+/** Pourquoi le personnage ne peut pas prendre ce don (null : il peut). Déjà pris, caractéristiques, niveau, magie. */
+export function prerequisDon(p: Personnage, d: DonRegles, R: SystemeAvecFiche): string | null {
+  if ((p.fiche?.progression?.dons ?? []).includes(d.id)) return 'déjà pris';
+  const pr = d.prerequis;
+  if (!pr) return null;
+  if (pr.niveau && niveauTotal(p) + 1 < pr.niveau) return `niveau ${pr.niveau}`;
+  if (pr.magie && !saitFaireDeLaMagie(p, R)) return 'savoir faire de la magie';
+  if (pr.caracs) {
+    const calc = R.calculer(p);
+    const val = (k: string) => calc.caracs.find((c) => c.carac === k)?.valeur ?? 10;
+    const manque = Object.entries(pr.caracs).filter(([k, v]) => val(k) < v);
+    if (pr.un ? manque.length === Object.keys(pr.caracs).length : manque.length) return `${pr.un ? 'au moins ' : ''}${Object.entries(pr.caracs).map(([k, v]) => `${k.toUpperCase()} ${v}`).join(pr.un ? ' ou ' : ', ')}`;
+  }
+  return null;
+}
+/** Les dons du système, avec ce qui empêche de les prendre. */
+export const donsAuChoix = (p: Personnage, R: SystemeAvecFiche): { don: DonRegles; raison: string | null }[] =>
+  (R.catalogue.dons ?? []).map((don) => ({ don, raison: prerequisDon(p, don, R) }));
 
 const niveauTotal = (p: Personnage) => (p.fiche?.progression?.classes ?? []).reduce((s, c) => s + c.niveau, 0);
 
@@ -36,16 +56,19 @@ export function appliquerNiveau(p: Personnage, R: SystemeAvecFiche, choix: Choix
   for (const [k, v] of Object.entries(choix.amelioration ?? {})) carac[k] = Math.min(20, (carac[k] ?? 10) + v);
   const nomClasse = R.catalogue.classes.find((c) => c.id === choix.classe)?.nom ?? choix.classe;
   const aptitudes = [...(p.fiche?.progression?.aptitudes ?? [])];
-  if (choix.don) aptitudes.push({ nom: choix.don, texte: `Don choisi au niveau ${nouveau} (${nomClasse}).` });
+  // Un don du catalogue (avec ses effets) ; sinon un don libre, noté parmi les aptitudes.
+  const donCatalogue = R.catalogue.dons?.find((d) => d.id === choix.don);
+  const dons = [...(p.fiche?.progression?.dons ?? []), ...(donCatalogue ? [donCatalogue.id] : [])];
+  if (choix.don && !donCatalogue) aptitudes.push({ nom: choix.don, texte: `Don choisi au niveau ${nouveau} (${nomClasse}).` });
   const pvMax = Number(p.combat.stats.pvMax ?? 0) + choix.pv;
   const suivant: Personnage = {
     ...p,
     combat: { ...p.combat, stats: { ...p.combat.stats, carac, pvMax, pv: Number(p.combat.stats.pv ?? 0) + choix.pv } },
     fiche: {
       ...(p.fiche ?? {}),
-      progression: { ...(p.fiche?.progression ?? {}), classes, aptitudes },
+      progression: { ...(p.fiche?.progression ?? {}), classes, aptitudes, dons },
       defense: { ...(p.fiche?.defense ?? {}), desVie: (p.fiche?.defense?.desVie ?? niveauTotal(p)) + 1 },
-      journal: [...(p.fiche?.journal ?? []), { quand, texte: `Niveau ${niveauTotal(p) + 1} atteint (${nomClasse} ${nouveau}) : +${choix.pv} PV.` }],
+      journal: [...(p.fiche?.journal ?? []), { quand, texte: `Niveau ${niveauTotal(p) + 1} atteint (${nomClasse} ${nouveau}) : +${choix.pv} PV${donCatalogue ? `, don ${donCatalogue.nom}` : ''}.` }],
     },
   };
   return avecStatsCalculees(suivant, R);

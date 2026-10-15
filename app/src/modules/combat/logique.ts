@@ -2,8 +2,9 @@
 import type { Campagne, Personnage, Rencontre, SortePersonnage } from '../../noyau/contrat';
 import { nouvelId } from '../../noyau/contrat';
 import type { SystemeRegles } from '../../noyau/regles';
+import { capacitesCombat } from './capacites';
 import { ajouterJeton, ajouterZone, appliquerPacks, caseLibre, estPack, jetonV7, lireEtat, nouvelEtat, revelerParLaVue, TERRAINS, zoneDeTerrain } from './moteur';
-import type { Camp, Cellule, EtatTable, Effet, Gabarit, Jeton, Modele, Pack } from './moteur';
+import type { Camp, Carac, Cellule, EtatTable, Effet, Gabarit, Jeton, Modele, Pack } from './moteur';
 
 /** Taille d'une case de combat en mètres. */
 export const METRES_PAR_CASE = 1.5;
@@ -13,9 +14,12 @@ const CAMP: Record<SortePersonnage, Camp> = { pj: 'pj', allie: 'allie', ennemi: 
 /** Modèle de jeton tiré d'une fiche (stats converties par le système de règles). `portrait` = adresse data: ou null. */
 export function jetonDepuisPersonnage(p: Personnage, R: SystemeRegles, portrait: string | null): Partial<Modele> & { pv: number } {
   const j = jetonV7({ ...R.versTable(p.combat.stats), name: p.nom });
+  // Avec une fiche : valeurs calculées (talents, dons, objets compris) et ce qu'elle apporte au combat.
+  const f = capacitesCombat(p, R).jeton;
   return {
-    nom: p.nom, camp: CAMP[p.sorte] ?? 'neutre', pv: j.pv, pvMax: j.pvMax, ca: j.ca, vitesse: j.vitesse, carac: j.carac,
+    nom: p.nom, camp: CAMP[p.sorte] ?? 'neutre', pv: Math.min(j.pv, f.pvMax ?? j.pvMax), pvMax: j.pvMax, ca: j.ca, vitesse: j.vitesse, carac: j.carac,
     vision: j.vision, degats: j.degats, bonusAttaque: j.bonusAttaque, notes: p.notes ?? '', persoId: p.id, portrait,
+    ...f,
   };
 }
 
@@ -47,6 +51,8 @@ const CONDITION: Record<string, string> = {
 };
 const OFFENSIF = new Set(['jet', 'pluie', 'gerbe', 'dard', 'tourbillon', 'pluie~', 'appel~', 'figure']);
 const ELEMENTS = new Set(['braise', 'source', 'socle', 'souffle', 'lueur']);
+/** Sauvegarde contre l'état infligé (Dextérité pour les dégâts de zone). */
+const SAUVEGARDE_ETAT: Record<string, Carac> = { Empoisonné: 'con', Paralysé: 'con', Pétrifié: 'con', Entravé: 'for', Ralenti: 'sag', Aveuglé: 'con', 'En feu': 'dex' };
 const cases = (m: number): number => Math.max(1, Math.round(m / METRES_PAR_CASE));
 
 export function gabarit(s: SortAnalyse, R: SystemeRegles): Omit<Gabarit, 'id'> {
@@ -59,13 +65,19 @@ export function gabarit(s: SortAnalyse, R: SystemeRegles): Omit<Gabarit, 'id'> {
   else if (f === 'dard') { rayon = 1; portee = cases(Math.max(4, s.porteeM * 2)); }
   else if (f === 'rempart') { forme = 'rectangle'; rayon = cases(s.zoneM * 2); }
   const effets: Effet[] = [];
-  const { moyenne } = R.degatsSort(s.puissance);
-  if (s.coeur === 'seve' && !s.coeurInverse) effets.push({ type: 'soin', valeur: moyenne });
+  // Équilibre : un sort de zone touche plusieurs cibles, ses dés sont réduits d'un quart (8d6 au plus) ; un dard vise une seule cible.
+  const zone = f !== 'dard' && (forme !== 'cercle' || rayon > 1);
+  const { moyenne } = R.degatsSort(zone ? Math.min(8, Math.max(1, Math.round(s.puissance * 0.75))) : s.puissance);
+  const soin = s.coeur === 'seve' && !s.coeurInverse;
+  if (soin) effets.push({ type: 'soin', valeur: R.degatsSort(s.puissance).moyenne });
   else if (ELEMENTS.has(s.coeur ?? '') && OFFENSIF.has(f)) effets.push({ type: 'degats', valeur: moyenne, nature: s.coeur ?? '' });
   const etat = CONDITION[c] ?? CONDITION[f];
   if (etat) effets.push({ type: 'condition', valeur: etat });
+  // Défense des cibles : un dard demande un jet d'attaque de sort ; sinon une sauvegarde (moitié des dégâts, pas d'état).
+  const attaque = f === 'dard' && effets.some((x) => x.type === 'degats');
+  const sauvegarde = soin || attaque || !effets.length || etat === 'Invisible' ? null : SAUVEGARDE_ETAT[etat ?? ''] ?? 'dex';
   return {
-    nom: s.nom, forme, rayon, largeur: 1, portee, origine, effets,
+    nom: s.nom, forme, rayon, largeur: 1, portee, origine, effets, sauvegarde, ...(attaque ? { attaque } : {}),
     couleur: COULEUR[c] ?? 'rgba(155,89,182,0.5)', particule: PARTICULE[c] ?? null,
     concentration: s.dureeLongue, desc: s.resume.slice(0, 80), atelier: true,
   };

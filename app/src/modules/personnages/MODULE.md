@@ -50,3 +50,5 @@ API publique : `definition`, `SORTES`, `libelleSorte`, `campJoueurs`, `sceneJoue
 Écran d'un joueur à distance : vue `talents` (`joueurs/Talents.tsx`, onglet Talents) : ses arbres (`noyau/talents` avec les arbres reçus), détail, « Apprendre » / « Oublier » envoyés au MJ (module Joueurs, `avecTalentDemande`). `fiche/Talents.tsx` exporte `texteEffet`.
 
 Vue `niveau` (`joueurs/Niveau.tsx`) : l'assistant `MonteeNiveau` sur l'écran du joueur, proposition envoyée au MJ (module Joueurs). `index.ts` exporte aussi `avecStatsCalculees`, `appliquerNiveau`, `etatProgression`, `ChoixNiveau`. `montrables` : personnages non cachés.
+
+Dons : `progression/logique.ts` (`prerequisDon`, `donsAuChoix` ; `appliquerNiveau` range un don du catalogue dans `progression.dons`), onglet Progression (dons du catalogue : accorder, retirer), montée de niveau du MJ et du joueur (cartes de dons, prérequis). Détail des talents : action de combat ou passif débloqué.

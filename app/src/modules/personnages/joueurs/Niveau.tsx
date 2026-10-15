@@ -4,7 +4,8 @@ import { useMemo, useState } from 'react';
 import type { Personnage } from '../../../noyau/contrat';
 import { aUneFiche, lancer, regles, type AptitudeRegles } from '../../../noyau/regles';
 import type { PropsVueJoueurs } from '../../../interface/types';
-import type { ChoixNiveau } from '../progression/logique';
+import { donsAuChoix, type ChoixNiveau } from '../progression/logique';
+import { texteEffet } from '../fiche/Talents';
 import '../personnages.css';
 
 interface Donnees { perso: Personnage; regles: string; attente: { choix: ChoixNiveau; quand: string } | null }
@@ -37,7 +38,7 @@ export default function Niveau({ donnees, envoyer }: PropsVueJoueurs) {
     return (
       <div className="vue-niveau pile">
         <h3 style={{ margin: 0 }}>Montée de niveau envoyée ✔</h3>
-        <p style={{ margin: 0 }}>{nomClasse(c.classe)}{c.sousClasse ? ` · ${R.catalogue.classes.find((x) => x.id === c.classe)?.sousClasses.find((s) => s.id === c.sousClasse)?.nom ?? ''}` : ''} · +{c.pv} PV{c.amelioration ? ` · ${Object.entries(c.amelioration).map(([k, v]) => `+${v} ${k.toUpperCase()}`).join(', ')}` : ''}{c.don ? ` · don : ${c.don}` : ''}</p>
+        <p style={{ margin: 0 }}>{nomClasse(c.classe)}{c.sousClasse ? ` · ${R.catalogue.classes.find((x) => x.id === c.classe)?.sousClasses.find((s) => s.id === c.sousClasse)?.nom ?? ''}` : ''} · +{c.pv} PV{c.amelioration ? ` · ${Object.entries(c.amelioration).map(([k, v]) => `+${v} ${k.toUpperCase()}`).join(', ')}` : ''}{c.don ? ` · don : ${R.catalogue.dons?.find((x) => x.id === c.don)?.nom ?? c.don}` : ''}</p>
         <p className="discret">Le maître du jeu va la valider. S’il la refuse, tu pourras recommencer ici.</p>
       </div>
     );
@@ -54,7 +55,8 @@ export default function Niveau({ donnees, envoyer }: PropsVueJoueurs) {
   const pv = (jet === null ? moyenne : R.progression.gainPv(classe, modCon, jet) + bonusPv);
   const sc = n?.sousClasse ? (sousClasse ?? null) : undefined;
   const amelioration = !n?.amelioration || mode === 'don' ? undefined : mode === 'deux' || c1 === c2 ? { [c1]: 2 } : { [c1]: 1, [c2]: 1 };
-  const choix: ChoixNiveau = { classe, pv, sousClasse: sc ?? undefined, amelioration, don: n?.amelioration && mode === 'don' ? don.trim() || 'Don' : undefined };
+  const choix: ChoixNiveau = { classe, pv, sousClasse: sc ?? undefined, amelioration, don: n?.amelioration && mode === 'don' && don ? don : undefined };
+  const nomDon = R.catalogue.dons?.find((x) => x.id === choix.don)?.nom ?? choix.don;
   // Gains de ce niveau : classe, sous-classe déjà prise, ou celle qu'on vient de choisir.
   const gagne = [...(n?.aptitudes ?? []), ...(n?.aptitudesSousClasse ?? []), ...(n?.sousClasse?.find((x) => x.id === sousClasse)?.aptitudes.filter((a) => a.niveau === actuel + 1) ?? [])];
 
@@ -99,9 +101,9 @@ export default function Niveau({ donnees, envoyer }: PropsVueJoueurs) {
       </div>
     ) }] : []),
     { titre: 'Ce que tu gagnes', ok: true, corps: gagne.length ? <Aptitudes liste={gagne} /> : <p className="discret">Pas de nouvelle aptitude à ce niveau : tes capacités actuelles progressent (sorts, dés, bonus).</p> },
-    ...(n?.amelioration ? [{ titre: 'Amélioration ou don', ok: mode !== 'don' || !!don.trim(), corps: (
+    ...(n?.amelioration ? [{ titre: 'Amélioration ou don', ok: mode !== 'don' || !!don, corps: (
       <div className="pile">
-        <p className="discret">Augmente tes caractéristiques (maximum 20), ou choisis un don (une capacité spéciale, à voir avec le maître du jeu).</p>
+        <p className="discret">Augmente tes caractéristiques (maximum 20), ou choisis un don : une capacité permanente (bonus sur la fiche, action de combat, magie). Les dons grisés demandent un prérequis.</p>
         <div className="ligne">
           <button className={`niveau-carte ${mode === 'deux' ? 'choisie' : ''}`} onClick={() => setMode('deux')}><b>+2 à une</b></button>
           <button className={`niveau-carte ${mode === 'un-un' ? 'choisie' : ''}`} onClick={() => setMode('un-un')}><b>+1 à deux</b></button>
@@ -115,7 +117,17 @@ export default function Niveau({ donnees, envoyer }: PropsVueJoueurs) {
               </select>
             ))}
           </div>
-        ) : <input value={don} onChange={(e) => setDon(e.target.value)} placeholder="Nom du don (Robuste, Vigilant, Maître d’armes…)" />}
+        ) : (
+          <div className="pile">
+            {donsAuChoix(p, R).map(({ don: x, raison }) => (
+              <button key={x.id} className={`niveau-carte large ${don === x.id ? 'choisie' : ''}`} disabled={!!raison} onClick={() => setDon(x.id)}>
+                <b>{x.nom}</b><span>{x.texte}</span>
+                {x.effets?.length ? <small>{x.effets.map((e) => texteEffet(e.cible, e.valeur)).join(' · ')}</small> : null}
+                {raison && <small className="perso-erreur">Il faut : {raison}</small>}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     ) }] : []),
     { titre: 'Récapitulatif', ok: true, corps: (
@@ -126,7 +138,7 @@ export default function Niveau({ donnees, envoyer }: PropsVueJoueurs) {
           {gagne.map((a, i) => <li key={i}>Aptitude : <b>{a.nom}</b></li>)}
           {sc && <li>Sous-classe : <b>{n?.sousClasse?.find((s) => s.id === sc)?.nom}</b></li>}
           {amelioration && <li>Amélioration : <b>{Object.entries(amelioration).map(([k, v]) => `+${v} ${CARACS.find((c) => c[0] === k)?.[1]}`).join(', ')}</b></li>}
-          {choix.don && <li>Don : <b>{choix.don}</b></li>}
+          {choix.don && <li>Don : <b>{nomDon}</b></li>}
         </ul>
         <button className="btn btn-principal" disabled={!!n?.sousClasse && !sousClasse} onClick={() => envoyer({ choix })}>Envoyer au maître du jeu</button>
         {!!n?.sousClasse && !sousClasse && <span className="perso-erreur">Choisis d’abord ta sous-classe.</span>}

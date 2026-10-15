@@ -26,3 +26,5 @@ Limites : supprimer un PJ dans « Magie des PJ » efface seulement sa magie (le 
 Pour la Table de combat (`index.ts`) : `lireTracePartage`, `effetDe`, `estReponseTrace`, types `DemandeTrace` / `ReponseTrace` / `EffetTrace`, `STAGE`, et `vues.ts` : `VueTrace` / `VueEffet` / `VueEntrainement` (vues de l'écran joueurs, chargées à la demande). Les vues de l'écran joueurs sont en `position: absolute` (sous les onglets d'un joueur à distance).
 
 Zone d'entraînement des joueurs : `joueurs/Entrainement.tsx` (vue `entrainement` : `Freehand` avec `droits`, carnet renvoyé au MJ) et `entrainement.ts` (pur, testé : `appliquerEntrainement`, `DROITS_PAR_DEFAUT` = leçons oui, grimoire non). `Freehand` et `Carnet` prennent `droits` / `grimoireModifiable` (tout permis par défaut, page Magie inchangée).
+
+`lien.saitFaireDeLaMagie(p, R)` : la règle unique de la magie (classe qui lance des sorts, talent d'éveil des sceaux, don `magie`, `magie.eveil` accordé par le MJ, PNJ doté d'une magie, grimoire déjà rempli). Utilisée par la Table de combat (sorts, sceaux) et l'entraînement des joueurs.

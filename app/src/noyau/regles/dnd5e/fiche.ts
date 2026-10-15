@@ -3,6 +3,7 @@
 import type { Effet, Personnage } from '../../contrat';
 import type { AttaqueCalculee, CatalogueRegles, EntreeCatalogue, FicheCalculee, ValeurCalculee } from '../types';
 import CATALOGUE_JSON from './catalogue.json';
+import DONS_JSON from './dons.json';
 import { CLASSES, PEUPLES, aptitudesActives, effetsDesAptitudes, incantation, pvMaxSuggere } from './progression';
 import { effetsTalents, enregistrerArbresDesRegles, type ArbreTalents } from '../../talents';
 import TALENTS_JSON from './talents.json';
@@ -10,7 +11,7 @@ import TALENTS_JSON from './talents.json';
 export const TALENTS = TALENTS_JSON as unknown as { pointsParNiveau: number; arbres: ArbreTalents[] };
 enregistrerArbresDesRegles(TALENTS.arbres);
 
-export const CATALOGUE = { ...(CATALOGUE_JSON as object), classes: CLASSES, peuples: PEUPLES } as unknown as CatalogueRegles;
+export const CATALOGUE = { ...(CATALOGUE_JSON as object), classes: CLASSES, peuples: PEUPLES, dons: DONS_JSON.dons } as unknown as CatalogueRegles;
 const PAR_ID = new Map<string, EntreeCatalogue>(CATALOGUE.objets.map((o) => [o.id, o]));
 export const entreeCatalogue = (ref: string | null | undefined): EntreeCatalogue | undefined => (ref ? PAR_ID.get(ref) : undefined);
 
@@ -28,11 +29,12 @@ export function niveauDe(p: Personnage): number {
   return total > 0 ? total : Math.max(1, num(p.combat.stats.niveau, 1));
 }
 
-/** Effets actifs : objets équipés, aptitudes notées à la main, aptitudes des classes et du peuple, talents acquis. */
+/** Effets actifs : objets équipés, aptitudes notées à la main, aptitudes des classes et du peuple, talents et dons. */
 export function effetsActifs(p: Personnage): Effet[] {
   const objets = (p.fiche?.inventaire?.objets ?? []).filter((o) => o.equipe);
   const aptitudes = p.fiche?.progression?.aptitudes ?? [];
-  return [...objets.flatMap((o) => o.effets ?? []), ...aptitudes.flatMap((a) => a.effets ?? []), ...effetsDesAptitudes(p), ...effetsTalents(p)];
+  const dons = (p.fiche?.progression?.dons ?? []).map((id) => CATALOGUE.dons?.find((d) => d.id === id)).flatMap((d) => (d?.effets ?? []) as Effet[]);
+  return [...objets.flatMap((o) => o.effets ?? []), ...aptitudes.flatMap((a) => a.effets ?? []), ...effetsDesAptitudes(p), ...effetsTalents(p), ...dons];
 }
 
 const somme = (effets: Effet[], cible: string): number => effets.filter((e) => e.cible === cible).reduce((s, e) => s + e.valeur, 0);

@@ -2,17 +2,18 @@
 // personnel, ou la tablette s'il n'en a pas) voit ses actions possibles : se déplacer, attaquer avec ses armes,
 // lancer ses sorts, tracer un sceau (zone de tracé pour lui seul ; les autres voient ensuite l'effet), finir son tour.
 // Tout part au MJ, qui vérifie et joue l'action ; la table revient à jour sur tous les écrans.
-import { Suspense, useEffect, useMemo, useRef, useState, type PointerEvent } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import type { PropsVueJoueurs } from '../../../interface/types';
 import { Zoomable } from '../../../interface/Zoomable';
 import { alerterJoueur } from '../../../interface/alerteJoueur';
+import { pointSvg } from '../../../interface/pointSvg';
 import { VueEffet, VueTrace } from '../../magie';
 import { caseVisee, casesDeZone, coteCaseImage, versImage, zoneVisee } from '../actions';
 import { cle, distance, type Cellule, type Gabarit } from '../moteur';
 import { porteeAttaque, type VueTable } from '../tour';
 import './joueurs.css';
 
-type Mode = { sorte: 'regarder' } | { sorte: 'deplacer' } | { sorte: 'attaquer'; arme: number | null } | { sorte: 'sort'; id: number | null };
+type Mode = { sorte: 'regarder' } | { sorte: 'deplacer' } | { sorte: 'attaquer'; arme: number | null } | { sorte: 'sort'; id: number | null } | { sorte: 'agir'; id: string | null };
 
 function useUrl(b: Blob): string {
   const url = useMemo(() => URL.createObjectURL(b), [b]);
@@ -48,17 +49,25 @@ export default function Tour({ donnees, envoyer, moi }: PropsVueJoueurs) {
   const arme = mode.sorte === 'attaquer' && o && mode.arme !== null ? o.attaques[mode.arme] : undefined;
   const depart: Cellule = o ? [o.jeton.x, o.jeton.y] : [0, 0];
   const cote = coteCaseImage(d);
-  const versSvg = (ev: PointerEvent<SVGSVGElement>) => {
-    const p = svg.current!.createSVGPoint();
-    p.x = ev.clientX; p.y = ev.clientY;
-    const q = p.matrixTransform(svg.current!.getScreenCTM()!.inverse());
-    return caseVisee(d, q.x, q.y);
+  const versSvg = (ev: { clientX: number; clientY: number }) => {
+    const [x, y] = pointSvg(svg.current!, ev.clientX, ev.clientY, d.largeur, d.hauteur);
+    return caseVisee(d, x, y);
   };
+  const action = mode.sorte === 'agir' && o ? o.actions.find((a) => a.id === mode.id) : undefined;
+  const cibleAction = (c: { x: number; y: number; allie?: boolean }) => !!action && (action.cible === 'allie' ? !!c.allie : action.cible === 'ennemi' ? !c.allie : false) && distance(d.grille, depart, [c.x, c.y]) <= action.portee;
 
   // Visée : case touchée (ou survolée à la souris) ; le MJ voit l'aperçu en direct.
-  const viser = (ev: PointerEvent<SVGSVGElement>, final: boolean) => {
+  const viser = (ev: { clientX: number; clientY: number }, final: boolean) => {
     if (!o || !monTour || attente || mode.sorte === 'regarder') return;
     const { monde, cellule } = versSvg(ev);
+    if (mode.sorte === 'agir') {
+      if (!final || !action) return;
+      const soi = cellule[0] === depart[0] && cellule[1] === depart[1];
+      const c = o.cibles.find((x) => x.x === cellule[0] && x.y === cellule[1]);
+      if (soi && action.cible === 'allie') setVise({ cellule, monde, cible: o.jeton.id });
+      else if (c && cibleAction(c)) setVise({ cellule, monde, cible: c.id });
+      return;
+    }
     if (mode.sorte === 'attaquer') {
       if (!final) return;
       const c = o.cibles.find((x) => x.x === cellule[0] && x.y === cellule[1]);
@@ -84,7 +93,9 @@ export default function Tour({ donnees, envoyer, moi }: PropsVueJoueurs) {
     if (mode.sorte === 'deplacer') demander({ faire: 'deplacer', cellule: vise.cellule });
     else if (mode.sorte === 'attaquer' && mode.arme !== null && vise.cible != null) demander({ faire: 'attaquer', attaque: mode.arme, cible: vise.cible });
     else if (sort && zone) demander({ faire: 'sort', sort: sort.id, cellule: zone.cellule, angle: zone.angle });
+    else if (action) demander({ faire: 'agir', action: action.id, cible: vise.cible === o.jeton.id ? null : vise.cible ?? null });
   };
+  const agirSansCible = (a: NonNullable<typeof action>) => { setAttente(true); demander({ faire: 'agir', action: a.id, cible: null }); };
 
   // Ce qu'on dessine par-dessus la table.
   const cases: Cellule[] = !o || !monTour ? [] : mode.sorte === 'deplacer' ? o.cases.map((k) => k.split(',').map(Number) as Cellule) : [];
@@ -97,6 +108,7 @@ export default function Tour({ donnees, envoyer, moi }: PropsVueJoueurs) {
     : mode.sorte === 'deplacer' ? `Touchez une case en vert (${o.reste} cases de déplacement).`
     : mode.sorte === 'attaquer' ? (arme ? `Touchez une cible entourée (portée ${porteeAttaque(arme)} cases).` : 'Choisissez une arme.')
     : mode.sorte === 'sort' ? (sort ? (tropLoin ? `Trop loin : ${sort.portee} cases au plus.` : `Touchez la carte pour viser ${sort.nom}.`) : 'Choisissez un sort.')
+    : mode.sorte === 'agir' ? (action ? `Touchez ${action.cible === 'allie' ? 'un allié (ou vous-même)' : 'un ennemi'} entouré (${action.portee} case${action.portee > 1 ? 's' : ''}).` : 'Choisissez une action.')
     : 'Choisissez une action. Glissez pour déplacer la vue, pincez ou + / − pour zoomer.';
 
   const effet = d.effet && d.effet.id !== effetVu ? d.effet : null;
@@ -113,13 +125,14 @@ export default function Tour({ donnees, envoyer, moi }: PropsVueJoueurs) {
           <svg ref={svg} viewBox={`0 0 ${d.largeur} ${d.hauteur}`} preserveAspectRatio="xMidYMid meet" className={mode.sorte === 'regarder' || !monTour ? '' : 'tour-viser'}
             onPointerDown={(ev) => { appui.current = { x: ev.clientX, y: ev.clientY, n: ev.isPrimary ? 1 : (appui.current?.n ?? 0) + 1 }; }}
             onPointerMove={(ev) => { if (ev.pointerType === 'mouse' && !ev.buttons) viser(ev, false); }}
-            onPointerUp={(ev) => { const a = appui.current; appui.current = null; if (a && a.n === 1 && Math.hypot(ev.clientX - a.x, ev.clientY - a.y) < 8) viser(ev, true); }}>
+            onClick={(ev) => { const a = appui.current; appui.current = null; if (!a || (a.n === 1 && Math.hypot(ev.clientX - a.x, ev.clientY - a.y) < 8)) viser(ev, true); }}>
             <image href={url} x={0} y={0} width={d.largeur} height={d.hauteur} />
             {cases.map((c) => caseRect(c, { fill: 'rgba(69,168,74,0.32)', stroke: 'rgba(160,230,160,0.6)', strokeWidth: 1.5 }))}
             {mode.sorte === 'deplacer' && vise && caseRect(vise.cellule, { fill: 'rgba(69,168,74,0.7)', stroke: '#fff', strokeWidth: 3 })}
             {zone && casesDeZone(d.grille, zone.zone).map((c) => caseRect(c, { fill: tropLoin ? 'rgba(120,120,120,0.5)' : sort!.couleur, stroke: 'rgba(255,255,255,0.7)', strokeWidth: 2 }))}
             {mode.sorte === 'attaquer' && o?.cibles.map((c) => { const [cx, cy] = versImage(d, [c.x, c.y]); const ok = enPortee(c); return <circle key={c.id} cx={cx} cy={cy} r={cote * 0.62} fill={vise?.cible === c.id ? 'rgba(217,72,72,0.45)' : 'none'} stroke={ok ? '#e05050' : 'rgba(150,150,150,0.6)'} strokeWidth={ok ? 4 : 2} strokeDasharray={ok ? undefined : '6 6'} />; })}
-            {monTour && mode.sorte !== 'regarder' && arrivee && <line x1={dx} y1={dy} x2={arrivee[0]} y2={arrivee[1]} stroke="#f2d27a" strokeWidth={4} strokeDasharray="10 8" pointerEvents="none" />}
+            {mode.sorte === 'agir' && action && o && [...o.cibles, { ...o.jeton, allie: true }].filter((c) => (c.id === o.jeton.id ? action.cible === 'allie' : cibleAction(c))).map((c) => { const [cx, cy] = versImage(d, [c.x, c.y]); return <circle key={c.id} cx={cx} cy={cy} r={cote * 0.62} fill={vise?.cible === c.id ? 'rgba(69,140,217,0.45)' : 'none'} stroke={action.cible === 'allie' ? '#4a90d9' : '#e05050'} strokeWidth={4} pointerEvents="none" />; })}
+            {monTour && mode.sorte !== 'regarder' && mode.sorte !== 'agir' && arrivee && <line x1={dx} y1={dy} x2={arrivee[0]} y2={arrivee[1]} stroke="#f2d27a" strokeWidth={4} strokeDasharray="10 8" pointerEvents="none" />}
             {o && <circle cx={dx} cy={dy} r={cote * 0.66} fill="none" stroke="#f2d27a" strokeWidth={monTour ? 5 : 3} className="tour-actif" pointerEvents="none" />}
           </svg>
         </Zoomable>
@@ -129,23 +142,36 @@ export default function Tour({ donnees, envoyer, moi }: PropsVueJoueurs) {
         <div className="tour-actions">
           <div className="tour-etat">
             <span>Déplacement : <b>{o.reste}</b> case{o.reste > 1 ? 's' : ''}</span>
-            <span>Action : <b>{o.actionFaite ? 'utilisée' : 'disponible'}</b></span>
+            <span>Action : <b>{!o.peutAgir ? 'impossible' : o.actionFaite ? 'utilisée' : o.attaquesRestantes > 1 ? `${o.attaquesRestantes} attaques` : 'disponible'}</b></span>
+            <span>Bonus : <b>{o.bonusFait ? 'utilisée' : 'disponible'}</b></span>
+            {!o.peutAgir && <span className="tour-reponse">{o.jeton.nom} ne peut pas agir ce tour-ci : finissez votre tour.</span>}
             <span className="tour-aide">{aide}</span>
             {d.reponse?.texte && !attente && <span className="tour-reponse">{d.reponse.texte}</span>}
           </div>
           <div className="tour-boutons">
             <button className="btn" aria-pressed={mode.sorte === 'deplacer'} disabled={attente || !o.cases.length} onClick={() => { setMode({ sorte: 'deplacer' }); setVise(null); }}>🦶 Se déplacer</button>
             <button className="btn" aria-pressed={mode.sorte === 'attaquer'} disabled={attente || o.actionFaite} onClick={() => { setMode({ sorte: 'attaquer', arme: o.attaques.length === 1 ? 0 : null }); setVise(null); }}>⚔ Attaquer</button>
-            <button className="btn" aria-pressed={mode.sorte === 'sort'} disabled={attente || o.actionFaite || !o.sorts.length} onClick={() => { setMode({ sorte: 'sort', id: null }); setVise(null); }}>✦ Sort ({o.sorts.length})</button>
+            {o.magie && <button className="btn" aria-pressed={mode.sorte === 'sort'} disabled={attente || o.actionFaite || !o.sorts.length} onClick={() => { setMode({ sorte: 'sort', id: null }); setVise(null); }}>✦ Sort ({o.sorts.length})</button>}
+            <button className="btn" aria-pressed={mode.sorte === 'agir'} disabled={attente || !o.peutAgir || !o.actions.length} onClick={() => { setMode({ sorte: 'agir', id: null }); setVise(null); }}>✨ Actions ({o.actions.filter((a) => a.possible).length})</button>
             {o.peutTracer && <button className="btn" disabled={attente || o.actionFaite || !!o.trace} onClick={() => { setAttente(true); demander({ faire: 'tracer' }); }}>✍ Tracer un sceau</button>}
             <span style={{ flex: 1 }} />
-            {mode.sorte !== 'regarder' && !attente && <button className="btn btn-principal" disabled={!vise || tropLoin || (mode.sorte === 'attaquer' && vise.cible == null)} onClick={valider}>Valider</button>}
+            {mode.sorte !== 'regarder' && !attente && (mode.sorte !== 'agir' || action) && <button className="btn btn-principal" disabled={!vise || tropLoin || ((mode.sorte === 'attaquer' || mode.sorte === 'agir') && vise.cible == null)} onClick={valider}>Valider</button>}
             {mode.sorte !== 'regarder' && !attente && <button className="btn" onClick={() => { setMode({ sorte: 'regarder' }); setVise(null); }}>Annuler</button>}
             <button className="btn" disabled={attente} onClick={() => { if (window.confirm('Finir ton tour ?')) { setAttente(true); demander({ faire: 'finir' }); } }}>Finir mon tour</button>
           </div>
           {mode.sorte === 'attaquer' && o.attaques.length > 1 && (
             <div className="tour-choix">
               {o.attaques.map((a, i) => <button key={i} className="btn btn-petit" aria-pressed={mode.arme === i} onClick={() => { setMode({ sorte: 'attaquer', arme: i }); setVise(null); }}>{a.nom} <small>{a.bonus >= 0 ? '+' : ''}{a.bonus} · {a.degats}{a.portee ? ` · ${a.portee} cases` : ' · contact'}</small></button>)}
+            </div>
+          )}
+          {mode.sorte === 'agir' && (
+            <div className="tour-choix tour-liste-actions">
+              {o.actions.map((a) => (
+                <button key={a.id} className="btn btn-petit" aria-pressed={mode.id === a.id} disabled={!a.possible} title={a.raison ?? a.texte}
+                  onClick={() => { if (a.cible === 'soi' || a.cible === 'aucune') { if (window.confirm(`${a.nom} : ${a.texte}`)) agirSansCible(a as NonNullable<typeof action>); } else { setMode({ sorte: 'agir', id: a.id }); setVise(null); } }}>
+                  {a.icone} {a.nom} <small>{a.cout === 'action' ? 'action' : a.cout === 'bonus' ? 'bonus' : 'gratuite'}{a.reste !== null ? ` · ${a.reste} restante${a.reste > 1 ? 's' : ''}` : ''}{a.raison ? ` · ${a.raison}` : ''}</small>
+                </button>
+              ))}
             </div>
           )}
           {mode.sorte === 'sort' && (

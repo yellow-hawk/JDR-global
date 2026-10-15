@@ -4,7 +4,8 @@
 //  - les exemples de base supprimés = campagne.modules.magie.exemplesRetires.
 import type { Campagne, Personnage, Sort } from '../../noyau/contrat';
 import { nouveauPersonnage } from '../../noyau/contrat';
-import { regles } from '../../noyau/regles';
+import { aUneFiche, regles, type SystemeRegles } from '../../noyau/regles';
+import { noeudParId } from '../../noyau/talents';
 import { nouveauProfil, type ProfilPJ } from './atelier/engine/profils';
 import type { Sceau, SortEnregistre } from './atelier/engine/types';
 import { GRIMOIRE_DE_BASE } from './atelier/data/grimoire';
@@ -14,6 +15,20 @@ import lanceurs from './lanceurs.json';
 
 /** Personnages qui ont une magie : les PJ, et tout personnage dont la fiche magie existe déjà. */
 export const aUneMagie = (p: Personnage): boolean => p.sorte === 'pj' || !!p.magie;
+
+/**
+ * Le personnage sait-il faire de la magie (tracer, lancer des sorts en combat, s'entraîner) ? Une classe qui lance
+ * des sorts, le talent d'éveil (arbre des sceaux), un don qui éveille la magie, ou le MJ qui l'accorde (`magie.eveil`).
+ * Un PNJ doté d'une magie par le MJ, ou un personnage qui a déjà des sorts dans son grimoire, la garde.
+ */
+export function saitFaireDeLaMagie(p: Personnage, R: SystemeRegles = regles('dnd5e')): boolean {
+  const m = (p.magie ?? null) as { eveil?: boolean; grimoire?: unknown[] } | null;
+  if (m?.eveil || (m && p.sorte !== 'pj') || (m?.grimoire?.length ?? 0) > 0) return true;
+  if ((p.fiche?.progression?.talents ?? []).some((id) => noeudParId(id)?.magie?.eveil)) return true;
+  if (!aUneFiche(R)) return false;
+  if ((p.fiche?.progression?.dons ?? []).some((id) => R.catalogue.dons?.find((d) => d.id === id)?.magie)) return true;
+  return !!p.fiche && (R.calculer(p).incantation?.length ?? 0) > 0;
+}
 
 /** Profil de l'Atelier pour un personnage (valeurs de départ si sa magie n'existe pas encore). */
 export function profilDe(p: Personnage): ProfilPJ {

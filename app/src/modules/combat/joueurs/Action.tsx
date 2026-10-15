@@ -2,6 +2,7 @@
 // l'aperçu suit (zone du sort, case d'arrivée) et part au MJ en direct ; « Valider » joue l'action sur la table.
 import { useEffect, useMemo, useRef, useState, type PointerEvent } from 'react';
 import type { PropsVueJoueurs } from '../../../interface/types';
+import { pointSvg } from '../../../interface/pointSvg';
 import { caseVisee, casesDeZone, coteCaseImage, versImage, zoneVisee, type DemandeAction } from '../actions';
 import type { Cellule } from '../moteur';
 import './joueurs.css';
@@ -27,10 +28,8 @@ export default function Action({ donnees, envoyer }: PropsVueJoueurs) {
   const cote = coteCaseImage(d);
   const viser = (ev: PointerEvent<SVGSVGElement>, figer: boolean) => {
     if (envoye || (fige && !figer)) return;
-    const p = svg.current!.createSVGPoint();
-    p.x = ev.clientX; p.y = ev.clientY;
-    const q = p.matrixTransform(svg.current!.getScreenCTM()!.inverse());
-    const { monde, cellule } = caseVisee(d, q.x, q.y);
+    const [qx, qy] = pointSvg(svg.current!, ev.clientX, ev.clientY, d.largeur, d.hauteur);
+    const { monde, cellule } = caseVisee(d, qx, qy);
     const v = a.sorte === 'sort' ? { ...zoneVisee(d.grille, a, monde), monde } : { cellule, angle: 0, monde };
     setVise({ cellule: v.cellule, angle: v.angle, monde });
     if (figer) setFige(true);

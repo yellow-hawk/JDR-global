@@ -44,6 +44,8 @@ export interface FichePersonnage {
     talents?: string[];
     /** Aptitudes ou dons notés à la main. */
     aptitudes?: { nom: string; texte?: string; effets?: Effet[] }[];
+    /** Dons du catalogue des règles (ids). */
+    dons?: string[];
   };
   /** Maîtrises : compétences (1 = maîtrise, 2 = expertise), jets de sauvegarde, armes, armures, outils. */
   maitrises?: { competences?: Record<string, number>; sauvegardes?: string[]; armes?: string[]; armures?: string[]; outils?: string[] };

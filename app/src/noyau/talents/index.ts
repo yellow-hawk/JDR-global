@@ -20,6 +20,9 @@ export interface NoeudTalent {
   magie?: MagieTalent;
   /** Icône (emoji) du talent dans l'arbre. */
   icone?: string;
+  /** Action de combat débloquée (id de combat/moteur/actionsCombat) ; capacité passive appliquée en combat. */
+  action?: string;
+  passif?: string;
   /** Jonction (relie deux branches) ou sommet (fin de branche). */
   sorte?: 'jonction' | 'sommet';
 }

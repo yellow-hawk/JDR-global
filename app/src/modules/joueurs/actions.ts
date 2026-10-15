@@ -4,7 +4,7 @@
 import type { Campagne, ObjetInventaire, Personnage } from '../../noyau/contrat';
 import { nouvelId, sansSecrets } from '../../noyau/contrat';
 import { aUneFiche, formuleValide, type ModeJet, type SystemeRegles } from '../../noyau/regles';
-import { appliquerNiveau, avecStatsCalculees, etatProgression, type ChoixNiveau } from '../personnages';
+import { appliquerNiveau, avecStatsCalculees, etatProgression, prerequisDon, type ChoixNiveau } from '../personnages';
 import { distantsDe, type Distant } from './logique';
 
 type Joueurs = { distants?: Record<string, Distant>; groupe?: EntreeGroupe[]; inventaire?: Partial<DroitsInventaire> };
@@ -151,6 +151,8 @@ export function avecDemandeNiveau(c: Campagne, persoId: string, choix: ChoixNive
   const classe = R.catalogue.classes.find((x) => x.id === choix?.classe);
   const somme = Object.values(choix.amelioration ?? {}).reduce((s, v) => s + Number(v), 0);
   if (!classe || !(choix.pv >= 1 && choix.pv <= 30) || somme > 2 || Object.values(choix.amelioration ?? {}).some((v) => !(Number(v) > 0))) return c;
+  const donCatalogue = R.catalogue.dons?.find((d) => d.id === choix.don);
+  if (donCatalogue && prerequisDon(p, donCatalogue, R)) return c;
   const propre: ChoixNiveau = { classe: classe.id, pv: Math.floor(choix.pv), ...(choix.sousClasse ? { sousClasse: String(choix.sousClasse) } : {}), ...(choix.amelioration ? { amelioration: choix.amelioration } : {}), ...(choix.don ? { don: String(choix.don).slice(0, 80) } : {}) };
   return avecDistant(c, persoId, (d) => ({ ...d, niveau: { choix: propre, quand } }));
 }

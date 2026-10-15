@@ -3,14 +3,16 @@
 // peut agir, avec ses armes et ses sorts, dans la limite de son mouvement et d'une action par tour.
 import type { AttaqueCalculee } from '../../noyau/regles';
 import type { Rng } from '../../noyau/hasard';
-import { attaquer, cle, distance, jetonActif, modCarac, porteeDeplacement, PORTEE_ATTAQUE, TERRAINS } from './moteur';
+import { actionCombat, attaquer, cle, distance, empechement, jetonActif, modCarac, peutAgir, porteeDeplacement, PORTEE_ATTAQUE, resteMouvement, TERRAINS } from './moteur';
 import type { Cellule, EtatTable, Gabarit, Grille, Jeton } from './moteur';
 import { jetonVisible } from './rendu';
 import type { Camera } from './rendu';
 
 /** Arme ou attaque du PJ ; `portee` en cases (0 : corps à corps). */
 export interface AttaqueTour { nom: string; bonus: number; degats: string; portee: number }
-export interface CibleTour { id: number; nom: string; x: number; y: number }
+export interface CibleTour { id: number; nom: string; x: number; y: number; allie?: boolean }
+/** Action de combat proposée au joueur (foncer, rage, second souffle…), et si elle est possible maintenant. */
+export interface ActionTour { id: string; nom: string; icone: string; texte: string; cout: 'action' | 'bonus' | 'gratuit'; cible: 'soi' | 'allie' | 'ennemi' | 'aucune'; portee: number; reste: number | null; possible: boolean; raison?: string }
 export type SortTour = Pick<Gabarit, 'id' | 'nom' | 'forme' | 'rayon' | 'largeur' | 'portee' | 'origine' | 'couleur' | 'desc'>;
 
 /** Zone de tracé ouverte pour le joueur actif (même forme que la Magie : id, titre, durée en s, cercles guides). */
@@ -26,6 +28,14 @@ export interface OptionsTour {
   jeton: CibleTour;
   reste: number;
   actionFaite: boolean;
+  /** Paralysé, étourdi… : le joueur ne peut que finir son tour. */
+  peutAgir: boolean;
+  bonusFait: boolean;
+  /** Attaques encore possibles avec l'action en cours (attaque supplémentaire). */
+  attaquesRestantes: number;
+  actions: ActionTour[];
+  /** Sait faire de la magie (sinon ni sorts ni sceaux). */
+  magie: boolean;
   cases: string[];
   attaques: AttaqueTour[];
   cibles: CibleTour[];
@@ -62,6 +72,7 @@ export type DemandeTour =
   | { tour: string; faire: 'sort'; sort: number; cellule: Cellule; angle: number }
   | { tour: string; faire: 'visee'; cellule: Cellule; angle: number; sort: number | null }
   | { tour: string; faire: 'tracer' }
+  | { tour: string; faire: 'agir'; action: string; cible: number | null }
   /** Traits du sceau, au fil du tracé puis à la fin (réponse de la zone de tracé de la Magie). */
   | { tour: string; faire: 'trace'; id: string; traits: unknown[]; fini: boolean; temps: number }
   | { tour: string; faire: 'finir' };
@@ -86,23 +97,31 @@ export function attaquesDuJeton(j: Jeton, fiche?: AttaqueCalculee[] | null): Att
 
 /** Ce que les joueurs voient et peuvent viser : debout, visible pour eux, pas soi-même. */
 export const ciblesVisibles = (e: EtatTable, j: Jeton): CibleTour[] =>
-  e.jetons.filter((x) => x.id !== j.id && x.pv > 0 && jetonVisible(e, x, 'joueurs')).map((x) => ({ id: x.id, nom: x.nom, x: x.x, y: x.y }));
+  e.jetons.filter((x) => x.id !== j.id && (x.pv > 0 || x.camp !== 'ennemi') && jetonVisible(e, x, 'joueurs'))
+    .map((x) => ({ id: x.id, nom: x.nom, x: x.x, y: x.y, allie: (x.camp === 'ennemi') === (j.camp === 'ennemi') }));
 
 /** Sorts de la table que ce personnage connaît. */
 export const sortsDuPerso = (e: EtatTable, persoId: string): SortTour[] =>
   e.sorts.filter((s) => s.lanceurs?.includes(persoId)).map(({ id, nom, forme, rayon, largeur, portee, origine, couleur, desc }) => ({ id, nom, forme, rayon, largeur, portee, origine, couleur, desc }));
 
 /** Options du tour en cours, si c'est le tour d'un PJ lié à un personnage. */
-export function optionsTour(e: EtatTable, p: { attaques: AttaqueTour[]; tablette: boolean; peutTracer: boolean; trace: TraceTour | null; viser: number | null }): OptionsTour | null {
+export function optionsTour(e: EtatTable, p: { attaques: AttaqueTour[]; tablette: boolean; peutTracer: boolean; trace: TraceTour | null; viser: number | null; actions?: string[]; magie?: boolean }): OptionsTour | null {
   const j = jetonActif(e);
   if (!j || !j.persoId || j.pv <= 0) return null;
-  const reste = Math.max(0, j.vitesse - j.mouvementUtilise);
+  const reste = resteMouvement(j);
+  const magie = p.magie ?? true, agit = peutAgir(j);
+  const actions: ActionTour[] = (p.actions ?? []).map((id) => actionCombat(id)!).filter(Boolean).map((a) => {
+    const non = empechement(j, a, true);
+    return { id: a.id, nom: a.nom, icone: a.icone, texte: a.texte, cout: a.cout, cible: a.cible, portee: a.portee ?? 1, reste: a.parCombat === undefined ? null : a.parCombat - (j.usages?.[a.id] ?? 0), possible: !non, ...(non ? { raison: non } : {}) };
+  });
   const portee = porteeDeplacement(e.grille, e.zones, TERRAINS, e.jetons.filter((x) => x.id !== j.id), [j.x, j.y], reste);
   return {
     id: idTour(e), persoId: j.persoId, tablette: p.tablette, jeton: { id: j.id, nom: j.nom, x: j.x, y: j.y },
-    reste, actionFaite: j.drapeaux.action, cases: Object.keys(portee).filter((k) => k !== cle([j.x, j.y])),
-    attaques: p.attaques, cibles: ciblesVisibles(e, j), sorts: sortsDuPerso(e, j.persoId),
-    peutTracer: p.peutTracer, trace: p.trace, viser: p.viser,
+    reste, actionFaite: j.drapeaux.action, cases: agit ? Object.keys(portee).filter((k) => k !== cle([j.x, j.y])) : [],
+    peutAgir: agit, bonusFait: j.drapeaux.bonus, attaquesRestantes: j.drapeaux.action ? 0 : (j.profil?.attaquesParAction ?? 1) - (j.attaquesFaites ?? 0),
+    actions, magie,
+    attaques: p.attaques, cibles: ciblesVisibles(e, j), sorts: magie ? sortsDuPerso(e, j.persoId) : [],
+    peutTracer: magie && p.peutTracer, trace: p.trace, viser: p.viser,
   };
 }
 
@@ -114,6 +133,13 @@ export function refus(o: OptionsTour | null, d: DemandeTour, perso: string | nul
   if (!o) return 'Ce n’est le tour d’aucun personnage joueur.';
   if (d.tour !== o.id) return 'Ce tour est terminé.';
   if (perso ? perso !== o.persoId : !o.tablette) return `C’est le tour de ${o.jeton.nom}.`;
+  if (!o.peutAgir && d.faire !== 'finir') return `${o.jeton.nom} ne peut pas agir ce tour-ci.`;
+  if (d.faire === 'agir') {
+    const a = o.actions.find((x) => x.id === d.action);
+    if (!a) return `${o.jeton.nom} ne sait pas faire cela.`;
+    if (!a.possible) return a.raison ?? 'Action impossible maintenant.';
+  }
+  if ((d.faire === 'sort' || d.faire === 'tracer') && !o.magie) return `${o.jeton.nom} ne sait pas faire de magie.`;
   if ((d.faire === 'attaquer' || d.faire === 'sort' || d.faire === 'tracer') && o.actionFaite) return `${o.jeton.nom} a déjà utilisé son action ce tour-ci.`;
   if (d.faire === 'deplacer' && !o.cases.includes(cle(d.cellule))) return 'Case hors de portée de déplacement.';
   if (d.faire === 'attaquer') {

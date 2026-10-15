@@ -3,10 +3,10 @@
 import type { Campagne, Personnage } from '../../noyau/contrat';
 import { nouvelId } from '../../noyau/contrat';
 import type { SystemeRegles } from '../../noyau/regles';
-import { aUneFiche, lireStat } from '../../noyau/regles';
+import { aUneFiche, lireStat, regles } from '../../noyau/regles';
 import { acquerir, arbresPour, retirer } from '../../noyau/talents';
 import { FICHE_CSS, ficheCorpsHtml } from '../personnages';
-import { appliquerEntrainement, aUneMagie, DROITS_PAR_DEFAUT, magieDepuisProfil, profilDe, type DroitsEntrainement } from '../magie';
+import { appliquerEntrainement, DROITS_PAR_DEFAUT, magieDepuisProfil, profilDe, saitFaireDeLaMagie, type DroitsEntrainement } from '../magie';
 
 /** `de` : 'joueur' pour un message écrit par le joueur au MJ (sinon, du MJ au joueur). */
 export interface MessagePrive { id: string; quand: string; texte: string; image?: string | null; de?: 'joueur' }
@@ -65,7 +65,7 @@ export const avecDroitsEntrainement = (c: Campagne, d: Partial<DroitsEntrainemen
   ({ ...c, modules: { ...c.modules, joueurs: { ...c.modules?.joueurs, entrainement: { ...droitsEntrainement(c), ...d } } } });
 
 /** Le joueur de ce PJ a-t-il une zone d'entraînement ? (personnage qui trace des sorts, sauf refus du MJ) */
-export const entrainementActif = (c: Campagne, p: Personnage): boolean => aUneMagie(p) && !distantsDe(c)[p.id]?.sansEntrainement;
+export const entrainementActif = (c: Campagne, p: Personnage): boolean => saitFaireDeLaMagie(p, regles(c.campagne.regles)) && !distantsDe(c)[p.id]?.sansEntrainement;
 export function avecEntrainement(c: Campagne, persoId: string, actif: boolean): Campagne {
   const d = distantsDe(c), x = d[persoId];
   return x ? avecDistants(c, { ...d, [persoId]: { ...x, sansEntrainement: !actif } }) : c;

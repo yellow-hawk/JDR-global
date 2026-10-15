@@ -33,7 +33,9 @@ describe('joueurs à distance', () => {
   });
 
   it('zone d’entraînement : records gardés, leçon apprise si permis, désactivable par PJ', () => {
-    const p = nouveauPersonnage('Ysolde', 'pj', 'dnd5e', R.statsParDefaut());
+    const sans = nouveauPersonnage('Bran', 'pj', 'dnd5e', R.statsParDefaut());
+    expect(entrainementActif({ ...nouvelleCampagne('T'), personnages: [sans] }, sans)).toBe(false); // ne sait pas faire de magie
+    const p = { ...nouveauPersonnage('Ysolde', 'pj', 'dnd5e', R.statsParDefaut()), magie: { eveil: true } };
     let c: Campagne = avecJeton({ ...nouvelleCampagne('T'), personnages: [p] }, p.id);
     expect(entrainementActif(c, c.personnages[0])).toBe(true);
     expect(droitsEntrainement(c)).toEqual({ lecons: true, grimoire: false });

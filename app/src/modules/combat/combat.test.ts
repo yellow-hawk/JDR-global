@@ -23,8 +23,9 @@ describe('combat ↔ campagne', () => {
   it('colonne de feu → ligne lancée de soi, dégâts de feu', () => {
     const g = gabarit({ nom: 'Colonne', coeur: 'braise', coeurInverse: false, forme: 'jet', formeInverse: false, directionCote: true,
       puissance: 4, porteeM: 12, zoneM: 3, dureeLongue: false, resume: '' }, R);
-    expect(g).toMatchObject({ forme: 'ligne', origine: 'soi', rayon: 8, particule: 'feu', atelier: true });
-    expect(g.effets).toEqual([{ type: 'degats', valeur: 14, nature: 'braise' }, { type: 'condition', valeur: 'En feu' }]);
+    // Sort de zone : 3d6 au lieu de 4d6 (équilibre), sauvegarde de Dextérité pour moitié.
+    expect(g).toMatchObject({ forme: 'ligne', origine: 'soi', rayon: 8, particule: 'feu', atelier: true, sauvegarde: 'dex' });
+    expect(g.effets).toEqual([{ type: 'degats', valeur: 11, nature: 'braise' }, { type: 'condition', valeur: 'En feu' }]);
   });
 
   it('tous les sorts de base se traduisent en gabarit valide', () => {

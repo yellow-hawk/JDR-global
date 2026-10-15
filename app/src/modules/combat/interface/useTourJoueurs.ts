@@ -6,10 +6,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { ecouterJoueurs, montrerAuxJoueurs } from '../../../noyau/bus';
 import { nouvelId, type Campagne } from '../../../noyau/contrat';
 import { aUneFiche, type SystemeRegles } from '../../../noyau/regles';
-import { aUneMagie, effetDe, lireTracePartage, profilDe } from '../../magie';
+import { effetDe, lireTracePartage, profilDe } from '../../magie';
 import { distantsDe, persoDuJeton } from '../../joueurs';
 import { gabarit } from '../logique';
-import { ajouterSort, centre, deplacer, jetonActif, lancerSort, TERRAINS, tourSuivant, zoneDeSort } from '../moteur';
+import { ajouterSort, centre, deplacer, jetonActif, jouerAction, lancerSort, modifierJeton, TERRAINS, tourSuivant, zoneDeSort } from '../moteur';
+import { capacitesCombat, synchroniserJeton } from '../capacites';
 import { emettreParticules, imageEtCamera, jetonVisible, type Fond } from '../rendu';
 import { analyseDeSceau } from '../sorts';
 import { attaqueAvecArme, attaquesDuJeton, estDemandeTour, idTour, optionsTour, refus, type EffetTour, type TraceTour, type VueTable } from '../tour';
@@ -40,8 +41,9 @@ export function useTourJoueurs(ctl: Controleur, c: Campagne, R: SystemeRegles, f
     if (!reglages.actif || !j || !p) return null;
     const fiche = aUneFiche(R) && p.fiche ? R.calculer(p).attaques : null;
     const id = idTour(e);
+    const cap = capacitesCombat(p, R);
     return optionsTour(e, {
-      attaques: attaquesDuJeton(j, fiche), tablette: !distantsDe(c)[p.id], peutTracer: aUneMagie(p),
+      attaques: attaquesDuJeton(j, fiche), tablette: !distantsDe(c)[p.id], peutTracer: cap.profil.magie, actions: cap.actions, magie: cap.profil.magie,
       trace: demandeTrace && trace?.tour === id ? demandeTrace : null, viser: viser?.tour === id ? viser.sort : null,
     });
   }, [e, c, R, reglages.actif, demandeTrace, viser]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -49,6 +51,13 @@ export function useTourJoueurs(ctl: Controleur, c: Campagne, R: SystemeRegles, f
   // Nouveau tour : on oublie l'évènement, la visée et le tracé du tour d'avant.
   const tourCourant = idTour(e);
   useEffect(() => { setViser(null); setTrace((t) => (t && t.tour !== tourCourant ? null : t)); }, [tourCourant]);
+  // Début du tour d'un personnage : son jeton reprend les valeurs de sa fiche (niveau, talents, dons, objets).
+  useEffect(() => {
+    const j = jetonActif(e), p = j?.persoId ? c.personnages.find((x) => x.id === j.persoId) : undefined;
+    if (!j || !p || ctl.lectureSeule) return;
+    const s = synchroniserJeton(j, p, R);
+    if (JSON.stringify(s) !== JSON.stringify(j)) ctl.faire((y) => modifierJeton(y, j.id, () => s), true);
+  }, [tourCourant]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Diffusion : image de la table + tour en cours, renvoyée à chaque changement (regroupé toutes les 0,4 s).
   const traceur = trace && !trace.fini ? trace.nom : null;
@@ -111,6 +120,13 @@ export function useTourJoueurs(ctl: Controleur, c: Campagne, R: SystemeRegles, f
       if (k.ui.sons) SONS.sort();
       const txt = `${j.nom} lance ${sp.nom} : ${r.cibles?.length ? r.cibles.join(', ') : 'aucune cible'}`;
       setEvenement(txt); setViser(null); repondre(txt);
+    } else if (d.faire === 'agir') {
+      const r = jouerAction(etat, j.id, d.action, d.cible, Math.random);
+      if (r.erreur) { repondre(r.erreur); return; }
+      k.faire(() => r.etat);
+      if (k.ui.sons) SONS.sort();
+      const txt = `${j.nom} — ${r.texte}`;
+      setEvenement(txt); repondre(txt);
     } else if (d.faire === 'tracer') {
       const demande: TraceTour = { id: nouvelId('trace'), titre: `Sceau de ${j.nom}`, duree: rg.dureeTrace, guide: true };
       setTrace({ demande, tour: o!.id, persoId: o!.persoId, nom: j.nom, traits: [], fini: false });

@@ -17,14 +17,28 @@
   "Hâté",
   "Protégé",
   "Inspiré",
-  "Résistance"
+  "Résistance",
+  "Esquive",
+  "Caché",
+  "Aidé",
+  "Fonce",
+  "Rage",
+  "Maudit",
+  "Marqué",
+  "Avatar"
  ],
  "conditionsBonus": [
   "Béni",
   "Hâté",
   "Protégé",
   "Inspiré",
-  "Résistance"
+  "Résistance",
+  "Esquive",
+  "Caché",
+  "Aidé",
+  "Fonce",
+  "Rage",
+  "Avatar"
  ],
  "terrains": [
   {

@@ -1,6 +1,6 @@
 // Actions faites par les joueurs sur l'écran joueurs (pur, testé) : le MJ envoie l'image de la table, sa caméra et
 // l'action (viser un sort, se déplacer) ; les joueurs touchent la carte, l'aperçu suit, ils valident.
-import { cellule, celluleDansZone, centre, largeurCase, zoneDeSort } from './moteur';
+import { cellule, celluleDansZone, centre, largeurCase, resteMouvement, zoneDeSort } from './moteur';
 import type { Cellule, EtatTable, Gabarit, Grille, Jeton, Zone } from './moteur';
 import { versMonde, type Camera } from './rendu';
 
@@ -53,4 +53,4 @@ export const coteCaseImage = (d: Pick<DemandeAction, 'camera' | 'grille'>): numb
 export const jetonPublic = (j: Jeton) => ({ id: j.id, nom: j.nom, x: j.x, y: j.y });
 
 /** Déplacement restant d'un jeton (en combat), sinon sa vitesse. */
-export const reste = (e: EtatTable, j: Jeton): number => (e.combat.actif ? Math.max(0, j.vitesse - j.mouvementUtilise) : j.vitesse);
+export const reste = (e: EtatTable, j: Jeton): number => (e.combat.actif ? resteMouvement(j) : j.vitesse);

@@ -60,6 +60,8 @@ export function Talents({ p, R, role, lectureSeule, maj }: PropsOnglet & { R: Sy
           <p style={{ margin: 0 }}>{choisi.texte}</p>
           {choisi.effets?.length ? <p className="discret" style={{ margin: 0 }}>Effets sur la fiche : {choisi.effets.map((x) => texteEffet(x.cible, x.valeur)).join(', ')}</p> : null}
           {choisi.requisUn?.length ? <p className="discret" style={{ margin: 0 }}>Il suffit d’un de : {choisi.requisUn.map((r) => arbre?.branches.flatMap((b) => b.noeuds).find((x) => x.id === r)?.nom ?? r).join(', ')}</p> : null}
+          {choisi.action ? <p className="perso-points" style={{ margin: 0 }}>⚔ Débloque une action de combat (bouton « Actions » pendant le tour).</p> : null}
+          {choisi.passif ? <p className="perso-points" style={{ margin: 0 }}>⚔ Appliqué automatiquement en combat.</p> : null}
           {choisi.magie?.signes?.length ? <p className="discret" style={{ margin: 0 }}>Signes appris : {choisi.magie.signes.join(', ')}{choisi.magie.rang ? ` · rang ${choisi.magie.rang}` : ''}</p> : null}
           {etatChoisi.raison && <p className="perso-erreur" style={{ margin: 0 }}>Verrouillé : {etatChoisi.raison}</p>}
           {peutModifier && (

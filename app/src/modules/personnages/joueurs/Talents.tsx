@@ -59,7 +59,9 @@ export default function Talents({ donnees, envoyer }: PropsVueJoueurs) {
               <div className="ligne"><span style={{ fontSize: '1.6rem' }}>{choisi.icone}</span><strong>{choisi.nom}</strong><span className="discret">coût {choisi.cout} · niveau {choisi.niveau}</span></div>
               <p style={{ margin: 0 }}>{choisi.texte}</p>
               {choisi.effets?.length ? <p className="discret" style={{ margin: 0 }}>Effets : {choisi.effets.map((x) => texteEffet(x.cible, x.valeur)).join(', ')}</p> : null}
-              {choisi.magie?.signes?.length ? <p className="discret" style={{ margin: 0 }}>Signes appris : {choisi.magie.signes.join(', ')}</p> : null}
+              {choisi.action ? <p className="perso-points" style={{ margin: 0 }}>⚔ Débloque une action de combat (bouton « Actions » pendant le tour).</p> : null}
+          {choisi.passif ? <p className="perso-points" style={{ margin: 0 }}>⚔ Appliqué automatiquement en combat.</p> : null}
+          {choisi.magie?.signes?.length ? <p className="discret" style={{ margin: 0 }}>Signes appris : {choisi.magie.signes.join(', ')}</p> : null}
               {e.etat === 'acquis' && <p className="perso-points" style={{ margin: 0 }}>Appris.</p>}
               {e.raison && <p className="perso-erreur" style={{ margin: 0 }}>Verrouillé : {e.raison}</p>}
               {d.droits.developper && e.etat === 'disponible' && (
