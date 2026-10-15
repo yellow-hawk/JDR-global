@@ -2,7 +2,7 @@
 import { emettre } from '../../../noyau/bus';
 import type { PropsOnglet } from './types';
 
-export function Magie({ p, role }: PropsOnglet) {
+export function Magie({ p, role, lectureSeule, maj }: PropsOnglet) {
   const m = (p.magie ?? null) as { rang?: number; signes?: string[]; emplacements?: number; grimoire?: { nom?: string }[] } | null;
   return (
     <div className="pile">
@@ -16,6 +16,11 @@ export function Magie({ p, role }: PropsOnglet) {
           {m.grimoire?.length ? <p className="discret">Sorts : {m.grimoire.map((s) => s.nom).filter(Boolean).join(', ')}</p> : null}
         </>
       ) : <p className="discret">Ce personnage ne pratique pas encore la magie des sceaux.</p>}
+      {role === 'mj' && !lectureSeule && (
+        <label className="ligne"><input type="checkbox" checked={!!(p.magie as { eveil?: boolean } | null)?.eveil}
+          onChange={(e) => maj((x) => ({ ...x, magie: { ...((x.magie ?? {}) as object), eveil: e.target.checked } }))} />
+          Sait faire de la magie (accordé par le MJ, sans classe, talent ni don)</label>
+      )}
       {role === 'mj' && (
         <button className="btn btn-petit" style={{ alignSelf: 'flex-start' }} onClick={() => emettre('naviguer', { page: 'magie', cible: p.id })}>
           {m ? 'Ouvrir dans l’Atelier de tracé' : 'Lui apprendre la magie (Atelier)'}
