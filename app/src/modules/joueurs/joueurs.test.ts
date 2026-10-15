@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { nouvelleCampagne, nouveauPersonnage, type Campagne } from '../../noyau/contrat';
 import { regles } from '../../noyau/regles';
+import { avecEntrainement, avecEntrainementRecu, droitsEntrainement, entrainementActif } from './logique';
 import { ajouterMessage, avecJeton, avecNotesJoueur, distantsDe, ficheDuJoueur, lienJoueur, marquerLusMj, nonLusMj, notesJoueur, persoDuJeton, retirerMessage } from './logique';
 
 const R = regles('dnd5e');
@@ -29,6 +30,20 @@ describe('joueurs à distance', () => {
     c = retirerMessage(c, p.id, distantsDe(c)[p.id].messages[0].id);
     c = avecNotesJoueur(c, p.id, 'Ne pas faire confiance à Sylas');
     expect(notesJoueur(c.personnages[0])).toBe('Ne pas faire confiance à Sylas');
+  });
+
+  it('zone d’entraînement : records gardés, leçon apprise si permis, désactivable par PJ', () => {
+    const p = nouveauPersonnage('Ysolde', 'pj', 'dnd5e', R.statsParDefaut());
+    let c: Campagne = avecJeton({ ...nouvelleCampagne('T'), personnages: [p] }, p.id);
+    expect(entrainementActif(c, c.personnages[0])).toBe(true);
+    expect(droitsEntrainement(c)).toEqual({ lecons: true, grimoire: false });
+    c = avecEntrainementRecu(c, p.id, { defis: { x: { score: 88, temps: 4000, date: 1 } }, lecons: ['l-pluie'] });
+    const m = c.personnages[0].magie as { defis: Record<string, { score: number }>; signes: string[] };
+    expect(m.defis.x.score).toBe(88);
+    expect(m.signes).toContain('pluie');
+    c = avecEntrainement(c, p.id, false);
+    expect(entrainementActif(c, c.personnages[0])).toBe(false);
+    expect(avecEntrainementRecu(c, p.id, { defis: { y: { score: 50, temps: 1, date: 1 } } })).toBe(c);
   });
 
   it('la fiche envoyée au joueur ne contient rien du MJ', () => {

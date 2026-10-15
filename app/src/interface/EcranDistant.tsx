@@ -1,13 +1,17 @@
 // Écran d'un joueur à distance (adresse avec ?joueur=<jeton>) : onglets « Table » (ce que voit la table),
-// « Ma fiche » (lecture seule, à jour en direct, avec ses notes) et « Messages » (ce que le MJ lui envoie à lui seul).
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+// « Ma fiche » (lecture seule, à jour en direct, avec ses notes), « Entraînement » (magie, si son personnage trace
+// des sorts) et « Messages » (échange privé avec le MJ).
+import { Suspense, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { envoyerAuMj } from '../noyau/bus';
+import { moduleParId } from './registre';
 
 export interface DonneesPrivees {
   /** Personnage de ce joueur (ses actions sur la table de combat). */
   persoId?: string;
   fiche?: { nom: string; html: string; css: string; notes: string; portrait?: Blob | null };
   messages?: { id: string; quand: string; texte: string; image?: Blob | null; de?: 'joueur' }[];
+  /** Zone d'entraînement (vue `entrainement` du module Magie) : son carnet et ce que le MJ permet. */
+  entrainement?: Record<string, unknown> | null;
 }
 
 function useUrl(b: Blob | null | undefined): string | null {
@@ -21,7 +25,9 @@ function Image({ blob }: { blob?: Blob | null }) {
 }
 
 export function EcranDistant({ prive, children }: { prive: DonneesPrivees; children: ReactNode }) {
-  const [onglet, setOnglet] = useState<'table' | 'fiche' | 'messages'>('table');
+  const [onglet, setOnglet] = useState<'table' | 'fiche' | 'messages' | 'entrainement'>('table');
+  const VueEntrainement = prive.entrainement ? moduleParId('magie')?.ecranJoueurs?.entrainement : undefined;
+  useEffect(() => { if (onglet === 'entrainement' && !VueEntrainement) setOnglet('table'); }, [onglet, VueEntrainement]);
   const [notes, setNotes] = useState(prive.fiche?.notes ?? '');
   const [lus, setLus] = useState(0);
   const portrait = useUrl(prive.fiche?.portrait);
@@ -50,6 +56,7 @@ export function EcranDistant({ prive, children }: { prive: DonneesPrivees; child
       <nav className="distant-onglets">
         <button aria-pressed={onglet === 'table'} onClick={() => setOnglet('table')}>Table</button>
         <button aria-pressed={onglet === 'fiche'} onClick={() => setOnglet('fiche')} disabled={!prive.fiche}>{prive.fiche ? `Ma fiche : ${prive.fiche.nom}` : 'Ma fiche'}</button>
+        {VueEntrainement && <button aria-pressed={onglet === 'entrainement'} onClick={() => setOnglet('entrainement')}>Entraînement</button>}
         <button aria-pressed={onglet === 'messages'} onClick={() => setOnglet('messages')}>Messages{nouveaux ? <b className="distant-badge">{nouveaux}</b> : null}</button>
       </nav>
       {children}
@@ -61,6 +68,13 @@ export function EcranDistant({ prive, children }: { prive: DonneesPrivees; child
             <strong>Mes notes</strong> <span>(le MJ peut les lire ; enregistrées automatiquement)</span>
             <textarea rows={8} value={notes} onChange={(e) => { ecrit.current = true; setNotes(e.target.value); }} placeholder="Indices, noms, choses à ne pas oublier…" />
           </label>
+        </div>
+      )}
+      {onglet === 'entrainement' && VueEntrainement && prive.entrainement && (
+        <div className="distant-panneau distant-entrainement">
+          <Suspense fallback={<p>Ouverture de l’atelier…</p>}>
+            <VueEntrainement donnees={prive.entrainement} envoyer={(d) => envoyerAuMj('joueurs', { entrainement: d })} moi={{ distant: true, persoId: prive.persoId ?? null }} />
+          </Suspense>
         </div>
       )}
       {onglet === 'messages' && (

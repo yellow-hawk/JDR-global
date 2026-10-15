@@ -10,4 +10,5 @@
 
 Écran du joueur : `interface/EcranDistant.tsx` (onglets Table, Ma fiche, Messages : il peut écrire au MJ), choisi par `?joueur=<jeton>` dans l'adresse. Le MJ envoie aussi `persoId` : la Table de combat sait quel PJ ce joueur peut jouer.
 API (`index.ts`) : `definition`, `distantsDe`, `persoDuJeton` (pour la Table de combat).
+Entraînement à la magie (`logique.ts`) : `droitsEntrainement` / `avecDroitsEntrainement` (`modules.joueurs.entrainement`), `entrainementActif` / `avecEntrainement` (par PJ), `avecEntrainementRecu` (carnet renvoyé → `personnage.magie`, via `magie.appliquerEntrainement`). Synchro envoie `entrainement: { profil, droits }` ; l'écran du joueur affiche la vue `entrainement` de la Magie dans l'onglet Entraînement.
 Confidentialité : un salon privé par joueur (`<salon>.<jeton>`) ; un joueur ne reçoit que ce qui lui est destiné.

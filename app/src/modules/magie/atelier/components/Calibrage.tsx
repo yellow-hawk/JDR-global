@@ -41,7 +41,7 @@ export function Calibrage({ profil, majProfil, onFermer }: Props) {
     const p = pt.matrixTransform(svg.getScreenCTM()!.inverse());
     return { x: p.x, y: p.y };
   };
-  const down = (e: PointerEvent<SVGSVGElement>) => { e.currentTarget.setPointerCapture(e.pointerId); setEnCours([pos(e)]); };
+  const down = (e: PointerEvent<SVGSVGElement>) => { try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* pointeur sans capture */ } setEnCours([pos(e)]); };
   const move = (e: PointerEvent<SVGSVGElement>) => {
     if (!enCours) return;
     const p = pos(e), l = enCours[enCours.length - 1];

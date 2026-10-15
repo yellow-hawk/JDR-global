@@ -13,3 +13,6 @@ export type { ProfilPJ } from './atelier/engine/profils';
 export { lireTracePartage, effetDe, estReponseTrace, type DemandeTrace, type ReponseTrace, type EffetTrace } from './partage';
 export { VueTrace, VueEffet } from './vues';
 export { STAGE } from './atelier/components/SceauSVG';
+/* Pour le module Joueurs : zone d'entraînement sur l'écran d'un joueur. */
+export { appliquerEntrainement, DROITS_PAR_DEFAUT, type DonneesEntrainement, type DroitsEntrainement } from './entrainement';
+export { magieDepuisProfil } from './lien';

@@ -147,7 +147,7 @@ a { color: var(--accent); }
 .ecran img { max-width: 100%; max-height: 100%; object-fit: contain; }
 .ecran-titre { font-family: var(--titre); font-size: clamp(1.6rem, 4vw, 3.4rem); text-align: center; margin-bottom: 0.4em; }
 .ecran-texte { font-size: clamp(1.1rem, 2vw, 1.8rem); max-width: 60ch; text-align: center; white-space: pre-wrap; }
-.ecran-image { display: grid; grid-template-rows: auto 1fr; height: 100%; width: 100%; gap: 1vh; }
+.ecran-image { display: grid; grid-template-rows: auto minmax(0, 1fr); grid-template-columns: minmax(0, 1fr); height: 100%; width: 100%; min-height: 0; gap: 1vh; }
 .ecran-image .ecran-titre { font-size: clamp(1.2rem, 2.4vw, 2.2rem); margin: 0; }
 .ecran-image > div { display: grid; place-items: center; min-height: 0; }
 .ecran-perso { display: flex; gap: 4vw; align-items: center; flex-wrap: wrap; justify-content: center; }
@@ -204,8 +204,10 @@ a { color: var(--accent); }
 .coq-salon { font-family: monospace; font-size: 1.1rem; letter-spacing: 0.15em; }
 
 /* Écran joueurs : zoom, dessins, fiches, vues interactives */
-.ecran-zoom { position: relative; width: 100%; height: 100%; min-height: 0; overflow: hidden; touch-action: none; cursor: grab; display: grid; place-items: center; }
-.ecran-zoom-contenu { width: 100%; height: 100%; display: grid; place-items: center; transform-origin: 0 0; }
+/* Zone zoomable : lignes et colonnes de taille fixe, pour que le contenu tienne en largeur ET en hauteur. */
+.ecran-zoom { position: relative; width: 100%; height: 100%; min-height: 0; min-width: 0; overflow: hidden; touch-action: none; cursor: grab; display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: center; }
+.ecran-zoom-contenu { width: 100%; height: 100%; min-height: 0; min-width: 0; display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: center; transform-origin: 0 0; }
+.ecran-zoom-contenu > svg { width: 100%; height: 100%; }
 .ecran-zoom-contenu img { max-width: 100%; max-height: 100%; object-fit: contain; user-select: none; -webkit-user-drag: none; }
 .ecran-zoom-retour { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); opacity: 0.85; }
 .ecran-zoom-commandes { position: absolute; bottom: 12px; right: 12px; display: flex; gap: 6px; opacity: 0.85; z-index: 2; }
@@ -263,3 +265,4 @@ a { color: var(--accent); }
 .distant-ecrire textarea { font: 1rem/1.4 Georgia, serif; padding: 8px; border: 1px solid #b9a586; border-radius: 6px; background: #fffdf8; color: #1f1a14; }
 .distant-ecrire .btn { align-self: flex-end; }
 .distant-messages article.de-moi { border-left-color: #3d6b8e; background: #f3f6f8; align-self: flex-end; }
+.distant-panneau.distant-entrainement { padding: 0; }

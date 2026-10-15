@@ -6,7 +6,8 @@ import { regles } from '../../noyau/regles';
 import { lireFichier } from '../../noyau/stockage';
 import { useCampagne } from '../../interface/etat';
 import { assurerSalon } from '../../interface/Tablettes';
-import { ajouterMessage, avecNotesJoueur, distantsDe, ficheDuJoueur, nonLusMj, notesJoueur, persoDuJeton } from './logique';
+import { profilDe } from '../magie';
+import { ajouterMessage, avecEntrainementRecu, avecNotesJoueur, distantsDe, droitsEntrainement, entrainementActif, ficheDuJoueur, nonLusMj, notesJoueur, persoDuJeton } from './logique';
 
 export function Synchro() {
   const { campagne, modifier } = useCampagne();
@@ -32,7 +33,8 @@ export function Synchro() {
     const lire = async (id?: string | null) => (id ? (await lireFichier(x.campagne.id, id)) ?? null : null);
     const fiche = { ...ficheDuJoueur(p, regles(x.campagne.regles)), notes: notesJoueur(p), portrait: await lire(p.portrait) };
     const messages = await Promise.all((distantsDe(x)[p.id]?.messages ?? []).map(async (m) => ({ ...m, image: await lire(m.image) })));
-    envoyerPrive(jeton, { persoId: p.id, fiche, messages });
+    const entrainement = entrainementActif(x, p) ? { profil: profilDe(p), droits: droitsEntrainement(x) } : null;
+    envoyerPrive(jeton, { persoId: p.id, fiche, messages, entrainement });
   };
 
   useEffect(() => surArriveeJoueur((j, nouveau) => {
@@ -42,7 +44,7 @@ export function Synchro() {
   }), []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Fiche ou messages changés : renvoyés aux joueurs connectés concernés (regroupé toutes les 0,6 s).
-  const signature = pjs.map((p) => JSON.stringify([p, distants[p.id].messages.length])).join('|');
+  const signature = pjs.map((p) => JSON.stringify([p, distants[p.id].messages.length, distants[p.id].sansEntrainement])).join('|') + JSON.stringify(campagne ? droitsEntrainement(campagne) : null);
   useEffect(() => {
     const t = window.setTimeout(() => { for (const j of jetons) if (connectes.has(j)) void envoyer(j); }, 600);
     return () => window.clearTimeout(t);
@@ -53,6 +55,8 @@ export function Synchro() {
     if (module !== 'joueurs' || !jeton) return;
     const x = c.current, p = x && persoDuJeton(x, jeton);
     if (!p) return;
+    const e = d.entrainement as { profil?: Record<string, unknown> } | undefined;
+    if (e?.profil && typeof e.profil === 'object') modifier((y) => avecEntrainementRecu(y, p.id, e.profil!));
     if (typeof d.notes === 'string' && notesJoueur(p) !== d.notes) modifier((y) => avecNotesJoueur(y, p.id, d.notes as string));
     if (typeof d.message === 'string' && d.message.trim()) {
       const texte = d.message.trim().slice(0, 4000);

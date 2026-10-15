@@ -14,10 +14,12 @@ interface Props {
   profil: ProfilPJ | null;
   majProfil: (fn: (p: ProfilPJ) => ProfilPJ) => void;
   onModele: (m: Modele) => void;
+  /** Faux sur l'écran d'un joueur quand le MJ garde la main sur les grimoires. */
+  grimoireModifiable?: boolean;
 }
 
 /** Carnet du personnage : signes connus, grimoire personnel, leçons, calibrage et impression. */
-export function Carnet({ profil, majProfil, onModele }: Props) {
+export function Carnet({ profil, majProfil, onModele, grimoireModifiable = true }: Props) {
   const [onglet, setOnglet] = useState<'grimoire' | 'signes' | 'lecons'>('grimoire');
   const [calib, setCalib] = useState(false);
   const [aRetirer, setARetirer] = useState<string | null>(null);
@@ -83,7 +85,7 @@ export function Carnet({ profil, majProfil, onModele }: Props) {
                         <button className="btn danger" onClick={() => { majProfil((p) => ({ ...p, grimoire: p.grimoire.filter((x) => x.id !== s.id) })); setARetirer(null); }}>Effacer la page</button>
                         <button className="btn ghost" onClick={() => setARetirer(null)}>Garder</button>
                       </>
-                    ) : <button className="btn ghost" onClick={() => setARetirer(s.id)}>Retirer</button>}
+                    ) : grimoireModifiable ? <button className="btn ghost" onClick={() => setARetirer(s.id)}>Retirer</button> : null}
                   </div>
                 </div>
               </article>

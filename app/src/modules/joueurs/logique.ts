@@ -5,11 +5,12 @@ import { nouvelId } from '../../noyau/contrat';
 import type { SystemeRegles } from '../../noyau/regles';
 import { aUneFiche, lireStat } from '../../noyau/regles';
 import { FICHE_CSS, ficheCorpsHtml } from '../personnages';
+import { appliquerEntrainement, aUneMagie, DROITS_PAR_DEFAUT, magieDepuisProfil, profilDe, type DroitsEntrainement } from '../magie';
 
 /** `de` : 'joueur' pour un message écrit par le joueur au MJ (sinon, du MJ au joueur). */
 export interface MessagePrive { id: string; quand: string; texte: string; image?: string | null; de?: 'joueur' }
-/** `luMj` : nombre de messages du joueur déjà vus par le MJ. */
-export interface Distant { jeton: string; messages: MessagePrive[]; luMj?: number }
+/** `luMj` : nombre de messages du joueur déjà vus par le MJ ; `sansEntrainement` : pas de zone d'entraînement. */
+export interface Distant { jeton: string; messages: MessagePrive[]; luMj?: number; sansEntrainement?: boolean }
 
 export const distantsDe = (c: Campagne): Record<string, Distant> =>
   ((c.modules?.joueurs as { distants?: Record<string, Distant> } | undefined)?.distants) ?? {};
@@ -46,6 +47,31 @@ export function marquerLusMj(c: Campagne, persoId: string): Campagne {
 export function retirerMessage(c: Campagne, persoId: string, id: string): Campagne {
   const d = distantsDe(c), x = d[persoId];
   return x ? avecDistants(c, { ...d, [persoId]: { ...x, messages: x.messages.filter((m) => m.id !== id) } }) : c;
+}
+
+/* ---------- zone d'entraînement (magie) ---------- */
+
+/** Ce que le MJ permet à l'entraînement (pour tous les joueurs) : `modules.joueurs.entrainement`. */
+export const droitsEntrainement = (c: Campagne): DroitsEntrainement =>
+  ({ ...DROITS_PAR_DEFAUT, ...((c.modules?.joueurs as { entrainement?: Partial<DroitsEntrainement> } | undefined)?.entrainement ?? {}) });
+export const avecDroitsEntrainement = (c: Campagne, d: Partial<DroitsEntrainement>): Campagne =>
+  ({ ...c, modules: { ...c.modules, joueurs: { ...c.modules?.joueurs, entrainement: { ...droitsEntrainement(c), ...d } } } });
+
+/** Le joueur de ce PJ a-t-il une zone d'entraînement ? (personnage qui trace des sorts, sauf refus du MJ) */
+export const entrainementActif = (c: Campagne, p: Personnage): boolean => aUneMagie(p) && !distantsDe(c)[p.id]?.sansEntrainement;
+export function avecEntrainement(c: Campagne, persoId: string, actif: boolean): Campagne {
+  const d = distantsDe(c), x = d[persoId];
+  return x ? avecDistants(c, { ...d, [persoId]: { ...x, sansEntrainement: !actif } }) : c;
+}
+
+/** Carnet renvoyé par l'écran du joueur : gardé dans les limites permises (records, calibrage, leçons, grimoire). */
+export function avecEntrainementRecu(c: Campagne, persoId: string, recu: Record<string, unknown>): Campagne {
+  const p = c.personnages.find((x) => x.id === persoId);
+  if (!p || !entrainementActif(c, p)) return c;
+  const profil = appliquerEntrainement(profilDe(p), recu, droitsEntrainement(c));
+  const magie = magieDepuisProfil(profil);
+  if (JSON.stringify(magie) === JSON.stringify(magieDepuisProfil(profilDe(p)))) return c;
+  return { ...c, personnages: c.personnages.map((x) => (x.id === persoId ? { ...x, magie } : x)) };
 }
 
 /** Lien personnel d'un joueur. `base` : adresse publique (tunnel) ou locale, sans « / » final. */

@@ -19,13 +19,15 @@ interface Props {
   majProfil: (fn: (p: ProfilPJ) => ProfilPJ) => void;
   onOuvrir: (s: Sceau) => void;
   onSave: (nom: string, notes: string, s: Sceau) => void;
+  /** Écran d'un joueur : ce que le MJ permet (apprendre par les leçons, changer son grimoire). Absent : tout. */
+  droits?: { lecons: boolean; grimoire: boolean };
 }
 
 export interface Modele { titre: string; consigne: string; sceau: Sceau; lecon?: Lecon; sortId?: string; fantome: boolean }
 
 const toPath = (s: Stroke) => s.length === 1 ? `M${s[0].x} ${s[0].y} l0.1 0` : 'M' + s.map((p) => `${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' L');
 
-export function Freehand({ mj, profil, majProfil, onOuvrir, onSave }: Props) {
+export function Freehand({ mj, profil, majProfil, onOuvrir, onSave, droits = { lecons: true, grimoire: true } }: Props) {
   const [traits, setTraits] = useState<Stroke[]>([]);
   const [enCours, setEnCours] = useState<Stroke | null>(null);
   const [guide, setGuide] = useState(true);
@@ -81,7 +83,7 @@ export function Freehand({ mj, profil, majProfil, onOuvrir, onSave }: Props) {
     const n = noter(modele.sceau, L.sceau);
     let appris: string | undefined, record = false;
     if (profil) {
-      if (modele.lecon && n.score >= 70) {
+      if (modele.lecon && n.score >= 70 && droits.lecons) {
         const l = modele.lecon;
         majProfil((p) => ({ ...p, lecons: p.lecons.includes(l.id) ? p.lecons : [...p.lecons, l.id], signes: l.apprend && !p.signes.includes(l.apprend) ? [...p.signes, l.apprend] : p.signes }));
         if (l.apprend && !profil.signes.includes(l.apprend)) appris = SIGNE[l.apprend].nom;
@@ -107,7 +109,8 @@ export function Freehand({ mj, profil, majProfil, onOuvrir, onSave }: Props) {
     return { x: p.x, y: p.y };
   };
   const down = (e: PointerEvent<SVGSVGElement>) => {
-    e.currentTarget.setPointerCapture(e.pointerId); setEnCours([pos(e)]);
+    try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* pointeur sans capture */ }
+    setEnCours([pos(e)]);
     if (debut === null) { setDebut(Date.now()); setMaintenant(Date.now()); }
   };
   const move = (e: PointerEvent<SVGSVGElement>) => {
@@ -207,13 +210,13 @@ export function Freehand({ mj, profil, majProfil, onOuvrir, onSave }: Props) {
 
         <div className="save">
           <input id="nom-libre" placeholder={analyse.nomSuggere} value={nom} onChange={(e) => setNom(e.target.value)} aria-label="Nom du sort" />
-          {profil && <button className="btn primary" onClick={inscrire} disabled={!L.sceau.coeur}>Inscrire dans le grimoire de {profil.nom}</button>}
+          {profil && droits.grimoire && <button className="btn primary" onClick={inscrire} disabled={!L.sceau.coeur}>Inscrire dans le grimoire de {profil.nom}</button>}
           {mj && <button className="btn" onClick={enregistrer} disabled={!L.sceau.coeur}>Grimoire du MJ</button>}
           {mj && <button className="btn" onClick={() => onOuvrir({ ...L.sceau, trace: undefined, sansCerne: undefined })} disabled={!L.sceau.coeur}>Ouvrir dans le composeur</button>}
           {msg && <span className="ok-t" role="status">{msg}</span>}
         </div>
 
-        <Carnet profil={profil} majProfil={majProfil} onModele={commencer} />
+        <Carnet profil={profil} majProfil={majProfil} onModele={commencer} grimoireModifiable={droits.grimoire} />
       </div>
 
       <div className="cote">

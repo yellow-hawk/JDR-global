@@ -13,3 +13,5 @@
 .effet-titre strong { font-family: var(--titre); font-size: 1.3em; color: #d4a050; }
 .effet-3d { flex: 1; min-height: 0; }
 .effet-3d .vue3d { height: 100%; min-height: 60vh; }
+.entrainement-joueurs { padding: 8px 12px 24px; }
+.entrainement-intro { max-width: 110ch; margin: 0 0 10px; line-height: 1.45; }
