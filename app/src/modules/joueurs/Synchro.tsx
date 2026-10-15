@@ -1,13 +1,15 @@
 // Côté MJ, toujours actif quand une campagne est ouverte (en-tête) : salons privés des joueurs à distance, envoi de
-// leur fiche (en direct) et de leurs messages, réception de leurs notes. Petit indicateur : joueurs connectés.
+// tout ce qui leur est propre (fiche, messages, talents, dés, sac, groupe, niveau…) et traitement de ce qu'ils
+// renvoient (`prive.ts`). Petit indicateur : joueurs connectés, messages à lire, niveaux à valider.
 import { useEffect, useRef, useState } from 'react';
-import { definirJoueursPrives, ecouterJoueurs, emettre, envoyerPrive, surArriveeJoueur, suivreJoueursConnectes } from '../../noyau/bus';
-import { regles } from '../../noyau/regles';
+import { annoncerJet, definirJoueursPrives, ecouterJoueurs, emettre, envoyerPrive, surArriveeJoueur, suivreJoueursConnectes } from '../../noyau/bus';
+import { jeter, regles } from '../../noyau/regles';
 import { lireFichier } from '../../noyau/stockage';
 import { useCampagne } from '../../interface/etat';
 import { assurerSalon } from '../../interface/Tablettes';
-import { profilDe } from '../magie';
-import { ajouterMessage, avecEntrainementRecu, avecNotesJoueur, avecTalentDemande, distantsDe, droitsEntrainement, droitsTalents, entrainementActif, ficheDuJoueur, nonLusMj, notesJoueur, persoDuJeton, talentsDuJoueur } from './logique';
+import { demandeNiveau, journalGroupe, verdict } from './actions';
+import { distantsDe, droitsEntrainement, droitsTalents, ficheDuJoueur, nonLusMj, notesJoueur, persoDuJeton } from './logique';
+import { donneesDuJoueur, traiterRetour } from './prive';
 
 export function Synchro() {
   const { campagne, modifier } = useCampagne();
@@ -33,9 +35,7 @@ export function Synchro() {
     const lire = async (id?: string | null) => (id ? (await lireFichier(x.campagne.id, id)) ?? null : null);
     const fiche = { ...ficheDuJoueur(p, regles(x.campagne.regles)), notes: notesJoueur(p), portrait: await lire(p.portrait) };
     const messages = await Promise.all((distantsDe(x)[p.id]?.messages ?? []).map(async (m) => ({ ...m, image: await lire(m.image) })));
-    const entrainement = entrainementActif(x, p) ? { profil: profilDe(p), droits: droitsEntrainement(x) } : null;
-    const talents = talentsDuJoueur(x, p, regles(x.campagne.regles));
-    envoyerPrive(jeton, { persoId: p.id, fiche, messages, entrainement, talents });
+    envoyerPrive(jeton, { ...donneesDuJoueur(x, p, regles(x.campagne.regles)), fiche, messages });
   };
 
   useEffect(() => surArriveeJoueur((j, nouveau) => {
@@ -45,39 +45,35 @@ export function Synchro() {
   }), []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Fiche ou messages changés : renvoyés aux joueurs connectés concernés (regroupé toutes les 0,6 s).
-  const signature = pjs.map((p) => JSON.stringify([p, distants[p.id].messages.length, distants[p.id].sansEntrainement])).join('|') + JSON.stringify(campagne ? [droitsEntrainement(campagne), droitsTalents(campagne)] : null);
+  const signature = pjs.map((p) => JSON.stringify([p, distants[p.id]])).join('|') + JSON.stringify(campagne ? [droitsEntrainement(campagne), droitsTalents(campagne), campagne.modules?.joueurs?.inventaire, journalGroupe(campagne)] : null);
   useEffect(() => {
     const t = window.setTimeout(() => { for (const j of jetons) if (connectes.has(j)) void envoyer(j); }, 600);
     return () => window.clearTimeout(t);
   }, [signature]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Notes écrites par un joueur : rangées dans sa fiche. Message d'un joueur : rangé avec les siens, et signalé.
+  // Ce que renvoie un joueur (notes, message, talent, jet, sac, groupe, niveau) : appliqué dans les limites permises.
   useEffect(() => ecouterJoueurs((module, d, jeton) => {
     if (module !== 'joueurs' || !jeton) return;
     const x = c.current, p = x && persoDuJeton(x, jeton);
     if (!p) return;
-    const t = d.talents as { faire?: unknown; id?: unknown } | undefined;
-    if (t && typeof t.id === 'string') {
-      const R = regles(x.campagne.regles);
-      modifier((y) => avecTalentDemande(y, p.id, t, R));
-      emettre('message', { texte: `${p.joueur || p.nom} ${t.faire === 'retirer' ? 'oublie' : 'apprend'} un talent depuis son écran.`, sorte: 'info' });
-    }
-    const e = d.entrainement as { profil?: Record<string, unknown> } | undefined;
-    if (e?.profil && typeof e.profil === 'object') modifier((y) => avecEntrainementRecu(y, p.id, e.profil!));
-    if (typeof d.notes === 'string' && notesJoueur(p) !== d.notes) modifier((y) => avecNotesJoueur(y, p.id, d.notes as string));
-    if (typeof d.message === 'string' && d.message.trim()) {
-      const texte = d.message.trim().slice(0, 4000);
-      modifier((y) => ajouterMessage(y, p.id, texte, null, undefined, 'joueur'));
-      emettre('message', { texte: `✉ ${p.joueur || p.nom} : ${texte.length > 90 ? `${texte.slice(0, 90)}…` : texte}`, sorte: 'info' });
+    const R = regles(x.campagne.regles);
+    const r = traiterRetour(x, p, d, R);
+    if (r.campagne !== x) { c.current = r.campagne; modifier(() => r.campagne); }
+    r.textes.forEach((texte) => emettre('message', { texte, sorte: 'info' }));
+    if (r.jet) {
+      const j = jeter(r.jet.formule, r.jet.mode, Math.random, `${p.nom} · ${r.jet.libelle}`);
+      annoncerJet(j);
+      if (r.jet.dd) emettre('message', { texte: `${p.nom}, ${r.jet.libelle} : ${verdict(j.total, r.jet.dd)}`, sorte: j.total >= r.jet.dd ? 'succes' : 'erreur' });
     }
   }), [modifier]);
 
   if (!pjs.length) return null;
   const n = jetons.filter((j) => connectes.has(j)).length;
   const nonLus = pjs.reduce((s, p) => s + nonLusMj(distants[p.id]), 0);
+  const niveaux = pjs.filter((p) => campagne && demandeNiveau(campagne, p.id)).length;
   return (
     <button className="btn btn-petit" title={nonLus ? `${nonLus} message(s) de joueurs à lire` : 'Joueurs à distance connectés'} onClick={() => emettre('naviguer', { page: 'joueurs' })}>
-      🌐 {n}/{pjs.length}{nonLus ? <b className="joueurs-badge">✉ {nonLus}</b> : null}
+      🌐 {n}/{pjs.length}{nonLus ? <b className="joueurs-badge">✉ {nonLus}</b> : null}{niveaux ? <b className="joueurs-badge">⬆ {niveaux}</b> : null}
     </button>
   );
 }

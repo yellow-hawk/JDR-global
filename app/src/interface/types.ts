@@ -21,6 +21,13 @@ export interface DefinitionModule {
   preparerCampagne?: (c: Campagne) => Campagne;
   /** Vues interactives de l'écran joueurs : scène { sorte: 'module', module: id, vue: clé } (à charger à la demande). */
   ecranJoueurs?: Record<string, ComponentType<PropsVueJoueurs>>;
+  /** Ce que le module sait montrer sur l'écran joueurs (programme de la séance) : liste, puis affichage. */
+  montrables?: {
+    titre: string;
+    lister(c: Campagne): { id: string; nom: string }[];
+    /** Affiche l'élément ; false s'il n'existe plus ou n'a rien à montrer. */
+    montrer(c: Campagne, id: string): Promise<boolean>;
+  };
 }
 
 /** Ce que reçoit une vue de module sur l'écran joueurs : ses données, et de quoi répondre au MJ. */

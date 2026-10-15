@@ -1,8 +1,8 @@
 // Fiche d'une carte : image, outils (repère, échelle, zone), infos, versions MJ / joueurs.
 import { useEffect, useRef, useState } from 'react';
 import type { Brouillard, Carte } from '../../noyau/contrat';
-import { emettre, montrerAuxJoueurs } from '../../noyau/bus';
-import { ajouterFichier, choisirFichier, lireFichier, supprimerFichier } from '../../noyau/stockage';
+import { completerScene, emettre } from '../../noyau/bus';
+import { ajouterFichier, choisirFichier, supprimerFichier } from '../../noyau/stockage';
 import { useCampagne } from '../../interface/etat';
 import { BlocMj, Champ, useUrlFichier } from '../../interface/composants';
 import { ACCEPTE, preparer } from './import';
@@ -11,10 +11,12 @@ import {
   modifierCarte, parentPossible, pixelsParCase,
 } from './logique';
 import { PanneauRepere } from './PanneauRepere';
-import { brouillardDe, compacter, imageAvecBrouillard, toutCacher, toutReveler } from './brouillard';
+import { brouillardDe, compacter, toutCacher, toutReveler } from './brouillard';
 import { CalqueBrouillard } from './CalqueBrouillard';
 import { OutilsBrouillard } from './OutilsBrouillard';
 import { Visionneuse, type Outil } from './Visionneuse';
+import { annotationPermise, annotationsDe, avecAnnotationPermise, cheminTrait, sansAnnotation, sansAnnotations } from './annotations';
+import { montrerCarte, sourceCarte } from './montrer';
 
 interface Props { carte: Carte; onOuvrir(id: string | null): void; onSupprimer(): void }
 
@@ -37,6 +39,14 @@ export function Detail({ carte: k, onOuvrir, onSupprimer }: Props) {
   const [revele, setRevele] = useState(true);
   const [taillePinceau, setTaillePinceau] = useState(5);
   const [direct, setDirect] = useState(false);
+  // Annotations des joueurs : visibles ici, effaçables ; la carte affichée suit.
+  const annotations = campagne ? annotationsDe(campagne, k.id) : [];
+  const majAnnotations = (f: (x: NonNullable<typeof campagne>) => NonNullable<typeof campagne>) => {
+    if (!campagne) return;
+    const y = f(campagne);
+    modifier(() => y);
+    completerScene(sourceCarte(k.id), { annotations: annotationsDe(y, k.id), annoter: annotationPermise(y, k.id) });
+  };
   const majBrouillard = (f: (x: Brouillard) => Brouillard) => maj((x) => ({ ...x, brouillard: f(brouillardDe(x)) }));
 
   // Écran joueurs en direct : l'image avec brouillard suit chaque changement (au plus toutes les 0,6 s).
@@ -81,10 +91,7 @@ export function Detail({ carte: k, onOuvrir, onSupprimer }: Props) {
     setVersion('mj');
   };
   const montrer = async (discret = false) => {
-    const img = k.images.joueurs ? await lireFichier(idC, k.images.joueurs) : undefined;
-    if (!img) return;
-    const image = b.actif ? await imageAvecBrouillard(img, b) : img;
-    montrerAuxJoueurs({ sorte: 'image', titre: k.nom, image });
+    if (!campagne || !(await montrerCarte(campagne, k))) return;
     if (!discret) emettre('message', { texte: `« ${k.nom} » est affichée sur l'écran joueurs${b.actif ? ' (avec le brouillard)' : ' (version joueurs)'}.`, sorte: 'succes' });
   };
 
@@ -117,6 +124,24 @@ export function Detail({ carte: k, onOuvrir, onSupprimer }: Props) {
               <button className="btn btn-petit btn-mj" onClick={() => void montrer()}>Montrer aux joueurs</button>
             </div>
           )}
+          {role === 'mj' && !lectureSeule && campagne && (
+            <div className="ligne discret cartes-annotations">
+              <label className="ligne"><input type="checkbox" checked={annotationPermise(campagne, k.id)} onChange={(e) => majAnnotations((x) => avecAnnotationPermise(x, k.id, e.target.checked))} /> Les joueurs peuvent annoter cette carte (repères, traits)</label>
+              {annotations.length > 0 && (
+                <details>
+                  <summary>Annotations des joueurs ({annotations.length})</summary>
+                  {annotations.map((a) => (
+                    <div key={a.id} className="ligne">
+                      <span style={{ color: a.couleur }}>●</span>
+                      <span style={{ flex: 1 }}>{a.sorte === 'repere' ? `📍 ${a.texte}` : '✏ trait'} · {a.auteur}</span>
+                      <button className="combat-oeil" title="Effacer" onClick={() => majAnnotations((x) => sansAnnotation(x, k.id, a.id, null))}>×</button>
+                    </div>
+                  ))}
+                  <button className="btn btn-petit" onClick={() => window.confirm('Effacer toutes les annotations de cette carte ?') && majAnnotations((x) => sansAnnotations(x, k.id))}>Tout effacer</button>
+                </details>
+              )}
+            </div>
+          )}
           {outil === 'brouillard' && (
             <OutilsBrouillard b={b} revele={revele} setRevele={setRevele} taille={taillePinceau} setTaille={setTaillePinceau}
               direct={direct} setDirect={setDirect}
@@ -142,6 +167,9 @@ export function Detail({ carte: k, onOuvrir, onSupprimer }: Props) {
             </div>
           )}
           <Visionneuse
+            dessus={annotations.map((a) => a.sorte === 'trait' && a.points
+              ? <path key={a.id} d={cheminTrait(a.points)} fill="none" stroke={a.couleur} strokeWidth={Math.max(l, h) / 250} strokeLinecap="round" pointerEvents="none" />
+              : <g key={a.id} pointerEvents="none"><circle cx={a.x} cy={a.y} r={Math.max(l, h) / 130} fill={a.couleur} stroke="#1b1308" /><text x={a.x + Math.max(l, h) / 90} y={a.y} fontSize={Math.max(l, h) / 60} fill="#fff" stroke="#1b1308" strokeWidth={Math.max(l, h) / 600} paintOrder="stroke">{a.texte}</text></g>)}
             url={url} carte={k} reperes={k.reperes} zonesEnfants={zones} outil={outil}
             pointsEchelle={points} repereActif={repere}
             onPoint={surPoint} onZone={surZone} onRepere={setRepere} onEnfant={(id) => onOuvrir(id)}

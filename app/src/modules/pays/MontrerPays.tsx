@@ -30,6 +30,11 @@ const lire = (): string[] => { try { return JSON.parse(localStorage.getItem(CLE)
 export const sectionsPays = (v: Civilisation, choix: string[]) =>
   RUBRIQUES.filter((r) => choix.includes(r.id)).map((r) => ({ titre: r.titre, texte: r.texte(v) })).filter((x) => x.texte.trim());
 
+/** Montre la fiche d'un peuple (rubriques choisies la dernière fois). */
+export function montrerPeuple(civ: Civilisation, choix: string[] = lire()): void {
+  montrerAuxJoueurs({ sorte: 'fiche', titre: civ.nom.replace(/^les /, 'Les '), sousTitre: civ.capitale ? `capitale ${civ.capitale}` : undefined, sections: sectionsPays(civ, choix) });
+}
+
 export function MontrerPays({ civ, onFermer }: { civ: Civilisation; onFermer(): void }) {
   const [choix, setChoix] = useState<string[]>(lire);
   const dispo = RUBRIQUES.filter((r) => r.texte(civ).trim());
@@ -39,7 +44,7 @@ export function MontrerPays({ civ, onFermer }: { civ: Civilisation; onFermer(): 
     try { localStorage.setItem(CLE, JSON.stringify(n)); } catch { /* navigation privée */ }
   };
   const montrer = () => {
-    montrerAuxJoueurs({ sorte: 'fiche', titre: civ.nom.replace(/^les /, 'Les '), sousTitre: civ.capitale ? `capitale ${civ.capitale}` : undefined, sections: sectionsPays(civ, choix) });
+    montrerPeuple(civ, choix);
     emettre('message', { texte: `La fiche ${civ.nom.replace(/^les /, 'des ')} est sur l’écran joueurs.`, sorte: 'succes' });
     onFermer();
   };

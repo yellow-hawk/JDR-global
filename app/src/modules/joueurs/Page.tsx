@@ -7,7 +7,9 @@ import { useCampagne } from '../../interface/etat';
 import { useUrlFichier } from '../../interface/composants';
 import { assurerSalon } from '../../interface/Tablettes';
 import './joueurs.css';
-import { ajouterMessage, avecDroitsEntrainement, avecDroitsTalents, avecEntrainement, avecJeton, distantsDe, droitsEntrainement, droitsTalents, entrainementActif, lienJoueur, marquerLusMj, type MessagePrive, nonLusMj, notesJoueur, retirerMessage } from './logique';
+import { ajouterMessage, avecEntrainement, avecJeton, distantsDe, entrainementActif, lienJoueur, marquerLusMj, type MessagePrive, nonLusMj, notesJoueur, retirerMessage } from './logique';
+import { DemandeJets, JournalGroupe, NiveauAValider, Reglages } from './PanneauxMj';
+import { regles } from '../../noyau/regles';
 
 function Vignette({ idCampagne, image }: { idCampagne: string; image?: string | null }) {
   const url = useUrlFichier(idCampagne, image ?? null);
@@ -17,6 +19,7 @@ function Vignette({ idCampagne, image }: { idCampagne: string; image?: string | 
 export function Page() {
   const { campagne, role, modifier } = useCampagne();
   const c = campagne!;
+  const R = regles(c.campagne.regles);
   const [infos, setInfos] = useState<InfosRelais | null | undefined>(undefined);
   const [salon, setSalon] = useState<string | null>(salonReseau());
   const [connectes, setConnectes] = useState<Set<string>>(new Set());
@@ -84,18 +87,9 @@ export function Page() {
         )}
       </section>
 
-      {pjs.length > 0 && (
-        <section className="carte-ui pile">
-          <strong>Arbre de talents</strong>
-          <p className="discret" style={{ margin: 0 }}>Chaque joueur a un onglet « Talents » : il explore ses arbres et voit ce qui est disponible, verrouillé ou appris. Tu vérifies tout : un talent n’est appris que s’il est vraiment disponible (niveau, prérequis, points).</p>
-          <label className="ligne"><input type="checkbox" checked={droitsTalents(c).developper} onChange={(e) => modifier((x) => avecDroitsTalents(x, { developper: e.target.checked }))} /> Les joueurs dépensent eux-mêmes leurs points de talent</label>
-          <label className="ligne"><input type="checkbox" checked={droitsTalents(c).retirer} onChange={(e) => modifier((x) => avecDroitsTalents(x, { retirer: e.target.checked }))} /> … et peuvent oublier un talent (points rendus)</label>
-          <strong>Zone d’entraînement à la magie</strong>
-          <p className="discret" style={{ margin: 0 }}>Les joueurs dont le personnage trace des sorts ont un onglet « Entraînement » : tracé libre avec lecture et effet 3D, leçons, défis chronométrés sur les sorts de leur grimoire, calibrage de leur main. Records et calibrage sont toujours gardés.</p>
-          <label className="ligne"><input type="checkbox" checked={droitsEntrainement(c).lecons} onChange={(e) => modifier((x) => avecDroitsEntrainement(x, { lecons: e.target.checked }))} /> Une leçon réussie apprend son signe au personnage</label>
-          <label className="ligne"><input type="checkbox" checked={droitsEntrainement(c).grimoire} onChange={(e) => modifier((x) => avecDroitsEntrainement(x, { grimoire: e.target.checked }))} /> Les joueurs peuvent inscrire ou retirer des sorts de leur grimoire</label>
-        </section>
-      )}
+      {pjs.length > 0 && <Reglages c={c} modifier={modifier} />}
+      {pjs.length > 0 && <DemandeJets c={c} pjs={pjs.filter((p) => distants[p.id])} R={R} modifier={modifier} />}
+      {pjs.length > 0 && <JournalGroupe c={c} modifier={modifier} />}
       {pjs.length === 0 && <div className="vide">Aucun personnage joueur dans la campagne.</div>}
       {pjs.length > 1 && (
         <section className="carte-ui pile">
@@ -146,6 +140,7 @@ export function Page() {
                     <span style={{ flex: 1 }} />
                     <button className="btn btn-petit btn-mj" disabled={!(brouillons[p.id] ?? '').trim() && !image[p.id]} onClick={() => envoyer(p.id)}>Envoyer à {p.nom}</button>
                   </div>
+                  <NiveauAValider c={c} p={p} R={R} modifier={modifier} />
                   <label className="ligne discret"><input type="checkbox" checked={entrainementActif(c, p)} onChange={(e) => modifier((x) => avecEntrainement(x, p.id, e.target.checked))} /> Zone d’entraînement à la magie</label>
                   {notesJoueur(p) && <details><summary>Ses notes</summary><p className="joueurs-notes">{notesJoueur(p)}</p></details>}
                 </>

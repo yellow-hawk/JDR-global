@@ -20,3 +20,5 @@ API publique : `definition`, `TYPES_CARTE`, `libelleType`, `ajouterCarte`, `pixe
 ## Brouillard de guerre
 
 `brouillard.ts` (traits révéler / cacher en pixels de l'image, `ajouterTrait`, `toutReveler`, `toutCacher`, `compacter`, `dessinerMasque`, `imageAvecBrouillard`), `CalqueBrouillard.tsx` (canevas sur la visionneuse : voilé pour le MJ, opaque en aperçu joueurs, pinceau), `OutilsBrouillard.tsx`. « Montrer aux joueurs » envoie l'image avec le brouillard ; « Écran joueurs en direct » la met à jour à chaque coup de pinceau. Données : `carte.brouillard`.
+
+Carte d'exploration partagée : `montrer.ts` (`montrerCarte`, source `carte:<id>`, vue `carte`), `joueurs/Carte.tsx` (zoom, repère nommé, trait, gomme sur les siens), `annotations.ts` (pur, testé : `modules.cartes.annotations`, `annoter`), `SuiviAnnotations.tsx` (en-tête MJ : range les annotations de la carte affichée et les renvoie par `completerScene`). Fiche de la carte : annotations visibles, effaçables, permission par carte. `montrables` : programme de la séance.

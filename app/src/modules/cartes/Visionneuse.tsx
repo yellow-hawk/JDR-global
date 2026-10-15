@@ -20,6 +20,8 @@ interface Props {
   onEnfant(id: string): void;
   /** Calque posé par-dessus (brouillard de guerre). */
   calque?: ReactNode;
+  /** Éléments SVG dessinés dans le repère de l'image (annotations des joueurs). */
+  dessus?: ReactNode;
 }
 
 export function Visionneuse(p: Props) {
@@ -80,6 +82,7 @@ export function Visionneuse(p: Props) {
             {p.pointsEchelle.length === 2 && (
               <line className="cartes-ligne" x1={p.pointsEchelle[0][0]} y1={p.pointsEchelle[0][1]} x2={p.pointsEchelle[1][0]} y2={p.pointsEchelle[1][1]} strokeWidth={rayon * 0.4} />
             )}
+            {p.dessus}
             {trace && (
               <rect className="cartes-trace" x={Math.min(trace[0], trace[2])} y={Math.min(trace[1], trace[3])}
                 width={Math.abs(trace[2] - trace[0])} height={Math.abs(trace[3] - trace[1])} strokeWidth={rayon * 0.3} />

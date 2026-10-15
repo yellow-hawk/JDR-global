@@ -1,0 +1,13 @@
+/* Vue « carte » de l'écran joueurs : carte zoomable et annotations de la table */
+.carte-joueurs { position: absolute; inset: 0; display: flex; flex-direction: column; background: #0d0b08; color: #ece3d2; }
+.carte-outils { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; padding: 8px 12px; padding-right: 140px; font-size: clamp(0.95rem, 1.4vw, 1.2rem); }
+.carte-outils .btn[aria-pressed='true'] { background: #d4a050; color: #17130e; border-color: #d4a050; }
+.carte-couleur { width: 26px; height: 26px; border-radius: 50%; border: 2px solid #3a3020; cursor: pointer; }
+.carte-couleur[aria-pressed='true'] { border-color: #fff; box-shadow: 0 0 0 2px #d4a050; }
+.carte-aide { color: #a8987d; }
+.carte-zone { position: relative; flex: 1; min-height: 0; }
+.carte-svg { touch-action: none; }
+.carte-svg.outil-repere, .carte-svg.outil-trait { cursor: crosshair; }
+.carte-annotation.effacable { cursor: pointer; opacity: 0.85; }
+.carte-annotation.effacable:hover { opacity: 0.5; }
+@media (max-width: 640px) { .carte-outils { padding-right: 12px; } }

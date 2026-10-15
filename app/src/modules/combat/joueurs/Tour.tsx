@@ -5,6 +5,7 @@
 import { Suspense, useEffect, useMemo, useRef, useState, type PointerEvent } from 'react';
 import type { PropsVueJoueurs } from '../../../interface/types';
 import { Zoomable } from '../../../interface/Zoomable';
+import { alerterJoueur } from '../../../interface/alerteJoueur';
 import { VueEffet, VueTrace } from '../../magie';
 import { caseVisee, casesDeZone, coteCaseImage, versImage, zoneVisee } from '../actions';
 import { cle, distance, type Cellule, type Gabarit } from '../moteur';
@@ -35,6 +36,8 @@ export default function Tour({ donnees, envoyer, moi }: PropsVueJoueurs) {
   // Nouveau tour, ou la table a changé après une action : on repart de zéro.
   const signature = o ? `${o.id}|${o.jeton.x},${o.jeton.y}|${o.actionFaite}|${o.reste}` : '';
   useEffect(() => { setMode({ sorte: 'regarder' }); setVise(null); setAttente(false); }, [signature]);
+  // Son tour arrive : son, vibration, et bandeau s'il regarde un autre onglet.
+  useEffect(() => { if (monTour && o) alerterJoueur(`C’est ton tour, ${o.jeton.nom} !`); }, [monTour, o?.id]); // eslint-disable-line react-hooks/exhaustive-deps
   // Réponse du MJ (refus, résultat) : le joueur peut recommencer.
   useEffect(() => { if (d.reponse) setAttente(false); }, [d.reponse?.n]); // eslint-disable-line react-hooks/exhaustive-deps
   // Sort tout juste tracé : on le vise directement.

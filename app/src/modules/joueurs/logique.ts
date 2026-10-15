@@ -10,8 +10,14 @@ import { appliquerEntrainement, aUneMagie, DROITS_PAR_DEFAUT, magieDepuisProfil,
 
 /** `de` : 'joueur' pour un message écrit par le joueur au MJ (sinon, du MJ au joueur). */
 export interface MessagePrive { id: string; quand: string; texte: string; image?: string | null; de?: 'joueur' }
-/** `luMj` : nombre de messages du joueur déjà vus par le MJ ; `sansEntrainement` : pas de zone d'entraînement. */
-export interface Distant { jeton: string; messages: MessagePrive[]; luMj?: number; sansEntrainement?: boolean }
+/**
+ * `luMj` : nombre de messages du joueur déjà vus par le MJ ; `sansEntrainement` : pas de zone d'entraînement ;
+ * `jets` : jets demandés par le MJ ; `niveau` : montée de niveau proposée par le joueur, en attente.
+ */
+export interface Distant {
+  jeton: string; messages: MessagePrive[]; luMj?: number; sansEntrainement?: boolean;
+  jets?: import('./actions').DemandeJet[]; niveau?: import('./actions').DemandeNiveau | null;
+}
 
 export const distantsDe = (c: Campagne): Record<string, Distant> =>
   ((c.modules?.joueurs as { distants?: Record<string, Distant> } | undefined)?.distants) ?? {};

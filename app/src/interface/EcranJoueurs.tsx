@@ -51,6 +51,7 @@ export function EcranJoueurs() {
     jet: (j) => { setJet(j); setJets((l) => [j, ...l].slice(0, 6)); },
     historique: (h) => setJets(h.filter((j) => !j.qui?.endsWith('caché')).slice(0, 6)),
     bandeau: setBandeau,
+    complement: (d) => setScene((s) => (s.sorte === 'module' ? { ...s, donnees: { ...s.donnees, ...d } } : s)),
     prive: (d) => setPrive((x) => ({ ...x, ...(d as DonneesPrivees) })),
     refuse: () => setRefuse(true),
   }), []);
@@ -148,11 +149,12 @@ export function EcranJoueurs() {
           {jets.slice(0, 5).map((j, i) => <li key={j.id + i}><strong>{j.total}</strong>{texteJet(j).replace(/ = -?\d+$/, '')}</li>)}
         </ol>
       )}
-      {jet && <Suspense fallback={null}><Des3D key={jet.id} jet={jet} /></Suspense>}
       <button className="btn btn-petit ecran-plein" onClick={pleinEcran}>Plein écran</button>
     </div>
   );
+  // Dés en 3D : par-dessus tout, même les onglets d'un joueur à distance.
+  const des = jet ? <Suspense fallback={null}><Des3D key={jet.id} jet={jet} /></Suspense> : null;
   if (refuse) return <div className="ecran ecran-refuse"><p>Ce lien n’est plus valide : le maître du jeu en a créé un nouveau. Demande-lui ton nouveau lien.</p></div>;
   // Joueur à distance : une nouvelle chose à l'écran (pas une simple mise à jour) ne doit pas rester cachée sous un onglet.
-  return distant ? <EcranDistant prive={prive} nouveaute={{ cle: cleScene(scene), titre: libelleScene(scene) }}>{ecran}</EcranDistant> : ecran;
+  return distant ? <EcranDistant prive={prive} nouveaute={{ cle: cleScene(scene), titre: libelleScene(scene) }} pardessus={des}>{ecran}</EcranDistant> : <>{ecran}{des}</>;
 }

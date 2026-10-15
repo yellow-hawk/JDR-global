@@ -6,6 +6,7 @@ import { Icone, Toasts } from './composants';
 import { BoutonDes } from './des';
 import { CommandeEcran, montrerAttente } from './EcranAttente';
 import { rouvrirSalon, Tablettes } from './Tablettes';
+import { Programme } from './Programme';
 import { MODULES, moduleParId } from './registre';
 
 type Theme = 'auto' | 'clair' | 'sombre';
@@ -81,6 +82,7 @@ export function Coquille() {
             Écran joueurs
           </button>
           {role === 'mj' && <Tablettes />}
+          {campagne && role === 'mj' && <Programme />}
           {campagne && role === 'mj' && <CommandeEcran />}
           <button className="btn btn-petit" onClick={() => setTheme(suivant)} title={`Passer en ${THEMES[suivant].toLowerCase()}`}>
             {THEMES[theme]}

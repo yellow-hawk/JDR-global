@@ -75,6 +75,8 @@ type MessageEcran = (
   | { type: 'jet'; jet: JetDes }
   | { type: 'historique'; jets: JetDes[] }
   | { type: 'bandeau'; texte: string | null }
+  /** Complète les données de la vue de module affichée (annotations d'une carte…) sans renvoyer ses images. */
+  | { type: 'complement'; donnees: Record<string, unknown> }
   /** `attend` : joueur à distance qui n'a pas encore reçu sa fiche (le MJ la renvoie). */
   | { type: 'bonjour'; qui?: string; attend?: boolean }
   /** Du relais vers un ancien lien : le MJ a changé le lien de ce joueur. */
@@ -252,6 +254,17 @@ export function libelleScene(s: Scene): string {
 }
 
 /** Côté MJ : petit bandeau permanent sur l'écran joueurs (ex. date du monde). null = le retirer. */
+/**
+ * Côté MJ : met à jour quelques données de la vue de module affichée (scène `module`), sans renvoyer le reste
+ * (une image de carte reste où elle est ; seules les annotations partent). Ignoré si une autre source a l'écran.
+ */
+export function completerScene(source: string, donnees: Record<string, unknown>): void {
+  if (sourceCourante !== source || sceneCourante.sorte !== 'module') return;
+  const propres = sansSecrets(donnees);
+  sceneCourante = { ...sceneCourante, donnees: { ...sceneCourante.donnees, ...propres } };
+  diffuser({ type: 'complement', donnees: propres });
+}
+
 export function montrerBandeau(texte: string | null): void {
   bandeauCourant = texte;
   diffuser({ type: 'bandeau', texte });
@@ -287,6 +300,8 @@ export interface RecepteurEcran {
   jet?(j: JetDes): void;
   historique?(h: JetDes[]): void;
   bandeau?(t: string | null): void;
+  /** Données ajoutées à la vue de module affichée (voir completerScene). */
+  complement?(d: Record<string, unknown>): void;
   /** Joueur à distance : ce que le MJ lui envoie à lui seul (fiche, messages). */
   prive?(d: Record<string, unknown>): void;
   /** Joueur à distance : son lien a été remplacé par le MJ (l'écran ne reçoit plus rien). */
@@ -315,6 +330,7 @@ export function recevoirEcran(r: RecepteurEcran): () => void {
     else if (m.type === 'jet') r.jet?.(m.jet as JetDes);
     else if (m.type === 'historique') r.historique?.(m.jets as JetDes[]);
     else if (m.type === 'bandeau') r.bandeau?.(m.texte as string | null);
+    else if (m.type === 'complement') r.complement?.((m.donnees ?? {}) as Record<string, unknown>);
     else if (m.type === 'prive') { recuPrive = true; r.prive?.((m.donnees ?? {}) as Record<string, unknown>); }
   }));
   const bonjour = () => {

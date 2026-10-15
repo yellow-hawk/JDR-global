@@ -2,6 +2,10 @@ import { lazy } from 'react';
 import type { DefinitionModule } from '../../interface/types';
 import { Synchro } from './Synchro';
 const Page = lazy(() => import('./Page').then((x) => ({ default: x.Page })));
+// Onglets de l'écran d'un joueur à distance (voir interface/EcranDistant) : dés, sac, journal du groupe.
+const Des = lazy(() => import('./vues/Des'));
+const Sac = lazy(() => import('./vues/Sac'));
+const Groupe = lazy(() => import('./vues/Groupe'));
 
 export const definition: DefinitionModule = {
   id: 'joueurs', nom: 'Joueurs', etat: 'pret', besoinCampagne: true, dansMenu: true,
@@ -9,4 +13,5 @@ export const definition: DefinitionModule = {
   Page,
   // En-tête : synchronisation des joueurs à distance (fiches, messages, notes) et indicateur des connectés.
   enTete: Synchro,
+  ecranJoueurs: { des: Des, inventaire: Sac, groupe: Groupe },
 };

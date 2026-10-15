@@ -29,3 +29,5 @@ Règle : une page de module lit `vue` pour afficher et appelle `modifier()` pour
 - `graphe/svg.ts` : `svgArbre(racine, horizontal)` (organigramme en SVG autonome).
 - `types.ts` : `DefinitionModule.ecranJoueurs`, `PropsVueJoueurs { donnees, titre?, envoyer }`.
 - `EcranDistant.tsx` : écran d'un joueur à distance (`?joueur=`) : onglets Table / Ma fiche (lecture seule, notes envoyées au MJ) / onglets des modules (`ONGLETS_MODULES` : Talents → `personnages.talents`, Entraînement → `magie.entrainement`, présents si le MJ envoie leurs données) / Messages (échange avec le MJ). Une nouvelle scène (clé `cleScene` dans `EcranJoueurs`) ramène à la Table, ou affiche un bandeau « Voir » si le joueur écrit ou est dans un onglet de module.
+
+Programme de la séance : `Programme.tsx` (en-tête : 🎬, liste, « ▶ » suivant, Alt+N) et `programmeSeance.ts` (pur, testé : `modules.programme`). Chaque module déclare `montrables` (`DefinitionModule`). `alerteJoueur.ts` : `alerterJoueur` (son, vibration, titre) / `surAlerteJoueur` (bandeau de l'écran distant). Écran distant : onglets Dés, Sac, Talents, Niveau, Groupe, Entraînement ; dés 3D par-dessus les onglets (`pardessus`).

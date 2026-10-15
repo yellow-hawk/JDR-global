@@ -119,3 +119,4 @@
 /* Arbre de talents sur l'écran d'un joueur */
 .talents-joueur { padding: 12px 16px; color: var(--encre); }
 .talents-joueur-vide { padding: 16px; }
+.vue-niveau { padding: 14px 16px; max-width: 760px; margin: 0 auto; color: var(--encre); }
