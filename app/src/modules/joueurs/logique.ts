@@ -4,6 +4,7 @@ import type { Campagne, Personnage } from '../../noyau/contrat';
 import { nouvelId } from '../../noyau/contrat';
 import type { SystemeRegles } from '../../noyau/regles';
 import { aUneFiche, lireStat } from '../../noyau/regles';
+import { acquerir, arbresPour, retirer } from '../../noyau/talents';
 import { FICHE_CSS, ficheCorpsHtml } from '../personnages';
 import { appliquerEntrainement, aUneMagie, DROITS_PAR_DEFAUT, magieDepuisProfil, profilDe, type DroitsEntrainement } from '../magie';
 
@@ -72,6 +73,32 @@ export function avecEntrainementRecu(c: Campagne, persoId: string, recu: Record<
   const magie = magieDepuisProfil(profil);
   if (JSON.stringify(magie) === JSON.stringify(magieDepuisProfil(profilDe(p)))) return c;
   return { ...c, personnages: c.personnages.map((x) => (x.id === persoId ? { ...x, magie } : x)) };
+}
+
+/* ---------- arbre de talents ---------- */
+
+/** Ce que le MJ permet : développer son arbre lui-même, et oublier un talent. `modules.joueurs.talents`. */
+export interface DroitsTalents { developper: boolean; retirer: boolean }
+export const droitsTalents = (c: Campagne): DroitsTalents =>
+  ({ developper: true, retirer: false, ...((c.modules?.joueurs as { talents?: Partial<DroitsTalents> } | undefined)?.talents ?? {}) });
+export const avecDroitsTalents = (c: Campagne, d: Partial<DroitsTalents>): Campagne =>
+  ({ ...c, modules: { ...c.modules, joueurs: { ...c.modules?.joueurs, talents: { ...droitsTalents(c), ...d } } } });
+
+/** Arbre de talents envoyé au joueur : sa progression seulement (rien d'autre de la fiche ni du MJ). */
+export function talentsDuJoueur(c: Campagne, p: Personnage, R: SystemeRegles) {
+  if (!aUneFiche(R)) return null;
+  const perso = { id: p.id, nom: p.nom, sorte: p.sorte, fiche: { progression: p.fiche?.progression ?? {} }, combat: { stats: { niveau: p.combat.stats.niveau } } };
+  return { perso, arbres: arbresPour(p), parNiveau: R.talents.pointsParNiveau, droits: droitsTalents(c) };
+}
+
+/** Demande du joueur (apprendre ou oublier un talent) : appliquée seulement si permise et si les règles l'acceptent. */
+export function avecTalentDemande(c: Campagne, persoId: string, d: { faire?: unknown; id?: unknown }, R: SystemeRegles): Campagne {
+  const p = c.personnages.find((x) => x.id === persoId), droits = droitsTalents(c);
+  if (!p || !aUneFiche(R) || typeof d.id !== 'string') return c;
+  let q = p;
+  if (d.faire === 'acquerir' && droits.developper) q = acquerir(p, d.id, R.talents.pointsParNiveau);
+  else if (d.faire === 'retirer' && droits.retirer) q = retirer(p, d.id);
+  return q === p ? c : { ...c, personnages: c.personnages.map((x) => (x.id === persoId ? q : x)) };
 }
 
 /** Lien personnel d'un joueur. `base` : adresse publique (tunnel) ou locale, sans « / » final. */

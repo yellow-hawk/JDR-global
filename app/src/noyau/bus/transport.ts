@@ -36,9 +36,31 @@ async function blobEnBase64(b: Blob): Promise<string> {
   return `data:${b.type || 'application/octet-stream'};base64,${btoa(bin)}`;
 }
 
-/** Copie prête pour JSON : chaque Blob devient { __blob: adresse data: }. */
+/** Au-delà, une image est allégée avant de partir par le réseau (le second écran local la reçoit telle quelle). */
+export const IMAGE_LOURDE = 4 * 1024 * 1024;
+const COTE_MAX = 4096;
+
+/**
+ * Grande image (carte importée, PDF rendu) → JPEG d'au plus 4096 px de côté : elle passe par le relais et par
+ * Internet sans dépasser les limites, et arrive vite. En cas d'échec, l'image d'origine part telle quelle.
+ */
+export async function alleger(b: Blob): Promise<Blob> {
+  if (b.size <= IMAGE_LOURDE || !b.type.startsWith('image/') || b.type.includes('svg') || typeof createImageBitmap === 'undefined' || typeof document === 'undefined') return b;
+  try {
+    const bmp = await createImageBitmap(b);
+    const k = Math.min(1, COTE_MAX / Math.max(bmp.width, bmp.height));
+    const c = document.createElement('canvas');
+    c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+    c.getContext('2d')!.drawImage(bmp, 0, 0, c.width, c.height);
+    bmp.close();
+    const j = await new Promise<Blob | null>((ok) => c.toBlob(ok, 'image/jpeg', 0.85));
+    return j && j.size < b.size ? j : b;
+  } catch { return b; }
+}
+
+/** Copie prête pour JSON : chaque Blob devient { __blob: adresse data: } (grandes images allégées). */
 export async function versReseau(v: unknown): Promise<unknown> {
-  if (typeof Blob !== 'undefined' && v instanceof Blob) return { __blob: await blobEnBase64(v) };
+  if (typeof Blob !== 'undefined' && v instanceof Blob) return { __blob: await blobEnBase64(await alleger(v)) };
   if (Array.isArray(v)) return Promise.all(v.map(versReseau));
   if (v && typeof v === 'object') {
     const o: Record<string, unknown> = {};
@@ -114,7 +136,8 @@ export function liaisonReseau(salons: string | string[], qui: string, base = '')
     envoyer: (m, salon = liste[0]) => {
       file = file.then(async () => {
         const corps = JSON.stringify(await versReseau(m));
-        await fetch(`${base}relais/envoi?salon=${encodeURIComponent(salon)}&qui=${encodeURIComponent(qui)}`, { method: 'POST', body: corps, headers: { 'Content-Type': 'application/json' } }).catch(() => undefined);
+        const r = await fetch(`${base}relais/envoi?salon=${encodeURIComponent(salon)}&qui=${encodeURIComponent(qui)}`, { method: 'POST', body: corps, headers: { 'Content-Type': 'application/json' } }).catch(() => null);
+        if (r && !r.ok) console.warn(`Écran joueurs : envoi refusé par le relais (${r.status}, ${Math.round(corps.length / 1048576)} Mo).`);
       });
     },
     ecouter: (f) => { ecouteurs.add(f); return () => { ecouteurs.delete(f); }; },

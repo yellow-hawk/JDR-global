@@ -13,7 +13,7 @@ const CIBLES: Record<string, string> = {
   ca: 'CA', attaque: 'attaque', degats: 'dégâts', initiative: 'initiative', vitesse: 'vitesse (cases)', pvParNiveau: 'PV par niveau',
   dd: 'DD des sorts', 'attaque.sort': 'attaque de sort', 'degats.sort': 'dégâts des sorts',
 };
-const texteEffet = (c: string, v: number) => `${v >= 0 ? '+' : ''}${v} ${CIBLES[c] ?? c.replace('competence.', '').replace('sauvegarde.', 'sauv. ').replace('carac.', '').toUpperCase()}`;
+export const texteEffet = (c: string, v: number) => `${v >= 0 ? '+' : ''}${v} ${CIBLES[c] ?? c.replace('competence.', '').replace('sauvegarde.', 'sauv. ').replace('carac.', '').toUpperCase()}`;
 
 export function Talents({ p, R, role, lectureSeule, maj }: PropsOnglet & { R: SystemeAvecFiche }) {
   const parNiveau = R.talents.pointsParNiveau;

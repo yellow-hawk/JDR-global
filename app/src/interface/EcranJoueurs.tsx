@@ -4,7 +4,7 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { EcranDistant, type DonneesPrivees } from './EcranDistant';
 import type { Scene } from '../noyau/bus';
-import { envoyerAuMj, recevoirEcran } from '../noyau/bus';
+import { envoyerAuMj, libelleScene, recevoirEcran } from '../noyau/bus';
 import { moduleParId } from './registre';
 import { Zoomable } from './Zoomable';
 import { SvgZoomable } from './SvgZoomable';
@@ -22,6 +22,19 @@ function useUrlBlob(b: Blob | null | undefined): string | null {
     return () => URL.revokeObjectURL(u);
   }, [b]);
   return url;
+}
+
+/**
+ * Ce qui distingue une nouvelle chose montrée d'une simple mise à jour : une vue de module (combat) ou un personnage
+ * en direct gardent la même clé ; un texte, une fiche, une image ou un document changent de clé avec leur contenu.
+ */
+function cleScene(s: Scene): string {
+  if (s.sorte === 'module') return `module|${s.module}|${s.vue}`;
+  if (s.sorte === 'personnage') return `perso|${s.nom}`;
+  if (s.sorte === 'texte') return `texte|${s.titre}|${s.texte}`;
+  if (s.sorte === 'fiche') return `fiche|${s.titre}|${s.sections.map((x) => x.texte).join('|')}`;
+  if (s.sorte === 'image' || s.sorte === 'document') return `${s.sorte}|${s.titre}|${s.image?.size ?? ''}|${s.sorte === 'document' ? s.texte ?? '' : ''}`;
+  return `${s.sorte}|${libelleScene(s)}`;
 }
 
 export function EcranJoueurs() {
@@ -140,5 +153,6 @@ export function EcranJoueurs() {
     </div>
   );
   if (refuse) return <div className="ecran ecran-refuse"><p>Ce lien n’est plus valide : le maître du jeu en a créé un nouveau. Demande-lui ton nouveau lien.</p></div>;
-  return distant ? <EcranDistant prive={prive}>{ecran}</EcranDistant> : ecran;
+  // Joueur à distance : une nouvelle chose à l'écran (pas une simple mise à jour) ne doit pas rester cachée sous un onglet.
+  return distant ? <EcranDistant prive={prive} nouveaute={{ cle: cleScene(scene), titre: libelleScene(scene) }}>{ecran}</EcranDistant> : ecran;
 }

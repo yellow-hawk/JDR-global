@@ -116,3 +116,6 @@
 .talents-choisi circle, .talents-choisi rect { stroke: var(--encre) !important; stroke-width: 4; }
 @keyframes talents-lueur { 50% { filter: drop-shadow(0 0 6px var(--accent)); } }
 @media (max-width: 900px) { .talents-disposition { grid-template-columns: 1fr; } }
+/* Arbre de talents sur l'écran d'un joueur */
+.talents-joueur { padding: 12px 16px; color: var(--encre); }
+.talents-joueur-vide { padding: 16px; }

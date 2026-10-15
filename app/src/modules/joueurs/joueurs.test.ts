@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { nouvelleCampagne, nouveauPersonnage, type Campagne } from '../../noyau/contrat';
+import { nouvelleCampagne, nouveauPersonnage, type Campagne, type Personnage } from '../../noyau/contrat';
 import { regles } from '../../noyau/regles';
-import { avecEntrainement, avecEntrainementRecu, droitsEntrainement, entrainementActif } from './logique';
-import { ajouterMessage, avecJeton, avecNotesJoueur, distantsDe, ficheDuJoueur, lienJoueur, marquerLusMj, nonLusMj, notesJoueur, persoDuJeton, retirerMessage } from './logique';
+import { arbresPour, etatTalent } from '../../noyau/talents';
+import { ajouterMessage, avecDroitsTalents, avecEntrainement, avecEntrainementRecu, avecJeton, avecNotesJoueur, avecTalentDemande, distantsDe, droitsEntrainement, entrainementActif, ficheDuJoueur, lienJoueur, marquerLusMj, nonLusMj, notesJoueur, persoDuJeton, retirerMessage, talentsDuJoueur } from './logique';
 
 const R = regles('dnd5e');
 
@@ -44,6 +44,23 @@ describe('joueurs à distance', () => {
     c = avecEntrainement(c, p.id, false);
     expect(entrainementActif(c, c.personnages[0])).toBe(false);
     expect(avecEntrainementRecu(c, p.id, { defis: { y: { score: 50, temps: 1, date: 1 } } })).toBe(c);
+  });
+
+  it('arbre de talents : le joueur apprend un talent disponible, seulement si permis', () => {
+    const p = { ...nouveauPersonnage('Brune', 'pj', 'dnd5e', R.statsParDefaut()), mj: { notes: 'secret' }, fiche: { progression: { classes: [{ id: 'guerrier', niveau: 3 }], talents: [] } } } as unknown as Personnage;
+    let c: Campagne = { ...nouvelleCampagne('T'), personnages: [p] };
+    const t = talentsDuJoueur(c, p, R)!;
+    expect(JSON.stringify(t)).not.toContain('secret');
+    const libre = arbresPour(p).flatMap((a) => a.branches.flatMap((b) => b.noeuds)).find((n) => etatTalent(p, n, t.parNiveau).etat === 'disponible')!;
+    const bloque = arbresPour(p).flatMap((a) => a.branches.flatMap((b) => b.noeuds)).find((n) => etatTalent(p, n, t.parNiveau).etat === 'verrouille')!;
+    expect(avecTalentDemande(c, p.id, { faire: 'acquerir', id: bloque.id }, R)).toBe(c);
+    c = avecTalentDemande(c, p.id, { faire: 'acquerir', id: libre.id }, R);
+    expect(c.personnages[0].fiche?.progression?.talents).toEqual([libre.id]);
+    expect(avecTalentDemande(c, p.id, { faire: 'retirer', id: libre.id }, R)).toBe(c); // oublier : pas permis par défaut
+    c = avecDroitsTalents(c, { retirer: true });
+    expect(avecTalentDemande(c, p.id, { faire: 'retirer', id: libre.id }, R).personnages[0].fiche?.progression?.talents).toEqual([]);
+    c = avecDroitsTalents(c, { developper: false });
+    expect(avecTalentDemande(c, p.id, { faire: 'acquerir', id: libre.id }, R)).toBe(c);
   });
 
   it('la fiche envoyée au joueur ne contient rien du MJ', () => {

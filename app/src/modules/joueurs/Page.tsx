@@ -6,8 +6,8 @@ import { ajouterFichier, choisirFichier } from '../../noyau/stockage';
 import { useCampagne } from '../../interface/etat';
 import { useUrlFichier } from '../../interface/composants';
 import { assurerSalon } from '../../interface/Tablettes';
-import { ajouterMessage, avecDroitsEntrainement, avecEntrainement, avecJeton, distantsDe, droitsEntrainement, entrainementActif, lienJoueur, marquerLusMj, nonLusMj, notesJoueur, retirerMessage, type MessagePrive } from './logique';
 import './joueurs.css';
+import { ajouterMessage, avecDroitsEntrainement, avecDroitsTalents, avecEntrainement, avecJeton, distantsDe, droitsEntrainement, droitsTalents, entrainementActif, lienJoueur, marquerLusMj, type MessagePrive, nonLusMj, notesJoueur, retirerMessage } from './logique';
 
 function Vignette({ idCampagne, image }: { idCampagne: string; image?: string | null }) {
   const url = useUrlFichier(idCampagne, image ?? null);
@@ -86,6 +86,10 @@ export function Page() {
 
       {pjs.length > 0 && (
         <section className="carte-ui pile">
+          <strong>Arbre de talents</strong>
+          <p className="discret" style={{ margin: 0 }}>Chaque joueur a un onglet « Talents » : il explore ses arbres et voit ce qui est disponible, verrouillé ou appris. Tu vérifies tout : un talent n’est appris que s’il est vraiment disponible (niveau, prérequis, points).</p>
+          <label className="ligne"><input type="checkbox" checked={droitsTalents(c).developper} onChange={(e) => modifier((x) => avecDroitsTalents(x, { developper: e.target.checked }))} /> Les joueurs dépensent eux-mêmes leurs points de talent</label>
+          <label className="ligne"><input type="checkbox" checked={droitsTalents(c).retirer} onChange={(e) => modifier((x) => avecDroitsTalents(x, { retirer: e.target.checked }))} /> … et peuvent oublier un talent (points rendus)</label>
           <strong>Zone d’entraînement à la magie</strong>
           <p className="discret" style={{ margin: 0 }}>Les joueurs dont le personnage trace des sorts ont un onglet « Entraînement » : tracé libre avec lecture et effet 3D, leçons, défis chronométrés sur les sorts de leur grimoire, calibrage de leur main. Records et calibrage sont toujours gardés.</p>
           <label className="ligne"><input type="checkbox" checked={droitsEntrainement(c).lecons} onChange={(e) => modifier((x) => avecDroitsEntrainement(x, { lecons: e.target.checked }))} /> Une leçon réussie apprend son signe au personnage</label>

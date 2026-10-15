@@ -12,7 +12,15 @@ export interface DonneesPrivees {
   messages?: { id: string; quand: string; texte: string; image?: Blob | null; de?: 'joueur' }[];
   /** Zone d'entraînement (vue `entrainement` du module Magie) : son carnet et ce que le MJ permet. */
   entrainement?: Record<string, unknown> | null;
+  /** Arbre de talents (vue `talents` du module Personnages). */
+  talents?: Record<string, unknown> | null;
 }
+
+/** Onglets en plus, donnés par les modules : clé des données privées → vue de l'écran joueurs. */
+const ONGLETS_MODULES: { cle: 'talents' | 'entrainement'; titre: string; module: string; vue: string }[] = [
+  { cle: 'talents', titre: 'Talents', module: 'personnages', vue: 'talents' },
+  { cle: 'entrainement', titre: 'Entraînement', module: 'magie', vue: 'entrainement' },
+];
 
 function useUrl(b: Blob | null | undefined): string | null {
   const url = useMemo(() => (b ? URL.createObjectURL(b) : null), [b]);
@@ -24,10 +32,28 @@ function Image({ blob }: { blob?: Blob | null }) {
   return url ? <img src={url} alt="" /> : null;
 }
 
-export function EcranDistant({ prive, children }: { prive: DonneesPrivees; children: ReactNode }) {
-  const [onglet, setOnglet] = useState<'table' | 'fiche' | 'messages' | 'entrainement'>('table');
-  const VueEntrainement = prive.entrainement ? moduleParId('magie')?.ecranJoueurs?.entrainement : undefined;
-  useEffect(() => { if (onglet === 'entrainement' && !VueEntrainement) setOnglet('table'); }, [onglet, VueEntrainement]);
+/**
+ * `nouveaute` : ce que montre la table. Quand le MJ affiche autre chose (fiche de peuple, carte, document…) alors que
+ * le joueur est sur un autre onglet, on revient à la table ; s'il est en train d'écrire, de tracer ou d'explorer ses
+ * talents, un bandeau « Voir » le prévient sans l'interrompre.
+ */
+export function EcranDistant({ prive, nouveaute, children }: { prive: DonneesPrivees; nouveaute?: { cle: string; titre: string }; children: ReactNode }) {
+  const [onglet, setOnglet] = useState<string>('table');
+  // Onglets fournis par les modules, présents seulement si le MJ envoie leurs données.
+  const extras = ONGLETS_MODULES.map((o) => ({ ...o, donnees: prive[o.cle], Vue: prive[o.cle] ? moduleParId(o.module)?.ecranJoueurs?.[o.vue] : undefined })).filter((o) => o.Vue && o.donnees);
+  const extra = extras.find((o) => o.cle === onglet);
+  const [aVoir, setAVoir] = useState<string | null>(null);
+  const derniere = useRef(nouveaute?.cle);
+  useEffect(() => {
+    if (!nouveaute || nouveaute.cle === derniere.current) return;
+    derniere.current = nouveaute.cle;
+    if (onglet === 'table') return;
+    const ecrit = !!document.activeElement?.matches('textarea, input[type=text], input:not([type])');
+    if (ecrit || extras.some((o) => o.cle === onglet)) setAVoir(nouveaute.titre);
+    else setOnglet('table');
+  }, [nouveaute?.cle]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (onglet === 'table') setAVoir(null); }, [onglet]);
+  useEffect(() => { if (!['table', 'fiche', 'messages'].includes(onglet) && !extra) setOnglet('table'); }, [onglet, extra]);
   const [notes, setNotes] = useState(prive.fiche?.notes ?? '');
   const [lus, setLus] = useState(0);
   const portrait = useUrl(prive.fiche?.portrait);
@@ -54,12 +80,19 @@ export function EcranDistant({ prive, children }: { prive: DonneesPrivees; child
   return (
     <>
       <nav className="distant-onglets">
-        <button aria-pressed={onglet === 'table'} onClick={() => setOnglet('table')}>Table</button>
+        <button aria-pressed={onglet === 'table'} onClick={() => setOnglet('table')}>Table{aVoir ? <b className="distant-badge">●</b> : null}</button>
         <button aria-pressed={onglet === 'fiche'} onClick={() => setOnglet('fiche')} disabled={!prive.fiche}>{prive.fiche ? `Ma fiche : ${prive.fiche.nom}` : 'Ma fiche'}</button>
-        {VueEntrainement && <button aria-pressed={onglet === 'entrainement'} onClick={() => setOnglet('entrainement')}>Entraînement</button>}
+        {extras.map((o) => <button key={o.cle} aria-pressed={onglet === o.cle} onClick={() => setOnglet(o.cle)}>{o.titre}</button>)}
         <button aria-pressed={onglet === 'messages'} onClick={() => setOnglet('messages')}>Messages{nouveaux ? <b className="distant-badge">{nouveaux}</b> : null}</button>
       </nav>
       {children}
+      {aVoir && onglet !== 'table' && (
+        <div className="distant-avoir" role="status">
+          <span>📺 Le maître du jeu montre : <b>{aVoir}</b></span>
+          <button className="btn btn-petit btn-principal" onClick={() => setOnglet('table')}>Voir</button>
+          <button className="btn btn-petit" onClick={() => setAVoir(null)}>Plus tard</button>
+        </div>
+      )}
       {onglet === 'fiche' && prive.fiche && (
         <div className="distant-panneau distant-fiche">
           <style>{prive.fiche.css}</style>
@@ -70,10 +103,10 @@ export function EcranDistant({ prive, children }: { prive: DonneesPrivees; child
           </label>
         </div>
       )}
-      {onglet === 'entrainement' && VueEntrainement && prive.entrainement && (
-        <div className="distant-panneau distant-entrainement">
-          <Suspense fallback={<p>Ouverture de l’atelier…</p>}>
-            <VueEntrainement donnees={prive.entrainement} envoyer={(d) => envoyerAuMj('joueurs', { entrainement: d })} moi={{ distant: true, persoId: prive.persoId ?? null }} />
+      {extra?.Vue && extra.donnees && (
+        <div className={`distant-panneau distant-${extra.cle}`}>
+          <Suspense fallback={<p>Chargement…</p>}>
+            <extra.Vue donnees={extra.donnees} envoyer={(d) => envoyerAuMj('joueurs', { [extra.cle]: d })} moi={{ distant: true, persoId: prive.persoId ?? null }} />
           </Suspense>
         </div>
       )}

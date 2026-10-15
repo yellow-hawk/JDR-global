@@ -9,7 +9,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawn, spawnSync } from 'node:child_process';
 
-const LIMITE = 25 * 1024 * 1024; // une image de combat ou de carte tient largement
+const LIMITE = 60 * 1024 * 1024; // les grandes images sont allégées avant l'envoi (noyau/bus/transport.ts) ; marge de sécurité
 const MAX_SALONS = 30;
 
 /** Adresses IPv4 de l'ordinateur sur le réseau local (à taper sur la tablette). */

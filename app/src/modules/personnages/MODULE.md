@@ -46,3 +46,5 @@ API publique : `definition`, `SORTES`, `libelleSorte`, `campJoueurs`, `sceneJoue
 ## Arbres de talents en étoile
 
 `talents/disposition.ts` (pur, testé) : tronc au centre, une branche par secteur, un anneau par rang, jonctions entre les branches qu'elles relient, aucun chevauchement. `talents/VueArbreTalents.tsx` : dessin (acquis en couleur, disponibles qui brillent, verrouillés estompés ; losange = jonction, couronne = sommet ; pointillés = « au moins un »), utilisé par l'onglet Talents et l'éditeur MJ. `talents/impression.ts` : même arbre en SVG pour le livre. Les données viennent de `app/scripts/generer-talents.py`. `impression.ts` : `FICHE_CSS` + `ficheCorpsHtml` (fiche réutilisée par le livre).
+
+Écran d'un joueur à distance : vue `talents` (`joueurs/Talents.tsx`, onglet Talents) : ses arbres (`noyau/talents` avec les arbres reçus), détail, « Apprendre » / « Oublier » envoyés au MJ (module Joueurs, `avecTalentDemande`). `fiche/Talents.tsx` exporte `texteEffet`.

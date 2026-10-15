@@ -266,3 +266,5 @@ a { color: var(--accent); }
 .distant-ecrire .btn { align-self: flex-end; }
 .distant-messages article.de-moi { border-left-color: #3d6b8e; background: #f3f6f8; align-self: flex-end; }
 .distant-panneau.distant-entrainement { padding: 0; }
+.distant-panneau.distant-talents { padding: 0; background: var(--fond); }
+.distant-avoir { position: fixed; top: 50px; left: 50%; transform: translateX(-50%); z-index: 45; display: flex; gap: 10px; align-items: center; padding: 8px 14px; border-radius: 8px; background: #17130e; color: #ece3d2; border: 1px solid #d4a050; box-shadow: 0 6px 20px rgb(0 0 0 / .35); max-width: calc(100vw - 24px); flex-wrap: wrap; }
