@@ -73,7 +73,7 @@ export interface ClasseRegles {
   equipement: string[];
   aptitudes: AptitudeRegles[];
   niveauSousClasse: number;
-  sousClasses: { id: string; nom: string; aptitudes: AptitudeRegles[] }[];
+  sousClasses: { id: string; nom: string; texte?: string; aptitudes: AptitudeRegles[] }[];
   incantation?: { carac: string; type: 'complet' | 'demi' | 'pacte' };
 }
 
@@ -185,8 +185,10 @@ export interface NouveautesNiveau {
   aptitudes: AptitudeRegles[];
   /** Amélioration de caractéristiques (ou don) à ce niveau. */
   amelioration: boolean;
-  /** Choix de sous-classe à ce niveau. */
-  sousClasse: { id: string; nom: string }[] | null;
+  /** Choix de sous-classe à ce niveau (avec sa description et toutes ses aptitudes, pour choisir en connaissance). */
+  sousClasse: { id: string; nom: string; texte?: string; aptitudes: AptitudeRegles[] }[] | null;
+  /** Aptitudes gagnées à ce niveau par la sous-classe déjà choisie. */
+  aptitudesSousClasse?: AptitudeRegles[];
   deVie: number;
 }
 
@@ -197,7 +199,7 @@ export interface ProgressionRegles {
   xpAdversaire(niveau: number): number;
   /** PV gagnés : moyenne (arrondie au-dessus) ou jet du dé de vie, + modificateur de CON (minimum 1). */
   gainPv(classe: string, modCon: number, jet?: number): number;
-  nouveautes(classe: string, niveau: number): NouveautesNiveau | null;
+  nouveautes(classe: string, niveau: number, sousClasse?: string | null): NouveautesNiveau | null;
   /** Difficulté d'une rencontre : budget d'XP par personnage (facile, moyenne, difficile, mortelle) et multiplicateur selon le nombre d'adversaires. */
   difficulte?: { seuils(niveau: number): [number, number, number, number]; multiplicateur(nombre: number): number };
 }

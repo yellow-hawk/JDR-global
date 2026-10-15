@@ -34,6 +34,7 @@ function titreClignotant(titre: string): void {
 
 /** Alerte le joueur qui regarde cet écran. */
 export function alerterJoueur(titre: string): void {
+  if (typeof location !== 'undefined' && new URLSearchParams(location.search).has('miroir')) return; // copie muette chez le MJ
   carillon();
   try { navigator.vibrate?.([120, 60, 120]); } catch { /* sans vibreur */ }
   titreClignotant(titre);

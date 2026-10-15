@@ -16,6 +16,12 @@ export function Zoomable({ children, cle }: { children: ReactNode; cle?: unknown
   const depart = useRef<{ x: number; y: number } | null>(null);
   const geste = useRef<{ v: Vue; d: number; cx: number; cy: number } | null>(null);
   useEffect(() => setV(DEPART), [cle]);
+  // La molette zoome ici, jamais la page autour (écouteur non passif).
+  useEffect(() => {
+    const n = boite.current, bloquer = (e: WheelEvent) => e.preventDefault();
+    n?.addEventListener('wheel', bloquer, { passive: false });
+    return () => n?.removeEventListener('wheel', bloquer);
+  }, []);
 
   // Zoom autour d'un point de l'écran (px relatifs à la boîte).
   const zoomer = (base: Vue, facteur: number, px: number, py: number): Vue => {

@@ -1,7 +1,7 @@
 // Bus d'événements entre modules (même fenêtre) et canal vers l'écran joueurs (autre fenêtre).
 // Un module n'appelle jamais l'intérieur d'un autre : il émet ou écoute un événement.
 import { sansSecrets } from '../contrat';
-import { liaisonLocale, liaisonReseau, sansDoublons, type Liaison, autoriserJoueurs } from './transport';
+import { liaisonLocale, liaisonParent, liaisonReseau, sansDoublons, type Liaison, autoriserJoueurs } from './transport';
 export { commanderTunnel, infosRelais, type InfosRelais, type InfosTunnel } from './transport';
 import type { JetDes } from '../regles';
 
@@ -97,7 +97,9 @@ const ecouteursEcran = new Set<(e: EcranActuel) => void>();
 let bandeauCourant: string | null = null;
 const historique: JetDes[] = [];
 const ecouteursJets = new Set<(h: JetDes[]) => void>();
-const MAX_HISTORIQUE = 12;
+const MAX_HISTORIQUE = 40;
+/** Ce qu'un écran joueurs voit d'un jet : jamais le DD du MJ. */
+const publicJet = ({ dd: _dd, ...j }: JetDes): JetDes => j;
 
 /* Côté MJ : une liaison locale, plus le relais réseau (tablette de la table, joueurs à distance). Le relais suit le
    salon commun et un salon privé par joueur à distance (`<salon>.<jeton>`), sur un seul flux. */
@@ -130,7 +132,7 @@ const recuParMj = sansDoublons((m, salonSource) => {
     if (typeof m.qui === 'string' && m.qui.startsWith('reseau-')) { appareils.set(m.qui, Date.now()); ecouteursAppareils.forEach((f) => f(nbAppareils())); }
     diffuser({ type: 'scene', scene: sceneCourante });
     diffuser({ type: 'bandeau', texte: bandeauCourant });
-    diffuser({ type: 'historique', jets: historique });
+    diffuser({ type: 'historique', jets: historique.map(publicJet) });
   } else if (m.type === 'joueur' && typeof m.module === 'string') {
     ecouteursJoueurs.forEach((f) => f(m.module as string, (m.donnees ?? {}) as Record<string, unknown>, jeton));
   }
@@ -147,7 +149,21 @@ function liaisonsDuMj(): Liaison[] {
 function diffuser(m: MessageEcran): void {
   const avecId = { ...m, mid: mid() };
   for (const l of liaisonsDuMj()) l.envoyer(avecId);
+  ecouteursDiffusion.forEach((f) => f(avecId));
 }
+/* Côté MJ : copies des écrans (mur) nourries directement par la page, sans réseau. */
+const ecouteursDiffusion = new Set<(m: Record<string, unknown>) => void>();
+const ecouteursPrive = new Set<(jeton: string, m: Record<string, unknown>) => void>();
+/** Tout ce qui part vers les écrans joueurs (scènes, jets, bandeau…), au fil de l'eau. */
+export function suivreDiffusion(f: (m: Record<string, unknown>) => void): () => void { ecouteursDiffusion.add(f); return () => { ecouteursDiffusion.delete(f); }; }
+/** Ce qui part vers un joueur à distance (sa fiche, ses onglets). */
+export function suivrePrive(f: (jeton: string, m: Record<string, unknown>) => void): () => void { ecouteursPrive.add(f); return () => { ecouteursPrive.delete(f); }; }
+/** État actuel de l'écran joueurs, pour une copie qui s'ouvre. */
+export function etatEcranJoueurs(): Record<string, unknown>[] {
+  return [{ type: 'scene', scene: sceneCourante }, { type: 'bandeau', texte: bandeauCourant }, { type: 'historique', jets: historique.map(publicJet) }];
+}
+/** Demande que les données privées d'un joueur soient renvoyées (une copie de son écran vient de s'ouvrir). */
+export function demanderDonneesPrivees(jeton: string): void { ecouteursBonjourPrive.forEach((f) => f(jeton, false)); }
 
 /** (Re)branche le flux réseau sur le salon commun et les salons privés des joueurs. */
 function brancherReseau(salon: string): void {
@@ -195,6 +211,7 @@ export function definirJoueursPrives(jetons: string[]): void {
 }
 /** Côté MJ : envoie à un seul joueur à distance (sa fiche, ses messages). */
 export function envoyerPrive(jeton: string, donnees: Record<string, unknown>): void {
+  ecouteursPrive.forEach((f) => f(jeton, { type: 'prive', donnees }));
   if (!reseauMj) return;
   reseauMj.liaison.envoyer({ type: 'prive', donnees, mid: mid() } satisfies MessageEcran, `${reseauMj.salon}.${jeton}`);
 }
@@ -278,7 +295,7 @@ export const bandeauAffiche = (): string | null => bandeauCourant;
 export function annoncerJet(jet: JetDes, cache = false): void {
   historique.unshift(cache ? { ...jet, qui: `${jet.qui ? `${jet.qui} · ` : ''}caché` } : jet);
   historique.length = Math.min(historique.length, MAX_HISTORIQUE);
-  if (!cache) diffuser({ type: 'jet', jet });
+  if (!cache) diffuser({ type: 'jet', jet: publicJet(jet) });
   ecouteursJets.forEach((f) => f([...historique]));
 }
 
@@ -311,6 +328,8 @@ export interface RecepteurEcran {
 /* Côté écran joueurs : par le relais si l'adresse a un salon (?salon=…), sinon en local. Un joueur à distance
    (?joueur=<jeton>) suit aussi son salon privé : sa fiche et les messages du MJ n'arrivent qu'à lui. */
 let liaisonJoueur: Liaison | null = null;
+/** Écran ouvert en copie par le MJ (`?miroir`, mur des écrans) : il regarde, n'agit pas, ne se connecte pas. */
+export const estMiroir = (): boolean => typeof location !== 'undefined' && new URLSearchParams(location.search).has('miroir');
 let salonPrive: string | null = null;
 
 /** Côté écran joueurs : reçoit les scènes, jets et bandeaux (et, pour un joueur à distance, ce qui lui est privé). */
@@ -318,8 +337,8 @@ export function recevoirEcran(r: RecepteurEcran): () => void {
   const params = typeof location !== 'undefined' ? new URLSearchParams(location.search) : null;
   const salon = params?.get('salon') ?? null, joueur = params?.get('joueur') ?? null;
   const qui = `${salon ? 'reseau' : 'local'}-${mid()}`;
-  salonPrive = salon && joueur ? `${salon}.${joueur}` : null;
-  const l = salon ? liaisonReseau(salonPrive ? [salon, salonPrive] : [salon], qui) : liaisonLocale();
+  salonPrive = salon && joueur && !estMiroir() ? `${salon}.${joueur}` : null;
+  const l = estMiroir() ? liaisonParent() : salon ? liaisonReseau(salonPrive ? [salon, salonPrive] : [salon], qui) : liaisonLocale();
   if (!l) return () => {};
   liaisonJoueur = l;
   let recuPrive = false;
@@ -340,12 +359,13 @@ export function recevoirEcran(r: RecepteurEcran): () => void {
   // Bonjour seulement une fois le flux ouvert : sinon la fiche envoyée en réponse arriverait avant qu'on écoute.
   void (l.pret ?? Promise.resolve()).then(bonjour);
   // Par le réseau, le MJ a pu ouvrir son salon après nous : on redit bonjour de temps en temps.
-  relance = salon ? setInterval(bonjour, 8000) : undefined;
+  relance = salon && !estMiroir() ? setInterval(bonjour, 8000) : undefined;
   return () => { if (relance) clearInterval(relance); l.fermer(); if (liaisonJoueur === l) liaisonJoueur = null; };
 }
 
 /** Côté écran joueurs : réponse au MJ (vue interactive, notes du joueur) ; un joueur à distance passe par son salon privé. */
 export function envoyerAuMj(module: string, donnees: Record<string, unknown>): void {
+  if (estMiroir()) return; // une copie de l'écran ne parle jamais au nom du joueur
   liaisonJoueur?.envoyer({ type: 'joueur', module, donnees, mid: mid() }, salonPrive ?? undefined);
 }
 

@@ -151,6 +151,25 @@ export async function autoriserJoueurs(salon: string, jetons: string[]): Promise
   await fetch(`relais/autoriser?salon=${encodeURIComponent(salon)}`, { method: 'POST', body: JSON.stringify(jetons), headers: { 'Content-Type': 'application/json' } }).catch(() => undefined);
 }
 
+/**
+ * Copie d'un écran dans la page du MJ (mur des écrans) : aucune connexion au serveur (les navigateurs n'en ouvrent
+ * que 6 par adresse) ; la page qui la contient lui passe les messages (postMessage, même origine). Elle n'envoie
+ * qu'un signal « prête » pour recevoir l'état actuel.
+ */
+export function liaisonParent(): Liaison {
+  const ecouteurs = new Set<(m: Record<string, unknown>, salon?: string) => void>();
+  const recevoir = (e: MessageEvent) => {
+    if (e.source !== window.parent || e.origin !== location.origin || e.data?.type !== 'jdr-miroir-msg') return;
+    ecouteurs.forEach((f) => f(e.data.m as Record<string, unknown>));
+  };
+  window.addEventListener('message', recevoir);
+  return {
+    envoyer: (m) => { if ((m as { type?: string }).type === 'bonjour') window.parent.postMessage({ type: 'jdr-miroir-pret' }, location.origin); },
+    ecouter: (f) => { ecouteurs.add(f); return () => { ecouteurs.delete(f); }; },
+    fermer: () => window.removeEventListener('message', recevoir),
+  };
+}
+
 /** Écarte les messages déjà reçus (le même message peut arriver par deux liaisons). */
 export function sansDoublons(f: (m: Record<string, unknown>, salon?: string) => void): (m: Record<string, unknown>, salon?: string) => void {
   const vus: string[] = [];

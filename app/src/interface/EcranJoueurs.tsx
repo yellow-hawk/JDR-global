@@ -42,6 +42,14 @@ export function EcranJoueurs() {
   const [jet, setJet] = useState<JetDes | null>(null);
   const [jets, setJets] = useState<JetDes[]>([]);
   const [bandeau, setBandeau] = useState<string | null>(null);
+  // Historique des jets : visible après un jet, puis il s'efface (il gênait la vue).
+  const [histoVisible, setHistoVisible] = useState(false);
+  useEffect(() => {
+    if (!jet) return;
+    setHistoVisible(true);
+    const t = window.setTimeout(() => setHistoVisible(false), 15000);
+    return () => window.clearTimeout(t);
+  }, [jet]);
   // Joueur à distance (?joueur=…) : sa fiche et ses messages, reçus sur son salon privé.
   const distant = useMemo(() => new URLSearchParams(window.location.search).has('joueur'), []);
   const [prive, setPrive] = useState<DonneesPrivees>({});
@@ -144,7 +152,7 @@ export function EcranJoueurs() {
         </div>
       )}
       {bandeau && <div className="ecran-bandeau">{bandeau}</div>}
-      {jets.length > 0 && (
+      {jets.length > 0 && histoVisible && (
         <ol className="ecran-jets" aria-label="Derniers jets">
           {jets.slice(0, 5).map((j, i) => <li key={j.id + i}><strong>{j.total}</strong>{texteJet(j).replace(/ = -?\d+$/, '')}</li>)}
         </ol>

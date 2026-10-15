@@ -226,13 +226,15 @@ a { color: var(--accent); }
 .ecran-svg-dessin svg { display: block; }
 
 /* Écran d'un joueur à distance : onglets Table / Ma fiche / Messages */
-.distant-onglets { position: fixed; top: 0; left: 0; right: 0; z-index: 40; display: flex; gap: 4px; padding: 6px 8px; background: #17130e; border-bottom: 1px solid #3a3020; }
+.distant-onglets { position: fixed; top: 0; left: 0; right: 0; z-index: 40; display: flex; flex-wrap: wrap; gap: 4px; padding: 6px 8px; background: #17130e; border-bottom: 1px solid #3a3020; }
+.distant-plein { margin-left: auto; }
+.ecran-distant .ecran-plein { display: none; }
 .distant-onglets button { font: inherit; color: #ece3d2; background: transparent; border: 1px solid #4a3e2a; border-radius: 6px; padding: 4px 12px; cursor: pointer; }
 .distant-onglets button[aria-pressed='true'] { background: #d4a050; color: #17130e; border-color: #d4a050; }
 .distant-onglets button:disabled { opacity: 0.45; cursor: default; }
 .distant-badge { display: inline-block; margin-left: 6px; min-width: 1.4em; padding: 0 5px; border-radius: 999px; background: #c0392b; color: #fff; font-size: 0.8em; text-align: center; }
-.ecran.ecran-distant { top: 44px; }
-.distant-panneau { position: fixed; inset: 44px 0 0 0; z-index: 30; overflow-y: auto; background: #f4ecdc; color: #1f1a14; padding: 16px; }
+.ecran.ecran-distant { top: var(--distant-haut, 44px); }
+.distant-panneau { position: fixed; inset: var(--distant-haut, 44px) 0 0 0; z-index: 30; overflow-y: auto; background: #f4ecdc; color: #1f1a14; padding: 16px; }
 .distant-feuille { max-width: 210mm; margin: 0 auto; background: #fff; padding: 12mm; box-shadow: 0 0 12px rgb(0 0 0 / .2); }
 .distant-feuille .pied { display: none; }
 .distant-notes { display: flex; flex-direction: column; gap: 4px; max-width: 210mm; margin: 14px auto 0; }
@@ -247,8 +249,8 @@ a { color: var(--accent); }
 /* Fiche du joueur sur téléphone : une colonne, caractéristiques sur 3, tableaux défilants. */
 @media (max-width: 640px) {
   .distant-panneau { padding: 8px; }
-  .distant-onglets { overflow-x: auto; }
-  .distant-onglets button { white-space: nowrap; padding: 4px 8px; }
+  .distant-onglets button { white-space: nowrap; padding: 6px 9px; min-height: 32px; }
+  .distant-nom { display: none; }
   .distant-feuille { padding: 12px; }
   .distant-feuille .fiche { font-size: 10pt; }
   .distant-feuille .fiche .entete { flex-wrap: wrap; }
@@ -259,6 +261,8 @@ a { color: var(--accent); }
   .distant-feuille .fiche .caracs { grid-template-columns: repeat(3, 1fr); }
   .distant-feuille .fiche .derives { grid-template-columns: repeat(2, 1fr); }
   .distant-feuille .fiche .colonnes { columns: 1; }
+  .distant-feuille .fiche small, .distant-feuille .fiche .derives small, .distant-feuille .fiche .carac small { font-size: 11px; }
+  .distant-feuille .fiche td, .distant-feuille .fiche th { font-size: 12px; }
   .distant-feuille .fiche table { display: block; overflow-x: auto; white-space: nowrap; }
 }
 .distant-ecrire { width: min(70ch, 100%); display: flex; flex-direction: column; gap: 6px; }
@@ -267,7 +271,7 @@ a { color: var(--accent); }
 .distant-messages article.de-moi { border-left-color: #3d6b8e; background: #f3f6f8; align-self: flex-end; }
 .distant-panneau.distant-entrainement { padding: 0; }
 .distant-panneau.distant-talents { padding: 0; background: var(--fond); }
-.distant-avoir { position: fixed; top: 50px; left: 50%; transform: translateX(-50%); z-index: 45; display: flex; gap: 10px; align-items: center; padding: 8px 14px; border-radius: 8px; background: #17130e; color: #ece3d2; border: 1px solid #d4a050; box-shadow: 0 6px 20px rgb(0 0 0 / .35); max-width: calc(100vw - 24px); flex-wrap: wrap; }
+.distant-avoir { position: fixed; top: calc(var(--distant-haut, 44px) + 6px); left: 50%; transform: translateX(-50%); z-index: 45; display: flex; gap: 10px; align-items: center; padding: 8px 14px; border-radius: 8px; background: #17130e; color: #ece3d2; border: 1px solid #d4a050; box-shadow: 0 6px 20px rgb(0 0 0 / .35); max-width: calc(100vw - 24px); flex-wrap: wrap; }
 .distant-dessus .des3d { z-index: 50; }
 .distant-panneau.distant-des, .distant-panneau.distant-inventaire, .distant-panneau.distant-groupe, .distant-panneau.distant-niveau { padding: 0; }
 /* Programme de la séance (en-tête) */
@@ -277,3 +281,22 @@ a { color: var(--accent); }
 .programme-liste li.fait { opacity: 0.55; }
 .programme-liste li.prochain { font-weight: 700; }
 .programme-nom { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.distant-panneau { overscroll-behavior: contain; }
+.ecran-jets { animation: jets-apparition 0.3s ease-out; }
+@keyframes jets-apparition { from { opacity: 0; transform: translateY(-6px); } }
+/* Jets des joueurs côté MJ : en grand quelques secondes, puis dans l'historique (🎲) */
+.jets-joueurs-recents { position: fixed; left: 16px; bottom: 16px; z-index: 60; display: flex; flex-direction: column-reverse; gap: 8px; max-width: min(360px, calc(100vw - 32px)); }
+.jet-joueur { display: grid; grid-template-columns: 1fr auto; grid-template-areas: 'tete total' 'detail total'; gap: 2px 12px; padding: 10px 14px; border-radius: 12px; background: var(--panneau); border: 2px solid var(--trait); box-shadow: 0 8px 24px rgb(0 0 0 / 0.3); cursor: pointer; animation: jets-apparition 0.3s ease-out; color: var(--encre); }
+.jet-joueur.reussi { border-color: var(--succes, #3a8a4a); }
+.jet-joueur.rate { border-color: var(--danger, #b03a2e); }
+.jet-joueur-tete { grid-area: tete; display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.jet-joueur-tete span { color: var(--encre-douce, #6a5a4a); }
+.jet-joueur-total { grid-area: total; font-family: var(--titre); font-size: 2.4rem; line-height: 1; align-self: center; color: var(--accent); }
+.jet-joueur-detail { grid-area: detail; display: flex; gap: 8px; flex-wrap: wrap; font-size: 0.85rem; color: var(--encre-douce, #6a5a4a); }
+.jet-joueur.reussi .jet-joueur-detail b:first-child { color: var(--succes, #3a8a4a); }
+.jet-joueur.rate .jet-joueur-detail b:first-child { color: var(--danger, #b03a2e); }
+.jet-joueur-critique { color: var(--accent); }
+.jets-joueurs-panneau { width: min(420px, calc(100vw - 24px)); max-height: 70vh; overflow-y: auto; }
+.jets-joueurs-liste { display: grid; gap: 6px; }
+.jets-joueurs-liste .jet-joueur { box-shadow: none; cursor: default; animation: none; }
+.jets-joueurs-liste .jet-joueur-total { font-size: 1.8rem; }

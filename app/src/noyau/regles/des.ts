@@ -66,6 +66,11 @@ export interface JetDes {
   qui?: string;
   /** Horodatage (ms). */
   quand: number;
+  /** Jet d'un joueur depuis son écran ; `libelle` : ce qu'il lance (Perception…). */
+  joueur?: boolean;
+  libelle?: string;
+  /** DD demandé par le MJ : reste chez le MJ, jamais envoyé aux écrans joueurs. */
+  dd?: number | null;
 }
 
 const MAX_DES = 40;

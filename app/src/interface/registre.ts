@@ -18,7 +18,8 @@ import { definition as chronologie } from '../modules/chronologie';
 import { definition as generateurs } from '../modules/generateurs';
 import { definition as livre } from '../modules/livre';
 import { definition as joueurs } from '../modules/joueurs';
+import { definition as ecrans } from '../modules/ecrans';
 
-export const MODULES: DefinitionModule[] = [campagne, journal, chronologie, documents, monde, pays, cartes, personnages, genealogie, avatar, magie, combat, generateurs, reseau, organigrammes, joueurs, livre];
+export const MODULES: DefinitionModule[] = [campagne, journal, chronologie, documents, monde, pays, cartes, personnages, genealogie, avatar, magie, combat, generateurs, reseau, organigrammes, joueurs, ecrans, livre];
 
 export const moduleParId = (id: string): DefinitionModule | undefined => MODULES.find((m) => m.id === id);

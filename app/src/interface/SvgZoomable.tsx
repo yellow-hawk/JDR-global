@@ -6,6 +6,14 @@ type Boite = [number, number, number, number];
 
 export function SvgZoomable({ svg }: { svg: string }) {
   const hote = useRef<HTMLDivElement>(null);
+  // La molette zoome le dessin, jamais la page autour (écouteur non passif).
+  const zone = useRef<HTMLDivElement | null>(null);
+  const bloquerMolette = (n: HTMLDivElement | null) => {
+    const bloquer = (e: WheelEvent) => e.preventDefault();
+    if (zone.current === n) return;
+    zone.current = n;
+    n?.addEventListener('wheel', bloquer, { passive: false });
+  };
   const [depart, setDepart] = useState<Boite | null>(null);
   const [vb, setVb] = useState<Boite | null>(null);
   const pointeurs = useRef(new Map<number, { x: number; y: number }>());
@@ -46,7 +54,7 @@ export function SvgZoomable({ svg }: { svg: string }) {
   };
 
   return (
-    <div className="ecran-svg-zoom"
+    <div className="ecran-svg-zoom" ref={bloquerMolette}
       onWheel={(e) => vb && setVb(zoomer(vb, e.deltaY < 0 ? 1.25 : 1 / 1.25, e.clientX, e.clientY))}
       onPointerDown={(e) => { try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* pointeur sans capture */ } pointeurs.current.set(e.pointerId, { x: e.clientX, y: e.clientY }); recommencer(); }}
       onPointerMove={(e) => {

@@ -183,6 +183,61 @@
        "nom": "Représailles",
        "texte": "Attaquer en réaction quand on est blessé au contact."
       }
+     ],
+     "texte": "Une rage sans retenue : plus d’attaques, au prix de l’épuisement."
+    },
+    {
+     "id": "esprit-animal",
+     "nom": "Voie de l’esprit animal",
+     "texte": "La rage éveille un esprit animal (ours, aigle, loup) qui guide et protège.",
+     "aptitudes": [
+      {
+       "niveau": 3,
+       "nom": "Esprit protecteur",
+       "texte": "En rage, choisissez un esprit : ours (résistance à presque tout), aigle (se désengager en action bonus), loup (avantage des alliés au contact de vos ennemis)."
+      },
+      {
+       "niveau": 6,
+       "nom": "Aspect de la bête",
+       "texte": "Un don de l’animal hors de la rage : porter de lourdes charges, voir très loin ou pister en groupe."
+      },
+      {
+       "niveau": 10,
+       "nom": "Communion sauvage",
+       "texte": "Parler aux bêtes et connaître la nature environnante."
+      },
+      {
+       "niveau": 14,
+       "nom": "Harmonie animale",
+       "texte": "En rage, un pouvoir majeur de l’esprit choisi (renverser, voler, gêner les ennemis proches)."
+      }
+     ]
+    },
+    {
+     "id": "gardien-ancestral",
+     "nom": "Voie du gardien ancestral",
+     "texte": "Les esprits des ancêtres combattent à ses côtés et protègent ses alliés.",
+     "aptitudes": [
+      {
+       "niveau": 3,
+       "nom": "Protecteurs ancestraux",
+       "texte": "En rage, la première créature frappée a désavantage contre vos alliés et ses coups contre eux sont amortis."
+      },
+      {
+       "niveau": 6,
+       "nom": "Bouclier des esprits",
+       "texte": "En réaction, réduire les dégâts subis par un allié proche de 2d6 (augmente aux niveaux suivants)."
+      },
+      {
+       "niveau": 10,
+       "nom": "Conseil des ancêtres",
+       "texte": "Interroger les esprits pour une divination, sans dépenser d’emplacement."
+      },
+      {
+       "niveau": 14,
+       "nom": "Esprits vengeurs",
+       "texte": "Les dégâts empêchés par le bouclier des esprits frappent l’attaquant."
+      }
      ]
     }
    ],
@@ -333,6 +388,51 @@
        "nom": "Talent incomparable",
        "texte": "Ajouter un dé d'inspiration à ses propres tests."
       }
+     ],
+     "texte": "Collectionneur de secrets : compétences, piques qui déstabilisent, magie d’autres traditions."
+    },
+    {
+     "id": "vaillance",
+     "nom": "Collège de la vaillance",
+     "texte": "Le barde qui chante les héros… en se battant à leurs côtés.",
+     "aptitudes": [
+      {
+       "niveau": 3,
+       "nom": "Inspiration martiale",
+       "texte": "Armures intermédiaires, boucliers et armes de guerre ; l’inspiration peut augmenter des dégâts ou la CA."
+      },
+      {
+       "niveau": 6,
+       "nom": "Attaque supplémentaire",
+       "texte": "Deux attaques au lieu d’une avec l’action Attaquer."
+      },
+      {
+       "niveau": 14,
+       "nom": "Magie de bataille",
+       "texte": "Après un sort lancé par une action, une attaque d’arme en action bonus."
+      }
+     ]
+    },
+    {
+     "id": "murmures",
+     "nom": "Collège des murmures",
+     "texte": "Espion et manipulateur : ses mots blessent l’esprit et volent des identités.",
+     "aptitudes": [
+      {
+       "niveau": 3,
+       "nom": "Lames psychiques",
+       "texte": "Dépenser une inspiration pour ajouter des dégâts psychiques à une attaque réussie."
+      },
+      {
+       "niveau": 6,
+       "nom": "Manteau de faux-semblants",
+       "texte": "Prendre l’apparence d’une créature morte récemment et imiter sa voix."
+      },
+      {
+       "niveau": 14,
+       "nom": "Paroles de terreur",
+       "texte": "Après un échange, inspirer une peur durable à une créature."
+      }
      ]
     }
    ],
@@ -462,6 +562,71 @@
        "niveau": 17,
        "nom": "Guérison suprême",
        "texte": "Les soins sont au maximum."
+      }
+     ],
+     "texte": "Le dieu de la vie : soins puissants et armure lourde."
+    },
+    {
+     "id": "guerre",
+     "nom": "Domaine de la guerre",
+     "texte": "Prêtre des batailles : armures lourdes, frappes guidées par le dieu.",
+     "aptitudes": [
+      {
+       "niveau": 1,
+       "nom": "Prêtre de guerre",
+       "texte": "Armes de guerre et armures lourdes ; attaque supplémentaire en action bonus quelques fois par repos long."
+      },
+      {
+       "niveau": 2,
+       "nom": "Frappe guidée",
+       "texte": "Conduit divin : +10 à un jet d’attaque."
+      },
+      {
+       "niveau": 6,
+       "nom": "Bénédiction du dieu de la guerre",
+       "texte": "En réaction, accorder +10 à l’attaque d’un allié."
+      },
+      {
+       "niveau": 8,
+       "nom": "Frappe divine",
+       "texte": "Une fois par tour, dégâts supplémentaires du type de l’arme."
+      },
+      {
+       "niveau": 17,
+       "nom": "Avatar de la bataille",
+       "texte": "Résistance aux dégâts des armes non magiques."
+      }
+     ]
+    },
+    {
+     "id": "lumiere",
+     "nom": "Domaine de la lumière",
+     "texte": "Flamme et lumière : éblouir, brûler, chasser les ténèbres.",
+     "aptitudes": [
+      {
+       "niveau": 1,
+       "nom": "Éclat protecteur",
+       "texte": "En réaction, imposer le désavantage à un attaquant en l’aveuglant de lumière."
+      },
+      {
+       "niveau": 2,
+       "nom": "Radiance de l’aube",
+       "texte": "Conduit divin : dissiper les ténèbres magiques et brûler les ennemis proches."
+      },
+      {
+       "niveau": 6,
+       "nom": "Éclat amélioré",
+       "texte": "L’éclat protecteur protège aussi les alliés."
+      },
+      {
+       "niveau": 8,
+       "nom": "Incantation puissante",
+       "texte": "Ajouter la Sagesse aux dégâts des sorts mineurs."
+      },
+      {
+       "niveau": 17,
+       "nom": "Couronne de lumière",
+       "texte": "Une aura de lumière qui affaiblit la résistance des ennemis au feu et au radiant."
       }
      ]
     }
@@ -600,6 +765,61 @@
        "nom": "Sanctuaire naturel",
        "texte": "Les bêtes et plantes hésitent à vous attaquer."
       }
+     ],
+     "texte": "Gardien des lieux sacrés : récupère sa magie et lance des sorts liés à une terre."
+    },
+    {
+     "id": "lune",
+     "nom": "Cercle de la lune",
+     "texte": "Change-forme redoutable : se bat sous la forme de bêtes puissantes.",
+     "aptitudes": [
+      {
+       "niveau": 2,
+       "nom": "Forme de combat",
+       "texte": "Forme sauvage en action bonus, bêtes plus puissantes ; se soigner en forme animale."
+      },
+      {
+       "niveau": 6,
+       "nom": "Frappes primitives",
+       "texte": "Les attaques en forme animale comptent comme magiques."
+      },
+      {
+       "niveau": 10,
+       "nom": "Forme élémentaire",
+       "texte": "Se transformer en élémentaire (air, eau, feu, terre)."
+      },
+      {
+       "niveau": 14,
+       "nom": "Mille formes",
+       "texte": "Lancer à volonté une altération de sa propre apparence."
+      }
+     ]
+    },
+    {
+     "id": "reves",
+     "nom": "Cercle des rêves",
+     "texte": "Lié au monde féerique : soigne, protège le repos et voyage entre les ombres.",
+     "aptitudes": [
+      {
+       "niveau": 2,
+       "nom": "Baume de la cour d’été",
+       "texte": "Une réserve de dés de soin à distribuer en action bonus."
+      },
+      {
+       "niveau": 6,
+       "nom": "Foyer de lune et d’ombre",
+       "texte": "Le camp du groupe est protégé et dissimulé pendant le repos."
+      },
+      {
+       "niveau": 10,
+       "nom": "Chemins cachés",
+       "texte": "Se téléporter, ou téléporter un allié, sur une courte distance."
+      },
+      {
+       "niveau": 14,
+       "nom": "Marcheur des rêves",
+       "texte": "À la fin d’un repos, voyager par le rêve ou ouvrir un passage."
+      }
      ]
     }
    ],
@@ -735,6 +955,71 @@
        "niveau": 18,
        "nom": "Présence draconique",
        "texte": "Aura de terreur ou de fascination."
+      }
+     ],
+     "texte": "Sang de dragon : peau écailleuse, affinité avec un élément, puis des ailes."
+    },
+    {
+     "id": "magie-sauvage",
+     "nom": "Magie sauvage",
+     "texte": "Une magie imprévisible : chaque sort peut déclencher un effet surprenant.",
+     "aptitudes": [
+      {
+       "niveau": 1,
+       "nom": "Déferlante de magie sauvage",
+       "texte": "Après un sort, le MJ peut faire lancer un d20 : sur 1, un effet aléatoire se produit."
+      },
+      {
+       "niveau": 1,
+       "nom": "Marées du chaos",
+       "texte": "Avantage sur un jet ; la magie sauvage se réveille ensuite."
+      },
+      {
+       "niveau": 6,
+       "nom": "Chance tordue",
+       "texte": "En réaction, ajouter ou retirer 1d4 au jet d’une autre créature."
+      },
+      {
+       "niveau": 14,
+       "nom": "Chaos maîtrisé",
+       "texte": "Choisir entre deux effets de magie sauvage."
+      },
+      {
+       "niveau": 18,
+       "nom": "Bombardement de sorts",
+       "texte": "Relancer un dé de dégâts au maximum et en ajouter un."
+      }
+     ]
+    },
+    {
+     "id": "ame-tempete",
+     "nom": "Âme de la tempête",
+     "texte": "Les vents et la foudre obéissent à son sang.",
+     "aptitudes": [
+      {
+       "niveau": 1,
+       "nom": "Langue du vent",
+       "texte": "Parler la langue primordiale des éléments."
+      },
+      {
+       "niveau": 1,
+       "nom": "Magie de tempête",
+       "texte": "Après un sort, voler sur une courte distance sans provoquer d’attaque."
+      },
+      {
+       "niveau": 6,
+       "nom": "Cœur de la tempête",
+       "texte": "Résistance à la foudre et au tonnerre ; ses sorts électrisent les ennemis proches."
+      },
+      {
+       "niveau": 14,
+       "nom": "Gardien de la tempête",
+       "texte": "En réaction, renvoyer des dégâts de foudre et repousser l’attaquant."
+      },
+      {
+       "niveau": 18,
+       "nom": "Fureur du vent",
+       "texte": "Vitesse de vol permanente."
       }
      ]
     }
@@ -889,6 +1174,71 @@
        "nom": "Survivant",
        "texte": "Récupérer des PV à chaque tour sous la moitié de ses PV."
       }
+     ],
+     "texte": "La force brute bien entraînée : critiques plus fréquents, endurance."
+    },
+    {
+     "id": "maitre-de-guerre",
+     "nom": "Maître de guerre",
+     "texte": "Tacticien : des manœuvres alimentées par des dés de supériorité.",
+     "aptitudes": [
+      {
+       "niveau": 3,
+       "nom": "Supériorité martiale",
+       "texte": "Quatre dés de supériorité (d8) et trois manœuvres : feinte, croc-en-jambe, riposte, ordre…"
+      },
+      {
+       "niveau": 7,
+       "nom": "Connaître son ennemi",
+       "texte": "En observant une créature, apprendre si elle est plus forte ou plus faible que vous."
+      },
+      {
+       "niveau": 10,
+       "nom": "Supériorité améliorée",
+       "texte": "Les dés de supériorité deviennent des d10."
+      },
+      {
+       "niveau": 15,
+       "nom": "Implacable",
+       "texte": "Récupérer un dé de supériorité en début de combat si on n’en a plus."
+      },
+      {
+       "niveau": 18,
+       "nom": "Supériorité ultime",
+       "texte": "Les dés de supériorité deviennent des d12."
+      }
+     ]
+    },
+    {
+     "id": "chevalier-arcanique",
+     "nom": "Chevalier arcanique",
+     "texte": "Guerrier qui mêle l’épée et la magie des magiciens.",
+     "aptitudes": [
+      {
+       "niveau": 3,
+       "nom": "Incantation",
+       "texte": "Quelques sorts de magicien (abjuration et évocation surtout) ; lier son arme pour la rappeler."
+      },
+      {
+       "niveau": 7,
+       "nom": "Magie de guerre",
+       "texte": "Après un sort mineur, une attaque d’arme en action bonus."
+      },
+      {
+       "niveau": 10,
+       "nom": "Frappe occulte",
+       "texte": "Un coup réussi impose le désavantage au prochain jet de sauvegarde contre vos sorts."
+      },
+      {
+       "niveau": 15,
+       "nom": "Charge arcanique",
+       "texte": "Se téléporter en utilisant la Fougue."
+      },
+      {
+       "niveau": 18,
+       "nom": "Magie de guerre améliorée",
+       "texte": "Après un sort, une attaque d’arme en action bonus."
+      }
      ]
     }
    ],
@@ -1014,6 +1364,61 @@
        "niveau": 14,
        "nom": "Surcharge",
        "texte": "Dégâts maximaux, au prix de sa santé."
+      }
+     ],
+     "texte": "Maître des sorts de destruction, qu’il sait façonner pour épargner ses alliés."
+    },
+    {
+     "id": "abjuration",
+     "nom": "École d’abjuration",
+     "texte": "Spécialiste des protections : boucliers magiques et contresorts.",
+     "aptitudes": [
+      {
+       "niveau": 2,
+       "nom": "Protection arcanique",
+       "texte": "Un bouclier magique qui absorbe des dégâts, rechargé par les sorts d’abjuration."
+      },
+      {
+       "niveau": 6,
+       "nom": "Protection projetée",
+       "texte": "Le bouclier peut encaisser à la place d’un allié proche."
+      },
+      {
+       "niveau": 10,
+       "nom": "Abjuration améliorée",
+       "texte": "Ajouter la maîtrise aux tests pour dissiper ou contrer la magie."
+      },
+      {
+       "niveau": 14,
+       "nom": "Résistance aux sorts",
+       "texte": "Avantage aux sauvegardes contre les sorts et résistance à leurs dégâts."
+      }
+     ]
+    },
+    {
+     "id": "divination",
+     "nom": "École de divination",
+     "texte": "Voit l’avenir : remplace des jets de dés par ses présages.",
+     "aptitudes": [
+      {
+       "niveau": 2,
+       "nom": "Présage",
+       "texte": "Après un repos long, lancer deux d20 et garder les résultats pour remplacer des jets plus tard."
+      },
+      {
+       "niveau": 6,
+       "nom": "Expert en divination",
+       "texte": "Les sorts de divination rendent un emplacement de plus bas niveau."
+      },
+      {
+       "niveau": 10,
+       "nom": "Troisième œil",
+       "texte": "Voir dans le noir, l’invisible ou lire toutes les langues."
+      },
+      {
+       "niveau": 14,
+       "nom": "Présage supérieur",
+       "texte": "Trois dés de présage au lieu de deux."
       }
      ]
     }
@@ -1195,6 +1600,61 @@
        "nom": "Paume vibratoire",
        "texte": "Une vibration mortelle."
       }
+     ],
+     "texte": "Le combat à mains nues porté à la perfection : renverser, repousser, désarmer."
+    },
+    {
+     "id": "ombre",
+     "nom": "Voie de l’ombre",
+     "texte": "Moine-ninja : silence, ténèbres et pas d’ombre en ombre.",
+     "aptitudes": [
+      {
+       "niveau": 3,
+       "nom": "Arts de l’ombre",
+       "texte": "Dépenser du ki pour lancer ténèbres, silence ou passage sans trace."
+      },
+      {
+       "niveau": 6,
+       "nom": "Pas d’ombre",
+       "texte": "Se téléporter d’une zone sombre à une autre et attaquer avec avantage."
+      },
+      {
+       "niveau": 11,
+       "nom": "Manteau d’ombres",
+       "texte": "Devenir invisible dans l’obscurité."
+      },
+      {
+       "niveau": 17,
+       "nom": "Opportuniste",
+       "texte": "En réaction, attaquer une créature touchée par un autre près de vous."
+      }
+     ]
+    },
+    {
+     "id": "quatre-elements",
+     "nom": "Voie des quatre éléments",
+     "texte": "Le ki façonne le feu, l’eau, l’air et la terre.",
+     "aptitudes": [
+      {
+       "niveau": 3,
+       "nom": "Disciple des éléments",
+       "texte": "Des disciplines élémentaires lancées avec le ki (poing de flamme, fouet d’eau…)."
+      },
+      {
+       "niveau": 6,
+       "nom": "Discipline supplémentaire",
+       "texte": "Une nouvelle discipline élémentaire."
+      },
+      {
+       "niveau": 11,
+       "nom": "Discipline supplémentaire",
+       "texte": "Une nouvelle discipline élémentaire, plus puissante."
+      },
+      {
+       "niveau": 17,
+       "nom": "Discipline supplémentaire",
+       "texte": "Une discipline majeure (vague de feu, forme de vent…)."
+      }
      ]
     }
    ],
@@ -1349,6 +1809,61 @@
        "niveau": 20,
        "nom": "Nimbe sacré",
        "texte": "Aura de lumière qui brûle les ennemis."
+      }
+     ],
+     "texte": "Le chevalier idéal : honneur, protection et lumière sacrée."
+    },
+    {
+     "id": "anciens",
+     "nom": "Serment des anciens",
+     "texte": "Gardien de la lumière et de la vie face aux ténèbres.",
+     "aptitudes": [
+      {
+       "niveau": 3,
+       "nom": "Colère de la nature",
+       "texte": "Conduit divin : des lianes entravent un ennemi."
+      },
+      {
+       "niveau": 7,
+       "nom": "Aura de protection contre la magie",
+       "texte": "Les alliés proches résistent aux dégâts des sorts."
+      },
+      {
+       "niveau": 15,
+       "nom": "Sentinelle immortelle",
+       "texte": "Rester à 1 PV au lieu de tomber, une fois par repos long."
+      },
+      {
+       "niveau": 20,
+       "nom": "Champion antique",
+       "texte": "Se régénérer et lancer ses sorts plus vite pendant une minute."
+      }
+     ]
+    },
+    {
+     "id": "vengeance",
+     "nom": "Serment de vengeance",
+     "texte": "Punir les grands crimes, quoi qu’il en coûte.",
+     "aptitudes": [
+      {
+       "niveau": 3,
+       "nom": "Vœu d’hostilité",
+       "texte": "Conduit divin : avantage aux attaques contre une créature choisie."
+      },
+      {
+       "niveau": 7,
+       "nom": "Vengeur implacable",
+       "texte": "Après une attaque d’opportunité réussie, se déplacer sans être gêné."
+      },
+      {
+       "niveau": 15,
+       "nom": "Âme de vengeance",
+       "texte": "En réaction, attaquer la cible du vœu quand elle attaque."
+      },
+      {
+       "niveau": 20,
+       "nom": "Ange vengeur",
+       "texte": "Ailes et aura d’effroi pendant une heure."
       }
      ]
     }
@@ -1510,6 +2025,61 @@
        "niveau": 15,
        "nom": "Défense supérieure du chasseur",
        "texte": "Dérobade, Résister à la marée…"
+      }
+     ],
+     "texte": "Le traqueur de grands monstres : techniques contre les hordes et les géants."
+    },
+    {
+     "id": "maitre-des-betes",
+     "nom": "Maître des bêtes",
+     "texte": "Un compagnon animal fidèle combat avec lui.",
+     "aptitudes": [
+      {
+       "niveau": 3,
+       "nom": "Compagnon du rôdeur",
+       "texte": "Une bête compagne qui progresse avec vous et agit sur vos ordres."
+      },
+      {
+       "niveau": 7,
+       "nom": "Entraînement exceptionnel",
+       "texte": "Le compagnon esquive, se désengage ou aide en action bonus ; ses attaques sont magiques."
+      },
+      {
+       "niveau": 11,
+       "nom": "Furie bestiale",
+       "texte": "Le compagnon attaque deux fois."
+      },
+      {
+       "niveau": 15,
+       "nom": "Partage des sorts",
+       "texte": "Un sort lancé sur soi touche aussi le compagnon proche."
+      }
+     ]
+    },
+    {
+     "id": "traqueur",
+     "nom": "Traqueur des ténèbres",
+     "texte": "Chasseur des souterrains : invisible dans le noir, il frappe en premier.",
+     "aptitudes": [
+      {
+       "niveau": 3,
+       "nom": "Embusqué redoutable",
+       "texte": "Bonus à l’initiative ; au premier tour, une attaque de plus et des dégâts supplémentaires."
+      },
+      {
+       "niveau": 7,
+       "nom": "Esprit de fer",
+       "texte": "Maîtrise des sauvegardes de Sagesse."
+      },
+      {
+       "niveau": 11,
+       "nom": "Rafale du traqueur",
+       "texte": "Après une attaque manquée, en refaire une."
+      },
+      {
+       "niveau": 15,
+       "nom": "Esquive du traqueur",
+       "texte": "En réaction, imposer le désavantage à un attaquant."
       }
      ]
     }
@@ -1693,6 +2263,61 @@
        "nom": "Réflexes de voleur",
        "texte": "Deux tours au premier round."
       }
+     ],
+     "texte": "Cambrioleur agile : mains rapides, escalade, objets magiques."
+    },
+    {
+     "id": "assassin",
+     "nom": "Assassin",
+     "texte": "Tueur discret : frappe mortelle sur les ennemis surpris, déguisements.",
+     "aptitudes": [
+      {
+       "niveau": 3,
+       "nom": "Assassinat",
+       "texte": "Avantage contre qui n’a pas encore agi ; coup critique automatique sur une créature surprise."
+      },
+      {
+       "niveau": 9,
+       "nom": "Infiltration experte",
+       "texte": "Se créer une fausse identité solide."
+      },
+      {
+       "niveau": 13,
+       "nom": "Imposteur",
+       "texte": "Imiter parfaitement la voix et l’écriture d’une personne."
+      },
+      {
+       "niveau": 17,
+       "nom": "Frappe mortelle",
+       "texte": "Contre une créature surprise, les dégâts sont doublés si elle rate sa sauvegarde."
+      }
+     ]
+    },
+    {
+     "id": "escroc-arcanique",
+     "nom": "Escroc arcanique",
+     "texte": "Roublard magicien : illusions, enchantements et main de mage invisible.",
+     "aptitudes": [
+      {
+       "niveau": 3,
+       "nom": "Incantation",
+       "texte": "Quelques sorts de magicien (illusion et enchantement surtout) ; main de mage invisible et habile."
+      },
+      {
+       "niveau": 9,
+       "nom": "Embuscade magique",
+       "texte": "Caché, ses sorts imposent le désavantage aux sauvegardes."
+      },
+      {
+       "niveau": 13,
+       "nom": "Escamoteur polyvalent",
+       "texte": "La main de mage distrait : avantage aux attaques contre la cible."
+      },
+      {
+       "niveau": 17,
+       "nom": "Voleur de sorts",
+       "texte": "Contrer un sort lancé sur soi et le voler pour un temps."
+      }
      ]
     }
    ],
@@ -1824,6 +2449,61 @@
        "nom": "Traversée des enfers",
        "texte": "Envoyer une créature en enfer un instant."
       }
+     ],
+     "texte": "Pacte avec un démon : vigueur volée aux ennemis, résistance et feu infernal."
+    },
+    {
+     "id": "archifee",
+     "nom": "L’Archifée",
+     "texte": "Pacte avec une puissance féerique : charme, peur et disparitions.",
+     "aptitudes": [
+      {
+       "niveau": 1,
+       "nom": "Présence féerique",
+       "texte": "Charmer ou effrayer les créatures proches."
+      },
+      {
+       "niveau": 6,
+       "nom": "Brumes d’échappée",
+       "texte": "Quand on est blessé, devenir invisible et se téléporter."
+      },
+      {
+       "niveau": 10,
+       "nom": "Défenses enchanteresses",
+       "texte": "Immunité au charme ; retourner un charme contre son auteur."
+      },
+      {
+       "niveau": 14,
+       "nom": "Sombre délire",
+       "texte": "Plonger une créature dans un monde illusoire."
+      }
+     ]
+    },
+    {
+     "id": "grand-ancien",
+     "nom": "Le Grand Ancien",
+     "texte": "Pacte avec une entité incompréhensible : télépathie et folie.",
+     "aptitudes": [
+      {
+       "niveau": 1,
+       "nom": "Esprit éveillé",
+       "texte": "Parler par télépathie à une créature proche."
+      },
+      {
+       "niveau": 6,
+       "nom": "Bouclier entropique",
+       "texte": "En réaction, imposer le désavantage à une attaque, puis avoir l’avantage en retour."
+      },
+      {
+       "niveau": 10,
+       "nom": "Pensées protégées",
+       "texte": "Esprit illisible et résistance aux dégâts psychiques."
+      },
+      {
+       "niveau": 14,
+       "nom": "Asservir",
+       "texte": "Charmer un humanoïde neutralisé par un contact."
+      }
      ]
     }
    ],
@@ -1838,7 +2518,10 @@
   {
    "id": "humain",
    "nom": "Humain",
-   "vie": [18, 80],
+   "vie": [
+    18,
+    80
+   ],
    "bonus": {
     "for": 1,
     "dex": 1,
@@ -1860,7 +2543,10 @@
   {
    "id": "haut-elfe",
    "nom": "Elfe (haut-elfe)",
-   "vie": [100, 750],
+   "vie": [
+    100,
+    750
+   ],
    "bonus": {
     "dex": 2,
     "int": 1
@@ -1899,7 +2585,10 @@
   {
    "id": "nain-des-collines",
    "nom": "Nain (des collines)",
-   "vie": [50, 350],
+   "vie": [
+    50,
+    350
+   ],
    "bonus": {
     "con": 2,
     "sag": 1
@@ -1940,7 +2629,10 @@
   {
    "id": "halfelin-pied-leger",
    "nom": "Halfelin (pied-léger)",
-   "vie": [20, 150],
+   "vie": [
+    20,
+    150
+   ],
    "bonus": {
     "dex": 2,
     "cha": 1
@@ -1975,7 +2667,10 @@
   {
    "id": "drakeide",
    "nom": "Drakéide",
-   "vie": [15, 80],
+   "vie": [
+    15,
+    80
+   ],
    "bonus": {
     "for": 2,
     "cha": 1
@@ -2006,7 +2701,10 @@
   {
    "id": "gnome-des-roches",
    "nom": "Gnome (des roches)",
-   "vie": [40, 425],
+   "vie": [
+    40,
+    425
+   ],
    "bonus": {
     "int": 2,
     "con": 1
@@ -2037,7 +2735,10 @@
   {
    "id": "demi-elfe",
    "nom": "Demi-elfe",
-   "vie": [20, 180],
+   "vie": [
+    20,
+    180
+   ],
    "bonus": {
     "cha": 2
    },
@@ -2066,7 +2767,10 @@
   {
    "id": "demi-orc",
    "nom": "Demi-orc",
-   "vie": [14, 75],
+   "vie": [
+    14,
+    75
+   ],
    "bonus": {
     "for": 2,
     "con": 1
@@ -2100,7 +2804,10 @@
   {
    "id": "tieffelin",
    "nom": "Tieffelin",
-   "vie": [18, 100],
+   "vie": [
+    18,
+    100
+   ],
    "bonus": {
     "cha": 2,
     "int": 1

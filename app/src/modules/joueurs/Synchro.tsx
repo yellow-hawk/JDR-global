@@ -7,9 +7,10 @@ import { jeter, regles } from '../../noyau/regles';
 import { lireFichier } from '../../noyau/stockage';
 import { useCampagne } from '../../interface/etat';
 import { assurerSalon } from '../../interface/Tablettes';
-import { demandeNiveau, journalGroupe, verdict } from './actions';
+import { demandeNiveau, journalGroupe } from './actions';
 import { distantsDe, droitsEntrainement, droitsTalents, ficheDuJoueur, nonLusMj, notesJoueur, persoDuJeton } from './logique';
 import { donneesDuJoueur, traiterRetour } from './prive';
+import { noterEcran } from './ecrans';
 
 export function Synchro() {
   const { campagne, modifier } = useCampagne();
@@ -56,14 +57,14 @@ export function Synchro() {
     if (module !== 'joueurs' || !jeton) return;
     const x = c.current, p = x && persoDuJeton(x, jeton);
     if (!p) return;
+    if (d.ecran) { noterEcran(p.id, d.ecran); if (Object.keys(d).length === 1) return; }
     const R = regles(x.campagne.regles);
     const r = traiterRetour(x, p, d, R);
     if (r.campagne !== x) { c.current = r.campagne; modifier(() => r.campagne); }
     r.textes.forEach((texte) => emettre('message', { texte, sorte: 'info' }));
     if (r.jet) {
-      const j = jeter(r.jet.formule, r.jet.mode, Math.random, `${p.nom} · ${r.jet.libelle}`);
+      const j = { ...jeter(r.jet.formule, r.jet.mode, Math.random, `${p.nom} · ${r.jet.libelle}`), joueur: true, libelle: r.jet.libelle, dd: r.jet.dd };
       annoncerJet(j);
-      if (r.jet.dd) emettre('message', { texte: `${p.nom}, ${r.jet.libelle} : ${verdict(j.total, r.jet.dd)}`, sorte: j.total >= r.jet.dd ? 'succes' : 'erreur' });
     }
   }), [modifier]);
 

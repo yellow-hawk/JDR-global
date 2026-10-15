@@ -11,7 +11,11 @@ describe('progression', () => {
   it('seuils d’XP et nouveautés de niveau', () => {
     const p = pj();
     expect(etatProgression(p, R)).toMatchObject({ niveau: 2, xp: 300, suivant: 900, pret: false });
-    expect(R.progression.nouveautes('guerrier', 3)!.sousClasse!.map((s) => s.id)).toEqual(['champion']);
+    expect(R.progression.nouveautes('guerrier', 3)!.sousClasse!.map((s) => s.id)).toEqual(['champion', 'maitre-de-guerre', 'chevalier-arcanique']);
+    // Trois sous-classes par classe, chacune décrite ; gains d'une sous-classe déjà choisie au niveau suivant.
+    for (const c of R.catalogue.classes) expect(c.sousClasses.length, c.id).toBe(3);
+    expect(R.progression.nouveautes('guerrier', 3)!.sousClasse!.every((s) => s.texte && s.aptitudes.length)).toBe(true);
+    expect(R.progression.nouveautes('guerrier', 7, 'maitre-de-guerre')!.aptitudesSousClasse!.map((a) => a.nom)).toEqual(['Connaître son ennemi']);
     expect(R.progression.nouveautes('guerrier', 4)!.amelioration).toBe(true);
     expect(R.progression.gainPv('guerrier', 2)).toBe(8);
     expect(R.progression.gainPv('magicien', -3, 1)).toBe(1);

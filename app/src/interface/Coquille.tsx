@@ -7,6 +7,7 @@ import { BoutonDes } from './des';
 import { CommandeEcran, montrerAttente } from './EcranAttente';
 import { rouvrirSalon, Tablettes } from './Tablettes';
 import { Programme } from './Programme';
+import { SuiviJets } from './SuiviJets';
 import { MODULES, moduleParId } from './registre';
 
 type Theme = 'auto' | 'clair' | 'sombre';
@@ -71,6 +72,7 @@ export function Coquille() {
         <div className="coq-outils">
           {campagne && role === 'mj' && MODULES.filter((m) => m.enTete).map((m) => { const E = m.enTete!; return <E key={m.id} />; })}
           {role === 'mj' && <BoutonDes />}
+          {campagne && role === 'mj' && <SuiviJets />}
           <button
             className={`btn btn-petit ${role === 'joueurs' ? 'btn-mj' : ''}`}
             onClick={() => changerRole(role === 'mj' ? 'joueurs' : 'mj')}

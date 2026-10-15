@@ -2,7 +2,7 @@
 // « Ma fiche » (lecture seule, à jour en direct, avec ses notes), « Entraînement » (magie, si son personnage trace
 // des sorts) et « Messages » (échange privé avec le MJ).
 import { Suspense, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { envoyerAuMj } from '../noyau/bus';
+import { envoyerAuMj, estMiroir } from '../noyau/bus';
 import { moduleParId } from './registre';
 import { alerterJoueur, surAlerteJoueur } from './alerteJoueur';
 
@@ -56,6 +56,20 @@ export function EcranDistant({ prive, nouveaute, children, pardessus }: { prive:
   const extras = ONGLETS_MODULES.map((o) => ({ ...o, donnees: prive[o.cle], Vue: prive[o.cle] ? moduleParId(o.module)?.ecranJoueurs?.[o.vue] : undefined })).filter((o) => o.Vue && o.donnees);
   const extra = extras.find((o) => o.cle === onglet);
   const [aVoir, setAVoir] = useState<string | null>(null);
+  // Hauteur réelle de la barre (une ou deux lignes selon la largeur) : l'écran et les panneaux commencent dessous.
+  const barre = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const n = barre.current;
+    if (!n) return;
+    const maj = () => document.documentElement.style.setProperty('--distant-haut', `${Math.ceil(n.getBoundingClientRect().height)}px`);
+    maj();
+    const o = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(maj) : null;
+    o?.observe(n);
+    window.addEventListener('resize', maj);
+    const t = window.setInterval(maj, 2000); // onglets ajoutés quand les données arrivent
+    return () => { o?.disconnect(); window.removeEventListener('resize', maj); window.clearInterval(t); };
+  }, []);
+  const pleinEcran = () => { if (document.fullscreenElement) void document.exitFullscreen(); else void document.documentElement.requestFullscreen().catch(() => undefined); };
   const derniere = useRef(nouveaute?.cle);
   useEffect(() => {
     if (!nouveaute || nouveaute.cle === derniere.current) return;
@@ -66,6 +80,23 @@ export function EcranDistant({ prive, nouveaute, children, pardessus }: { prive:
     else setOnglet('table');
   }, [nouveaute?.cle]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (onglet === 'table') setAVoir(null); }, [onglet]);
+  // Le MJ voit cet écran tel quel (mur des écrans) : on lui dit l'onglet ouvert et la taille de la fenêtre.
+  useEffect(() => {
+    if (estMiroir()) return;
+    const dire = () => envoyerAuMj('joueurs', { ecran: { onglet, l: window.innerWidth, h: window.innerHeight } });
+    let t = window.setTimeout(dire, 400);
+    const redim = () => { window.clearTimeout(t); t = window.setTimeout(dire, 600); };
+    window.addEventListener('resize', redim);
+    const relance = window.setInterval(dire, 20000);
+    return () => { window.clearTimeout(t); window.clearInterval(relance); window.removeEventListener('resize', redim); };
+  }, [onglet]);
+  // Copie chez le MJ : elle suit l'onglet du vrai joueur.
+  useEffect(() => {
+    if (!estMiroir()) return;
+    const ecoute = (e: MessageEvent) => { if (e.origin === location.origin && e.data?.type === 'jdr-miroir' && typeof e.data.onglet === 'string') setOnglet(e.data.onglet); };
+    window.addEventListener('message', ecoute);
+    return () => window.removeEventListener('message', ecoute);
+  }, []);
   // Alerte (son tour en combat, jet demandé…) : bandeau même s'il regarde un autre onglet.
   const ongletCourant = useRef(onglet); ongletCourant.current = onglet;
   useEffect(() => surAlerteJoueur((t) => { if (ongletCourant.current !== 'table') setAVoir(t); }), []);
@@ -78,7 +109,8 @@ export function EcranDistant({ prive, nouveaute, children, pardessus }: { prive:
     alerterJoueur(a.texte);
     if (!document.activeElement?.matches('textarea, input')) setOnglet('des');
   }, [prive.alerte?.id]); // eslint-disable-line react-hooks/exhaustive-deps
-  useEffect(() => { if (!['table', 'fiche', 'messages'].includes(onglet) && !extra) setOnglet('table'); }, [onglet, extra]);
+  // Onglet d'un module sans données (ou plus disponible) : retour à la table. Une copie attend ses données.
+  useEffect(() => { if (!estMiroir() && !['table', 'fiche', 'messages'].includes(onglet) && !extra) setOnglet('table'); }, [onglet, extra]);
   const [notes, setNotes] = useState(prive.fiche?.notes ?? '');
   const [lus, setLus] = useState(0);
   const portrait = useUrl(prive.fiche?.portrait);
@@ -104,11 +136,12 @@ export function EcranDistant({ prive, nouveaute, children, pardessus }: { prive:
 
   return (
     <>
-      <nav className="distant-onglets">
+      <nav className="distant-onglets" ref={barre}>
         <button aria-pressed={onglet === 'table'} onClick={() => setOnglet('table')}>Table{aVoir ? <b className="distant-badge">●</b> : null}</button>
-        <button aria-pressed={onglet === 'fiche'} onClick={() => setOnglet('fiche')} disabled={!prive.fiche}>{prive.fiche ? `Ma fiche : ${prive.fiche.nom}` : 'Ma fiche'}</button>
+        <button aria-pressed={onglet === 'fiche'} onClick={() => setOnglet('fiche')} disabled={!prive.fiche} title={prive.fiche?.nom}>Ma fiche<span className="distant-nom">{prive.fiche ? ` : ${prive.fiche.nom}` : ''}</span></button>
         {extras.map((o) => <button key={o.cle} aria-pressed={onglet === o.cle} onClick={() => setOnglet(o.cle)}>{o.titre}{prive.badges?.[o.cle] ? <b className="distant-badge">{prive.badges[o.cle]}</b> : null}</button>)}
         <button aria-pressed={onglet === 'messages'} onClick={() => setOnglet('messages')}>Messages{nouveaux ? <b className="distant-badge">{nouveaux}</b> : null}</button>
+        <button className="distant-plein" title="Plein écran" aria-label="Plein écran" onClick={pleinEcran}>⛶</button>
       </nav>
       {children}
       {aVoir && onglet !== 'table' && (

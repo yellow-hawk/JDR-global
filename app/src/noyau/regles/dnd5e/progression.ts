@@ -90,13 +90,14 @@ export function gainPv(classe: string, modCon: number, jet?: number): number {
   return Math.max(1, (jet ?? dv / 2 + 1) + modCon);
 }
 
-export function nouveautes(classe: string, niveau: number): NouveautesNiveau | null {
+export function nouveautes(classe: string, niveau: number, sousClasse?: string | null): NouveautesNiveau | null {
   const cl = classeDe(classe);
   if (!cl || niveau < 1 || niveau > 20) return null;
   return {
     classe: cl.id, niveau, deVie: cl.deVie,
     aptitudes: cl.aptitudes.filter((a) => a.niveau === niveau && !a.amelioration),
     amelioration: cl.aptitudes.some((a) => a.niveau === niveau && a.amelioration),
-    sousClasse: niveau === cl.niveauSousClasse ? cl.sousClasses.map((s) => ({ id: s.id, nom: s.nom })) : null,
+    sousClasse: niveau === cl.niveauSousClasse ? cl.sousClasses.map((s) => ({ id: s.id, nom: s.nom, texte: s.texte, aptitudes: s.aptitudes })) : null,
+    aptitudesSousClasse: cl.sousClasses.find((s) => s.id === sousClasse)?.aptitudes.filter((a) => a.niveau === niveau) ?? [],
   };
 }
